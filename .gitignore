@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Fotografije (lokalna pohrana)
+public/uploads/full/
+public/uploads/thumbs/
