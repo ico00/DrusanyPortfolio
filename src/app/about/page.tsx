@@ -2,8 +2,12 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
+import { getPages } from "@/lib/pages";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const pages = await getPages();
+  const { title, html } = pages.about;
+
   return (
     <div className="min-h-screen bg-zinc-950">
       <Suspense fallback={<div className="h-16" />}>
@@ -18,15 +22,13 @@ export default function AboutPage() {
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
-          <h1 className="font-serif text-4xl font-normal tracking-tight text-white md:text-5xl lg:text-6xl">
-            About
+          <h1 className="mb-12 font-serif text-4xl font-light tracking-tight text-white md:text-5xl">
+            {title}
           </h1>
-          <div className="mt-12 border-l-2 border-white/20 pl-8">
-            <p className="text-lg leading-relaxed text-zinc-400 md:text-xl">
-              Photographer focused on natural light and authentic moments.
-              I shoot portraits, landscapes and documentary photography.
-            </p>
-          </div>
+          <div
+            className="prose prose-invert prose-lg max-w-none [&_a]:text-white/80 [&_a]:underline [&_a:hover]:text-white"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
         </div>
       </main>
     </div>

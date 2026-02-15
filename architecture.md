@@ -16,6 +16,7 @@ Ovaj dokument opisuje arhitekturu statičnog fotografskog portfolija izgrađenog
 | **Lucide Icons** | latest | Ikone za UI (hamburger, strelice, social) |
 | **Sharp** | 0.34+ | Image processing (resize, WebP) |
 | **exifr** | 7.x | EXIF metadata extraction (datum, naslov, camera, lens, exposure, aperture, ISO) |
+| **BlockNote** | 0.46.x | Block-based rich text editor (About, Contact, Blog) – shadcn UI |
 
 ### Instalacija
 
@@ -75,7 +76,26 @@ Sve metapodatke o slikama čuvamo u jednom JSON fajlu. Struktura:
 - **order**: Redoslijed unutar kategorije (manji = ranije); postavlja se drag-and-drop u adminu; undefined = sortiraj po datumu
 - **camera, lens, exposure, aperture, iso**: EXIF opcije (aparata, objektiva, ekspozicije, blende, ISO) – izvlače se pri uploadu, mogu se uređivati
 
-### 3.2 Original Images: `public/uploads/`
+### 3.2 Pages: `src/data/pages.json`
+
+Sadržaj About i Contact stranica. Struktura:
+
+```json
+{
+  "about": { "title": "About me", "html": "<p>...</p><blockquote>...</blockquote>" },
+  "contact": { "title": "Contact", "html": "<p>...</p>" }
+}
+```
+
+- **title**: Naslov stranice (prikazuje se kao h1)
+- **html**: HTML sadržaj iz BlockNote editora (paragrafi, naslovi, citati, liste, tablice)
+- Migracija: ako `title` nedostaje, izvlači se iz prvog `<h1>` u HTML-u
+
+### 3.3 Blog: `src/data/blog.json`
+
+Blog postovi. Struktura: `{ "posts": [ { "slug", "title", "date", "body", "thumbnail?" } ] }`. Sadržaj (`body`) je HTML iz BlockNote editora.
+
+### 3.4 Original Images: `public/uploads/`
 
 - Slike se spremaju u podfoldere po kategoriji: `public/uploads/full/[category]/` i `public/uploads/thumbs/[category]/`
 - Format: WebP (Sharp resize)
@@ -127,7 +147,28 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 - **Delete:** Brisanje slike (uklanja iz JSON-a i diska)
 - **Drag-and-drop sortiranje:** Fotografije u galeriji mogu se povući za promjenu redoslijeda; novi redoslijed se sprema putem `/api/reorder`
 
-**Zaštita:** Komponenta provjerava `process.env.NODE_ENV` i prikazuje poruku ako je production.
+### 4.3 Admin Pages & Blog (BlockNote editor)
+
+**Lokacija:** `src/components/AdminPages.tsx`, `src/components/AdminBlog.tsx`, `src/components/BlockNoteEditor.tsx`
+
+**AdminPages (About / Contact):**
+- Tabovi "About" i "Contact" u adminu
+- Polje "Naslov stranice" (title) – odvojeno od sadržaja
+- BlockNote editor za sadržaj – blokovi (paragraf, naslov H1–H6, citat, lista, tablica, slika)
+- Upute: side menu (⋮⋮ +), slash menu (`/`), formatiranje teksta (označi → toolbar)
+- Spremanje putem `/api/pages`
+
+**AdminBlog:**
+- Lista postova, dodavanje/editiranje po slug-u
+- Polja: title, date, thumbnail (opcionalno), body (BlockNote)
+- Spremanje putem `/api/blog`
+
+**BlockNote editor (BlockNoteEditor.tsx):**
+- **BlockNote** (@blocknote/shadcn) – block-based WYSIWYG, sprema HTML
+- **Statična traka stila bloka (StaticBlockTypeBar):** Prikazuje trenutni stil bloka na temelju pozicije kursora (bez označavanja teksta); dropdown za promjenu tipa (Paragraph, Heading 1–6, Quote, itd.)
+- **Tamna tema:** `data-theme="dark"` na html kad je admin otvoren; zinc/amber paleta
+- **Fontovi u editoru = fontovi na stranici:** font-sans (body), font-serif (naslovi) – WYSIWYG
+- **Formatting Toolbar:** Neprozirna pozadina (zinc-800), svijetli tekst; dropdowni (Stil bloka, izbornici) također neprozirni
 
 ### 4.3 API Routes (dev only)
 
@@ -192,6 +233,20 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 
 - Vraća `{ images }` iz `gallery.json` (koristi `getGallery` za sortiranje po `order` pa `capturedAt`); `getGallery` generira slug za slike bez njega (title+venue+year, jedinstvenost)
 
+#### `/api/pages` (GET, POST)
+
+**Lokacija:** `src/app/api/pages/route.ts`
+
+- **GET:** Vraća `{ about, contact }` iz `pages.json` (koristi `getPages`)
+- **POST:** Prima `{ about?, contact? }`, sprema u `pages.json` putem `savePages`
+
+#### `/api/blog` (GET, POST)
+
+**Lokacija:** `src/app/api/blog/route.ts`
+
+- **GET:** Vraća blog postove iz `blog.json`
+- **POST:** Prima novi ili ažurirani post (slug, title, date, body, thumbnail?), sprema u `blog.json`
+
 ---
 
 ## 5. Static Export Configuration
@@ -249,7 +304,19 @@ fontSize: {
 - **Redoslijed:** Slike se obrađuju sekvencijalno iz `filteredImages` – prve idu u prazne stupce (1, 2, 3, 4 u prvom redu), zatim se popunjavaju rupe; redoslijed se prirodno održava
 - **Layout:** `display: grid` s `grid-template-columns: repeat(columnCount, 1fr)`; svaki stupac je `flex flex-col` s `gap-2 sm:gap-4`
 
-### 6.4 Animations (Framer Motion)
+### 6.4 Prose Content (About, Contact, Blog)
+
+Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
+
+- **Razmak između blokova:** `margin-top: 1.5em` za sve susjedne blokove (paragrafi, citati, naslovi) – lakše čitanje
+- **Blockquote (citat):** Lijevi border 4px, padding, italic; tamna varijanta za prose-invert
+- **Tablica:** Granice, padding, header pozadina; tamna varijanta za prose-invert
+
+**Stranice:**
+- **About / Contact:** `prose prose-invert prose-lg`, naslov (h1) odvojen, svijetli tekst na tamnoj pozadini
+- **Blog:** `prose prose-zinc prose-headings:font-serif`, bijela pozadina
+
+### 6.5 Animations (Framer Motion)
 
 - **Fade-in na load:** `initial={{ opacity: 0 }}` → `animate={{ opacity: 1 }}` – bez y-offseta
 - **Stagger children:** Kratki stagger (0.02s) za grid items
@@ -279,7 +346,7 @@ npm run dev
 
 - Pokreće dev server na `http://localhost:3000`
 - Admin panel dostupan na `/admin`
-- API routes aktivne: `/api/upload`, `/api/exif-preview`, `/api/update`, `/api/delete`, `/api/hero`, `/api/gallery`
+- API routes aktivne: `/api/upload`, `/api/exif-preview`, `/api/update`, `/api/delete`, `/api/hero`, `/api/reorder`, `/api/gallery`, `/api/pages`, `/api/blog`
 - Hot reload za brze promjene
 
 ### 7.5 Preview statičnog builda
@@ -324,34 +391,47 @@ DrusanyPortfolio/
 │   │   ├── admin/
 │   │   │   └── page.tsx   # Admin panel (dev only)
 │   │   ├── api/
+│   │   │   ├── blog/route.ts
 │   │   │   ├── delete/route.ts
 │   │   │   ├── exif-preview/route.ts
 │   │   │   ├── gallery/route.ts
 │   │   │   ├── hero/route.ts
+│   │   │   ├── pages/route.ts
 │   │   │   ├── reorder/route.ts
 │   │   │   ├── update/route.ts
 │   │   │   └── upload/route.ts
 │   │   ├── about/page.tsx
-│   │   ├── blog/page.tsx
+│   │   ├── blog/
+│   │   │   ├── page.tsx
+│   │   │   └── [slug]/page.tsx
 │   │   ├── contact/page.tsx
 │   │   ├── layout.tsx       # CustomCursor u body
 │   │   ├── page.tsx       # Home (HeroSlider ili Gallery)
 │   │   └── globals.css
 │   ├── components/
-│   │   ├── AdminClient.tsx    # Admin UI (upload, edit, hero, delete)
-│   │   ├── CategorySelect.tsx # Custom category dropdown
-│   │   ├── VenueSelect.tsx    # Venue dropdown (Concerts)
-│   │   ├── SportSelect.tsx    # Sport type dropdown (Sport)
+│   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog)
+│   │   ├── AdminDashboard.tsx    # Dashboard (pregled sadržaja)
+│   │   ├── AdminPages.tsx        # About/Contact editor (BlockNote)
+│   │   ├── AdminBlog.tsx         # Blog post editor (BlockNote)
+│   │   ├── BlockNoteEditor.tsx   # BlockNote WYSIWYG (HTML)
+│   │   ├── BlockNoteEditorDynamic.tsx  # Dynamic import, ssr: false
+│   │   ├── StaticBlockTypeBar.tsx # Traka stila bloka (cursor position)
+│   │   ├── CategorySelect.tsx    # Custom category dropdown
+│   │   ├── VenueSelect.tsx       # Venue dropdown (Concerts)
+│   │   ├── SportSelect.tsx       # Sport type dropdown (Sport)
 │   │   ├── CustomCursor.tsx   # Custom cursor (dot + aperture, desktop only)
 │   │   ├── Gallery.tsx        # Balanced masonry (shortest column) + lightbox; useColumnCount, imageColumns
-│   │   ├── Header.tsx        # Logo (inline SVG), Nav + Portfolio dropdown, aktivna stranica
+│   │   ├── Header.tsx        # Logo (inline SVG), Nav + Portfolio dropdown, Search (kad galerija), aktivna stranica, hover efekti
 │   │   ├── HeroSlider.tsx    # 6 category slides, auto-play 4s, wheel/swipe/strelicama lijevo-desno
 │   │   └── HomeContent.tsx   # Conditional Hero/Gallery; overflow hidden na hero
 │   ├── lib/
 │   │   ├── getGallery.ts   # Čitanje gallery.json, sortiranje po order (pa capturedAt desc), generiranje slug
+│   │   ├── pages.ts        # getPages, savePages – About/Contact (title + html)
 │   │   └── slug.ts         # slugify, generateSlug (title+venue+year) – zajednički za upload, update i AdminClient
 │   └── data/
-│       └── gallery.json    # Flat-file baza
+│       ├── gallery.json    # Flat-file baza slika
+│       ├── pages.json      # About, Contact (title + html)
+│       └── blog.json       # Blog postovi
 ├── out/                   # Generirano pri build (gitignore)
 ├── next.config.ts
 ├── package.json
@@ -365,8 +445,8 @@ DrusanyPortfolio/
 ### Home (`/`)
 
 - **Bez `?category`:** HeroSlider – 6 slideova (Concerts, Sport, Animals, Interiors, Zagreb, Food & Drink), 100vh, wheel/swipe/strelicama lijevo-desno, **auto-play svake 4 sekunde**, Framer Motion; `overflow: hidden` na html/body da wheel mijenja slideove
-- **Stranica galerije:** `min-h-screen` na bijelom divu – nema crnog prostora kad ima malo slika
-- **S `?category=concerts`:** Masonry galerija filtrirana po kategoriji; venue filter (samo dvorane s barem jednom slikom); **Search** (expandable na hover, filter as you type)
+- **Stranica galerije:** `min-h-screen` na bijelom divu – nema crnog prostora kad ima malo slika; `window.scrollTo(0, 0)` pri prelasku na galeriju da se vrh (filter) odmah vidi
+- **S `?category=concerts`:** Masonry galerija filtrirana po kategoriji; venue filter (samo dvorane s barem jednom slikom); **Search** u headeru (expandable na hover, filter as you type, placeholder "Search in gallery...")
 - **S `?category=sport`:** Isto s sport filterom (Football, Basketball, Handball, itd. – samo vrste s barem jednom slikom)
 - **Filtriranje:** Client-side preko `gallery.json` – `images.filter(img => category === img.category)`; za Concerts i `?venue=slug`; za Sport i `?sport=slug`
 - Hero slika: **samo ručno odabrana** (`isHero: true`) – nema fallback na prvu/najnoviju sliku; ako nema hero, prikazuje se placeholder s nazivom kategorije
@@ -374,9 +454,10 @@ DrusanyPortfolio/
 ### Gallery & Lightbox
 
 - **Masonry grid:** Balanced left-to-right – slike u stupac s najmanjom visinom (shortest column); aspect ratio iz `width`/`height` u gallery.json; stupci približno jednake visine, minimalne praznine; `useColumnCount` za responsivne stupce (1–4); slike s thumb putanjama, klik otvara lightbox
-- **Venue filter (Concerts):** Samo dvorane s barem jednom slikom; label "Venue:"; linkovi s podcrtom, `text-xs`
-- **Sport filter (Sport):** Samo vrste sporta s barem jednom slikom; label "Sport:"; isti stil kao venue
-- **Search:** Ikona povećala (32px), expandable na hover; filter as you type (title, alt, keywords, venue, sport, category); kad pretraga nema rezultata – prazan grid (bez poruke "No images")
+- **Scroll na učitavanju:** Pri navigaciji na galeriju (`?category` + `#gallery`) stranica se eksplicitno skrola na vrh (`window.scrollTo(0, 0)`) – u HomeContent i Gallery (setTimeout 0) – kako bi Venue/Sport filter bio odmah vidljiv; `id="gallery"` na wrapperu koji uključuje filter bar i grid
+- **Venue filter (Concerts):** Samo dvorane s barem jednom slikom; label "Venue:"; linkovi s podcrtom, `text-xs`; hover efekt (donja crta)
+- **Sport filter (Sport):** Samo vrste sporta s barem jednom slikom; label "Sport:"; isti stil kao venue; hover efekt (donja crta)
+- **Search:** U headeru, desno od Contact linka (dio navigacije); vidljiv samo kad je otvorena galerija (`?category`); ikona povećala, expandable na hover; filter as you type (title, alt, keywords, venue, sport, category); placeholder "Search in gallery..."; URL parametar `q`; kad pretraga nema rezultata – prazan grid (bez poruke "No images")
 - **ImageCard hover:** Scale 1.03 (700ms), tamni overlay (500ms), caption: **title @ venue** (Concerts) ili **Sport // title** (Sport) u jednom redu, datum ispod (manji font); glatke tranzicije; **Interiors, Animals:** bez opisa i datuma
 - **Lightbox:** Slika fit-to-screen (max 2048px, max 100vh); numeracija (1/10) i X gumb na vrhu u istoj liniji; donji caption u okviru s crnom prozirnom pozadinom: **title @ venue, date** (14px) ili **Sport // title, date**; EXIF (camera, lens, exposure, aperture, ISO) – ikona kamere za toggle, prikaz u istom okviru kad uključeno (10px); **Interiors, Animals:** bez opisa i datuma; URL se ažurira s `?image=slug` (useEffect, ne setState callback)
 - **Copyright zaštita:** Desni klik onemogućen (`onContextMenu` preventDefault); pri pokušaju prikazuje se popup s copyright porukom
@@ -390,6 +471,7 @@ DrusanyPortfolio/
 - **Linkovi:** Home, Portfolio (dropdown kategorija), About, Blog, Contact
 - **HeroSlider:** "View Gallery" link (ne "View Project"); prikaz **title @ venue** ako postoji
 - **Aktivna stranica:** `usePathname` + `useSearchParams` za određivanje trenutne lokacije; crta ispod (`border-b`) aktivnog linka na desktopu; crta lijevo (`border-l-2`) u Portfolio dropdownu i mobilnom izborniku
+- **Hover efekti:** Donja crta na hover za sve nav linkove (Home, Portfolio, About, Blog, Contact), filtere (Venue, Sport, Type) i mobilni izbornik; `inline-block`, eksplicitne boje (`border-zinc-900` / `border-white`), `transition-[color,border-color]` – Safari kompatibilnost (izbjegava `border-current` i `border-transparent` koji ne rade pouzdano)
 
 ### Custom Cursor (desktop only)
 
@@ -397,6 +479,12 @@ DrusanyPortfolio/
 - **Dot:** Bijela točka (10px), `mix-blend-mode: difference`; vidljiva uvijek; **trenutno praćenje** (bez kašnjenja, direktni state)
 - **Aperture ikona:** Prikazuje se samo preko fotografija (`data-cursor-aperture` na galeriji, hero slideru, lightboxu); scale 1.5 na hover nad klikabilnim elementima; **spring animacija** (stiffness 400) – glatko prati miš
 - **globals.css:** `body.custom-cursor-active * { cursor: none }`
+
+### About, Contact, Blog stranice
+
+- **About (`/about`):** Naslov (h1) + prose sadržaj iz `pages.json`; tamna pozadina, prose-invert
+- **Contact (`/contact`):** Isto; naslov + prose sadržaj
+- **Blog (`/blog`):** Lista postova; `/blog/[slug]` – pojedinačni post (naslov, datum, thumbnail, prose body); bijela pozadina, prose-zinc
 
 ### Kategorije
 
@@ -437,14 +525,15 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 | **EXIF** | exifr (datum, naslov, keywords, camera, lens, exposure, aperture, ISO) – čita se samo pri uploadu |
 | **Podaci** | `src/data/gallery.json` |
 | **Slike** | `public/uploads/full/[category]/` + `thumbs/[category]/` (WebP, originalni nazivi) |
-| **Admin** | `/admin` + 6 API routes (dev only) |
-| **Admin features** | Category-first flow, galerija filtrirana po kategoriji, Upload, EXIF preview, CategorySelect, VenueSelect, SportSelect, Edit modal (**slug as you type** – title/venue/datum → auto-slug u realnom vremenu), Hero toggle, Delete, **drag-and-drop sortiranje** (redoslijed se sprema) |
+| **Admin** | `/admin` + API routes (dev only): upload, exif-preview, update, delete, hero, reorder, gallery, **pages**, **blog** |
+| **Admin features** | Category-first flow, galerija filtrirana po kategoriji, Upload, EXIF preview, CategorySelect, VenueSelect, SportSelect, Edit modal (**slug as you type**), Hero toggle, Delete, **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – BlockNote editor s StaticBlockTypeBar, tamna tema, WYSIWYG fontovi |
 | **Home** | HeroSlider (6 slides, auto-play 4s, strelice lijevo-desno, "View Gallery", title @ venue) ili masonry Gallery po `?category`; hero samo ručno odabrana |
-| **Header** | Logo (inline SVG), poravnanje lijevo, aktivna stranica (border-b/border-l) |
+| **Header** | Logo (inline SVG), poravnanje lijevo, Search u nav (kad galerija, expandable hover), aktivna stranica (border-b/border-l), hover efekti (Safari: inline-block, eksplicitne boje) |
 | **Custom Cursor** | Dot (trenutno) + aperture (spring, samo preko fotografija), mix-blend-difference, desktop only |
-| **Gallery** | Balanced masonry (shortest column, heights array, aspect ratio); stupci približno jednake visine; useColumnCount (1–4 stupaca), Search (expandable), venue filter (Concerts), sport filter (Sport), ImageCard hover (title @ venue ili Sport // title, datum); Interiors, Animals bez opisa/datuma |
+| **Gallery** | Balanced masonry (shortest column, heights array, aspect ratio); stupci približno jednake visine; useColumnCount (1–4 stupaca), venue filter (Concerts), sport filter (Sport), hover efekti na filterima; scroll na vrh pri učitavanju; ImageCard hover (title @ venue ili Sport // title, datum); Interiors, Animals bez opisa/datuma |
 | **Lightbox** | Fit-to-screen, numeracija + X na vrhu, caption + EXIF u jednom okviru (crna prozirna pozadina), EXIF toggle (ikona kamere), copyright popup na desni klik, URL sync `?image=slug` |
 | **Filtriranje** | Client-side preko JSON-a (`?category=slug`, `?venue=slug` za Concerts, `?sport=slug` za Sport); search filter as you type (title, alt, keywords, venue, sport, category); direktni linkovi `?image=slug` |
+| **Pages & Blog** | `pages.json` (About, Contact – title + html), `blog.json`; BlockNote editor; prose blockquote, tablica, razmak 1.5em između blokova |
 | **Export** | `output: 'export'`, `images.unoptimized: true` |
 | **Output** | `out/` folder |
 | **Design** | Minimalist, velika tipografija, masonry/full-bleed, fade-in |

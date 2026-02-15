@@ -4,10 +4,11 @@ import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Search, Camera } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Camera } from "lucide-react";
 import type { GalleryImage } from "@/lib/getGallery";
 import { VENUES } from "./VenueSelect";
 import { SPORTS } from "./SportSelect";
+import { FOOD_DRINK } from "./FoodDrinkSelect";
 
 function normalizeCategory(cat: string): string {
   return cat
@@ -73,10 +74,17 @@ export default function Gallery({ images }: GalleryProps) {
   const categorySlug = searchParams.get("category");
   const venueSlug = searchParams.get("venue");
   const sportSlug = searchParams.get("sport");
+  const foodDrinkSlug = searchParams.get("foodDrink");
   const imageSlug = searchParams.get("image");
-
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchQuery = searchParams.get("q") ?? "";
   const columnCount = useColumnCount();
+
+  useEffect(() => {
+    if (categorySlug) {
+      const t = setTimeout(() => window.scrollTo(0, 0), 50);
+      return () => clearTimeout(t);
+    }
+  }, [categorySlug, venueSlug, sportSlug, foodDrinkSlug]);
 
   const filteredImages = useMemo(() => {
     if (!categorySlug) return images;
@@ -96,6 +104,12 @@ export default function Gallery({ images }: GalleryProps) {
         (img) => img.sport && normalizeSport(img.sport) === s
       );
     }
+    if (slug === "food-drink" && foodDrinkSlug) {
+      const fd = foodDrinkSlug.toLowerCase();
+      result = result.filter(
+        (img) => (img as { foodDrink?: string }).foodDrink === fd
+      );
+    }
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase();
       result = result.filter((img) => {
@@ -108,6 +122,9 @@ export default function Gallery({ images }: GalleryProps) {
         const sportLabel = img.sport
           ? (SPORTS.find((s) => normalizeSport(s.slug) === normalizeSport(img.sport!))?.label ?? img.sport).toLowerCase()
           : "";
+        const foodDrinkLabel = (img as { foodDrink?: string }).foodDrink
+          ? (FOOD_DRINK.find((fd) => fd.slug === (img as { foodDrink?: string }).foodDrink)?.label ?? "").toLowerCase()
+          : "";
         const category = (img.category || "").toLowerCase();
         return (
           title.includes(q) ||
@@ -115,12 +132,13 @@ export default function Gallery({ images }: GalleryProps) {
           keywords.includes(q) ||
           venueLabel.includes(q) ||
           sportLabel.includes(q) ||
+          foodDrinkLabel.includes(q) ||
           category.includes(q)
         );
       });
     }
     return result;
-  }, [images, categorySlug, venueSlug, sportSlug, searchQuery]);
+  }, [images, categorySlug, venueSlug, sportSlug, foodDrinkSlug, searchQuery]);
 
   const imageColumns = useMemo(() => {
     const cols: GalleryImage[][] = Array.from({ length: columnCount }, () => []);
@@ -136,6 +154,7 @@ export default function Gallery({ images }: GalleryProps) {
 
   const isConcerts = categorySlug?.toLowerCase() === "concerts";
   const isSport = categorySlug?.toLowerCase() === "sport";
+  const isFoodDrink = categorySlug?.toLowerCase() === "food-drink";
 
   const imagesBeforeSearch = useMemo(() => {
     if (!categorySlug) return images;
@@ -155,8 +174,14 @@ export default function Gallery({ images }: GalleryProps) {
         (img) => img.sport && normalizeSport(img.sport) === s
       );
     }
+    if (slug === "food-drink" && foodDrinkSlug) {
+      const fd = foodDrinkSlug.toLowerCase();
+      result = result.filter(
+        (img) => (img as { foodDrink?: string }).foodDrink === fd
+      );
+    }
     return result;
-  }, [images, categorySlug, venueSlug, sportSlug]);
+  }, [images, categorySlug, venueSlug, sportSlug, foodDrinkSlug]);
 
   const isSearchEmpty = searchQuery.trim() && imagesBeforeSearch.length > 0 && filteredImages.length === 0;
 
@@ -185,6 +210,19 @@ export default function Gallery({ images }: GalleryProps) {
     );
     return SPORTS.filter((s) => sportSlugsPresent.has(s.slug));
   }, [images, isSport]);
+
+  const foodDrinkWithImages = useMemo(() => {
+    if (!isFoodDrink) return [];
+    const fdImages = images.filter(
+      (img) => normalizeCategory(img.category) === "food-drink"
+    );
+    const fdSlugsPresent = new Set(
+      fdImages
+        .filter((img) => (img as { foodDrink?: string }).foodDrink)
+        .map((img) => (img as { foodDrink?: string }).foodDrink!)
+    );
+    return FOOD_DRINK.filter((fd) => fdSlugsPresent.has(fd.slug));
+  }, [images, isFoodDrink]);
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [showCopyright, setShowCopyright] = useState(false);
@@ -324,7 +362,7 @@ export default function Gallery({ images }: GalleryProps) {
   }
 
   return (
-    <>
+    <div id="gallery">
       {categorySlug && (
         <div className="mb-8 flex flex-wrap items-center gap-8">
           {isConcerts && (
@@ -334,10 +372,10 @@ export default function Gallery({ images }: GalleryProps) {
               </span>
               <Link
                 href={`/?category=concerts#gallery`}
-                className={`pb-1 text-xs font-extralight tracking-widest transition-colors ${
+                className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                   !venueSlug
-                    ? "border-b border-current text-zinc-900"
-                    : "text-zinc-600 hover:text-zinc-900"
+                    ? "border-b border-zinc-900 text-zinc-900"
+                    : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
                 }`}
               >
                 All
@@ -346,10 +384,10 @@ export default function Gallery({ images }: GalleryProps) {
                 <Link
                   key={v.slug}
                   href={`/?category=concerts&venue=${v.slug}#gallery`}
-                  className={`pb-1 text-xs font-extralight tracking-widest transition-colors ${
+                  className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                     venueSlug === v.slug
-                      ? "border-b border-current text-zinc-900"
-                      : "text-zinc-600 hover:text-zinc-900"
+                      ? "border-b border-zinc-900 text-zinc-900"
+                      : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
                   }`}
                 >
                   {v.label}
@@ -364,10 +402,10 @@ export default function Gallery({ images }: GalleryProps) {
               </span>
               <Link
                 href={`/?category=sport#gallery`}
-                className={`pb-1 text-xs font-extralight tracking-widest transition-colors ${
+                className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                   !sportSlug
-                    ? "border-b border-current text-zinc-900"
-                    : "text-zinc-600 hover:text-zinc-900"
+                    ? "border-b border-zinc-900 text-zinc-900"
+                    : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
                 }`}
               >
                 All
@@ -376,10 +414,10 @@ export default function Gallery({ images }: GalleryProps) {
                 <Link
                   key={s.slug}
                   href={`/?category=sport&sport=${s.slug}#gallery`}
-                  className={`pb-1 text-xs font-extralight tracking-widest transition-colors ${
+                  className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                     sportSlug === s.slug
-                      ? "border-b border-current text-zinc-900"
-                      : "text-zinc-600 hover:text-zinc-900"
+                      ? "border-b border-zinc-900 text-zinc-900"
+                      : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
                   }`}
                 >
                   {s.label}
@@ -387,27 +425,39 @@ export default function Gallery({ images }: GalleryProps) {
               ))}
             </>
           )}
-          <label className="group flex cursor-text items-center overflow-hidden">
-            <Search className="ml-3 mr-2 h-8 w-8 shrink-0 py-2 text-zinc-800 pointer-events-none" strokeWidth={2} />
-            <span
-              className={`inline-flex overflow-hidden border-b border-zinc-300 transition-[width,border-color] duration-200 group-hover:border-zinc-500 group-focus-within:border-zinc-500 ${
-                searchQuery ? "w-36 border-zinc-500" : "w-0 group-hover:w-36 group-focus-within:w-36"
-              }`}
-            >
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="w-36 min-w-36 bg-transparent py-2 pl-1 pr-2 text-sm text-zinc-900 placeholder-zinc-400 outline-none"
-                aria-label="Search images"
-              />
-            </span>
-          </label>
+          {isFoodDrink && (
+            <>
+              <span className="text-xs font-extralight tracking-widest text-zinc-500">
+                Type:
+              </span>
+              <Link
+                href={`/?category=food-drink#gallery`}
+                className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
+                  !foodDrinkSlug
+                    ? "border-b border-zinc-900 text-zinc-900"
+                    : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
+                }`}
+              >
+                All
+              </Link>
+              {foodDrinkWithImages.map((fd) => (
+                <Link
+                  key={fd.slug}
+                  href={`/?category=food-drink&foodDrink=${fd.slug}#gallery`}
+                  className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
+                    foodDrinkSlug === fd.slug
+                      ? "border-b border-zinc-900 text-zinc-900"
+                      : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
+                  }`}
+                >
+                  {fd.label}
+                </Link>
+              ))}
+            </>
+          )}
         </div>
       )}
       <motion.div
-        id="gallery"
         className="grid gap-2 sm:gap-4"
         style={{ gridTemplateColumns: `repeat(${columnCount}, 1fr)` }}
         variants={containerVariants}
@@ -477,7 +527,8 @@ export default function Gallery({ images }: GalleryProps) {
                       )}
                     </p>
                   )}
-                  {(img.capturedAt || img.createdAt) && (
+                  {categorySlug?.toLowerCase() !== "food-drink" &&
+                    (img.capturedAt || img.createdAt) && (
                     <p className="translate-y-2.5 text-xs text-white/70 opacity-0 transition-all duration-500 ease-out group-hover:-translate-y-[10px] group-hover:opacity-100">
                       {new Date(img.capturedAt || img.createdAt!).toLocaleDateString("en-US", {
                         year: "numeric",
@@ -666,7 +717,8 @@ export default function Gallery({ images }: GalleryProps) {
                               {SPORTS.find((s) => s.slug === lightboxImage.sport)?.label ?? lightboxImage.sport}
                             </>
                           )}
-                          {(lightboxImage.capturedAt || lightboxImage.createdAt) && (
+                          {categorySlug?.toLowerCase() !== "food-drink" &&
+                            (lightboxImage.capturedAt || lightboxImage.createdAt) && (
                             <>
                               {(lightboxImage.venue || lightboxImage.sport) ? ", " : ""}
                               <span className="text-white/80">
@@ -706,6 +758,6 @@ export default function Gallery({ images }: GalleryProps) {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }

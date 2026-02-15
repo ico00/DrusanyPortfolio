@@ -90,6 +90,7 @@ export interface GalleryImage {
   iso?: number;
   venue?: string;
   sport?: string;
+  foodDrink?: string;
   keywords?: string;
   slug?: string;
 }
@@ -231,6 +232,7 @@ export async function POST(request: Request) {
     const formCapturedAt = (formData.get("capturedAt") as string) || "";
     const venue = (formData.get("venue") as string) || "";
     const sport = (formData.get("sport") as string) || "";
+    const foodDrink = (formData.get("foodDrink") as string) || "";
     const formKeywords = (formData.get("keywords") as string) || "";
     const formSlug = (formData.get("slug") as string) || "";
     const overwrite = formData.get("overwrite") === "true";
@@ -404,6 +406,7 @@ export async function POST(request: Request) {
         existing.iso = iso;
         if (venue) existing.venue = venue;
         if (sport) existing.sport = sport;
+        if (foodDrink) (existing as { foodDrink?: string }).foodDrink = foodDrink;
         if (keywords) existing.keywords = keywords;
         if (slug) existing.slug = slug;
         if (isHero) existing.isHero = true;
@@ -440,6 +443,7 @@ export async function POST(request: Request) {
       ...(iso != null && { iso }),
       ...(venue && { venue }),
       ...(sport && { sport }),
+      ...(foodDrink && { foodDrink }),
       ...(keywords && { keywords }),
       ...(slug && { slug }),
     };

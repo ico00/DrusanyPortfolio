@@ -25,6 +25,7 @@ export async function POST(request: Request) {
       iso?: number;
       venue?: string;
       sport?: string;
+      foodDrink?: string;
       keywords?: string;
       slug?: string;
     };
@@ -66,6 +67,7 @@ export async function POST(request: Request) {
     if (updates.iso !== undefined) img.iso = updates.iso;
     if (updates.venue !== undefined) img.venue = updates.venue;
     if (updates.sport !== undefined) img.sport = updates.sport;
+    if (updates.foodDrink !== undefined) (img as { foodDrink?: string }).foodDrink = updates.foodDrink;
     if (updates.keywords !== undefined) img.keywords = updates.keywords;
     const titleOrVenueOrDateChanged =
       updates.title !== undefined ||

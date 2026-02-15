@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X, Search } from "lucide-react";
 
-function DrusanyLogo({ className, fill }: { className?: string; fill?: string }) {
+export function DrusanyLogo({ className, fill }: { className?: string; fill?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +46,9 @@ const PORTFOLIO_CATEGORIES = [
 export default function Header() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const category = searchParams.get("category");
+  const searchQuery = searchParams.get("q") ?? "";
   const isHeroMode = !category;
 
   const isHome = pathname === "/" && !category;
@@ -58,10 +60,21 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchExpanded, setSearchExpanded] = useState(false);
 
   const textClass = isHeroMode
     ? "text-white/90 hover:text-white"
     : "text-zinc-600 hover:text-zinc-900";
+  const navLinkClass = (active: boolean) =>
+    `inline-block pb-1 text-sm font-extralight tracking-widest transition-[color,border-color] duration-200 ${textClass} ${
+      active
+        ? isHeroMode
+          ? "border-b border-white"
+          : "border-b border-zinc-900"
+        : isHeroMode
+          ? "border-b border-transparent hover:border-white"
+          : "border-b border-transparent hover:border-zinc-900"
+    }`;
   const dropdownBg = isHeroMode
     ? "border-white/20 bg-zinc-950/95"
     : "border-zinc-200/60 bg-white/95";
@@ -88,7 +101,7 @@ export default function Header() {
 
   return (
     <header className={`fixed left-0 right-0 top-0 z-50 w-full transition-all duration-300 ${headerBg}`}>
-      <div className="flex h-16 w-full max-w-7xl items-center justify-between pl-4 pr-8 md:pl-4 md:pr-12 lg:pl-6 lg:pr-16">
+      <div className="relative flex h-16 w-full max-w-7xl items-center justify-between pl-4 pr-8 md:pl-4 md:pr-12 lg:pl-6 lg:pr-16">
         <Link
           href="/"
           className="flex shrink-0 items-center transition-opacity hover:opacity-80"
@@ -100,11 +113,10 @@ export default function Header() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-10 md:flex md:gap-14 lg:gap-16">
-          <Link
-            href="/"
-            className={`relative pb-1 text-sm font-extralight tracking-widest transition-colors ${textClass} ${isHome ? "border-b border-current" : ""}`}
-          >
+        <nav
+          className="hidden flex-1 items-center justify-end gap-12 md:flex md:gap-14 lg:gap-16"
+        >
+          <Link href="/" className={navLinkClass(isHome)}>
             Home
           </Link>
 
@@ -115,7 +127,15 @@ export default function Header() {
           >
             <button
               type="button"
-              className={`relative flex items-center gap-1 pb-1 text-sm font-extralight tracking-widest transition-colors ${textClass} ${isPortfolio ? "border-b border-current" : ""}`}
+              className={`inline-flex items-center gap-1 pb-1 text-sm font-extralight tracking-widest transition-[color,border-color] duration-200 ${textClass} ${
+                isPortfolio
+                  ? isHeroMode
+                    ? "border-b border-white"
+                    : "border-b border-zinc-900"
+                  : isHeroMode
+                    ? "border-b border-transparent hover:border-white"
+                    : "border-b border-transparent hover:border-zinc-900"
+              }`}
               aria-expanded={dropdownOpen}
               aria-haspopup="true"
             >
@@ -134,7 +154,15 @@ export default function Header() {
                       <Link
                         key={cat.slug}
                         href={`/?category=${cat.slug}#gallery`}
-                        className={`block border-l-2 px-4 py-2 text-sm font-extralight tracking-wider transition-colors ${dropdownItemClass} ${isActive ? "border-current" : "border-transparent"}`}
+                        className={`block border-l-2 px-4 py-2 text-sm font-extralight tracking-wider transition-colors ${dropdownItemClass} ${
+                          isActive
+                            ? isHeroMode
+                              ? "border-white"
+                              : "border-zinc-900"
+                            : isHeroMode
+                              ? "border-transparent hover:border-white"
+                              : "border-transparent hover:border-zinc-900"
+                        }`}
                         onClick={() => setDropdownOpen(false)}
                       >
                         {cat.label}
@@ -146,26 +174,48 @@ export default function Header() {
             )}
           </div>
 
-          <Link
-            href="/about"
-            className={`relative pb-1 text-sm font-extralight tracking-widest transition-colors ${textClass} ${isAbout ? "border-b border-current" : ""}`}
-          >
+          <Link href="/about" className={navLinkClass(isAbout)}>
             About
           </Link>
 
-          <Link
-            href="/blog"
-            className={`relative pb-1 text-sm font-extralight tracking-widest transition-colors ${textClass} ${isBlog ? "border-b border-current" : ""}`}
-          >
+          <Link href="/blog" className={navLinkClass(isBlog)}>
             Blog
           </Link>
 
-          <Link
-            href="/contact"
-            className={`relative pb-1 text-sm font-extralight tracking-widest transition-colors ${textClass} ${isContact ? "border-b border-current" : ""}`}
-          >
+          <Link href="/contact" className={navLinkClass(isContact)}>
             Contact
           </Link>
+
+          {isPortfolio && (
+            <div
+              className="ml-6 flex flex-row-reverse items-center gap-2 overflow-hidden"
+              onMouseEnter={() => setSearchExpanded(true)}
+              onMouseLeave={() => !searchQuery && setSearchExpanded(false)}
+            >
+              <Search className="h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2} />
+              <span
+                className={`inline-flex overflow-hidden border-b border-zinc-300 transition-[width] duration-200 ${
+                  searchQuery || searchExpanded ? "w-28" : "w-0"
+                }`}
+              >
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    const q = e.target.value;
+                    const params = new URLSearchParams(searchParams.toString());
+                    if (q.trim()) params.set("q", q);
+                    else params.delete("q");
+                    const query = params.toString();
+                    router.replace(query ? `${pathname}?${query}#gallery` : pathname, { scroll: false });
+                  }}
+                  placeholder="Search in gallery..."
+                  className="w-28 min-w-28 bg-transparent py-0.5 pl-1.5 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
+                  aria-label="Search images"
+                />
+              </span>
+            </div>
+          )}
         </nav>
 
         <button
@@ -181,10 +231,34 @@ export default function Header() {
       {mobileOpen && (
         <div className={`border-t px-8 py-6 backdrop-blur-xl md:hidden ${mobileBg}`}>
           <div className={`flex flex-col gap-4 ${isHeroMode ? "text-white/90" : "text-zinc-600"}`}>
+            {isPortfolio && (
+              <label className="flex items-center gap-2 border-b border-zinc-300 pb-4">
+                <Search className="h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2} />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    const q = e.target.value;
+                    const params = new URLSearchParams(searchParams.toString());
+                    if (q.trim()) params.set("q", q);
+                    else params.delete("q");
+                    const query = params.toString();
+                    router.replace(query ? `${pathname}?${query}#gallery` : pathname, { scroll: false });
+                  }}
+                  placeholder="Search in gallery..."
+                  className={`flex-1 bg-transparent text-sm outline-none placeholder:opacity-60 ${
+                    isHeroMode ? "text-white placeholder-white/50" : "text-zinc-900 placeholder-zinc-400"
+                  }`}
+                  aria-label="Search images"
+                />
+              </label>
+            )}
             <Link
               href="/"
               onClick={() => setMobileOpen(false)}
-              className={`border-l-2 py-1 pl-3 text-sm font-extralight tracking-widest ${isHome ? "border-current" : "border-transparent"}`}
+              className={`block py-1 pl-3 text-sm font-extralight tracking-widest transition-colors border-l-2 ${
+                isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
+              } ${isHome ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
             >
               Home
             </Link>
@@ -197,7 +271,9 @@ export default function Header() {
                     key={cat.slug}
                     href={`/?category=${cat.slug}#gallery`}
                     onClick={() => setMobileOpen(false)}
-                    className={`border-l-2 py-1 pl-6 text-sm font-extralight tracking-wider ${isActive ? "border-current" : "border-transparent"}`}
+                    className={`block py-1 pl-6 text-sm font-extralight tracking-wider transition-colors border-l-2 ${
+                      isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
+                    } ${isActive ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
                   >
                     {cat.label}
                   </Link>
@@ -207,21 +283,27 @@ export default function Header() {
             <Link
               href="/about"
               onClick={() => setMobileOpen(false)}
-              className={`border-l-2 py-1 pl-3 text-sm font-extralight tracking-widest ${isAbout ? "border-current" : "border-transparent"}`}
+              className={`block py-1 pl-3 text-sm font-extralight tracking-widest transition-colors border-l-2 ${
+                isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
+              } ${isAbout ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
             >
               About
             </Link>
             <Link
               href="/blog"
               onClick={() => setMobileOpen(false)}
-              className={`border-l-2 py-1 pl-3 text-sm font-extralight tracking-widest ${isBlog ? "border-current" : "border-transparent"}`}
+              className={`block py-1 pl-3 text-sm font-extralight tracking-widest transition-colors border-l-2 ${
+                isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
+              } ${isBlog ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
             >
               Blog
             </Link>
             <Link
               href="/contact"
               onClick={() => setMobileOpen(false)}
-              className={`border-l-2 py-1 pl-3 text-sm font-extralight tracking-widest ${isContact ? "border-current" : "border-transparent"}`}
+              className={`block py-1 pl-3 text-sm font-extralight tracking-widest transition-colors border-l-2 ${
+                isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
+              } ${isContact ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
             >
               Contact
             </Link>

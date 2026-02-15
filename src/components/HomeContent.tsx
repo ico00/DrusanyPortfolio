@@ -27,6 +27,9 @@ function HomeContentInner({ images }: HomeContentProps) {
   const router = useRouter();
   const pathname = usePathname();
   const category = searchParams.get("category");
+  const venue = searchParams.get("venue");
+  const sport = searchParams.get("sport");
+  const foodDrink = searchParams.get("foodDrink");
   const imageSlug = searchParams.get("image");
 
   useEffect(() => {
@@ -53,15 +56,24 @@ function HomeContentInner({ images }: HomeContentProps) {
     if (!category) {
       document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
+      history.scrollRestoration = "auto";
     } else {
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
+      history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+      const t = setTimeout(() => window.scrollTo(0, 0), 50);
+      return () => {
+        clearTimeout(t);
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+      };
     }
     return () => {
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
     };
-  }, [category]);
+  }, [category, venue, sport, foodDrink]);
 
   if (category) {
     return (

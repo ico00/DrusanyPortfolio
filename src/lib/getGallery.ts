@@ -27,6 +27,8 @@ export interface GalleryImage {
   venue?: string;
   /** Sport type (sport only): football, basketball, handball, auto-moto, athletics */
   sport?: string;
+  /** Food or Drink (food-drink only): food, drink */
+  foodDrink?: string;
   /** Keywords (comma-separated, from EXIF IPTC/XMP) */
   keywords?: string;
   /** URL slug za direktne linkove (npr. depeche-mode-arena-zagreb-2013) */

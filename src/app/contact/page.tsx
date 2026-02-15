@@ -1,9 +1,13 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { ArrowLeft, Mail } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
+import { getPages } from "@/lib/pages";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const pages = await getPages();
+  const { title, html } = pages.contact;
+
   return (
     <div className="min-h-screen bg-zinc-950">
       <Suspense fallback={<div className="h-16" />}>
@@ -18,21 +22,13 @@ export default function ContactPage() {
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
-          <h1 className="font-serif text-4xl font-normal tracking-tight text-white md:text-5xl lg:text-6xl">
-            Contact
+          <h1 className="mb-12 font-serif text-4xl font-light tracking-tight text-white md:text-5xl">
+            {title}
           </h1>
-          <div className="mt-12 border-l-2 border-white/20 pl-8">
-            <p className="text-lg leading-relaxed text-zinc-400 md:text-xl">
-              For bookings and collaboration:
-            </p>
-            <a
-              href="mailto:hello@example.com"
-              className="mt-4 inline-flex items-center gap-3 text-xl text-white transition-colors hover:text-white/80 md:text-2xl"
-            >
-              <Mail className="h-6 w-6 text-white/60" />
-              hello@example.com
-            </a>
-          </div>
+          <div
+            className="prose prose-invert prose-lg max-w-none [&_a]:text-white/80 [&_a]:underline [&_a:hover]:text-white"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
         </div>
       </main>
     </div>

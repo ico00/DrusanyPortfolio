@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* BlockNote – Tailwind utility classes */
+@source "../../node_modules/@blocknote/shadcn";
+
 html {
   scroll-behavior: smooth;
 }
@@ -33,3 +36,233 @@ body {
 body.custom-cursor-active * {
   cursor: none !important;
 }
+
+/* RichTextEditor – svijetli tekst na tamnoj pozadini */
+.ProseMirror {
+  color: rgb(228 228 231); /* zinc-200 */
+}
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4 {
+  color: rgb(244 244 245); /* zinc-100 */
+}
+.ProseMirror p,
+.ProseMirror li {
+  color: rgb(228 228 231);
+}
+.ProseMirror.ProseMirror-empty::before {
+  color: rgb(113 113 122); /* zinc-500 */
+}
+
+/* BlockNote – tamna tema (zinc/amber). data-theme="dark" na html kad je admin otvoren */
+[data-theme="dark"],
+[data-theme="dark"] .blocknote-editor-wrapper,
+.blocknote-editor-wrapper.dark,
+.blocknote-editor-wrapper [data-theme="dark"],
+.bn-editor-dark {
+  --radius: 0.5rem;
+  --background: rgb(39 39 42); /* zinc-800 */
+  --foreground: rgb(228 228 231); /* zinc-200 */
+  --card: rgb(39 39 42);
+  --card-foreground: rgb(228 228 231);
+  --popover: rgb(39 39 42);
+  --popover-foreground: rgb(228 228 231);
+  --primary: rgb(245 158 11); /* amber-500 */
+  --primary-foreground: rgb(24 24 27); /* zinc-900 */
+  --secondary: rgb(63 63 70); /* zinc-600 */
+  --secondary-foreground: rgb(228 228 231);
+  --muted: rgb(63 63 70);
+  --muted-foreground: rgb(161 161 170); /* zinc-400 */
+  --accent: rgb(63 63 70);
+  --accent-foreground: rgb(228 228 231);
+  --destructive: rgb(185 28 28);
+  --border: rgb(63 63 70);
+  --input: rgb(63 63 70);
+  --ring: rgb(245 158 11);
+}
+
+@layer base {
+  .bn-shadcn * {
+    border-color: var(--border);
+    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
+  }
+}
+
+/* BlockNote – svijetli tekst u editoru + isti fontovi kao na stranicama (WYSIWYG) */
+.blocknote-editor-wrapper .bn-editor,
+.blocknote-editor-wrapper .bn-block-content,
+.blocknote-editor-wrapper .bn-inline-content {
+  color: rgb(228 228 231);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+.blocknote-editor-wrapper .bn-editor h1,
+.blocknote-editor-wrapper .bn-editor h2,
+.blocknote-editor-wrapper .bn-editor h3,
+.blocknote-editor-wrapper .bn-editor h4,
+.blocknote-editor-wrapper .bn-editor h5,
+.blocknote-editor-wrapper .bn-editor h6,
+.blocknote-editor-wrapper .bn-block-content[data-content-type="heading"] {
+  color: rgb(244 244 245);
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+/* BlockNote – side menu (+ i ⋮⋮) svijetle boje na tamnoj pozadini */
+[data-theme="dark"] .bn-container,
+[data-theme="dark"] .bn-container[data-color-scheme="dark"] {
+  --bn-colors-side-menu: rgb(251 191 36); /* amber-400 */
+  --bn-colors-menu-text: rgb(228 228 231);
+  --bn-colors-menu-background: rgb(39 39 42);
+  --bn-colors-hovered-text: rgb(244 244 245);
+  --bn-colors-hovered-background: rgb(63 63 70);
+  --bn-colors-selected-text: rgb(24 24 27);
+  --bn-colors-selected-background: rgb(251 191 36);
+}
+[data-theme="dark"] .bn-side-menu .bn-button,
+[data-theme="dark"] .bn-toggle-add-block-button {
+  color: rgb(251 191 36) !important;
+}
+[data-theme="dark"] .bn-side-menu .bn-button:hover,
+[data-theme="dark"] .bn-toggle-add-block-button:hover {
+  color: rgb(253 224 71) !important; /* amber-300 */
+  background-color: rgb(63 63 70) !important;
+}
+
+/* BlockNote – izbornici (dropdown) iznad svega + svijetli tekst */
+[data-theme="dark"] [data-radix-popper-content-wrapper] {
+  z-index: 99999 !important;
+}
+[data-theme="dark"] [data-slot="dropdown-menu-content"],
+[data-theme="dark"] [data-slot="popover-content"],
+[data-theme="dark"] [data-slot="select-content"] {
+  z-index: 99999 !important;
+  background-color: rgb(39 39 42) !important;
+  color: rgb(228 228 231) !important;
+  border-color: rgb(63 63 70) !important;
+  opacity: 1 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+[data-theme="dark"] [data-slot="select-content"] * {
+  color: rgb(228 228 231) !important;
+}
+[data-theme="dark"] [data-slot="select-content"] [data-slot="select-item"]:hover,
+[data-theme="dark"] [data-slot="select-content"] [data-slot="select-item"][data-highlighted] {
+  background-color: rgb(63 63 70) !important;
+  color: rgb(244 244 245) !important;
+}
+[data-theme="dark"] [data-slot="dropdown-menu-content"] *,
+[data-theme="dark"] [data-slot="popover-content"] * {
+  color: inherit;
+}
+[data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"],
+[data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-label"] {
+  color: rgb(228 228 231);
+}
+[data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"]:hover,
+[data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"]:focus {
+  background-color: rgb(63 63 70) !important;
+  color: rgb(244 244 245) !important;
+}
+
+/* BlockNote – slash menu i grid suggestion menu (tip bloka) */
+[data-theme="dark"] .bn-suggestion-menu,
+[data-theme="dark"] .bn-grid-suggestion-menu {
+  z-index: 99999 !important;
+  background-color: rgb(39 39 42) !important;
+  color: rgb(228 228 231) !important;
+  border: 1px solid rgb(63 63 70) !important;
+}
+[data-theme="dark"] .bn-suggestion-menu-item,
+[data-theme="dark"] .bn-grid-suggestion-menu-item {
+  color: rgb(228 228 231) !important;
+}
+[data-theme="dark"] .bn-suggestion-menu-item:hover,
+[data-theme="dark"] .bn-suggestion-menu-item[data-selected],
+[data-theme="dark"] .bn-grid-suggestion-menu-item:hover,
+[data-theme="dark"] .bn-grid-suggestion-menu-item[data-selected] {
+  background-color: rgb(63 63 70) !important;
+  color: rgb(251 191 36) !important;
+}
+[data-theme="dark"] .bn-menu-dropdown {
+  z-index: 99999 !important;
+}
+
+/* BlockNote – Formatting Toolbar i Link Toolbar: neprozirna pozadina, dobra vidljivost */
+[data-theme="dark"] .bn-toolbar,
+[data-theme="dark"] .bn-formatting-toolbar,
+[data-theme="dark"] .bn-link-toolbar {
+  background-color: rgb(39 39 42) !important;
+  color: rgb(228 228 231) !important;
+  border: 1px solid rgb(63 63 70) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  opacity: 1 !important;
+}
+[data-theme="dark"] .bn-toolbar *,
+[data-theme="dark"] .bn-formatting-toolbar *,
+[data-theme="dark"] .bn-link-toolbar * {
+  color: rgb(228 228 231) !important;
+}
+[data-theme="dark"] .bn-toolbar button,
+[data-theme="dark"] .bn-formatting-toolbar button,
+[data-theme="dark"] .bn-link-toolbar button {
+  color: rgb(228 228 231) !important;
+}
+[data-theme="dark"] .bn-toolbar [data-slot="select-trigger"],
+[data-theme="dark"] .bn-formatting-toolbar [data-slot="select-trigger"] {
+  color: rgb(228 228 231) !important;
+  background-color: rgb(63 63 70) !important;
+}
+
+/* BlockNote – statična traka stila bloka (order -1 = prikaz na vrhu) */
+.bn-has-static-toolbar.bn-container {
+  display: flex;
+  flex-direction: column;
+}
+.bn-static-block-type-bar .bn-select {
+  min-width: 140px;
+}
+
+/* Prose – veći razmak između blokova (nakon entera) za lakše čitanje */
+.prose > * + * {
+  margin-top: 1.5em;
+}
+
+/* Prose – blockquote (quote blok) i tablica na stranicama About, Contact, Blog */
+.prose blockquote {
+  border-left: 4px solid rgb(161 161 170); /* zinc-400 */
+  margin: 1.5em 0;
+  padding-left: 1em;
+  font-style: italic;
+  color: inherit;
+}
+.prose-invert blockquote {
+  border-left-color: rgb(113 113 122); /* zinc-500 */
+  color: rgb(228 228 231);
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+}
+.prose th,
+.prose td {
+  border: 1px solid rgb(228 228 231);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.prose th {
+  font-weight: 600;
+  background-color: rgb(244 244 245);
+}
+.prose-invert th,
+.prose-invert td {
+  border-color: rgb(63 63 70);
+}
+.prose-invert th {
+  background-color: rgb(63 63 70);
+  color: rgb(244 244 245);
+}
+.prose-invert td {
+  color: rgb(228 228 231);
+}
+
