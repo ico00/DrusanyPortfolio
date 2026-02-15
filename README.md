@@ -13,7 +13,8 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 - **Hero slider** – Početna stranica s 6 slideova po kategorijama, auto-play
 - **Pretraga** – Filter as you type (naslov, venue, sport, keywords)
 - **Direktni linkovi** – URL slug po slici (npr. `/?category=concerts&image=depeche-mode-arena-zagreb-2013`)
-- **Admin panel** – Samo u development modu: upload, uređivanje metapodataka, EXIF preview, drag-and-drop sortiranje, hero odabir
+- **About, Contact, Blog** – Stranice s BlockNote WYSIWYG editorom (blokovi, naslovi, citati, tablice)
+- **Admin panel** – Samo u development modu: galerija (upload, edit, hero, sortiranje), About/Contact, Blog – sve s BlockNote editorom
 
 ## 🛠 Tech stack
 
@@ -21,6 +22,7 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 |-------------|---------|
 | Next.js 16 | App Router, statični export |
 | Tailwind CSS 4 | Styling |
+| BlockNote | Rich text editor (About, Contact, Blog) |
 | Framer Motion | Animacije |
 | Sharp | Image processing (WebP, resize) |
 | exifr | EXIF metadata (datum, naslov, camera, lens…) |
@@ -55,6 +57,7 @@ Otvori [http://localhost:3000](http://localhost:3000) u pregledniku.
 
 - **Početna stranica** – Hero slider s kategorijama
 - **Galerija** – Dodaj `?category=concerts` (ili sport, animals, interiors, zagreb, food-drink) u URL
+- **About, Contact, Blog** – `/about`, `/contact`, `/blog`
 - **Admin panel** – [http://localhost:3000/admin](http://localhost:3000/admin) – dostupan **samo u dev modu**
 
 ## 📜 Dostupne naredbe
@@ -74,11 +77,16 @@ DrusanyPortfolio/
 ├── src/
 │   ├── app/              # Stranice i API rute
 │   │   ├── admin/        # Admin panel (dev only)
-│   │   └── api/          # Upload, update, delete, reorder, hero, gallery
-│   ├── components/       # Gallery, Header, AdminClient, CategorySelect…
+│   │   ├── api/          # upload, update, delete, reorder, hero, gallery, pages, blog
+│   │   ├── about/        # About stranica
+│   │   ├── contact/      # Contact stranica
+│   │   └── blog/         # Blog lista + [slug] pojedinačni post
+│   ├── components/       # Gallery, Header, AdminClient, BlockNoteEditor, AdminPages, AdminBlog…
 │   ├── data/
-│   │   └── gallery.json  # Metapodaci o slikama
-│   └── lib/              # getGallery, slug utils
+│   │   ├── gallery.json  # Metapodaci o slikama
+│   │   ├── pages.json   # About, Contact (title + html)
+│   │   └── blog.json    # Blog postovi
+│   └── lib/              # getGallery, pages, blog, slug utils
 └── out/                  # Statični output (generira se pri build)
 ```
 
@@ -87,13 +95,9 @@ DrusanyPortfolio/
 Admin je dostupan **samo kada pokreneš `npm run dev`** – u produkcijskom buildu se ne uključuje.
 
 **Funkcionalnosti:**
-- Odabir kategorije → upload slika u tu kategoriju
-- EXIF preview – automatsko popunjavanje naslova i datuma pri odabiru datoteke
-- Uređivanje opisa (title, venue, sport, slug, keywords, camera, lens…)
-- Slug se automatski generira iz naslova/venue/datuma – vidiš ga **as you type**
-- Drag-and-drop za promjenu redoslijeda slika
-- Hero odabir – koja slika se prikazuje na početnoj za svaku kategoriju
-- Brisanje slika
+- **Galerija:** Odabir kategorije → upload slika; EXIF preview; uređivanje opisa (title, venue, sport, slug, keywords…); slug **as you type**; drag-and-drop sortiranje; hero odabir; brisanje
+- **Pages:** Uređivanje About i Contact stranica – naslov + BlockNote editor (blokovi, naslovi, citati, tablice)
+- **Blog:** Kreiranje i uređivanje blog postova – title, datum, thumbnail, sadržaj (BlockNote)
 
 ## 🌐 Deployment
 
