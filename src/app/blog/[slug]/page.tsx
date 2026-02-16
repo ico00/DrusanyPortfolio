@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
+import ProseContent from "@/components/ProseContent";
 import blogData from "../../../data/blog.json";
 
 export function generateStaticParams() {
@@ -76,9 +77,9 @@ export default async function BlogPostPage({
             {post.date}
           </time>
         </header>
-        <div
+        <ProseContent
+          html={post.body}
           className="prose prose-zinc max-w-none prose-headings:font-serif prose-a:text-zinc-600 prose-a:underline prose-a:hover:text-zinc-900"
-          dangerouslySetInnerHTML={{ __html: post.body }}
         />
       </article>
     </div>

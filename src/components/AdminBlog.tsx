@@ -7,8 +7,11 @@ import {
   Pencil,
   Trash2,
   X,
+  Check,
+  AlertCircle,
 } from "lucide-react";
 import BlockNoteEditor from "./BlockNoteEditorDynamic";
+import DatePicker from "./DatePicker";
 import type { BlogPost } from "@/lib/blog";
 
 export default function AdminBlog() {
@@ -198,11 +201,9 @@ export default function AdminBlog() {
             </div>
             <div>
               <label className="mb-2 block text-sm text-zinc-400">Date</label>
-              <input
-                type="date"
+              <DatePicker
                 value={form.date}
-                onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
-                className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                onChange={(v) => setForm((f) => ({ ...f, date: v }))}
               />
             </div>
             <div>
@@ -304,11 +305,16 @@ export default function AdminBlog() {
 
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 rounded-lg px-4 py-2 text-sm ${
-            toast.type === "success" ? "bg-green-900/90 text-green-100" : "bg-red-900/90 text-red-100"
+          className={`fixed bottom-6 right-6 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg ${
+            toast.type === "success" ? "bg-emerald-600 text-white" : "bg-red-600 text-white"
           }`}
         >
-          {toast.message}
+          {toast.type === "success" ? (
+            <Check className="h-5 w-5" />
+          ) : (
+            <AlertCircle className="h-5 w-5" />
+          )}
+          <span className="text-sm font-medium">{toast.message}</span>
         </div>
       )}
     </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useCallback } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Check, AlertCircle } from "lucide-react";
 import BlockNoteEditor from "./BlockNoteEditorDynamic";
 
 interface PageContent {
@@ -10,9 +10,18 @@ interface PageContent {
   html: string;
 }
 
+interface AboutPageContent extends PageContent {
+  quote?: string;
+}
+
+interface ContactPageContent extends PageContent {
+  email?: string;
+  formspreeEndpoint?: string;
+}
+
 interface PagesData {
-  about: PageContent;
-  contact: PageContent;
+  about: AboutPageContent;
+  contact: ContactPageContent;
 }
 
 interface AdminPagesProps {
@@ -25,8 +34,11 @@ export default function AdminPages({ page }: AdminPagesProps) {
   const [saving, setSaving] = useState(false);
   const [aboutTitle, setAboutTitle] = useState("");
   const [aboutHtml, setAboutHtml] = useState("");
+  const [aboutQuote, setAboutQuote] = useState("");
   const [contactTitle, setContactTitle] = useState("");
   const [contactHtml, setContactHtml] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactFormspree, setContactFormspree] = useState("");
   const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   const fetchPages = useCallback(async () => {
@@ -37,8 +49,11 @@ export default function AdminPages({ page }: AdminPagesProps) {
         setPages(data);
         setAboutTitle(data.about?.title ?? "About");
         setAboutHtml(data.about?.html ?? "");
+        setAboutQuote(data.about?.quote ?? "");
         setContactTitle(data.contact?.title ?? "Contact");
         setContactHtml(data.contact?.html ?? "");
+        setContactEmail(data.contact?.email ?? "");
+        setContactFormspree(data.contact?.formspreeEndpoint ?? "");
       }
     } catch {
       setPages({ about: { title: "About", html: "" }, contact: { title: "Contact", html: "" } });
@@ -63,8 +78,13 @@ export default function AdminPages({ page }: AdminPagesProps) {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          about: { title: aboutTitle, html: aboutHtml },
-          contact: { title: contactTitle, html: contactHtml },
+          about: { title: aboutTitle, html: aboutHtml, quote: aboutQuote || undefined },
+          contact: {
+            title: contactTitle,
+            html: contactHtml,
+            email: contactEmail || undefined,
+            formspreeEndpoint: contactFormspree || undefined,
+          },
         }),
       });
       if (!res.ok) throw new Error("Failed to save");
@@ -90,7 +110,60 @@ export default function AdminPages({ page }: AdminPagesProps) {
   const setContent = page === "about" ? setAboutHtml : setContactHtml;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-14">
+      {page === "contact" && (
+        <>
+          <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
+            <label className="mb-2 block text-sm font-medium text-zinc-400">
+              Formspree endpoint (preporučeno)
+            </label>
+            <input
+              type="url"
+              value={contactFormspree}
+              onChange={(e) => setContactFormspree(e.target.value)}
+              placeholder="https://formspree.io/f/xxxxx"
+              className="w-full rounded-lg border border-zinc-600 bg-zinc-700/50 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+            />
+            <p className="mt-1 text-xs text-zinc-500">
+              Kreiraj besplatni formu na formspree.io – poruke stižu na email. Ako prazno, koristi se mailto.
+            </p>
+          </div>
+          <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
+            <label className="mb-2 block text-sm font-medium text-zinc-400">
+              Email (fallback za mailto)
+            </label>
+            <input
+              type="email"
+              value={contactEmail}
+              onChange={(e) => setContactEmail(e.target.value)}
+              placeholder="hello@example.com"
+              className="w-full rounded-lg border border-zinc-600 bg-zinc-700/50 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+            />
+            <p className="mt-1 text-xs text-zinc-500">
+              Koristi se samo ako Formspree nije postavljen
+            </p>
+          </div>
+        </>
+      )}
+
+      {page === "about" && (
+        <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
+          <label className="mb-2 block text-sm font-medium text-zinc-400">
+            Citat na slici (preko lijevog panela)
+          </label>
+          <input
+            type="text"
+            value={aboutQuote}
+            onChange={(e) => setAboutQuote(e.target.value)}
+            placeholder="Npr. Stay awhile and listen"
+            className="w-full rounded-lg border border-zinc-600 bg-zinc-700/50 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+          />
+          <p className="mt-1 text-xs text-zinc-500">
+            Prikazuje se u donjem lijevom kutu slike na About stranici
+          </p>
+        </div>
+      )}
+
       <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
         <label className="mb-2 block text-sm font-medium text-zinc-400">
           Naslov stranice
@@ -106,14 +179,8 @@ export default function AdminPages({ page }: AdminPagesProps) {
 
       <div>
         <label className="mb-2 block text-sm text-zinc-400">
-          {page === "about" ? "Sadržaj About stranice" : "Sadržaj Contact stranice"}
+          {page === "about" ? "Sadržaj About stranice" : "Uvodni tekst iznad kontakt forme"}
         </label>
-        <p className="mb-2 rounded-lg bg-zinc-800/80 px-3 py-2 text-xs text-zinc-400">
-          <strong className="text-zinc-300">Blok editor:</strong> Naciljaj blok ili klikni unutra → lijevo se pojavi izbornik (⋮⋮ +). Upiši <kbd className="rounded bg-zinc-700 px-1.5 py-0.5">/</kbd> za tip bloka (naslov, lista, slika…). Označi tekst za formatiranje (bold, boja, link).
-        </p>
-        <p className="mb-2 rounded-lg bg-zinc-800/50 px-3 py-2 text-xs text-zinc-500">
-          <strong className="text-zinc-400">Promjena tipa bloka (npr. H1 → H3):</strong> Označi tekst u bloku → iznad se pojavi toolbar s dropdownom tipa bloka (prva ikona). Klikni na nju da vidiš trenutni stil i odaberi drugi (Heading 1, 2, 3, Paragraf…).
-        </p>
         <BlockNoteEditor
           key={page}
           content={content}
@@ -142,11 +209,16 @@ export default function AdminPages({ page }: AdminPagesProps) {
 
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 rounded-lg px-4 py-2 text-sm ${
-            toast.type === "success" ? "bg-green-900/90 text-green-100" : "bg-red-900/90 text-red-100"
+          className={`fixed bottom-6 right-6 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg ${
+            toast.type === "success" ? "bg-emerald-600 text-white" : "bg-red-600 text-white"
           }`}
         >
-          {toast.message}
+          {toast.type === "success" ? (
+            <Check className="h-5 w-5" />
+          ) : (
+            <AlertCircle className="h-5 w-5" />
+          )}
+          <span className="text-sm font-medium">{toast.message}</span>
         </div>
       )}
     </div>

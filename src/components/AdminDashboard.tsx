@@ -199,14 +199,17 @@ export default function AdminDashboard() {
                   axisLine={{ stroke: "#52525b" }}
                 />
                 <Tooltip
+                  cursor={false}
                   contentStyle={{
                     backgroundColor: "#27272a",
-                    border: "1px solid #3f3f46",
+                    border: "1px solid #52525b",
                     borderRadius: "8px",
+                    padding: "10px 14px",
                   }}
-                  labelStyle={{ color: "#e4e4e7" }}
+                  labelStyle={{ color: "#fafafa", fontWeight: 600, fontSize: 14 }}
+                  itemStyle={{ color: "#e4e4e7", fontSize: 13 }}
                 />
-                <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="count" radius={[4, 4, 0, 0]} background={false}>
                   {stats.imagesByCategory.map((_, index) => (
                     <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                   ))}
@@ -238,11 +241,15 @@ export default function AdminDashboard() {
                     ))}
                   </Pie>
                   <Tooltip
+                    cursor={false}
                     contentStyle={{
                       backgroundColor: "#27272a",
-                      border: "1px solid #3f3f46",
+                      border: "1px solid #52525b",
                       borderRadius: "8px",
+                      padding: "10px 14px",
                     }}
+                    labelStyle={{ color: "#fafafa", fontWeight: 600, fontSize: 14 }}
+                    itemStyle={{ color: "#e4e4e7", fontSize: 13 }}
                   />
                   <Legend
                     wrapperStyle={{ fontSize: "12px" }}

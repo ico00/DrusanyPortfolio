@@ -54,6 +54,7 @@ import CategorySelect, { CATEGORIES } from "./CategorySelect";
 import VenueSelect from "./VenueSelect";
 import SportSelect from "./SportSelect";
 import FoodDrinkSelect from "./FoodDrinkSelect";
+import DateTimePicker from "./DateTimePicker";
 import { generateSlug } from "@/lib/slug";
 
 interface GalleryImage {
@@ -298,11 +299,17 @@ export default function AdminClient() {
   const [galleryExpanded, setGalleryExpanded] = useState(false);
 
   useEffect(() => {
-    if (adminTab === "about" || adminTab === "contact") setPagesExpanded(true);
+    if (adminTab === "about" || adminTab === "contact") {
+      setPagesExpanded(true);
+      setGalleryExpanded(false);
+    }
   }, [adminTab]);
 
   useEffect(() => {
-    if (adminTab === "gallery" && category) setGalleryExpanded(true);
+    if (adminTab === "gallery" && category) {
+      setGalleryExpanded(true);
+      setPagesExpanded(false);
+    }
   }, [adminTab, category]);
 
   const fetchGallery = useCallback(async () => {
@@ -781,7 +788,11 @@ export default function AdminClient() {
               <button
                 type="button"
                 onClick={() => {
-                  setGalleryExpanded((e) => !e);
+                  setGalleryExpanded((e) => {
+                    if (e) return false;
+                    setPagesExpanded(false);
+                    return true;
+                  });
                   setAdminTab("gallery");
                 }}
                 className={`flex w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
@@ -800,37 +811,49 @@ export default function AdminClient() {
                   <ChevronRight className="h-4 w-4 shrink-0" />
                 )}
               </button>
-              {galleryExpanded && (
-                <div className="ml-6 mt-0.5 space-y-0.5 border-l border-zinc-700 pl-2">
-                  {CATEGORIES.map((cat) => {
-                    const Icon = cat.icon;
-                    const isActive = adminTab === "gallery" && normalizeCategory(category) === cat.slug;
-                    return (
-                      <button
-                        key={cat.slug}
-                        type="button"
-                        onClick={() => {
-                          setCategory(cat.slug);
-                          setAdminTab("gallery");
-                        }}
-                        className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
-                          isActive
-                            ? "text-white"
-                            : "text-zinc-400 hover:text-zinc-200"
-                        }`}
-                      >
-                        <Icon className="h-4 w-4 shrink-0" />
-                        {cat.label}
-                      </button>
-                    );
-                  })}
+              <div
+                className={`grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out ${
+                  galleryExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                }`}
+              >
+                <div className="min-h-0">
+                  <div className="ml-6 mt-0.5 space-y-0.5 border-l border-zinc-700 pl-2">
+                    {CATEGORIES.map((cat) => {
+                      const Icon = cat.icon;
+                      const isActive = adminTab === "gallery" && normalizeCategory(category) === cat.slug;
+                      return (
+                        <button
+                          key={cat.slug}
+                          type="button"
+                          onClick={() => {
+                            setCategory(cat.slug);
+                            setAdminTab("gallery");
+                          }}
+                          className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
+                            isActive
+                              ? "text-white"
+                              : "text-zinc-400 hover:text-zinc-200"
+                          }`}
+                        >
+                          <Icon className="h-4 w-4 shrink-0" />
+                          {cat.label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
             <div>
               <button
                 type="button"
-                onClick={() => setPagesExpanded((e) => !e)}
+                onClick={() => {
+                  setPagesExpanded((e) => {
+                    if (e) return false;
+                    setGalleryExpanded(false);
+                    return true;
+                  });
+                }}
                 className={`flex w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
                   adminTab === "about" || adminTab === "contact"
                     ? "border-l-2 border-blue-500/80 bg-zinc-800 text-white"
@@ -847,32 +870,38 @@ export default function AdminClient() {
                   <ChevronRight className="h-4 w-4 shrink-0" />
                 )}
               </button>
-              {pagesExpanded && (
-                <div className="ml-6 mt-0.5 space-y-0.5 border-l border-zinc-700 pl-2">
-                  <button
-                    type="button"
-                    onClick={() => setAdminTab("about")}
-                    className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
-                      adminTab === "about"
-                        ? "text-white"
-                        : "text-zinc-400 hover:text-zinc-200"
-                    }`}
-                  >
-                    About
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setAdminTab("contact")}
-                    className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
-                      adminTab === "contact"
-                        ? "text-white"
-                        : "text-zinc-400 hover:text-zinc-200"
-                    }`}
-                  >
-                    Contact
-                  </button>
+              <div
+                className={`grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out ${
+                  pagesExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                }`}
+              >
+                <div className="min-h-0">
+                  <div className="ml-6 mt-0.5 space-y-0.5 border-l border-zinc-700 pl-2">
+                    <button
+                      type="button"
+                      onClick={() => setAdminTab("about")}
+                      className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
+                        adminTab === "about"
+                          ? "text-white"
+                          : "text-zinc-400 hover:text-zinc-200"
+                      }`}
+                    >
+                      About
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAdminTab("contact")}
+                      className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
+                        adminTab === "contact"
+                          ? "text-white"
+                          : "text-zinc-400 hover:text-zinc-200"
+                      }`}
+                    >
+                      Contact
+                    </button>
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
             <button
               type="button"
@@ -1107,12 +1136,10 @@ export default function AdminClient() {
               >
                 Capture date
               </label>
-              <input
+              <DateTimePicker
                 id="capturedAt"
-                type="datetime-local"
                 value={capturedAt}
-                onChange={(e) => setCapturedAt(e.target.value)}
-                className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                onChange={setCapturedAt}
               />
             </div>
 
@@ -1411,18 +1438,15 @@ export default function AdminClient() {
                   <label className="mb-1 block text-sm text-zinc-400">
                     Capture date
                   </label>
-                  <input
-                    type="datetime-local"
+                  <DateTimePicker
                     value={editForm.capturedAt}
-                    onChange={(e) => {
-                      const v = e.target.value;
+                    onChange={(v) =>
                       setEditForm((f) => ({
                         ...f,
                         capturedAt: v,
                         slug: generateSlug(f.title, f.venue, v),
-                      }));
-                    }}
-                    className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                      }))
+                    }
                   />
                 </div>
                 {normalizeCategory(editForm.category) === "concerts" && (

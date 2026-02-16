@@ -173,8 +173,10 @@ export async function POST(request: Request) {
         iptc: true,
         mergeOutput: true,
       });
-      if (exif?.DateTimeOriginal) {
-        date = formatDateForInput(exif.DateTimeOriginal);
+      const exifDate =
+        exif?.DateTimeOriginal ?? exif?.CreateDate ?? exif?.DateTime ?? exif?.ModifyDate;
+      if (exifDate) {
+        date = formatDateForInput(exifDate);
       }
       if (exif) {
         description = getDescription(exif as Record<string, unknown>);

@@ -6,19 +6,31 @@ export interface PageContent {
   html: string;
 }
 
+export interface AboutPageContent extends PageContent {
+  quote?: string;
+}
+
+export interface ContactPageContent extends PageContent {
+  email?: string;
+  formspreeEndpoint?: string;
+}
+
 export interface PagesData {
-  about: PageContent;
-  contact: PageContent;
+  about: AboutPageContent;
+  contact: ContactPageContent;
 }
 
 const DEFAULT_PAGES: PagesData = {
   about: {
     title: "About",
     html: "<p>Photographer focused on natural light and authentic moments.</p>",
+    quote: undefined,
   },
   contact: {
     title: "Contact",
-    html: "<p>For bookings and collaboration:</p><p><a href=\"mailto:hello@example.com\">hello@example.com</a></p>",
+    html: "<p>For bookings and collaboration:</p>",
+    email: "hello@example.com",
+    formspreeEndpoint: undefined,
   },
 };
 
@@ -49,14 +61,37 @@ function normalizePage(
   return { title, html };
 }
 
+function normalizeContactPage(
+  raw: Partial<ContactPageContent> | null | undefined,
+  defaultPage: ContactPageContent
+): ContactPageContent {
+  const base = normalizePage(raw, defaultPage, "Contact") as ContactPageContent;
+  return {
+    ...base,
+    email: typeof raw?.email === "string" && raw.email.trim() ? raw.email.trim() : defaultPage.email,
+    formspreeEndpoint: typeof raw?.formspreeEndpoint === "string" && raw.formspreeEndpoint.trim() ? raw.formspreeEndpoint.trim() : undefined,
+  };
+}
+
+function normalizeAboutPage(
+  raw: Partial<AboutPageContent> | null | undefined,
+  defaultPage: AboutPageContent
+): AboutPageContent {
+  const base = normalizePage(raw, defaultPage, "About") as AboutPageContent;
+  return {
+    ...base,
+    quote: typeof raw?.quote === "string" && raw.quote.trim() ? raw.quote.trim() : undefined,
+  };
+}
+
 export async function getPages(): Promise<PagesData> {
   try {
     const pagesPath = path.join(process.cwd(), "src", "data", "pages.json");
     const raw = await readFile(pagesPath, "utf-8");
     const data = JSON.parse(raw) as { about?: Partial<PageContent>; contact?: Partial<PageContent> };
     return {
-      about: normalizePage(data.about, DEFAULT_PAGES.about, "About"),
-      contact: normalizePage(data.contact, DEFAULT_PAGES.contact, "Contact"),
+      about: normalizeAboutPage(data.about, DEFAULT_PAGES.about),
+      contact: normalizeContactPage(data.contact, DEFAULT_PAGES.contact),
     };
   } catch {
     return DEFAULT_PAGES;

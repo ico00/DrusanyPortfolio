@@ -89,6 +89,14 @@ body.custom-cursor-active * {
   }
 }
 
+/* BlockNote – razmak između blokova (paragrafi, naslovi, itd.) */
+.blocknote-editor-wrapper .bn-block-group > .bn-block-outer {
+  margin-bottom: 1.5rem;
+}
+.blocknote-editor-wrapper .bn-block-group > .bn-block-outer:last-child {
+  margin-bottom: 0;
+}
+
 /* BlockNote – svijetli tekst u editoru + isti fontovi kao na stranicama (WYSIWYG) */
 .blocknote-editor-wrapper .bn-editor,
 .blocknote-editor-wrapper .bn-block-content,
@@ -133,6 +141,7 @@ body.custom-cursor-active * {
   z-index: 99999 !important;
 }
 [data-theme="dark"] [data-slot="dropdown-menu-content"],
+[data-theme="dark"] [data-slot="dropdown-menu-sub-content"],
 [data-theme="dark"] [data-slot="popover-content"],
 [data-theme="dark"] [data-slot="select-content"] {
   z-index: 99999 !important;
@@ -141,6 +150,29 @@ body.custom-cursor-active * {
   border-color: rgb(63 63 70) !important;
   opacity: 1 !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+/* BlockNote – color picker (Colors submenu) – neprozirna pozadina, vidljiv tekst */
+[data-theme="dark"] .bn-color-picker-dropdown,
+[data-theme="dark"] .bn-menu-dropdown.bn-color-picker-dropdown {
+  background-color: rgb(39 39 42) !important;
+  color: rgb(228 228 231) !important;
+  border: 1px solid rgb(63 63 70) !important;
+  opacity: 1 !important;
+}
+[data-theme="dark"] .bn-color-picker-dropdown *,
+[data-theme="dark"] .bn-menu-dropdown.bn-color-picker-dropdown * {
+  color: rgb(228 228 231) !important;
+}
+[data-theme="dark"] .bn-color-picker-dropdown [data-slot="dropdown-menu-item"],
+[data-theme="dark"] .bn-menu-dropdown.bn-color-picker-dropdown [data-slot="dropdown-menu-item"] {
+  color: rgb(228 228 231) !important;
+}
+[data-theme="dark"] .bn-color-picker-dropdown [data-slot="dropdown-menu-item"]:hover,
+[data-theme="dark"] .bn-color-picker-dropdown [data-slot="dropdown-menu-item"][data-highlighted],
+[data-theme="dark"] .bn-menu-dropdown.bn-color-picker-dropdown [data-slot="dropdown-menu-item"]:hover,
+[data-theme="dark"] .bn-menu-dropdown.bn-color-picker-dropdown [data-slot="dropdown-menu-item"][data-highlighted] {
+  background-color: rgb(63 63 70) !important;
+  color: rgb(244 244 245) !important;
 }
 [data-theme="dark"] [data-slot="select-content"] * {
   color: rgb(228 228 231) !important;
@@ -151,6 +183,7 @@ body.custom-cursor-active * {
   color: rgb(244 244 245) !important;
 }
 [data-theme="dark"] [data-slot="dropdown-menu-content"] *,
+[data-theme="dark"] [data-slot="dropdown-menu-sub-content"] *,
 [data-theme="dark"] [data-slot="popover-content"] * {
   color: inherit;
 }
@@ -159,9 +192,18 @@ body.custom-cursor-active * {
   color: rgb(228 228 231);
 }
 [data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"]:hover,
-[data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"]:focus {
+[data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"]:focus,
+[data-theme="dark"] [data-slot="dropdown-menu-sub-content"] [data-slot="dropdown-menu-item"]:hover,
+[data-theme="dark"] [data-slot="dropdown-menu-sub-content"] [data-slot="dropdown-menu-item"]:focus,
+[data-theme="dark"] [data-slot="dropdown-menu-sub-content"] [data-slot="dropdown-menu-checkbox-item"]:hover,
+[data-theme="dark"] [data-slot="dropdown-menu-sub-content"] [data-slot="dropdown-menu-checkbox-item"]:focus {
   background-color: rgb(63 63 70) !important;
   color: rgb(244 244 245) !important;
+}
+[data-theme="dark"] [data-slot="dropdown-menu-sub-content"] [data-slot="dropdown-menu-item"],
+[data-theme="dark"] [data-slot="dropdown-menu-sub-content"] [data-slot="dropdown-menu-checkbox-item"],
+[data-theme="dark"] [data-slot="dropdown-menu-sub-content"] [data-slot="dropdown-menu-label"] {
+  color: rgb(228 228 231);
 }
 
 /* BlockNote – slash menu i grid suggestion menu (tip bloka) */
@@ -227,17 +269,109 @@ body.custom-cursor-active * {
   margin-top: 1.5em;
 }
 
-/* Prose – blockquote (quote blok) i tablica na stranicama About, Contact, Blog */
+/* Prose – svi paragrafi ista boja (BlockNote postavlja inline boju samo kad je odabrana) */
+.prose-invert p {
+  color: rgb(94 100 106); /* zinc-600 – isti ton kao ostali paragrafi s color pickerom */
+}
+
+/* Prose – code blokovi (pre/code) – font za kodiranje + pozadina za lakše čitanje */
+.prose pre,
+.prose code,
+.prose-invert pre,
+.prose-invert code,
+.blocknote-editor-wrapper pre,
+.blocknote-editor-wrapper code {
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+}
+/* Code block (pre) – pozadina, padding, zaobljeni uglovi, manji font */
+.prose pre,
+.prose-invert pre,
+.blocknote-editor-wrapper pre {
+  background-color: rgb(39 39 42); /* zinc-800 */
+  padding: 1em 1.25em;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5em 0;
+  font-size: 0.75rem; /* 12px */
+}
+.prose pre {
+  background-color: rgb(244 244 245); /* zinc-100 */
+}
+.prose pre code,
+.prose-invert pre code,
+.blocknote-editor-wrapper pre code {
+  background: none;
+  padding: 0;
+}
+/* Inline code – mala pozadina za snippete u tekstu */
+.prose :not(pre) > code,
+.prose-invert :not(pre) > code,
+.blocknote-editor-wrapper :not(pre) > code {
+  background-color: rgb(63 63 70); /* zinc-700 */
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+.prose :not(pre) > code {
+  background-color: rgb(228 228 231); /* zinc-200 */
+}
+
+/* Prose – blockquote (quote blok) – uljepšan izgled */
+.prose blockquote,
+.prose-invert blockquote {
+  position: relative;
+}
 .prose blockquote {
   border-left: 4px solid rgb(161 161 170); /* zinc-400 */
   margin: 1.5em 0;
-  padding-left: 1em;
+  padding: 1.25em 1.5em;
+  background-color: rgb(244 244 245); /* zinc-100 */
+  border-radius: 0 0.5rem 0.5rem 0; /* zaobljeni desni uglovi, lijevi oštar uz border */
   font-style: italic;
-  color: inherit;
+  color: rgb(63 63 70); /* zinc-700 */
 }
 .prose-invert blockquote {
-  border-left-color: rgb(113 113 122); /* zinc-500 */
+  border-left-color: rgb(245 158 11); /* amber-500 */
+  background-color: rgb(39 39 42); /* zinc-800 */
   color: rgb(228 228 231);
+}
+
+/* Dekorativni zaobljeni navodnik – stvarni HTML element (radi u Safariju) */
+.quote-decor {
+  position: absolute;
+  top: -0.15em;
+  left: 0.1em;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 6rem;
+  line-height: 1;
+  opacity: 0.25;
+  pointer-events: none;
+  user-select: none;
+}
+.prose .quote-decor {
+  color: rgb(161 161 170); /* zinc-400 – svijetla tema */
+}
+.prose-invert .quote-decor {
+  color: rgb(245 158 11); /* amber-500 – tamna tema */
+}
+
+/* BlockNote editor – quote blok s istim dekorativnim navodnikom (CSS ::before za admin) */
+.blocknote-editor-wrapper blockquote {
+  position: relative;
+}
+.blocknote-editor-wrapper blockquote::before {
+  content: "\201C";
+  display: block;
+  position: absolute;
+  top: -0.15em;
+  left: 0.1em;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 6rem;
+  line-height: 1;
+  color: rgb(245 158 11);
+  opacity: 0.2;
+  pointer-events: none;
+  user-select: none;
 }
 .prose table {
   width: 100%;
@@ -264,5 +398,32 @@ body.custom-cursor-active * {
 }
 .prose-invert td {
   color: rgb(228 228 231);
+}
+
+/* Admin – custom date picker (react-day-picker) tamna tema */
+.rdp-admin-dark {
+  --rdp-accent-color: rgb(245 158 11);
+  --rdp-accent-background-color: rgba(245, 158, 11, 0.2);
+  --rdp-today-color: rgb(245 158 11);
+}
+.rdp-admin-dark .rdp-root {
+  color: rgb(228 228 231);
+}
+.rdp-admin-dark .rdp-caption_label {
+  color: rgb(228 228 231);
+}
+.rdp-admin-dark .rdp-weekday {
+  color: rgb(161 161 170);
+}
+.rdp-admin-dark .rdp-day_button.rdp-day_outside {
+  color: rgb(113 113 122);
+}
+/* Strelici navigacije i dropdowna – bijele umjesto plavih */
+.rdp-admin-dark .rdp-chevron {
+  fill: rgb(255 255 255);
+}
+.rdp-admin-dark .rdp-button_previous,
+.rdp-admin-dark .rdp-button_next {
+  color: rgb(255 255 255);
 }
 

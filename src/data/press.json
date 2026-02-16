@@ -1,0 +1,144 @@
+{
+  "items": [
+    {
+      "id": "3",
+      "src": "/uploads/press/People.jpg",
+      "alt": "People",
+      "caption": "People",
+      "width": 1618,
+      "height": 2048
+    },
+    {
+      "id": "6",
+      "src": "/uploads/press/guardian.jpg",
+      "alt": "The Guardian",
+      "caption": "The Guardian",
+      "width": 828,
+      "height": 1205
+    },
+    {
+      "id": "17",
+      "src": "/uploads/press/zgsport.jpg",
+      "alt": "ZGSport",
+      "caption": "ZGSport",
+      "width": 580,
+      "height": 800
+    },
+    {
+      "id": "1",
+      "src": "/uploads/press/24sata.jpg",
+      "alt": "24sata",
+      "caption": "24sata",
+      "width": 1170,
+      "height": 1851
+    },
+    {
+      "id": "2",
+      "src": "/uploads/press/LPReview.jpg",
+      "alt": "LP Review",
+      "caption": "LP Review",
+      "width": 613,
+      "height": 800
+    },
+    {
+      "id": "8",
+      "src": "/uploads/press/htz.jpg",
+      "alt": "HTZ",
+      "caption": "HTZ",
+      "width": 1366,
+      "height": 1007
+    },
+
+    {
+      "id": "4",
+      "src": "/uploads/press/UKdaily.jpg",
+      "alt": "UK Daily",
+      "caption": "UK Daily",
+      "width": 811,
+      "height": 1000
+    },
+    {
+      "id": "5",
+      "src": "/uploads/press/gloria.jpg",
+      "alt": "Gloria",
+      "caption": "Gloria",
+      "width": 1000,
+      "height": 734
+    },
+
+    {
+      "id": "7",
+      "src": "/uploads/press/hrt.jpg",
+      "alt": "HRT",
+      "caption": "HRT",
+      "width": 1892,
+      "height": 1482
+    },
+
+    {
+      "id": "9",
+      "src": "/uploads/press/index.jpg",
+      "alt": "Index",
+      "caption": "Index",
+      "width": 828,
+      "height": 1351
+    },
+    {
+      "id": "10",
+      "src": "/uploads/press/jutarnji.jpg",
+      "alt": "Jutarnji list",
+      "caption": "Jutarnji list",
+      "width": 2048,
+      "height": 1617
+    },
+    {
+      "id": "11",
+      "src": "/uploads/press/ledo.jpg",
+      "alt": "Ledo",
+      "caption": "Ledo",
+      "width": 1007,
+      "height": 1024
+    },
+    {
+      "id": "12",
+      "src": "/uploads/press/nacional.jpg",
+      "alt": "Nacional",
+      "caption": "Nacional",
+      "width": 1100,
+      "height": 909
+    },
+    {
+      "id": "13",
+      "src": "/uploads/press/oasport.jpg",
+      "alt": "OASport",
+      "caption": "OASport",
+      "width": 765,
+      "height": 1100
+    },
+    {
+      "id": "14",
+      "src": "/uploads/press/srednja.jpg",
+      "alt": "Srednja",
+      "caption": "Srednja",
+      "width": 668,
+      "height": 1100
+    },
+    {
+      "id": "15",
+      "src": "/uploads/press/vecernji.jpg",
+      "alt": "Večernji list",
+      "caption": "Večernji list",
+      "width": 1000,
+      "height": 700
+    },
+    {
+      "id": "16",
+      "src": "/uploads/press/yahoo.jpg",
+      "alt": "Yahoo",
+      "caption": "Yahoo",
+      "width": 900,
+      "height": 678
+    }
+
+  ]
+}

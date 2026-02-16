@@ -43,11 +43,13 @@ export interface GalleryData {
 
 function slugify(str: string): string {
   return str
+    .replace(/dž/gi, "dz")
+    .replace(/đ/gi, "dj")
+    .replace(/[čćČĆ]/g, "c")
+    .replace(/[šŠ]/g, "s")
+    .replace(/[žŽ]/g, "z")
     .toLowerCase()
     .trim()
-    .replace(/[čć]/g, "c")
-    .replace(/[š]/g, "s")
-    .replace(/[ž]/g, "z")
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "")
     .replace(/-+/g, "-")

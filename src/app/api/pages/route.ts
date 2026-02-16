@@ -25,20 +25,23 @@ export async function PUT(request: Request) {
 
   try {
     const body = (await request.json()) as {
-      about?: { title?: string; html?: string };
-      contact?: { title?: string; html?: string };
+      about?: { title?: string; html?: string; quote?: string };
+      contact?: { title?: string; html?: string; email?: string; formspreeEndpoint?: string };
     };
     const pages = await getPages();
     if (body.about) {
       pages.about = {
         title: body.about.title?.trim() ?? pages.about.title,
         html: body.about.html ?? pages.about.html,
+        quote: body.about.quote !== undefined ? (body.about.quote?.trim() || undefined) : pages.about.quote,
       };
     }
     if (body.contact) {
       pages.contact = {
         title: body.contact.title?.trim() ?? pages.contact.title,
         html: body.contact.html ?? pages.contact.html,
+        email: body.contact.email !== undefined ? (body.contact.email?.trim() || undefined) : pages.contact.email,
+        formspreeEndpoint: body.contact.formspreeEndpoint !== undefined ? (body.contact.formspreeEndpoint?.trim() || undefined) : pages.contact.formspreeEndpoint,
       };
     }
     await savePages(pages);

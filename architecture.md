@@ -17,6 +17,8 @@ Ovaj dokument opisuje arhitekturu statičnog fotografskog portfolija izgrađenog
 | **Sharp** | 0.34+ | Image processing (resize, WebP) |
 | **exifr** | 7.x | EXIF metadata extraction (datum, naslov, camera, lens, exposure, aperture, ISO) |
 | **BlockNote** | 0.46.x | Block-based rich text editor (About, Contact, Blog) – shadcn UI |
+| **react-day-picker** | 9.x | Custom kalendar za datum/vrijeme u adminu |
+| **Recharts** | 3.x | Dashboard grafikoni (bar, pie) |
 
 ### Instalacija
 
@@ -82,22 +84,82 @@ Sadržaj About i Contact stranica. Struktura:
 
 ```json
 {
-  "about": { "title": "About me", "html": "<p>...</p><blockquote>...</blockquote>" },
-  "contact": { "title": "Contact", "html": "<p>...</p>" }
+  "about": {
+    "title": "About me",
+    "html": "<p>...</p><blockquote>...</blockquote>",
+    "quote": "Optional quote overlay on left image"
+  },
+  "contact": {
+    "title": "Contact",
+    "html": "<p>Intro text above form...</p>",
+    "email": "hello@example.com",
+    "formspreeEndpoint": "https://formspree.io/f/xxxxx"
+  }
 }
 ```
 
 - **title**: Naslov stranice (prikazuje se kao h1)
 - **html**: HTML sadržaj iz BlockNote editora (paragrafi, naslovi, citati, liste, tablice)
+- **about.quote**: Opcionalno – citat koji se prikazuje u donjem lijevom kutu slike na About stranici
+- **contact.email**: Fallback email za mailto ako Formspree nije postavljen
+- **contact.formspreeEndpoint**: Formspree URL (npr. `https://formspree.io/f/xxxxx`) – poruke se šalju na Formspree; ako prazno, koristi se mailto
 - Migracija: ako `title` nedostaje, izvlači se iz prvog `<h1>` u HTML-u
 
 ### 3.3 Blog: `src/data/blog.json`
 
 Blog postovi. Struktura: `{ "posts": [ { "slug", "title", "date", "body", "thumbnail?" } ] }`. Sadržaj (`body`) je HTML iz BlockNote editora.
 
-### 3.4 Original Images: `public/uploads/`
+### 3.4 Gear: `src/data/gear.json`
+
+Fotografska oprema (About stranica). Struktura:
+
+```json
+{
+  "items": [
+    {
+      "id": "1",
+      "src": "/uploads/gear/canon-5d.webp",
+      "alt": "Canon EOS 5D Mark IV",
+      "title": "Canon EOS 5D Mark IV",
+      "category": "cameras",
+      "width": 1200,
+      "height": 800
+    }
+  ]
+}
+```
+
+- **title**: Naziv opreme (npr. "Canon EOS 5D Mark IV")
+- **category**: Opcionalno – kamere, objektivi, itd.
+- **width/height**: Za originalni aspect ratio – dodaj s `npm run gear:dimensions`
+
+### 3.5 Press: `src/data/press.json`
+
+Objavljene fotografije u medijima (About stranica). Struktura:
+
+```json
+{
+  "items": [
+    {
+      "id": "1",
+      "src": "/uploads/press/novine-2024.webp",
+      "alt": "Opis slike",
+      "caption": "Sportske novosti, 15.3.2024",
+      "link": "https://optional-link-to-article.com"
+    }
+  ]
+}
+```
+
+- **src**: Putanja do slike (npr. `/uploads/press/` ili bilo koja postojeća slika)
+- **caption**: Ime medija / naslov objave (opcionalno)
+- **link**: URL članka (opcionalno) – ako postoji, slika je klikabilna
+
+### 3.6 Original Images: `public/uploads/`
 
 - Slike se spremaju u podfoldere po kategoriji: `public/uploads/full/[category]/` i `public/uploads/thumbs/[category]/`
+- Press slike: `public/uploads/press/` (ručno dodavanje)
+- Gear slike: `public/uploads/gear/` (ručno dodavanje)
 - Format: WebP (Sharp resize)
 - Naziv datoteke: sanitizirani originalni naziv (lowercase, razmaci→crte, bez specijalnih znakova); ako postoji kolizija, dodaje se kratki random suffix ili broj
 - Pri static exportu, cijeli `public/` folder se kopira u `out/`
@@ -134,13 +196,14 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 **Lokacija:** `src/app/admin/page.tsx` + `src/components/AdminClient.tsx`
 
 **Funkcionalnost:**
+- **Sidebar accordion:** Samo jedan podmeni (Gallery ili Pages) može biti otvoren; animacija otvaranja/zatvaranja (grid-template-rows)
 - **Category-first flow:** Korisnik prvo odabere kategoriju; bez odabira upload je onemogućen
 - **Galerija filtrirana po kategoriji:** Prikazuje se samo galerija odabrane kategorije (ne opća galerija sa svim slikama)
 - Upload novih slika (file input) – slike idu u odabranu kategoriju
 - **EXIF preview:** Pri odabiru datoteke poziv na `/api/exif-preview` – automatsko popunjavanje naslova i datuma snimanja iz EXIF-a
-- Forma za metapodatke: title, capture date, venue (samo za Concerts), sport (samo za Sport), keywords (iz EXIF-a), hero checkbox (kategorija se uzima iz odabira gore; alt = title automatski)
+- Forma za metapodatke: title, **custom DateTimePicker** za capture date (kalendar + sat/minut), venue (samo za Concerts), sport (samo za Sport), keywords (iz EXIF-a), hero checkbox (kategorija se uzima iz odabira gore; alt = title automatski)
 - **CategorySelect:** Custom izbornik s ikonama (Concerts, Sport, Animals, Interiors, Zagreb, Food & Drink) + opcija "Other (custom)"
-- **Edit modal:** Uređivanje opisa postojećih slika (title, category, date, alt, venue, sport, slug, keywords, camera, lens, exposure, aperture, ISO); datum/vrijeme u 24h formatu; **slug as you type** – polje za slug se automatski ažurira dok pišeš title, mijenjaš venue ili datum (koristi `generateSlug` iz `@/lib/slug`)
+- **Edit modal:** Uređivanje opisa postojećih slika (title, category, date, alt, venue, sport, slug, keywords, camera, lens, exposure, aperture, ISO); **custom DateTimePicker** (react-day-picker) – datum + vrijeme u 24h formatu; **slug as you type** – polje za slug se automatski ažurira dok pišeš title, mijenjaš venue ili datum (koristi `generateSlug` iz `@/lib/slug`)
 - **VenueSelect:** Dropdown za venue (samo za Concerts) – Arena Zagreb, Cibona, Dom sportova, KD Vatroslav Lisinski, KSET, Misc, Šalata, Tvornica kulture
 - **SportSelect:** Dropdown za vrstu sporta (samo za Sport) – Athletics, Auto-Moto, Basketball, Fencing, Football, Handball, Martial Arts (poredan abecedno)
 - **Hero toggle:** Postavljanje/uklanjanje hero slike po kategoriji (samo ručno); hero slika u galeriji istaknuta amber obrubom
@@ -153,15 +216,18 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 
 **AdminPages (About / Contact):**
 - Tabovi "About" i "Contact" u adminu
-- Polje "Naslov stranice" (title) – odvojeno od sadržaja
-- BlockNote editor za sadržaj – blokovi (paragraf, naslov H1–H6, citat, lista, tablica, slika)
-- Upute: side menu (⋮⋮ +), slash menu (`/`), formatiranje teksta (označi → toolbar)
+- **About:** Polje "Citat na slici" (quote); naslov; BlockNote editor za sadržaj
+- **Contact:** Polje "Formspree endpoint" (preporučeno); polje "Email" (fallback za mailto); naslov; BlockNote editor za uvodni tekst iznad forme
+- BlockNote editor – blokovi (paragraf, naslov H1–H6, citat, lista, tablica, slika); side menu (⋮⋮ +), slash menu (`/`), formatiranje teksta (označi → toolbar)
+- **Razmak između blokova:** `space-y-14` između form sekcija; BlockNote blokovi imaju `margin-bottom: 1.5rem` (globals.css)
 - Spremanje putem `/api/pages`
 
 **AdminBlog:**
 - Lista postova, dodavanje/editiranje po slug-u
-- Polja: title, date, thumbnail (opcionalno), body (BlockNote)
+- Polja: title, **custom DatePicker** za datum, thumbnail (opcionalno), body (BlockNote)
 - Spremanje putem `/api/blog`
+
+**Admin toast:** Usklađen vizual (emerald success, red error, Check/AlertCircle ikone) – galerija, Pages, Blog
 
 **BlockNote editor (BlockNoteEditor.tsx):**
 - **BlockNote** (@blocknote/shadcn) – block-based WYSIWYG, sprema HTML
@@ -183,7 +249,7 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 2. Kreira podfoldere `full/[category]/` i `thumbs/[category]/` (category se sanitizira)
 3. Naziv datoteke: originalni naziv sanitiziran (lowercase, razmaci→crte); ako postoji kolizija, dodaje se suffix
 4. Sharp: resize na 2048px (full) i 600px (thumb), WebP
-5. **exifr:** Čita EXIF (makerNote: true, xmp: true, iptc: true) – datum, naslov, keywords (IPTC/XMP), camera, lens, exposure, aperture, ISO
+5. **exifr:** Čita EXIF (makerNote: true, xmp: true, iptc: true) – datum (DateTimeOriginal, fallback: CreateDate, DateTime, ModifyDate), naslov, keywords (IPTC/XMP), camera, lens, exposure, aperture, ISO
 6. Ako forma šalje `capturedAt`, koristi ga; inače EXIF datum
 7. **Slug:** Generira iz title+venue+year putem `generateSlug` (iz `@/lib/slug`); provjera jedinstvenosti unutar kategorije; pri overwrite zadržava postojeći
 8. Generira UUID, sprema u `gallery.json` s putanjama `/uploads/full/[category]/filename.webp`
@@ -194,7 +260,7 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 **Lokacija:** `src/app/api/exif-preview/route.ts`
 
 - Prima `FormData` s datotekom
-- **exifr:** Parsira cijeli EXIF (makerNote: true, xmp: true, iptc: true) – datum, naslov, keywords (dc:subject, Keywords, IPTC), camera, lens, exposure, aperture, ISO
+- **exifr:** Parsira cijeli EXIF (makerNote: true, xmp: true, iptc: true) – datum (DateTimeOriginal, fallback: CreateDate, DateTime, ModifyDate), naslov, keywords (dc:subject, Keywords, IPTC), camera, lens, exposure, aperture, ISO
 - Vraća `{ date, description, keywords, camera, lens, exposure, aperture, iso }` za auto-fill u admin formi
 
 #### `/api/update` (POST)
@@ -233,12 +299,12 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 
 - Vraća `{ images }` iz `gallery.json` (koristi `getGallery` za sortiranje po `order` pa `capturedAt`); `getGallery` generira slug za slike bez njega (title+venue+year, jedinstvenost)
 
-#### `/api/pages` (GET, POST)
+#### `/api/pages` (GET, PUT)
 
 **Lokacija:** `src/app/api/pages/route.ts`
 
 - **GET:** Vraća `{ about, contact }` iz `pages.json` (koristi `getPages`)
-- **POST:** Prima `{ about?, contact? }`, sprema u `pages.json` putem `savePages`
+- **PUT:** Prima `{ about?: { title?, html?, quote? }, contact?: { title?, html?, email?, formspreeEndpoint? } }`, sprema u `pages.json` putem `savePages`
 
 #### `/api/blog` (GET, POST)
 
@@ -309,12 +375,15 @@ fontSize: {
 Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
 
 - **Razmak između blokova:** `margin-top: 1.5em` za sve susjedne blokove (paragrafi, citati, naslovi) – lakše čitanje
-- **Blockquote (citat):** Lijevi border 4px, padding, italic; tamna varijanta za prose-invert
+- **Blockquote (citat):** Lijevi border 4px, padding, italic; **dekorativni zaobljeni navodnik** (U+201C) u pozadini – stvarni HTML element (`.quote-decor`) injektiran putem **ProseContent** komponente (radi u Safariju); tamna varijanta za prose-invert
 - **Tablica:** Granice, padding, header pozadina; tamna varijanta za prose-invert
 
 **Stranice:**
-- **About / Contact:** `prose prose-invert prose-lg`, naslov (h1) odvojen, svijetli tekst na tamnoj pozadini
-- **Blog:** `prose prose-zinc prose-headings:font-serif`, bijela pozadina
+- **ProseContent:** Client komponenta koja renderira HTML (dangerouslySetInnerHTML) i injektira `.quote-decor` span u svaki blockquote – Safari kompatibilno (CSS ::before ne radi u Safariju)
+- **About / Contact:** `ProseContent` s `prose prose-invert prose-lg`, naslov (h1) odvojen, svijetli tekst na tamnoj pozadini; About i Contact imaju split layout (left image + right content)
+- **Blog:** `ProseContent` s `prose prose-zinc prose-headings:font-serif`, bijela pozadina
+
+**BlockNote editor (admin):** Razmak između blokova – `.blocknote-editor-wrapper .bn-block-group > .bn-block-outer { margin-bottom: 1.5rem }` u globals.css; quote blok s dekorativnim navodnikom (CSS ::before)
 
 ### 6.5 Animations (Framer Motion)
 
@@ -409,13 +478,22 @@ DrusanyPortfolio/
 │   │   ├── page.tsx       # Home (HeroSlider ili Gallery)
 │   │   └── globals.css
 │   ├── components/
+│   │   ├── AboutImage.tsx        # Slika za About/Contact (fill, object-cover)
+│   │   ├── AboutNav.tsx          # Fiksni nav na dnu About (About, Press, Gear); aktivni link prati scroll
+│   │   ├── ContactForm.tsx       # Kontakt forma (Formspree); name, email, subject, message
+│   │   ├── PressSection.tsx      # About – objavljene fotografije (masonry)
+│   │   ├── GearSection.tsx       # About – fotografska oprema (masonry)
 │   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog)
-│   │   ├── AdminDashboard.tsx    # Dashboard (pregled sadržaja)
-│   │   ├── AdminPages.tsx        # About/Contact editor (BlockNote)
+│   │   ├── AdminDashboard.tsx    # Dashboard (bar/pie grafikoni – Recharts; cursor/background off, tooltip stilizacija)
+│   │   ├── AdminPages.tsx        # About/Contact editor (BlockNote, quote, FormspreeEndpoint)
 │   │   ├── AdminBlog.tsx         # Blog post editor (BlockNote)
 │   │   ├── BlockNoteEditor.tsx   # BlockNote WYSIWYG (HTML)
 │   │   ├── BlockNoteEditorDynamic.tsx  # Dynamic import, ssr: false
 │   │   ├── StaticBlockTypeBar.tsx # Traka stila bloka (cursor position)
+│   │   ├── DateTimePicker.tsx    # Datum + vrijeme (react-day-picker, tamna tema)
+│   │   ├── DatePicker.tsx        # Samo datum (Blog)
+│   │   ├── AdminDateDropdown.tsx # Custom dropdown mjesec/godina (admin)
+│   │   ├── ProseContent.tsx      # Renderiranje HTML-a s .quote-decor u blockquote
 │   │   ├── CategorySelect.tsx    # Custom category dropdown
 │   │   ├── VenueSelect.tsx       # Venue dropdown (Concerts)
 │   │   ├── SportSelect.tsx       # Sport type dropdown (Sport)
@@ -426,11 +504,16 @@ DrusanyPortfolio/
 │   │   └── HomeContent.tsx   # Conditional Hero/Gallery; overflow hidden na hero
 │   ├── lib/
 │   │   ├── getGallery.ts   # Čitanje gallery.json, sortiranje po order (pa capturedAt desc), generiranje slug
-│   │   ├── pages.ts        # getPages, savePages – About/Contact (title + html)
+│   │   ├── gear.ts         # getGear – čitanje gear.json
+│   │   ├── press.ts        # getPress – čitanje press.json
+│   │   ├── pages.ts        # getPages, savePages – About/Contact (title, html, quote, email, formspreeEndpoint)
+│   │   ├── blog.ts         # getBlog – čitanje blog.json
 │   │   └── slug.ts         # slugify, generateSlug (title+venue+year) – zajednički za upload, update i AdminClient
 │   └── data/
 │       ├── gallery.json    # Flat-file baza slika
-│       ├── pages.json      # About, Contact (title + html)
+│       ├── pages.json      # About (title, html, quote), Contact (title, html, email, formspreeEndpoint)
+│       ├── gear.json       # Fotografska oprema (About)
+│       ├── press.json      # Objavljene fotografije (About)
 │       └── blog.json       # Blog postovi
 ├── out/                   # Generirano pri build (gitignore)
 ├── next.config.ts
@@ -482,8 +565,8 @@ DrusanyPortfolio/
 
 ### About, Contact, Blog stranice
 
-- **About (`/about`):** Naslov (h1) + prose sadržaj iz `pages.json`; tamna pozadina, prose-invert
-- **Contact (`/contact`):** Isto; naslov + prose sadržaj
+- **About (`/about`):** Split layout – lijevo fiksna slika (40% širine na desktopu) s opcionalnim citatom u donjem lijevom kutu; desno scrollabilni sadržaj (Back, naslov, prose HTML, PressSection, GearSection); **AboutNav** fiksno na dnu – linkovi About, Press, Gear s aktivnim stanjem (crta ispod); scroll na vrh pri učitavanju; aktivni link prati scroll (listener na main + window)
+- **Contact (`/contact`):** Isti layout kao About – lijevo slika, desno sadržaj; sadrži Back, naslov, uvodni prose (iz pages.json), **ContactForm** (name, email, subject, message); Formspree za slanje; fallback na mailto ako Formspree nije postavljen; success/error stanja
 - **Blog (`/blog`):** Lista postova; `/blog/[slug]` – pojedinačni post (naslov, datum, thumbnail, prose body); bijela pozadina, prose-zinc
 
 ### Kategorije
@@ -526,14 +609,14 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 | **Podaci** | `src/data/gallery.json` |
 | **Slike** | `public/uploads/full/[category]/` + `thumbs/[category]/` (WebP, originalni nazivi) |
 | **Admin** | `/admin` + API routes (dev only): upload, exif-preview, update, delete, hero, reorder, gallery, **pages**, **blog** |
-| **Admin features** | Category-first flow, galerija filtrirana po kategoriji, Upload, EXIF preview, CategorySelect, VenueSelect, SportSelect, Edit modal (**slug as you type**), Hero toggle, Delete, **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – BlockNote editor s StaticBlockTypeBar, tamna tema, WYSIWYG fontovi |
+| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – BlockNote editor s StaticBlockTypeBar; **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija) |
 | **Home** | HeroSlider (6 slides, auto-play 4s, strelice lijevo-desno, "View Gallery", title @ venue) ili masonry Gallery po `?category`; hero samo ručno odabrana |
 | **Header** | Logo (inline SVG), poravnanje lijevo, Search u nav (kad galerija, expandable hover), aktivna stranica (border-b/border-l), hover efekti (Safari: inline-block, eksplicitne boje) |
 | **Custom Cursor** | Dot (trenutno) + aperture (spring, samo preko fotografija), mix-blend-difference, desktop only |
 | **Gallery** | Balanced masonry (shortest column, heights array, aspect ratio); stupci približno jednake visine; useColumnCount (1–4 stupaca), venue filter (Concerts), sport filter (Sport), hover efekti na filterima; scroll na vrh pri učitavanju; ImageCard hover (title @ venue ili Sport // title, datum); Interiors, Animals bez opisa/datuma |
 | **Lightbox** | Fit-to-screen, numeracija + X na vrhu, caption + EXIF u jednom okviru (crna prozirna pozadina), EXIF toggle (ikona kamere), copyright popup na desni klik, URL sync `?image=slug` |
 | **Filtriranje** | Client-side preko JSON-a (`?category=slug`, `?venue=slug` za Concerts, `?sport=slug` za Sport); search filter as you type (title, alt, keywords, venue, sport, category); direktni linkovi `?image=slug` |
-| **Pages & Blog** | `pages.json` (About, Contact – title + html), `blog.json`; BlockNote editor; prose blockquote, tablica, razmak 1.5em između blokova |
+| **Pages & Blog** | `pages.json` (About: title, html, quote; Contact: title, html, email, formspreeEndpoint); `gear.json`, `press.json`; **ProseContent** (HTML + .quote-decor u blockquote); About split layout (image + content), AboutNav, ContactForm (Formspree); BlockNote editor; prose blockquote s dekorativnim navodnikom, tablica |
 | **Export** | `output: 'export'`, `images.unoptimized: true` |
 | **Output** | `out/` folder |
 | **Design** | Minimalist, velika tipografija, masonry/full-bleed, fade-in |

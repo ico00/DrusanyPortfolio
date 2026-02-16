@@ -13,8 +13,10 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 - **Hero slider** – Početna stranica s 6 slideova po kategorijama, auto-play
 - **Pretraga** – Filter as you type (naslov, venue, sport, keywords)
 - **Direktni linkovi** – URL slug po slici (npr. `/?category=concerts&image=depeche-mode-arena-zagreb-2013`)
-- **About, Contact, Blog** – Stranice s BlockNote WYSIWYG editorom (blokovi, naslovi, citati, tablice)
-- **Admin panel** – Samo u development modu: galerija (upload, edit, hero, sortiranje), About/Contact, Blog – sve s BlockNote editorom
+- **About** – Split layout (lijevo slika s citatom, desno sadržaj); sekcije About, Press, Gear; fiksni nav na dnu s aktivnim linkom koji prati scroll; **dekorativni navodnik** na blockquote citatima
+- **Contact** – Isti layout kao About; kontakt forma (Formspree) – name, email, subject, message; fallback na mailto
+- **Blog** – Stranice s BlockNote WYSIWYG editorom (blokovi, naslovi, citati, tablice)
+- **Admin panel** – Samo u development modu: **Dashboard** (grafikoni – Recharts); galerija (upload, edit, hero, sortiranje) s **custom DateTimePicker**; About/Contact (quote, Formspree endpoint); Blog s **DatePicker**; **sidebar accordion**; **toast** poruke (success/error)
 
 ## 🛠 Tech stack
 
@@ -23,9 +25,12 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 | Next.js 16 | App Router, statični export |
 | Tailwind CSS 4 | Styling |
 | BlockNote | Rich text editor (About, Contact, Blog) |
+| react-day-picker | Custom datum/vrijeme picker u adminu |
+| Recharts | Dashboard grafikoni (bar, pie) |
+| Formspree | Contact form submissions (optional, fallback: mailto) |
 | Framer Motion | Animacije |
 | Sharp | Image processing (WebP, resize) |
-| exifr | EXIF metadata (datum, naslov, camera, lens…) |
+| exifr | EXIF metadata (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate, naslov, camera, lens…) |
 
 ## 📋 Preduvjeti
 
@@ -57,7 +62,9 @@ Otvori [http://localhost:3000](http://localhost:3000) u pregledniku.
 
 - **Početna stranica** – Hero slider s kategorijama
 - **Galerija** – Dodaj `?category=concerts` (ili sport, animals, interiors, zagreb, food-drink) u URL
-- **About, Contact, Blog** – `/about`, `/contact`, `/blog`
+- **About** – `/about` (split layout, Press, Gear sekcije)
+- **Contact** – `/contact` (split layout, Formspree forma)
+- **Blog** – `/blog`
 - **Admin panel** – [http://localhost:3000/admin](http://localhost:3000/admin) – dostupan **samo u dev modu**
 
 ## 📜 Dostupne naredbe
@@ -84,9 +91,11 @@ DrusanyPortfolio/
 │   ├── components/       # Gallery, Header, AdminClient, BlockNoteEditor, AdminPages, AdminBlog…
 │   ├── data/
 │   │   ├── gallery.json  # Metapodaci o slikama
-│   │   ├── pages.json   # About, Contact (title + html)
+│   │   ├── pages.json   # About (title, html, quote), Contact (title, html, email, formspreeEndpoint)
+│   │   ├── gear.json    # Fotografska oprema (About)
+│   │   ├── press.json   # Objavljene fotografije (About)
 │   │   └── blog.json    # Blog postovi
-│   └── lib/              # getGallery, pages, blog, slug utils
+│   └── lib/              # getGallery, pages, gear, press, blog, slug utils
 └── out/                  # Statični output (generira se pri build)
 ```
 
@@ -95,9 +104,12 @@ DrusanyPortfolio/
 Admin je dostupan **samo kada pokreneš `npm run dev`** – u produkcijskom buildu se ne uključuje.
 
 **Funkcionalnosti:**
-- **Galerija:** Odabir kategorije → upload slika; EXIF preview; uređivanje opisa (title, venue, sport, slug, keywords…); slug **as you type**; drag-and-drop sortiranje; hero odabir; brisanje
-- **Pages:** Uređivanje About i Contact stranica – naslov + BlockNote editor (blokovi, naslovi, citati, tablice)
-- **Blog:** Kreiranje i uređivanje blog postova – title, datum, thumbnail, sadržaj (BlockNote)
+- **Dashboard:** Pregled sadržaja – bar/pie grafikoni (Recharts)
+- **Galerija:** Sidebar accordion; odabir kategorije → upload slika; EXIF preview (datum fallback); **custom DateTimePicker** (datum + vrijeme); uređivanje opisa (title, venue, sport, slug, keywords…); slug **as you type**; drag-and-drop sortiranje; hero odabir; brisanje; **toast** poruke
+- **Pages:** About – citat na slici, naslov, BlockNote sadržaj; Contact – Formspree endpoint, email (fallback), naslov, uvodni tekst (BlockNote)
+- **Blog:** Kreiranje i uređivanje blog postova – title, **custom DatePicker** za datum, thumbnail, sadržaj (BlockNote)
+
+**Contact forma:** Za slanje poruka koristi se [Formspree](https://formspree.io) – kreiraj besplatni form u adminu unesi endpoint. Ako nije postavljen, koristi se mailto.
 
 ## 🌐 Deployment
 

@@ -209,7 +209,7 @@ export default function Header() {
                     const query = params.toString();
                     router.replace(query ? `${pathname}?${query}#gallery` : pathname, { scroll: false });
                   }}
-                  placeholder="Search in gallery..."
+                  placeholder="Search..."
                   className="w-28 min-w-28 bg-transparent py-0.5 pl-1.5 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
                   aria-label="Search images"
                 />
@@ -245,7 +245,7 @@ export default function Header() {
                     const query = params.toString();
                     router.replace(query ? `${pathname}?${query}#gallery` : pathname, { scroll: false });
                   }}
-                  placeholder="Search in gallery..."
+                  placeholder="Search..."
                   className={`flex-1 bg-transparent text-sm outline-none placeholder:opacity-60 ${
                     isHeroMode ? "text-white placeholder-white/50" : "text-zinc-900 placeholder-zinc-400"
                   }`}

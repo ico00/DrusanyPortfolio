@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "src": "/uploads/gear/canon-1dx-mkii.png",
+      "alt": "Canon 1DX MK II",
+      "title": "Canon 1DX MK II",
+      "category": "cameras"
+    },
+    {
+      "id": "2",
+      "src": "/uploads/gear/canon-r6-mkii.png",
+      "alt": "Canon R6 MK II",
+      "title": "Canon R6 MK II",
+      "category": "cameras"
+    },
+
+    {
+      "id": "3",
+      "src": "/uploads/gear/canon-70-200.png",
+      "alt": "Canon EF 70-200mm f/2.8L IS USM MK  III",
+      "title": "Canon EF 70-200mm f/2.8L IS USM MK  III",
+      "category": "lenses"
+    },
+    {
+      "id": "4",
+      "src": "/uploads/gear/godox-v1pro.png",
+      "alt": "Godox V1 Pro",
+      "title": "Godox V1 Pro",
+      "category": "accessories"
+    },
+    {
+      "id": "5",
+      "src": "/uploads/gear/canon-100macro.png",
+      "alt": "Canon RF 100mm f/2.8 L IS USM Macro",
+      "title": "Canon RF 100mm f/2.8 L IS USM Macro",
+      "category": "lenses"
+    }
+  ]
+}

@@ -6,14 +6,21 @@ import exifr from "exifr";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
+/** Transliterate Croatian diacritics to ASCII (č→c, ć→c, š→s, ž→z, đ→dj, dž→dz) */
+function transliterateCroatian(str: string): string {
+  return str
+    .replace(/dž/gi, "dz")
+    .replace(/đ/gi, "dj")
+    .replace(/[čćČĆ]/g, "c")
+    .replace(/[šŠ]/g, "s")
+    .replace(/[žŽ]/g, "z");
+}
+
 /** Sanitize for slug: lowercase, spaces to hyphens, remove special chars */
 function slugify(str: string): string {
-  return str
+  return transliterateCroatian(str)
     .toLowerCase()
     .trim()
-    .replace(/[čć]/g, "c")
-    .replace(/[š]/g, "s")
-    .replace(/[ž]/g, "z")
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "")
     .replace(/-+/g, "-")
@@ -39,7 +46,7 @@ function generateSlug(
 
 /** Sanitize folder name: lowercase, spaces to hyphens, remove special chars */
 function sanitizeFolderName(name: string): string {
-  const s = name
+  const s = transliterateCroatian(name)
     .toLowerCase()
     .trim()
     .replace(/\s+/g, "-")
@@ -52,7 +59,7 @@ function sanitizeFilename(originalName: string): string {
   const name = originalName || "image";
   const ext = path.extname(name).toLowerCase() || ".webp";
   const base = path.basename(name, path.extname(name)) || "image";
-  const sanitized = base
+  const sanitized = transliterateCroatian(base)
     .toLowerCase()
     .trim()
     .replace(/\s+/g, "-")
@@ -320,8 +327,10 @@ export async function POST(request: Request) {
         iptc: true,
         mergeOutput: true,
       });
-      if (exif?.DateTimeOriginal) {
-        const parsed = dateToISO(exif.DateTimeOriginal);
+      const exifDate =
+        exif?.DateTimeOriginal ?? exif?.CreateDate ?? exif?.DateTime ?? exif?.ModifyDate;
+      if (exifDate) {
+        const parsed = dateToISO(exifDate);
         if (parsed) capturedAt = parsed;
       }
       if (exif) {
