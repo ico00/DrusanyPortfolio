@@ -6,7 +6,7 @@ type DropdownOption = { value: number; label: string; disabled: boolean };
 
 export function AdminDateDropdown({
   options = [],
-  value,
+  value: valueProp,
   onChange,
   disabled,
   className,
@@ -17,7 +17,7 @@ export function AdminDateDropdown({
   ...rest
 }: {
   options?: DropdownOption[];
-  value?: number;
+  value?: number | string | readonly string[];
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   disabled?: boolean;
   className?: string;
@@ -26,6 +26,13 @@ export function AdminDateDropdown({
   components: { Chevron: React.ComponentType<{ orientation?: string; size?: number; className?: string }> };
   classNames: Record<string, string>;
 } & Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "onChange">) {
+  const raw =
+    typeof valueProp === "number"
+      ? valueProp
+      : Array.isArray(valueProp)
+        ? valueProp[0]
+        : valueProp;
+  const value = raw !== undefined && raw !== "" ? Number(raw) : undefined;
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const selectedOption = options?.find((o) => o.value === value);

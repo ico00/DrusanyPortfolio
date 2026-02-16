@@ -49,7 +49,8 @@ export default function Header() {
   const router = useRouter();
   const category = searchParams.get("category");
   const searchQuery = searchParams.get("q") ?? "";
-  const isHeroMode = !category;
+  const isBlogPage = pathname === "/blog" || pathname.startsWith("/blog/");
+  const isHeroMode = !category && !isBlogPage;
 
   const isHome = pathname === "/" && !category;
   const isPortfolio = pathname === "/" && !!category;

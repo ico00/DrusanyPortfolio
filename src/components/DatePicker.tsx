@@ -79,7 +79,8 @@ export default function DatePicker({
               reverseYears
               startMonth={new Date(new Date().getFullYear() - 50, 0)}
               endMonth={new Date(new Date().getFullYear() + 5, 11)}
-              components={{ Dropdown: AdminDateDropdown }}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any -- react-day-picker Dropdown type mismatch
+              components={{ Dropdown: AdminDateDropdown as any }}
               classNames={{
                 root: "rdp-root",
                 months: "flex flex-col",

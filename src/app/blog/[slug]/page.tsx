@@ -1,13 +1,19 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, PenLine, Camera, Calendar, Tag } from "lucide-react";
 import Header from "@/components/Header";
 import ProseContent from "@/components/ProseContent";
-import blogData from "../../../data/blog.json";
+import BlogGallery from "@/components/BlogGallery";
+import { getBlog, getBlogPost } from "@/lib/blog";
+import {
+  getDisplayCategories,
+  getShortCategoryLabel,
+  formatBlogDate,
+} from "@/data/blogCategories";
 
-export function generateStaticParams() {
-  const posts = (blogData as { posts: { slug: string }[] }).posts ?? [];
+export async function generateStaticParams() {
+  const { posts } = await getBlog();
   return posts.length > 0 ? posts.map((p) => ({ slug: p.slug })) : [{ slug: "_" }];
 }
 
@@ -17,9 +23,8 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const posts = (blogData as { posts: { slug: string; title: string; date: string; thumbnail?: string; body: string }[] })
-    .posts ?? [];
-  const post = posts.find((p) => p.slug === slug);
+  const post = await getBlogPost(slug);
+
   if (!post) {
     if (slug === "_") {
       return (
@@ -27,15 +32,15 @@ export default async function BlogPostPage({
           <Suspense fallback={<div className="h-16" />}>
             <Header />
           </Suspense>
-          <article className="mx-auto max-w-2xl px-6 py-24">
+          <article className="mx-auto max-w-4xl px-6 py-24">
             <Link
               href="/blog"
               className="mb-12 inline-flex items-center gap-2 text-sm font-extralight tracking-widest text-zinc-600 transition-colors hover:text-zinc-900"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Blog
+              Natrag na blog
             </Link>
-            <p className="text-lg text-zinc-600">Coming soon.</p>
+            <p className="text-lg text-zinc-600">Uskoro.</p>
           </article>
         </div>
       );
@@ -43,44 +48,73 @@ export default async function BlogPostPage({
     notFound();
   }
 
+  const focusPoint = post.thumbnailFocus || "50% 50%";
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-16">
       <Suspense fallback={<div className="h-16" />}>
         <Header />
       </Suspense>
-      <article className="mx-auto max-w-2xl px-6 py-24">
-        <Link
-          href="/blog"
-          className="mb-12 inline-flex items-center gap-2 text-sm font-extralight tracking-widest text-zinc-600 transition-colors hover:text-zinc-900"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Blog
-        </Link>
-        {post.thumbnail && (
-          <div className="mb-8 aspect-video overflow-hidden rounded-lg bg-zinc-100">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={post.thumbnail}
-              alt=""
-              className="h-full w-full object-cover"
-            />
-          </div>
-        )}
-        <header className="mb-8">
-          <h1 className="font-serif text-3xl font-normal tracking-tight text-zinc-900 md:text-4xl">
+
+      <article>
+        <header className="mx-auto max-w-4xl px-6 pt-12 md:pt-16">
+          <h1 className="font-serif text-3xl font-normal tracking-tight text-zinc-900 md:text-4xl lg:text-5xl">
             {post.title}
           </h1>
-          <time
-            dateTime={post.date}
-            className="mt-2 block text-sm text-zinc-500"
-          >
-            {post.date}
-          </time>
+          <p className="mt-3 flex flex-wrap items-center gap-y-2 text-sm text-zinc-500">
+            <span className="inline-flex items-center gap-1.5" style={{ marginRight: "3rem" }}>
+              <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+              <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+              Tekst i fotografije: Ivica Drusany
+            </span>
+            <span className="inline-flex items-center gap-1.5" style={{ marginRight: "3rem" }}>
+              <Calendar className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+              Datum objave:{" "}
+              <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+              Kategorija:{" "}
+            {getDisplayCategories(post).length > 0 ? (
+              getDisplayCategories(post).map((catSlug) => (
+                <Link
+                  key={catSlug}
+                  href={`/blog?kategorija=${encodeURIComponent(catSlug)}`}
+                  className="inline-block border-b border-transparent pb-0.5 text-zinc-600 transition-[color,border-color] duration-200 hover:border-zinc-900 hover:text-zinc-900"
+                >
+                  {getShortCategoryLabel(catSlug)}
+                </Link>
+              ))
+            ) : (
+              "—"
+            )}
+            </span>
+          </p>
         </header>
+
+        {post.thumbnail && (
+          <div className="relative mt-6 w-full overflow-hidden bg-zinc-100 md:mt-8">
+            <div className="aspect-[21/9] w-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={post.thumbnail}
+                alt=""
+                className="h-full w-full object-cover"
+                style={{ objectPosition: focusPoint }}
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="mx-auto max-w-4xl px-6 py-12 md:py-16">
         <ProseContent
-          html={post.body}
-          className="prose prose-zinc max-w-none prose-headings:font-serif prose-a:text-zinc-600 prose-a:underline prose-a:hover:text-zinc-900"
+          html={post.body || ""}
+          className="prose prose-lg prose-zinc max-w-none prose-headings:font-serif prose-a:text-zinc-600 prose-a:underline prose-a:hover:text-zinc-900"
         />
+        {post.galleryImages && post.galleryImages.length > 0 && (
+          <BlogGallery images={post.galleryImages} />
+        )}
+        </div>
       </article>
     </div>
   );

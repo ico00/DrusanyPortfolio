@@ -34,3 +34,8 @@ export function generateSlug(
   if (year && !isNaN(year)) parts.push(String(year));
   return parts.filter(Boolean).join("-") || `image-${Date.now()}`;
 }
+
+/** Generate blog slug from title only (as you type) */
+export function generateBlogSlug(title: string): string {
+  return slugify(title) || `post-${Date.now()}`;
+}

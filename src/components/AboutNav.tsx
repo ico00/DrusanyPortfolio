@@ -20,7 +20,7 @@ export default function AboutNav() {
 
     const updateActive = () => {
       const triggerY = window.innerHeight * 0.25;
-      let active = SECTIONS[0].id;
+      let active: (typeof SECTIONS)[number]["id"] = SECTIONS[0].id;
       for (const { id } of SECTIONS) {
         const el = document.getElementById(id);
         if (!el) continue;

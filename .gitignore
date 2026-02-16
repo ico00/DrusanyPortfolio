@@ -43,3 +43,4 @@ next-env.d.ts
 # Fotografije (lokalna pohrana)
 public/uploads/full/
 public/uploads/thumbs/
+public/uploads/blog/
