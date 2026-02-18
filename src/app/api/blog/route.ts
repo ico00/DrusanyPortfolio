@@ -1,4 +1,5 @@
 import { getBlog, getBlogPost, saveBlog, saveBlogBody } from "@/lib/blog";
+import type { BlogGalleryMetadata } from "@/lib/blog";
 
 export const dynamic = "force-static";
 
@@ -43,6 +44,8 @@ export async function POST(request: Request) {
       thumbnail: string;
       thumbnailFocus?: string;
       gallery: string[];
+      galleryMetadata?: Record<string, BlogGalleryMetadata>;
+      featured?: boolean;
       body: string;
     };
     const blog = await getBlog();
@@ -63,6 +66,8 @@ export async function POST(request: Request) {
       thumbnail: body.thumbnail || "",
       thumbnailFocus: body.thumbnailFocus || "50% 50%",
       gallery: Array.isArray(body.gallery) ? body.gallery : ([] as string[]),
+      galleryMetadata: body.galleryMetadata ?? {},
+      featured: body.featured ?? false,
     };
     await saveBlogBody(slug, body.body || "");
     blog.posts.unshift(post);
@@ -97,6 +102,8 @@ export async function PUT(request: Request) {
       thumbnail?: string;
       thumbnailFocus?: string;
       gallery?: string[];
+      galleryMetadata?: Record<string, BlogGalleryMetadata>;
+      featured?: boolean;
       body?: string;
     };
     const blog = await getBlog();
@@ -126,6 +133,8 @@ export async function PUT(request: Request) {
     if (body.thumbnail !== undefined) blog.posts[idx].thumbnail = body.thumbnail;
     if (body.thumbnailFocus !== undefined) blog.posts[idx].thumbnailFocus = body.thumbnailFocus;
     if (body.gallery !== undefined) blog.posts[idx].gallery = body.gallery;
+    if (body.galleryMetadata !== undefined) blog.posts[idx].galleryMetadata = body.galleryMetadata;
+    if (body.featured !== undefined) blog.posts[idx].featured = !!body.featured;
     if (body.body !== undefined) {
       await saveBlogBody(blog.posts[idx].slug, body.body);
     }

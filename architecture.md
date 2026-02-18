@@ -159,7 +159,28 @@ Objavljene fotografije u medijima (About stranica). Struktura:
 - **caption**: Ime medija / naslov objave (opcionalno)
 - **link**: URL članka (opcionalno) – ako postoji, slika je klikabilna
 
-### 3.6 Original Images: `public/uploads/`
+### 3.6 Theme: `src/data/theme.json`
+
+Konfiguracija tipografije i boja za elemente stranice. Struktura:
+
+```json
+{
+  "title": { "fontFamily": "serif", "fontSize": "clamp(2rem, 5vw, 4rem)", "color": "#ffffff" },
+  "heading": { "fontFamily": "serif", "fontSize": "1.5rem", "color": "#18181b" },
+  "body": { "fontFamily": "sans", "fontSize": "1rem", "color": "#3f3f46" },
+  "quote": { "fontFamily": "serif", "fontSize": "1.125rem", "color": "#e4e4e7" },
+  "nav": { "fontFamily": "sans", "fontSize": "0.875rem", "color": "rgba(255,255,255,0.9)" },
+  "caption": { "fontFamily": "sans", "fontSize": "0.75rem", "color": "#71717a" }
+}
+```
+
+- **fontFamily:** sans (Geist), serif (Playfair), mono (JetBrains) – definirani u `src/data/themeFonts.ts`
+- **fontSize:** CSS vrijednost (npr. `1rem`, `clamp(2rem, 5vw, 4rem)`)
+- **color:** Hex ili rgba
+- **ThemeStyles** (layout) injektira CSS varijable u `:root`; prose i utility klase (`.theme-title`, `.theme-heading`, `.theme-nav`, `.theme-caption`) koriste te varijable
+- **Dodavanje novih fontova:** 1) `layout.tsx` – import iz `next/font/google`, dodaj `.variable` u body; 2) `themeFonts.ts` – dodaj zapis u `THEME_FONTS`
+
+### 3.7 Original Images: `public/uploads/`
 
 - Slike se spremaju u podfoldere po kategoriji: `public/uploads/full/[category]/` i `public/uploads/thumbs/[category]/`
 - Press slike: `public/uploads/press/` (ručno dodavanje)
@@ -202,6 +223,7 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 
 **Funkcionalnost:**
 - **Sidebar accordion:** Samo jedan podmeni (Gallery ili Pages) može biti otvoren; animacija otvaranja/zatvaranja (grid-template-rows)
+- **Theme tab:** Ispod Blog – Customize Theme (font, veličina, boja za title, heading, body, quote, nav, caption); custom dropdown (kao CategorySelect); live preview s adaptivnom pozadinom (svijetla/tamna prema boji teksta); spremanje putem `/api/theme`; za statički export: uređivanje samo u dev modu, zatim `npm run build`
 - **Category-first flow:** Korisnik prvo odabere kategoriju; bez odabira upload je onemogućen
 - **Galerija filtrirana po kategoriji:** Prikazuje se samo galerija odabrane kategorije (ne opća galerija sa svim slikama)
 - Upload novih slika (file input) – slike idu u odabranu kategoriju
@@ -337,6 +359,13 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 
 - Prima `{ url }` – putanja `/uploads/blog/...`; briše fizičku datoteku s diska kad se slika ukloni iz galerije
 
+#### `/api/theme` (GET, PUT)
+
+**Lokacija:** `src/app/api/theme/route.ts`
+
+- **GET:** Vraća theme konfiguraciju iz `theme.json` (font, fontSize, color po elementu)
+- **PUT:** Prima `ThemeConfig`, sprema u `theme.json`; dostupno samo u development modu
+
 ---
 
 ## 5. Static Export Configuration
@@ -369,7 +398,7 @@ const nextConfig: NextConfig = {
 ### 6.1 Estetika: High-End Minimalist
 
 - **Boje:** Neutralna paleta (bijela, crna, siva), možda jedan akcent
-- **Tipografija:** Veliki fontovi (clamp za responsivnost), serif za naslove, sans za body
+- **Tipografija:** Veliki fontovi (clamp za responsivnost), serif za naslove, sans za body; **Theme customization** – font, veličina i boja po elementu (title, heading, body, quote, nav, caption) putem Admin → Theme
 - **Prostor:** Generozan whitespace, minimalan UI
 - **Kontrast:** Jaka čitljivost, suptilni hover efekti
 
@@ -394,7 +423,15 @@ fontSize: {
 - **Redoslijed:** Slike se obrađuju sekvencijalno iz `filteredImages` – prve idu u prazne stupce (1, 2, 3, 4 u prvom redu), zatim se popunjavaju rupe; redoslijed se prirodno održava
 - **Layout:** `display: grid` s `grid-template-columns: repeat(columnCount, 1fr)`; svaki stupac je `flex flex-col` s `gap-2 sm:gap-4`
 
-### 6.4 Prose Content (About, Contact, Blog)
+### 6.4 Theme Customization
+
+- **theme.json:** Font, fontSize i color za svaki element (title, heading, body, quote, nav, caption)
+- **themeFonts.ts:** Centralna konfiguracija fontova – `THEME_FONTS` (id, label, cssVar, previewFamily); `FONT_MAP` za CSS; `FONT_OPTIONS` za admin dropdown
+- **ThemeStyles:** Async server komponenta u layoutu – učitava theme, injektira `:root { --theme-*-font, --theme-*-size, --theme-*-color }`
+- **globals.css:** Prose h1–h6, p, li, blockquote koriste `var(--theme-heading-font)`, `var(--theme-body-font)` itd.; utility klase `.theme-title`, `.theme-heading`, `.theme-nav`, `.theme-caption` za elemente izvan prose
+- **Dodavanje fonta:** 1) `layout.tsx` – import iz `next/font/google`, dodaj variable u body; 2) `themeFonts.ts` – novi zapis u `THEME_FONTS`
+
+### 6.5 Prose Content (About, Contact, Blog)
 
 Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
 
@@ -409,7 +446,7 @@ Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
 
 **BlockNote editor (admin):** Razmak između blokova – `.blocknote-editor-wrapper .bn-block-group > .bn-block-outer { margin-bottom: 1.5rem }` u globals.css; quote blok s dekorativnim navodnikom (CSS ::before)
 
-### 6.5 Animations (Framer Motion)
+### 6.6 Animations (Framer Motion)
 
 - **Fade-in na load:** `initial={{ opacity: 0 }}` → `animate={{ opacity: 1 }}` – bez y-offseta
 - **Stagger children:** Kratki stagger (0.02s) za grid items
@@ -493,6 +530,7 @@ DrusanyPortfolio/
 │   │   │   ├── hero/route.ts
 │   │   │   ├── pages/route.ts
 │   │   │   ├── reorder/route.ts
+│   │   │   ├── theme/route.ts
 │   │   │   ├── update/route.ts
 │   │   │   └── upload/route.ts
 │   │   ├── about/page.tsx
@@ -500,7 +538,7 @@ DrusanyPortfolio/
 │   │   │   ├── page.tsx
 │   │   │   └── [slug]/page.tsx
 │   │   ├── contact/page.tsx
-│   │   ├── layout.tsx       # CustomCursor u body
+│   │   ├── layout.tsx       # CustomCursor, ThemeStyles u body
 │   │   ├── page.tsx       # Home (HeroSlider ili Gallery)
 │   │   └── globals.css
 │   ├── components/
@@ -515,7 +553,7 @@ DrusanyPortfolio/
 │   │   ├── ContactForm.tsx       # Kontakt forma (Formspree); name, email, subject, message
 │   │   ├── PressSection.tsx      # About – objavljene fotografije (masonry)
 │   │   ├── GearSection.tsx       # About – fotografska oprema (masonry)
-│   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog)
+│   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog, Theme)
 │   │   ├── AdminDashboard.tsx    # Dashboard (bar/pie grafikoni – Recharts; cursor/background off, tooltip stilizacija)
 │   │   ├── AdminPages.tsx        # About/Contact editor (BlockNote, quote, FormspreeEndpoint)
 │   │   ├── AdminBlog.tsx         # Blog post editor (BlockNote, galerija, bulk delete)
@@ -531,6 +569,8 @@ DrusanyPortfolio/
 │   │   ├── CategorySelect.tsx    # Custom category dropdown
 │   │   ├── VenueSelect.tsx       # Venue dropdown (Concerts)
 │   │   ├── SportSelect.tsx       # Sport type dropdown (Sport)
+│   │   ├── ThemeAdmin.tsx        # Theme customization (font, size, color po elementu; custom dropdown)
+│   │   ├── ThemeStyles.tsx      # Injektira theme CSS varijable u :root
 │   │   ├── CustomCursor.tsx   # Custom cursor (dot + aperture, desktop only)
 │   │   ├── Gallery.tsx        # Balanced masonry (shortest column) + lightbox; useColumnCount, imageColumns
 │   │   ├── Header.tsx        # Logo (inline SVG), Nav + Portfolio dropdown, Search (kad galerija), aktivna stranica, hover efekti
@@ -544,7 +584,8 @@ DrusanyPortfolio/
 │   │   ├── press.ts        # getPress – čitanje press.json
 │   │   ├── pages.ts        # getPages, savePages – About/Contact (title, html, quote, email, formspreeEndpoint)
 │   │   ├── blog.ts         # getBlog, getBlogPost – čitanje blog.json, enrichBlogGallery (Sharp dimenzije)
-│   │   └── slug.ts         # slugify, generateSlug (title+venue+year), generateBlogSlug (yymmdd-naslov) – zajednički za upload, update, AdminClient, blog
+│   │   ├── slug.ts         # slugify, generateSlug (title+venue+year), generateBlogSlug (yymmdd-naslov) – zajednički za upload, update, AdminClient, blog
+│   │   └── theme.ts        # getTheme, saveTheme, themeToCssVariables – čitanje/spremanje theme.json
 │   └── data/
 │       ├── gallery.json    # Flat-file baza slika
 │       ├── pages.json      # About (title, html, quote), Contact (title, html, email, formspreeEndpoint)
@@ -647,8 +688,8 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 | **EXIF** | exifr (datum, naslov, keywords, camera, lens, exposure, aperture, ISO) – čita se samo pri uploadu |
 | **Podaci** | `src/data/gallery.json` |
 | **Slike** | `public/uploads/full/[category]/` + `thumbs/[category]/` (WebP, originalni nazivi) |
-| **Admin** | `/admin` + API routes (dev only): upload, exif-preview, update, delete, hero, reorder, gallery, **pages**, **blog** |
-| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – BlockNote editor s StaticBlockTypeBar, **upload slika u sadržaj** (content/), **editLoading** (sprječava popover crash); **BlogCategorySelect** (abecedno); **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija) |
+| **Admin** | `/admin` + API routes (dev only): upload, exif-preview, update, delete, hero, reorder, gallery, **pages**, **blog**, **theme** |
+| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – BlockNote editor s StaticBlockTypeBar, **upload slika u sadržaj** (content/), **editLoading** (sprječava popover crash); **BlogCategorySelect** (abecedno); **Theme** – Customize Theme (font, veličina, boja za title, heading, body, quote, nav, caption); custom dropdown (kao CategorySelect); live preview; **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija) |
 | **Home** | HeroSlider (6 slides, auto-play 4s, strelice lijevo-desno, "View Gallery", title @ venue) ili masonry Gallery po `?category`; hero samo ručno odabrana |
 | **Header** | Logo (inline SVG), poravnanje lijevo, Search u nav (kad galerija, expandable hover), aktivna stranica (border-b/border-l), hover efekti (Safari: inline-block, eksplicitne boje) |
 | **Custom Cursor** | Dot (trenutno) + aperture (spring, samo preko fotografija), mix-blend-difference, desktop only |

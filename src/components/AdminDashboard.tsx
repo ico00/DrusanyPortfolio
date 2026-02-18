@@ -14,7 +14,7 @@ import {
   Cell,
   Legend,
 } from "recharts";
-import { ImageIcon, FileText, BookOpen, Loader2, Layout } from "lucide-react";
+import { ImageIcon, FileText, BookOpen, Loader2, Layout, Cross } from "lucide-react";
 import { CATEGORIES } from "./CategorySelect";
 
 function normalizeCategory(cat: string): string {
@@ -41,26 +41,50 @@ const CARD_ACCENTS = [
   { bg: "bg-violet-500/20", icon: "text-violet-400", border: "border-violet-500/30" },
 ];
 
-export default function AdminDashboard() {
+interface AdminDashboardProps {
+  onContentHealthClick?: (
+    filter: "no-slug" | "no-exif" | "no-featured",
+    imageIds?: string[]
+  ) => void;
+}
+
+export default function AdminDashboard({ onContentHealthClick }: AdminDashboardProps) {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     totalImages: 0,
     imagesByCategory: [] as { name: string; count: number; slug: string }[],
     pagesCount: 2,
     blogPostsCount: 0,
+    contentHealth: {
+      imagesWithoutExif: 0,
+      imagesWithoutSlug: 0,
+      blogPostsWithoutFeaturedImage: 0,
+      imageIdsWithoutExif: [] as string[],
+      imageIdsWithoutSlug: [] as string[],
+    },
   });
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
     try {
-      const [galleryRes, pagesRes, blogRes] = await Promise.all([
+      const [galleryRes, pagesRes, blogRes, healthRes] = await Promise.all([
         fetch("/api/gallery"),
         fetch("/api/pages"),
         fetch("/api/blog"),
+        fetch("/api/content-health"),
       ]);
 
       const galleryData = galleryRes.ok ? await galleryRes.json() : { images: [] };
       const blogData = blogRes.ok ? await blogRes.json() : { posts: [] };
+      const contentHealth = healthRes.ok
+        ? await healthRes.json()
+        : {
+            imagesWithoutExif: 0,
+            imagesWithoutSlug: 0,
+            blogPostsWithoutFeaturedImage: 0,
+            imageIdsWithoutExif: [],
+            imageIdsWithoutSlug: [],
+          };
 
       const images = galleryData.images ?? [];
       const posts = blogData.posts ?? [];
@@ -91,6 +115,7 @@ export default function AdminDashboard() {
         imagesByCategory,
         pagesCount: 2,
         blogPostsCount: posts.length,
+        contentHealth,
       });
     } catch {
       setStats({
@@ -98,6 +123,13 @@ export default function AdminDashboard() {
         imagesByCategory: [],
         pagesCount: 2,
         blogPostsCount: 0,
+        contentHealth: {
+          imagesWithoutExif: 0,
+          imagesWithoutSlug: 0,
+          blogPostsWithoutFeaturedImage: 0,
+          imageIdsWithoutExif: [],
+          imageIdsWithoutSlug: [],
+        },
       });
     } finally {
       setLoading(false);
@@ -126,6 +158,65 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8">
+      {/* Content health */}
+      <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
+        <h3 className="mb-3 flex items-center gap-2 text-sm font-medium text-amber-400">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20">
+            <Cross className="h-4 w-4 text-amber-400" strokeWidth={2.5} />
+          </span>
+          Content health
+        </h3>
+        <div className="flex flex-wrap gap-4 text-sm">
+          <button
+            type="button"
+            onClick={() =>
+              onContentHealthClick?.(
+                "no-exif",
+                stats.contentHealth.imageIdsWithoutExif
+              )
+            }
+            className={`text-left transition-colors hover:underline ${
+              stats.contentHealth.imagesWithoutExif > 0
+                ? "text-amber-400 hover:text-amber-300"
+                : "text-zinc-500 cursor-default hover:no-underline"
+            }`}
+            title={stats.contentHealth.imagesWithoutExif > 0 ? "Prikaži u galeriji" : undefined}
+          >
+            Images without EXIF: {stats.contentHealth.imagesWithoutExif}
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              onContentHealthClick?.(
+                "no-slug",
+                stats.contentHealth.imageIdsWithoutSlug
+              )
+            }
+            className={`text-left transition-colors hover:underline ${
+              stats.contentHealth.imagesWithoutSlug > 0
+                ? "text-amber-400 hover:text-amber-300"
+                : "text-zinc-500 cursor-default hover:no-underline"
+            }`}
+            title={stats.contentHealth.imagesWithoutSlug > 0 ? "Prikaži u galeriji" : undefined}
+          >
+            Images without slug: {stats.contentHealth.imagesWithoutSlug}
+          </button>
+          <button
+            type="button"
+            onClick={() => onContentHealthClick?.("no-featured")}
+            className={`text-left transition-colors hover:underline ${
+              stats.contentHealth.blogPostsWithoutFeaturedImage > 0
+                ? "text-amber-400 hover:text-amber-300"
+                : "text-zinc-500 cursor-default hover:no-underline"
+            }`}
+            title={stats.contentHealth.blogPostsWithoutFeaturedImage > 0 ? "Prikaži u blogu" : undefined}
+          >
+            Blog posts without featured image:{" "}
+            {stats.contentHealth.blogPostsWithoutFeaturedImage}
+          </button>
+        </div>
+      </div>
+
       {/* Summary cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[0].border}`}>

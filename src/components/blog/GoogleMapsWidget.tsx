@@ -28,7 +28,7 @@ export default function GoogleMapsWidget({
   const activeLocation = locations.find((l) => l.id === activeId) ?? locations[0];
 
   return (
-    <aside className="rounded-lg border border-zinc-200/60 bg-white p-5">
+    <aside className="rounded-lg bg-white p-5 shadow-sm">
       <h3 className="font-serif text-lg font-normal tracking-tight text-zinc-900">{title}</h3>
 
       {locations.length > 1 && (

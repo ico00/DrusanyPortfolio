@@ -3,6 +3,7 @@ import SearchWidget from "./SearchWidget";
 import CategoriesWidget from "./CategoriesWidget";
 import InstagramWidget from "./InstagramWidget";
 import GoogleMapsWidget from "./GoogleMapsWidget";
+import FeaturedPostsWidget from "./FeaturedPostsWidget";
 import {
   getBlogWidgets,
   type BlogWidgetConfig,
@@ -10,6 +11,7 @@ import {
   type CategoriesWidgetConfig,
   type InstagramWidgetConfig,
   type MapsWidgetConfig,
+  type FeaturedPostsWidgetConfig,
 } from "@/lib/blogWidgets";
 import { fetchInstagramFeed } from "@/lib/instagram";
 import { getBlog } from "@/lib/blog";
@@ -49,7 +51,7 @@ async function WidgetRenderer({
     case "search":
       return (
         <Suspense fallback={<div className="h-20 animate-pulse rounded-lg bg-zinc-100" />}>
-          <SearchWidget title={(widget as SearchWidgetConfig).title} />
+          <SearchWidget />
         </Suspense>
       );
     case "categories":
@@ -80,6 +82,15 @@ async function WidgetRenderer({
         <GoogleMapsWidget
           title={maps.title}
           locations={maps.locations}
+        />
+      );
+    }
+    case "featured-posts": {
+      const fp = widget as FeaturedPostsWidgetConfig;
+      return (
+        <FeaturedPostsWidget
+          title={fp.title}
+          posts={posts}
         />
       );
     }

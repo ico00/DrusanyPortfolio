@@ -14,6 +14,7 @@ import {
   GripVertical,
   Square,
   CheckSquare,
+  Star,
 } from "lucide-react";
 import {
   DndContext,
@@ -136,8 +137,12 @@ export default function AdminBlog() {
     thumbnail: "",
     thumbnailFocus: "50% 50%",
     gallery: [] as string[],
+    galleryMetadata: {} as Record<string, { title?: string; description?: string }>,
+    featured: false,
     body: "",
   });
+  const [bulkTitle, setBulkTitle] = useState("");
+  const [bulkDescription, setBulkDescription] = useState("");
   const [uploadingFeatured, setUploadingFeatured] = useState(false);
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const [galleryPreviewUrls, setGalleryPreviewUrls] = useState<string[]>([]);
@@ -218,6 +223,8 @@ export default function AdminBlog() {
         thumbnail: post.thumbnail ?? "",
         thumbnailFocus: post.thumbnailFocus ?? "50% 50%",
         gallery: post.gallery ?? [],
+        galleryMetadata: post.galleryMetadata ?? {},
+        featured: post.featured ?? false,
         body: full?.body ?? "",
       });
     } finally {
@@ -236,6 +243,8 @@ export default function AdminBlog() {
       thumbnail: "",
       thumbnailFocus: "50% 50%",
       gallery: [],
+      galleryMetadata: {},
+      featured: false,
       body: "",
     });
   };
@@ -419,7 +428,15 @@ export default function AdminBlog() {
 
   const removeGalleryImage = (url: string) => {
     deleteBlogGalleryFile(url);
-    setForm((f) => ({ ...f, gallery: f.gallery.filter((u) => u !== url) }));
+    setForm((f) => {
+      const nextMeta = { ...f.galleryMetadata };
+      delete nextMeta[url];
+      return {
+        ...f,
+        gallery: f.gallery.filter((u) => u !== url),
+        galleryMetadata: nextMeta,
+      };
+    });
     setSelectedGalleryUrls((s) => {
       const next = new Set(s);
       next.delete(url);
@@ -436,6 +453,21 @@ export default function AdminBlog() {
     });
   };
 
+  // Pri selekciji slike u galeriji, prikaži njen title/description u poljima
+  useEffect(() => {
+    if (selectedGalleryUrls.size === 0) {
+      setBulkTitle("");
+      setBulkDescription("");
+      return;
+    }
+    const firstUrl = form.gallery.find((g) => selectedGalleryUrls.has(g));
+    if (firstUrl) {
+      const meta = form.galleryMetadata[firstUrl];
+      setBulkTitle(meta?.title ?? "");
+      setBulkDescription(meta?.description ?? "");
+    }
+  }, [selectedGalleryUrls, form.gallery, form.galleryMetadata]);
+
   const selectAllGallery = () => {
     setSelectedGalleryUrls(new Set(form.gallery));
   };
@@ -446,12 +478,41 @@ export default function AdminBlog() {
     if (selectedGalleryUrls.size === 0) return;
     if (!confirm(`Obrisati ${selectedGalleryUrls.size} slik${selectedGalleryUrls.size === 1 ? "u" : "a"}?`)) return;
     selectedGalleryUrls.forEach((url) => deleteBlogGalleryFile(url));
-    setForm((f) => ({
-      ...f,
-      gallery: f.gallery.filter((u) => !selectedGalleryUrls.has(u)),
-    }));
+    setForm((f) => {
+      const nextMeta = { ...f.galleryMetadata };
+      selectedGalleryUrls.forEach((u) => delete nextMeta[u]);
+      return {
+        ...f,
+        gallery: f.gallery.filter((u) => !selectedGalleryUrls.has(u)),
+        galleryMetadata: nextMeta,
+      };
+    });
     setSelectedGalleryUrls(new Set());
     showToast("success", "Slike uklonjene iz galerije.");
+  };
+
+  const handleBulkApplyMetadata = () => {
+    if (selectedGalleryUrls.size === 0) return;
+    const title = bulkTitle.trim() || undefined;
+    const description = bulkDescription.trim() || undefined;
+    if (!title && !description) {
+      showToast("error", "Unesi naslov ili opis.");
+      return;
+    }
+    setForm((f) => {
+      const nextMeta = { ...f.galleryMetadata };
+      selectedGalleryUrls.forEach((url) => {
+        nextMeta[url] = {
+          ...(nextMeta[url] ?? {}),
+          ...(title !== undefined && { title }),
+          ...(description !== undefined && { description }),
+        };
+      });
+      return { ...f, galleryMetadata: nextMeta };
+    });
+    setBulkTitle("");
+    setBulkDescription("");
+    showToast("success", `Primijenjeno na ${selectedGalleryUrls.size} slik${selectedGalleryUrls.size === 1 ? "u" : "a"}. Klikni Spremi da se sačuvaju.`);
   };
 
   const handleSaveEdit = async () => {
@@ -607,6 +668,28 @@ export default function AdminBlog() {
                   className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
                 />
               </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <label className="text-sm text-zinc-400">Istaknuti post</label>
+              <button
+                type="button"
+                onClick={() => setForm((f) => ({ ...f, featured: !f.featured }))}
+                className={`rounded p-2 transition-colors ${
+                  form.featured
+                    ? "text-amber-400 hover:text-amber-300"
+                    : "text-zinc-500 hover:text-zinc-400"
+                }`}
+                title={form.featured ? "Ukloni iz istaknutih" : "Dodaj u istaknute"}
+                aria-label={form.featured ? "Ukloni iz istaknutih" : "Dodaj u istaknute"}
+              >
+                <Star
+                  className={`h-5 w-5 ${form.featured ? "fill-amber-400" : ""}`}
+                  strokeWidth={1.5}
+                />
+              </button>
+              <span className="text-xs text-zinc-500">
+                {form.featured ? "Prikazuje se u widgetu istaknutih" : "Dodaj u istaknute"}
+              </span>
             </div>
             <div>
               <label className="mb-2 block text-sm text-zinc-400">Kategorije</label>
@@ -807,6 +890,14 @@ export default function AdminBlog() {
                         </span>
                         <button
                           type="button"
+                          onClick={handleBulkApplyMetadata}
+                          disabled={!bulkTitle.trim() && !bulkDescription.trim()}
+                          className="flex items-center gap-2 rounded-lg bg-zinc-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-zinc-500 disabled:opacity-50 disabled:hover:bg-zinc-600"
+                        >
+                          Primijeni na odabrano
+                        </button>
+                        <button
+                          type="button"
                           onClick={handleBulkDeleteGallery}
                           className="flex items-center gap-2 rounded-lg bg-red-600/80 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-600"
                         >
@@ -826,6 +917,36 @@ export default function AdminBlog() {
                   </div>
                 )}
               </div>
+
+              {/* Bulk edit: naslov i opis za odabrane slike */}
+              {selectedGalleryUrls.size > 0 && (
+                <div className="mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-zinc-700 bg-zinc-800/50 p-3">
+                  <div className="min-w-[12rem] flex-1">
+                    <label className="mb-1 block text-xs text-zinc-500">Naslov (za odabrane)</label>
+                    <input
+                      type="text"
+                      value={bulkTitle}
+                      onChange={(e) => setBulkTitle(e.target.value)}
+                      placeholder="npr. Advent u Zagrebu"
+                      className="w-full rounded border border-zinc-600 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none"
+                    />
+                  </div>
+                  <div className="min-w-[12rem] flex-1">
+                    <label className="mb-1 block text-xs text-zinc-500">Opis (za odabrane)</label>
+                    <input
+                      type="text"
+                      value={bulkDescription}
+                      onChange={(e) => setBulkDescription(e.target.value)}
+                      placeholder="npr. Trg bana Jelačića, prosinac 2025."
+                      className="w-full rounded border border-zinc-600 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none"
+                    />
+                  </div>
+                  <p className="w-full text-xs text-zinc-500">
+                    Klikni <strong>Spremi</strong> (gore) da se promjene sačuvaju. Nakon toga pokreni{" "}
+                    <code className="rounded bg-zinc-800 px-1">npm run build</code> da se promjene vide na stranici.
+                  </p>
+                </div>
+              )}
 
               {/* Već uploadane slike – drag-and-drop sortiranje */}
               {form.gallery.length > 0 && (
@@ -1046,7 +1167,42 @@ export default function AdminBlog() {
                   {post.time ? ` · ${post.time}` : " · —"}
                 </p>
               </div>
-              <div className="flex shrink-0 gap-2">
+              <div className="flex shrink-0 items-center gap-2">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const next = !post.featured;
+                    try {
+                      const res = await fetch("/api/blog", {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ id: post.id, featured: next }),
+                      });
+                      if (res.ok) {
+                        setPosts((prev) =>
+                          prev.map((p) =>
+                            p.id === post.id ? { ...p, featured: next } : p
+                          )
+                        );
+                        showToast("success", next ? "Dodano u istaknute" : "Uklonjeno iz istaknutih");
+                      }
+                    } catch {
+                      showToast("error", "Promjena nije uspjela.");
+                    }
+                  }}
+                  className={`rounded p-2 transition-colors ${
+                    post.featured
+                      ? "text-amber-400 hover:text-amber-300"
+                      : "text-zinc-500 hover:text-zinc-400"
+                  }`}
+                  title={post.featured ? "Ukloni iz istaknutih" : "Dodaj u istaknute"}
+                  aria-label={post.featured ? "Ukloni iz istaknutih" : "Dodaj u istaknute"}
+                >
+                  <Star
+                    className={`h-4 w-4 ${post.featured ? "fill-amber-400" : ""}`}
+                    strokeWidth={1.5}
+                  />
+                </button>
                 <button
                   type="button"
                   onClick={() => openEdit(post)}

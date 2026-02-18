@@ -28,6 +28,7 @@ export async function POST(request: Request) {
       foodDrink?: string;
       keywords?: string;
       slug?: string;
+      thumbnailFocus?: string;
     };
 
     const { id, ...updates } = body;
@@ -92,6 +93,7 @@ export async function POST(request: Request) {
       const s = slugify(updates.slug);
       img.slug = s || undefined;
     }
+    if (updates.thumbnailFocus !== undefined) img.thumbnailFocus = updates.thumbnailFocus;
 
     await writeFile(galleryPath, JSON.stringify(gallery, null, 2));
 

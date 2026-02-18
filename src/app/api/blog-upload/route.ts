@@ -1,7 +1,79 @@
-import { mkdir, access, stat } from "fs/promises";
+import { mkdir, access, stat, readFile, writeFile } from "fs/promises";
 import path from "path";
 import sharp from "sharp";
+import exifr from "exifr";
 import { getBlogUploadDir } from "@/lib/blog";
+
+const BLOG_EXIF_PATH = path.join(process.cwd(), "src", "data", "blogExif.json");
+
+function formatExposure(sec: unknown): string | null {
+  if (typeof sec !== "number" || sec <= 0) return null;
+  if (sec >= 1) return `${sec}"`;
+  const frac = 1 / sec;
+  if (frac >= 1 && Math.abs(frac - Math.round(frac)) < 0.01) return `1/${Math.round(frac)}`;
+  return `${sec}s`;
+}
+
+function formatAperture(fnum: unknown): string | null {
+  if (typeof fnum !== "number" || fnum <= 0) return null;
+  return `f/${fnum}`;
+}
+
+function formatLensInfo(arr: unknown): string | null {
+  if (!Array.isArray(arr) || arr.length < 4) return null;
+  const [minFocal, maxFocal, minF, maxF] = arr.map(Number);
+  if (!minFocal || minFocal <= 0) return null;
+  const focal =
+    minFocal === maxFocal ? `${minFocal}mm` : `${minFocal}-${maxFocal}mm`;
+  const fnum = minF > 0 ? ` f/${minF}` : "";
+  return `${focal}${fnum}`.trim() || null;
+}
+
+function getExifExtras(exif: Record<string, unknown>): {
+  camera: string | null;
+  lens: string | null;
+  exposure: string | null;
+  aperture: string | null;
+  iso: number | null;
+} {
+  const make = typeof exif.Make === "string" ? exif.Make.trim() : "";
+  const model = typeof exif.Model === "string" ? exif.Model.trim() : "";
+  const camera =
+    model && (!make || !model.toLowerCase().startsWith(make.toLowerCase()))
+      ? [make, model].filter(Boolean).join(" ")
+      : model || make || null;
+  let lens =
+    (typeof exif.LensModel === "string" && exif.LensModel.trim()) || null;
+  if (!lens) lens = formatLensInfo(exif.LensInfo);
+  if (!lens && typeof exif.Lens === "string" && exif.Lens.trim()) {
+    lens = exif.Lens.trim();
+  }
+  if (!lens && typeof exif.LensMake === "string" && exif.LensMake.trim()) {
+    lens = exif.LensMake.trim();
+  }
+  const exposure = formatExposure(exif.ExposureTime);
+  const aperture = formatAperture(exif.FNumber);
+  const iso =
+    typeof exif.ISO === "number" && exif.ISO > 0 ? exif.ISO : null;
+  return { camera, lens, exposure, aperture, iso };
+}
+
+async function saveBlogExif(url: string, exif: { camera?: string; lens?: string; exposure?: string; aperture?: string; iso?: number }) {
+  let data: Record<string, { camera?: string; lens?: string; exposure?: string; aperture?: string; iso?: number }> = {};
+  try {
+    const raw = await readFile(BLOG_EXIF_PATH, "utf-8");
+    data = JSON.parse(raw) as typeof data;
+  } catch {
+    // file doesn't exist or invalid
+  }
+  const hasAny = exif.camera || exif.lens || exif.exposure || exif.aperture || exif.iso != null;
+  if (hasAny) {
+    data[url] = exif;
+  } else {
+    delete data[url];
+  }
+  await writeFile(BLOG_EXIF_PATH, JSON.stringify(data, null, 2), "utf-8");
+}
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
@@ -122,6 +194,8 @@ export async function POST(request: Request) {
       await mkdir(baseDir, { recursive: true });
       const outPath = path.join(baseDir, "featured.webp");
       await sharp(buffer)
+        .rotate()
+        .keepExif()
         .resize(2048, undefined, { withoutEnlargement: true })
         .webp({ quality: 85 })
         .toFile(outPath);
@@ -165,11 +239,44 @@ export async function POST(request: Request) {
       }
 
       const finalPath = path.join(galleryDir, filename);
+      const url = `/uploads/blog/${folderName}/gallery/${filename}`;
+
+      let camera: string | undefined;
+      let lens: string | undefined;
+      let exposure: string | undefined;
+      let aperture: string | undefined;
+      let iso: number | undefined;
+      try {
+        const exif = await exifr.parse(buffer, {
+          userComment: true,
+          makerNote: true,
+          xmp: true,
+          iptc: true,
+          mergeOutput: true,
+        });
+        if (exif) {
+          const extras = getExifExtras(exif as Record<string, unknown>);
+          if (extras.camera) camera = extras.camera;
+          if (extras.lens) lens = extras.lens;
+          if (extras.exposure) exposure = extras.exposure;
+          if (extras.aperture) aperture = extras.aperture;
+          if (extras.iso != null) iso = extras.iso;
+        }
+      } catch {
+        // EXIF parse failed
+      }
+
       await sharp(buffer)
+        .rotate() // primijeni EXIF orijentaciju (WebP u preglednicima ne podržava EXIF orientation)
+        .keepExif() // zadrži EXIF u WebP datoteci
         .resize(2048, undefined, { withoutEnlargement: true })
         .webp({ quality: 85 })
         .toFile(finalPath);
-      const url = `/uploads/blog/${folderName}/gallery/${filename}`;
+
+      if (camera || lens || exposure || aperture || iso != null) {
+        await saveBlogExif(url, { camera, lens, exposure, aperture, iso });
+      }
+
       return Response.json({ success: true, url });
     }
 
@@ -180,6 +287,8 @@ export async function POST(request: Request) {
       const filename = sanitizeFilename(nameToUse || "image", slug);
       const outPath = path.join(contentDir, filename);
       await sharp(buffer)
+        .rotate()
+        .keepExif()
         .resize(2048, undefined, { withoutEnlargement: true })
         .webp({ quality: 85 })
         .toFile(outPath);

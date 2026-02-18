@@ -10,6 +10,15 @@ import { VENUES } from "./VenueSelect";
 import { SPORTS } from "./SportSelect";
 import { FOOD_DRINK } from "./FoodDrinkSelect";
 
+const COPYRIGHT_START = 2026;
+
+function getCopyrightYear(): string {
+  const current = new Date().getFullYear();
+  return current === COPYRIGHT_START
+    ? `${COPYRIGHT_START}`
+    : `${COPYRIGHT_START}-${current}`;
+}
+
 function normalizeCategory(cat: string): string {
   return cat
     .toLowerCase()
@@ -656,32 +665,49 @@ export default function Gallery({ images }: GalleryProps) {
               <AnimatePresence>
                 {showCopyright && (
                   <div
-                    className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-4"
+                    className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
                     onClick={() => setShowCopyright(false)}
                   >
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
+                      initial={{ opacity: 0, scale: 0.98 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                      className="max-w-sm rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-center shadow-xl"
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      className="max-w-xl min-w-[20rem] rounded-xl border border-zinc-700 bg-zinc-900 px-8 py-6 text-center shadow-xl"
                       onClick={(e) => e.stopPropagation()}
                     >
-                    <p className="text-sm font-medium text-zinc-200">
-                      © All rights reserved
-                    </p>
-                    <p className="mt-2 text-xs text-zinc-500">
-                      These images are protected by copyright. Downloading, copying, or distributing without permission is prohibited.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => setShowCopyright(false)}
-                      className="mt-4 rounded-lg bg-zinc-700 px-4 py-2 text-sm text-zinc-200 transition-colors hover:bg-zinc-600"
-                    >
-                      OK
-                    </button>
-                  </motion.div>
-                </div>
+                      <div className="space-y-3">
+                        <p className="font-serif text-lg tracking-tight text-white">
+                          © {getCopyrightYear()} Ivica Drusany
+                        </p>
+                        <p className="mt-1.5 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">
+                          All rights reserved
+                        </p>
+                        <div className="mt-6 space-y-2 text-sm leading-relaxed text-zinc-400">
+                          <p>These images are protected by copyright.</p>
+                          <p>Downloading, copying, or distributing without permission is prohibited.</p>
+                          <p>
+                            For purchase and usage inquiries, please complete the{" "}
+                            <Link
+                              href="/contact"
+                              className="border-b border-zinc-500 text-zinc-300 transition-colors hover:border-zinc-400 hover:text-white"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              contact form
+                            </Link>
+                            .
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowCopyright(false)}
+                        className="mt-6 rounded-lg border border-zinc-600 bg-zinc-800 px-6 py-2.5 text-sm tracking-[0.1em] text-zinc-300 transition-colors hover:bg-zinc-700 hover:text-white"
+                      >
+                        I understand
+                      </button>
+                    </motion.div>
+                  </div>
                 )}
               </AnimatePresence>
 

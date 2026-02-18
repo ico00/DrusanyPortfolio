@@ -115,7 +115,7 @@ export default function Header() {
         </Link>
 
         <nav
-          className="hidden flex-1 items-center justify-end gap-12 md:flex md:gap-14 lg:gap-16"
+          className="theme-nav hidden flex-1 items-center justify-end gap-12 md:flex md:gap-14 lg:gap-16"
         >
           <Link href="/" className={navLinkClass(isHome)}>
             Home
@@ -230,7 +230,7 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div className={`border-t px-8 py-6 backdrop-blur-xl md:hidden ${mobileBg}`}>
+        <div className={`theme-nav border-t px-8 py-6 backdrop-blur-xl md:hidden ${mobileBg}`}>
           <div className={`flex flex-col gap-4 ${isHeroMode ? "text-white/90" : "text-zinc-600"}`}>
             {isPortfolio && (
               <label className="flex items-center gap-2 border-b border-zinc-300 pb-4">

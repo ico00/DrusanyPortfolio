@@ -30,10 +30,12 @@ import {
   ChevronDown,
   ChevronRight,
   LayoutDashboard,
+  Palette,
 } from "lucide-react";
 import AdminPages from "./AdminPages";
 import AdminBlog from "./AdminBlog";
 import AdminDashboard from "./AdminDashboard";
+import ThemeAdmin from "./ThemeAdmin";
 import {
   DndContext,
   closestCenter,
@@ -56,6 +58,7 @@ import SportSelect from "./SportSelect";
 import FoodDrinkSelect from "./FoodDrinkSelect";
 import DateTimePicker from "./DateTimePicker";
 import { generateSlug } from "@/lib/slug";
+import { THUMBNAIL_FOCUS_OPTIONS } from "@/data/thumbnailFocus";
 
 interface GalleryImage {
   id: string;
@@ -79,6 +82,7 @@ interface GalleryImage {
   foodDrink?: string;
   keywords?: string;
   slug?: string;
+  thumbnailFocus?: string;
 }
 
 type ToastType = "success" | "error" | null;
@@ -262,6 +266,7 @@ export default function AdminClient() {
     exposure: string;
     aperture: string;
     iso: string;
+    thumbnailFocus: string;
   }>({
     title: "",
     category: "",
@@ -276,6 +281,7 @@ export default function AdminClient() {
     exposure: "",
     aperture: "",
     iso: "",
+    thumbnailFocus: "50% 50%",
   });
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ type: ToastType; message: string } | null>(
@@ -294,9 +300,11 @@ export default function AdminClient() {
   } | null>(null);
   const duplicateResolveRef = useRef<((action: "overwrite" | "add" | "cancel") => void) | null>(null);
   const editFormRef = useRef<HTMLFormElement | null>(null);
-  const [adminTab, setAdminTab] = useState<"dashboard" | "gallery" | "about" | "contact" | "blog">("dashboard");
+  const [adminTab, setAdminTab] = useState<"dashboard" | "gallery" | "about" | "contact" | "blog" | "theme">("dashboard");
   const [pagesExpanded, setPagesExpanded] = useState(false);
   const [galleryExpanded, setGalleryExpanded] = useState(false);
+  const [galleryFilter, setGalleryFilter] = useState<"" | "no-slug" | "no-exif">("");
+  const [galleryFilterIds, setGalleryFilterIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (adminTab === "about" || adminTab === "contact") {
@@ -306,11 +314,11 @@ export default function AdminClient() {
   }, [adminTab]);
 
   useEffect(() => {
-    if (adminTab === "gallery" && category) {
+    if (adminTab === "gallery" && (category || galleryFilter)) {
       setGalleryExpanded(true);
       setPagesExpanded(false);
     }
-  }, [adminTab, category]);
+  }, [adminTab, category, galleryFilter]);
 
   const fetchGallery = useCallback(async () => {
     try {
@@ -585,9 +593,11 @@ export default function AdminClient() {
     }
   };
 
-  const categoryImages = images.filter(
-    (img) => normalizeCategory(img.category) === normalizeCategory(category)
-  );
+  const categoryImages = galleryFilter
+    ? images.filter((img) => galleryFilterIds.includes(img.id))
+    : images.filter(
+        (img) => normalizeCategory(img.category) === normalizeCategory(category)
+      );
 
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) => {
@@ -711,6 +721,7 @@ export default function AdminClient() {
       exposure: img.exposure || "",
       aperture: img.aperture || "",
       iso: img.iso != null ? String(img.iso) : "",
+      thumbnailFocus: img.thumbnailFocus || "50% 50%",
     });
   };
 
@@ -737,6 +748,7 @@ export default function AdminClient() {
           foodDrink: editForm.foodDrink || undefined,
           keywords: editForm.keywords || undefined,
           slug: editForm.slug.trim() || undefined,
+          thumbnailFocus: editForm.thumbnailFocus || undefined,
         }),
       });
       const data = await res.json();
@@ -827,6 +839,8 @@ export default function AdminClient() {
                           type="button"
                           onClick={() => {
                             setCategory(cat.slug);
+                            setGalleryFilter("");
+                            setGalleryFilterIds([]);
                             setAdminTab("gallery");
                           }}
                           className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
@@ -915,6 +929,18 @@ export default function AdminClient() {
               <BookOpen className={`h-5 w-5 shrink-0 ${adminTab === "blog" ? "text-violet-400" : ""}`} />
               Blog
             </button>
+            <button
+              type="button"
+              onClick={() => setAdminTab("theme")}
+              className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                adminTab === "theme"
+                  ? "border-l-2 border-amber-500/80 bg-zinc-800 text-white"
+                  : "border-l-2 border-transparent text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-200"
+              }`}
+            >
+              <Palette className={`h-5 w-5 shrink-0 ${adminTab === "theme" ? "text-amber-400" : ""}`} />
+              Theme
+            </button>
           </nav>
         </div>
         <div className="border-t border-zinc-800 px-4 py-3">
@@ -928,23 +954,48 @@ export default function AdminClient() {
           <div className="mb-8">
             <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">
               {adminTab === "dashboard" && "Dashboard"}
-              {adminTab === "gallery" && (category ? (CATEGORIES.find((c) => c.slug === normalizeCategory(category))?.label ?? category) : "Gallery")}
+              {adminTab === "gallery" &&
+                (galleryFilter
+                  ? galleryFilter === "no-slug"
+                    ? "Images without slug"
+                    : "Images without EXIF"
+                  : category
+                    ? (CATEGORIES.find((c) => c.slug === normalizeCategory(category))?.label ?? category)
+                    : "Gallery")}
               {adminTab === "about" && "About"}
               {adminTab === "contact" && "Contact"}
               {adminTab === "blog" && "Blog"}
+              {adminTab === "theme" && "Theme"}
             </h1>
             <p className="mt-1 text-sm text-zinc-400">
               {adminTab === "dashboard" && "Overview of your content and statistics"}
-              {adminTab === "gallery" && (category ? `Manage images in ${CATEGORIES.find((c) => c.slug === normalizeCategory(category))?.label ?? category}` : "Select a category from the sidebar")}
+              {adminTab === "gallery" &&
+                (galleryFilter
+                  ? `Content health filter: ${galleryFilter === "no-slug" ? "missing slug" : "missing EXIF"}`
+                  : category
+                    ? `Manage images in ${CATEGORIES.find((c) => c.slug === normalizeCategory(category))?.label ?? category}`
+                    : "Select a category from the sidebar")}
               {adminTab === "about" && "Edit About page content"}
               {adminTab === "contact" && "Edit Contact page content"}
               {adminTab === "blog" && "Create and manage blog posts"}
+              {adminTab === "theme" && "Customize fonts, sizes and colors"}
             </p>
           </div>
 
         {adminTab === "dashboard" && (
           <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8">
-            <AdminDashboard />
+            <AdminDashboard
+              onContentHealthClick={(filter, imageIds) => {
+                if (filter === "no-slug" || filter === "no-exif") {
+                  setGalleryFilter(filter);
+                  setGalleryFilterIds(imageIds ?? []);
+                  setCategory("");
+                  setAdminTab("gallery");
+                } else if (filter === "no-featured") {
+                  setAdminTab("blog");
+                }
+              }}
+            />
           </div>
         )}
 
@@ -959,10 +1010,16 @@ export default function AdminClient() {
             <AdminBlog />
           </div>
         )}
+        {adminTab === "theme" && (
+          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8">
+            <ThemeAdmin />
+          </div>
+        )}
 
         {adminTab === "gallery" && (
         <>
-        {/* Upload Form */}
+        {/* Upload Form – skriven kad je content health filter aktivan */}
+        {!galleryFilter && (
         <form
           onSubmit={handleSubmit}
           className="mb-16 rounded-xl border border-zinc-800 bg-zinc-900/50 p-8"
@@ -1190,10 +1247,11 @@ export default function AdminClient() {
             )}
           </button>
         </form>
+        )}
 
-        {/* Gallery list – only for selected category */}
+        {/* Gallery list – category or content health filter */}
         <section>
-          {!category ? (
+          {!category && !galleryFilter ? (
             <p className="rounded-xl border border-zinc-800 bg-zinc-900/30 py-12 text-center text-zinc-500">
               Select a category from the sidebar to view and manage its gallery.
             </p>
@@ -1206,8 +1264,53 @@ export default function AdminClient() {
             <>
               <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                 <h2 className="text-lg font-semibold text-zinc-200">
-                  {CATEGORIES.find((c) => c.slug === normalizeCategory(category))?.label ?? category}{" "}
-                  ({categoryImages.length})
+                  {galleryFilter ? (
+                    <>
+                      {galleryFilter === "no-slug"
+                        ? "Images without slug"
+                        : "Images without EXIF"}{" "}
+                      ({categoryImages.length})
+                      {galleryFilter === "no-slug" && categoryImages.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (!confirm(`Generirati slug za ${categoryImages.length} slika?`)) return;
+                            try {
+                              const res = await fetch("/api/gallery/generate-slugs", {
+                                method: "POST",
+                              });
+                              const data = await res.json();
+                              if (!res.ok) throw new Error(data.error || "Greška");
+                              showToast("success", `Dodano ${data.updated} slugova.`);
+                              setGalleryFilter("");
+                              setGalleryFilterIds([]);
+                              fetchGallery();
+                            } catch (err) {
+                              showToast("error", err instanceof Error ? err.message : "Greška.");
+                            }
+                          }}
+                          className="ml-3 rounded-lg bg-amber-500/20 px-3 py-1.5 text-sm font-medium text-amber-400 transition-colors hover:bg-amber-500/30"
+                        >
+                          Generiraj slugove
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setGalleryFilter("");
+                          setGalleryFilterIds([]);
+                        }}
+                        className="ml-3 text-sm font-normal text-zinc-500 hover:text-zinc-300"
+                      >
+                        ✕ Clear filter
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      {CATEGORIES.find((c) => c.slug === normalizeCategory(category))?.label ?? category}{" "}
+                      ({categoryImages.length})
+                    </>
+                  )}
                 </h2>
                 {categoryImages.length > 0 && (
                   <div className="flex items-center gap-3">
@@ -1259,7 +1362,9 @@ export default function AdminClient() {
 
               {categoryImages.length === 0 ? (
                 <p className="rounded-xl border border-zinc-800 bg-zinc-900/30 py-12 text-center text-zinc-500">
-                  No images in this category. Add the first one using the form above.
+                  {galleryFilter
+                    ? "No images match this filter."
+                    : "No images in this category. Add the first one using the form above."}
                 </p>
               ) : (
                 <DndContext
@@ -1384,14 +1489,14 @@ export default function AdminClient() {
         {/* Edit modal */}
         {editingId && (
           <div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/80 p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/80 p-4"
             onClick={() => setEditingId(null)}
           >
             <div
-              className="w-full max-w-md rounded-xl border border-zinc-800 bg-zinc-900 p-6 shadow-xl"
+              className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="mb-4 flex items-center justify-between">
+              <div className="flex shrink-0 items-center justify-between border-b border-zinc-800 px-6 py-4">
                 <h3 className="text-lg font-semibold text-zinc-200">Edit description</h3>
                 <button
                   type="button"
@@ -1402,127 +1507,214 @@ export default function AdminClient() {
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <form ref={editFormRef} onSubmit={handleUpdate} className="space-y-4">
-                <div>
-                  <label className="mb-1 block text-sm text-zinc-400">
-                    Title / Description
-                  </label>
-                  <input
-                    type="text"
-                    value={editForm.title}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      setEditForm((f) => ({
-                        ...f,
-                        title: v,
-                        slug: generateSlug(v, f.venue, f.capturedAt),
-                      }));
-                    }}
-                    className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
-                    placeholder="Depeche Mode, Arena Zagreb..."
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm text-zinc-400">
-                    Category
-                  </label>
-                  <CategorySelect
-                    value={editForm.category}
-                    onChange={(v) =>
-                      setEditForm((f) => ({ ...f, category: v }))
-                    }
-                    placeholder="Select category"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm text-zinc-400">
-                    Capture date
-                  </label>
-                  <DateTimePicker
-                    value={editForm.capturedAt}
-                    onChange={(v) =>
-                      setEditForm((f) => ({
-                        ...f,
-                        capturedAt: v,
-                        slug: generateSlug(f.title, f.venue, v),
-                      }))
-                    }
-                  />
-                </div>
-                {normalizeCategory(editForm.category) === "concerts" && (
-                  <div>
-                    <label className="mb-1 block text-sm text-zinc-400">
-                      Venue
-                    </label>
-                    <VenueSelect
-                      value={editForm.venue}
-                      onChange={(v) =>
-                        setEditForm((f) => ({
-                          ...f,
-                          venue: v,
-                          slug: generateSlug(f.title, v, f.capturedAt),
-                        }))
-                      }
-                      placeholder="Select venue"
-                    />
-                  </div>
-                )}
-                {normalizeCategory(editForm.category) === "sport" && (
-                  <div>
-                    <label className="mb-1 block text-sm text-zinc-400">
-                      Vrsta sporta
-                    </label>
-                    <SportSelect
-                      value={editForm.sport}
-                      onChange={(v) =>
-                        setEditForm((f) => ({ ...f, sport: v }))
-                      }
-                      placeholder="Select sport"
-                    />
-                  </div>
-                )}
-                {normalizeCategory(editForm.category) === "food-drink" && (
-                  <div>
-                    <label className="mb-1 block text-sm text-zinc-400">
-                      Food ili Drink
-                    </label>
-                    <FoodDrinkSelect
-                      value={editForm.foodDrink}
-                      onChange={(v) =>
-                        setEditForm((f) => ({ ...f, foodDrink: v }))
-                      }
-                      placeholder="Select type"
-                    />
-                  </div>
-                )}
-                <div>
-                  <label className="mb-1 block text-sm text-zinc-400">
-                    Keywords
-                  </label>
-                  <input
-                    type="text"
-                    value={editForm.keywords}
-                    onChange={(e) =>
-                      setEditForm((f) => ({ ...f, keywords: e.target.value }))
-                    }
-                    className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
-                    placeholder="concert, live, arena"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm text-zinc-400">
-                    Slug (za direktne linkove)
-                  </label>
-                  <input
-                    type="text"
-                    value={editForm.slug}
-                    onChange={(e) =>
-                      setEditForm((f) => ({ ...f, slug: e.target.value }))
-                    }
-                    className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
-                    placeholder="depeche-mode-arena-zagreb-2013"
-                  />
-                </div>
+              <form ref={editFormRef} onSubmit={handleUpdate} className="flex flex-1 flex-col overflow-hidden">
+                <div className="flex-1 overflow-y-auto p-6">
+                  <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
+                    {/* Lijevi stupac: osnovni podaci */}
+                    <div className="space-y-4">
+                      <div>
+                        <label className="mb-1 block text-sm text-zinc-400">
+                          Title / Description
+                        </label>
+                        <input
+                          type="text"
+                          value={editForm.title}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            setEditForm((f) => ({
+                              ...f,
+                              title: v,
+                              slug: generateSlug(v, f.venue, f.capturedAt),
+                            }));
+                          }}
+                          className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                          placeholder="Depeche Mode, Arena Zagreb..."
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm text-zinc-400">
+                          Category
+                        </label>
+                        <CategorySelect
+                          value={editForm.category}
+                          onChange={(v) =>
+                            setEditForm((f) => ({ ...f, category: v }))
+                          }
+                          placeholder="Select category"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm text-zinc-400">
+                          Capture date
+                        </label>
+                        <DateTimePicker
+                          value={editForm.capturedAt}
+                          onChange={(v) =>
+                            setEditForm((f) => ({
+                              ...f,
+                              capturedAt: v,
+                              slug: generateSlug(f.title, f.venue, v),
+                            }))
+                          }
+                        />
+                      </div>
+                      {normalizeCategory(editForm.category) === "concerts" && (
+                        <div>
+                          <label className="mb-1 block text-sm text-zinc-400">
+                            Venue
+                          </label>
+                          <VenueSelect
+                            value={editForm.venue}
+                            onChange={(v) =>
+                              setEditForm((f) => ({
+                                ...f,
+                                venue: v,
+                                slug: generateSlug(f.title, v, f.capturedAt),
+                              }))
+                            }
+                            placeholder="Select venue"
+                          />
+                        </div>
+                      )}
+                      {normalizeCategory(editForm.category) === "sport" && (
+                        <div>
+                          <label className="mb-1 block text-sm text-zinc-400">
+                            Vrsta sporta
+                          </label>
+                          <SportSelect
+                            value={editForm.sport}
+                            onChange={(v) =>
+                              setEditForm((f) => ({ ...f, sport: v }))
+                            }
+                            placeholder="Select sport"
+                          />
+                        </div>
+                      )}
+                      {normalizeCategory(editForm.category) === "food-drink" && (
+                        <div>
+                          <label className="mb-1 block text-sm text-zinc-400">
+                            Food ili Drink
+                          </label>
+                          <FoodDrinkSelect
+                            value={editForm.foodDrink}
+                            onChange={(v) =>
+                              setEditForm((f) => ({ ...f, foodDrink: v }))
+                            }
+                            placeholder="Select type"
+                          />
+                        </div>
+                      )}
+                      <div>
+                        <label className="mb-1 block text-sm text-zinc-400">
+                          Keywords
+                        </label>
+                        <input
+                          type="text"
+                          value={editForm.keywords}
+                          onChange={(e) =>
+                            setEditForm((f) => ({ ...f, keywords: e.target.value }))
+                          }
+                          className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                          placeholder="concert, live, arena"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm text-zinc-400">
+                          Slug (za direktne linkove)
+                        </label>
+                        <input
+                          type="text"
+                          value={editForm.slug}
+                          onChange={(e) =>
+                            setEditForm((f) => ({ ...f, slug: e.target.value }))
+                          }
+                          className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                          placeholder="depeche-mode-arena-zagreb-2013"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Desni stupac: fokus točka + EXIF */}
+                    <div className="space-y-4">
+                {editingId && (() => {
+                  const editingImg = images.find((i) => i.id === editingId);
+                  return editingImg?.src ? (
+                    <div>
+                      <label className="mb-1 block text-sm text-zinc-400">
+                        Fokus točka (za hero/featured prikaz)
+                      </label>
+                      <div
+                        className="relative aspect-video w-full cursor-crosshair overflow-hidden rounded-lg bg-zinc-800"
+                        onClick={(e) => {
+                          const target = e.currentTarget;
+                          const rect = target.getBoundingClientRect();
+                          const x = ((e.clientX - rect.left) / rect.width) * 100;
+                          const y = ((e.clientY - rect.top) / rect.height) * 100;
+                          const xPercent = Math.round(Math.max(0, Math.min(100, x)));
+                          const yPercent = Math.round(Math.max(0, Math.min(100, y)));
+                          setEditForm((f) => ({
+                            ...f,
+                            thumbnailFocus: `${xPercent}% ${yPercent}%`,
+                          }));
+                        }}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            (e.target as HTMLElement).focus();
+                          }
+                        }}
+                        title="Klikni na sliku da postaviš fokus točku"
+                      >
+                        <img
+                          src={editingImg.src}
+                          alt=""
+                          className="pointer-events-none h-full w-full object-cover"
+                          style={{ objectPosition: editForm.thumbnailFocus }}
+                          draggable={false}
+                        />
+                        {(() => {
+                          const [x, y] = (editForm.thumbnailFocus || "50% 50%")
+                            .split(" ")
+                            .map((s) => parseFloat(s) || 50);
+                          return (
+                            <div
+                              className="pointer-events-none absolute h-6 w-6 rounded-full border-2 border-amber-400 bg-amber-400/20 shadow-lg"
+                              style={{
+                                left: `${x}%`,
+                                top: `${y}%`,
+                                transform: "translate(-50%, -50%)",
+                              }}
+                            />
+                          );
+                        })()}
+                      </div>
+                      <p className="mt-1 text-xs text-zinc-500">
+                        Klikni na sliku ili odaberi iz mreže:
+                      </p>
+                      <div className="mt-1 grid w-fit grid-cols-3 gap-0.5">
+                        {THUMBNAIL_FOCUS_OPTIONS.map((opt) => (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() =>
+                              setEditForm((f) => ({ ...f, thumbnailFocus: opt.value }))
+                            }
+                            title={opt.label}
+                            className={`h-6 w-6 rounded border text-[10px] transition-colors ${
+                              editForm.thumbnailFocus === opt.value
+                                ? "border-amber-500 bg-amber-500/30 text-amber-400"
+                                : "border-zinc-600 bg-zinc-800 text-zinc-500 hover:border-zinc-500 hover:bg-zinc-700"
+                            }`}
+                          >
+                            •
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null;
+                })()}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="mb-1 block text-sm text-zinc-400">
@@ -1595,7 +1787,10 @@ export default function AdminClient() {
                     />
                   </div>
                 </div>
-                <div className="flex gap-2 pt-2">
+                    </div>
+                  </div>
+                </div>
+                <div className="flex shrink-0 gap-2 border-t border-zinc-800 px-6 py-4">
                   <button
                     type="submit"
                     disabled={updatingId === editingId}

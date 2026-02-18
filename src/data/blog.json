@@ -229,7 +229,8 @@
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_554.webp",
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_556.webp",
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_560.webp"
-      ]
+      ],
+      "featured": true
     },
     {
       "id": "76bfeffd-7c3b-43e1-a24b-7cfc65f957b3",
@@ -280,7 +281,8 @@
         "/uploads/blog/2025-03-23-250323-zagrebancije-festival-svjetla-2025/gallery/250323-festival_svjetla_231.webp",
         "/uploads/blog/2025-03-23-250323-zagrebancije-festival-svjetla-2025/gallery/250323-festival_svjetla_236.webp",
         "/uploads/blog/2025-03-23-250323-zagrebancije-festival-svjetla-2025/gallery/250323-festival_svjetla_248.webp"
-      ]
+      ],
+      "featured": true
     },
     {
       "id": "a6fbcfc6-8fab-4829-8bd3-c9076be67258",
@@ -289,63 +291,221 @@
       "date": "2025-12-29",
       "thumbnail": "/uploads/blog/2026-02-16-advent-2025/featured.webp",
       "gallery": [
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_007.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_009.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_014.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_017.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_019.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_021.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_023.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_024.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_034.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_038.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_039.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_043.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_047.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_053.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_062.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_067.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_068.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_072.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_076.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_082.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_088.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_089.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_091.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_093.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_107.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_111.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_116.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_118.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_121.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_124.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_137.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_142.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_149.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_151.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_156.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_158.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_160.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_166.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_182.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_185.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_186.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_196.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_203.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_220.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_223.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_233.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_242.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_248.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_250.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_252.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_255.webp",
-        "/uploads/blog/2026-02-16-advent-2025/gallery/251228-advent_263.webp"
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_007.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_009.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_014.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_017.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_019.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_021.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_023.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_024.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_034.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_038.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_039.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_043.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_047.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_053.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_062.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_067.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_068.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_072.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_076.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_082.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_088.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_089.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_091.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_093.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_107.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_111.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_116.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_118.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_121.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_124.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_137.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_142.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_149.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_151.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_156.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_158.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_160.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_166.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_182.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_185.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_186.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_196.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_203.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_220.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_223.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_233.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_242.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_248.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_250.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_252.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_255.webp",
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_263.webp"
       ],
       "thumbnailFocus": "71% 27%",
       "categories": [
         "zagrebancije"
-      ]
+      ],
+      "galleryMetadata": {
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_007.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_009.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_014.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_017.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_019.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_021.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_023.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_024.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_034.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_038.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_039.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_043.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_047.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_053.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_062.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_067.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_068.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_072.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_076.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_082.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_088.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_089.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_091.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_093.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_107.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_111.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_116.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_118.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_121.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_124.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_137.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_142.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_149.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_151.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_156.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_158.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_160.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_166.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_182.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_185.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_186.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_196.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_203.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_220.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_223.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_233.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_242.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_248.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_250.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_252.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_255.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        },
+        "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_263.webp": {
+          "title": "Zagrebancije: Advent 2025."
+        }
+      }
     }
   ]
 }

@@ -13,9 +13,15 @@
       "title": "Kategorije"
     },
     {
+      "id": "featured-posts",
+      "type": "featured-posts",
+      "enabled": true,
+      "title": "Istaknuti članci"
+    },
+    {
       "id": "instagram",
       "type": "instagram",
-      "enabled": true,
+      "enabled": false,
       "title": "Instagram",
       "username": "ivica.drusany",
       "profileUrl": "https://www.instagram.com/ivica.drusany/",

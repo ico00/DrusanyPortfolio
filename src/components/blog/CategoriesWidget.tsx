@@ -36,7 +36,7 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
   }
 
   return (
-    <aside className="rounded-lg border border-zinc-200/60 bg-white p-5">
+    <aside className="rounded-lg bg-white p-5 shadow-sm">
       <h3 className="font-serif text-lg font-normal tracking-tight text-zinc-900">{title}</h3>
       <ul className="mt-4 space-y-2">
         <li>

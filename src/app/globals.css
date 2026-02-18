@@ -20,6 +20,48 @@ html {
   --font-serif: var(--font-playfair), "Georgia", serif;
 }
 
+/* Theme customization – varijable iz theme.json (ThemeStyles) */
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6,
+.prose-invert h1, .prose-invert h2, .prose-invert h3, .prose-invert h4, .prose-invert h5, .prose-invert h6 {
+  font-family: var(--theme-heading-font, var(--font-serif));
+  font-size: var(--theme-heading-size, 1.5rem);
+  color: var(--theme-heading-color, inherit);
+}
+
+/* Standalone heading (izvan prose) – font, veličina, boja */
+.theme-heading {
+  font-family: var(--theme-heading-font, var(--font-serif));
+  font-size: var(--theme-heading-size, 1.5rem);
+  color: var(--theme-heading-color, #18181b);
+}
+.prose p, .prose li, .prose-invert p, .prose-invert li {
+  font-family: var(--theme-body-font, var(--font-sans));
+  font-size: var(--theme-body-size, 1rem);
+  color: var(--theme-body-color, inherit);
+}
+.prose blockquote, .prose-invert blockquote {
+  font-family: var(--theme-quote-font, var(--font-serif));
+  font-size: var(--theme-quote-size, 1.125rem);
+  color: var(--theme-quote-color, inherit);
+}
+
+/* Theme – hero naslov, navigacija, caption */
+.theme-title {
+  font-family: var(--theme-title-font, var(--font-serif));
+  font-size: var(--theme-title-size, clamp(2rem, 5vw, 4rem));
+  color: var(--theme-title-color, #ffffff);
+}
+.theme-nav {
+  font-family: var(--theme-nav-font, var(--font-sans));
+  font-size: var(--theme-nav-size, 0.875rem);
+  /* Boja ostaje na komponenti (hero vs non-hero) */
+}
+.theme-caption {
+  font-family: var(--theme-caption-font, var(--font-sans));
+  font-size: var(--theme-caption-size, 0.75rem);
+  color: var(--theme-caption-color, #71717a);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

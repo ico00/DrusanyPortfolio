@@ -83,11 +83,11 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
                       <div className="h-full w-full bg-zinc-800" />
                     )}
                   </div>
-                  <div className="p-6">
-                    <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-900 md:text-3xl">
+                  <div className="bg-zinc-950 p-6">
+                    <h2 className="font-serif text-2xl font-normal tracking-tight text-white md:text-3xl">
                       {post.title}
                     </h2>
-                    <p className="mt-3 flex flex-wrap items-center gap-y-2 text-sm text-zinc-500">
+                    <p className="mt-3 flex flex-wrap items-center gap-y-2 text-sm text-zinc-300">
                       <span className="inline-flex items-center gap-1.5" style={{ marginRight: "3rem" }}>
                         <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
                         <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
@@ -111,7 +111,7 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
                               e.stopPropagation();
                               router.push(`/blog?kategorija=${encodeURIComponent(slug)}`);
                             }}
-                            className="inline-block border-b border-transparent pb-0.5 text-zinc-600 transition-[color,border-color] duration-200 hover:border-zinc-900 hover:text-zinc-900"
+                            className="inline-block border-b border-transparent pb-0.5 text-zinc-300 transition-[color,border-color] duration-200 hover:border-white hover:text-white"
                           >
                             {getShortCategoryLabel(slug)}
                           </button>

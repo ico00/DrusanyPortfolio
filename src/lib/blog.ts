@@ -6,6 +6,26 @@ export interface BlogGalleryImage {
   src: string;
   width: number;
   height: number;
+  /** Naslov/caption slike */
+  title?: string;
+  /** Opis slike */
+  description?: string;
+  /** Camera make + model */
+  camera?: string;
+  /** Lens model */
+  lens?: string;
+  /** Exposure time (e.g. "1/500", "2\"") */
+  exposure?: string;
+  /** Aperture (e.g. "f/2.8") */
+  aperture?: string;
+  /** ISO speed */
+  iso?: number;
+}
+
+/** Metadata po URL-u slike u galeriji */
+export interface BlogGalleryMetadata {
+  title?: string;
+  description?: string;
 }
 
 export interface BlogPost {
@@ -23,8 +43,12 @@ export interface BlogPost {
   /** Focus point for object-position: "x% y%" e.g. "50% 30%" */
   thumbnailFocus?: string;
   gallery?: string[];
+  /** Metadata po URL-u (title, description) – uređuje se u adminu */
+  galleryMetadata?: Record<string, BlogGalleryMetadata>;
   /** Enriched gallery with dimensions (from getBlogPost) */
   galleryImages?: BlogGalleryImage[];
+  /** Istaknuti post – prikazuje se u widgetu s 3 istaknuta posta */
+  featured?: boolean;
   body?: string; // body comes from file; deprecated in JSON
   /** Plain text from body for search (from getBlogWithBodies) */
   bodySearchText?: string;
@@ -94,19 +118,50 @@ export async function getBlogWithBodies(): Promise<BlogData> {
   return { posts: enriched };
 }
 
-/** Enrich gallery URLs with width/height from file metadata (masonry layout) */
-async function enrichBlogGallery(urls: string[]): Promise<BlogGalleryImage[]> {
+const BLOG_EXIF_PATH = path.join(process.cwd(), "src", "data", "blogExif.json");
+
+/** Enrich gallery URLs with width/height, EXIF and metadata */
+async function enrichBlogGallery(
+  urls: string[],
+  galleryMetadata?: Record<string, BlogGalleryMetadata>
+): Promise<BlogGalleryImage[]> {
+  let blogExif: Record<string, { camera?: string; lens?: string; exposure?: string; aperture?: string; iso?: number }> = {};
+  try {
+    const raw = await readFile(BLOG_EXIF_PATH, "utf-8");
+    blogExif = JSON.parse(raw) as typeof blogExif;
+  } catch {
+    // file doesn't exist or invalid
+  }
+
   const result: BlogGalleryImage[] = [];
   for (const url of urls) {
     const filePath = path.join(process.cwd(), "public", url.startsWith("/") ? url.slice(1) : url);
+    const src = url.startsWith("/") ? url : `/${url}`;
+    let w = 1;
+    let h = 1;
+
     try {
       const meta = await sharp(filePath).metadata();
-      const w = meta.width ?? 1;
-      const h = meta.height ?? 1;
-      result.push({ src: url.startsWith("/") ? url : `/${url}`, width: w, height: h });
+      w = meta.width ?? 1;
+      h = meta.height ?? 1;
     } catch {
-      result.push({ src: url.startsWith("/") ? url : `/${url}`, width: 1, height: 1 });
+      // keep defaults
     }
+
+    const exif = blogExif[src];
+    const meta = galleryMetadata?.[src];
+    result.push({
+      src,
+      width: w,
+      height: h,
+      ...(meta?.title && { title: meta.title }),
+      ...(meta?.description && { description: meta.description }),
+      ...(exif?.camera && { camera: exif.camera }),
+      ...(exif?.lens && { lens: exif.lens }),
+      ...(exif?.exposure && { exposure: exif.exposure }),
+      ...(exif?.aperture && { aperture: exif.aperture }),
+      ...(exif?.iso != null && { iso: exif.iso }),
+    });
   }
   return result;
 }
@@ -118,7 +173,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 
   const galleryImages =
     (post.gallery?.length ?? 0) > 0
-      ? await enrichBlogGallery(post.gallery!)
+      ? await enrichBlogGallery(post.gallery!, post.galleryMetadata)
       : undefined;
 
   // Read body from file (src/data/blog/[slug].html)

@@ -114,6 +114,9 @@ export default function HeroSlider({ images }: HeroSliderProps) {
               src={heroImg.src}
               alt={heroImg.alt || slide.label}
               className="h-full w-full object-cover"
+              style={{
+                objectPosition: heroImg.thumbnailFocus || "50% 50%",
+              }}
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-zinc-900">
@@ -143,17 +146,18 @@ export default function HeroSlider({ images }: HeroSliderProps) {
               )}
             </p>
           )}
-          {(heroImg?.capturedAt || heroImg?.createdAt) && (
-            <p className="mt-2 text-sm text-white/60">
-              {new Date(
-                heroImg.capturedAt || heroImg.createdAt || ""
-              ).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-          )}
+          {!["animals", "interiors", "food-drink"].includes(slide.slug) &&
+            (heroImg?.capturedAt || heroImg?.createdAt) && (
+              <p className="mt-2 text-sm text-white/60">
+                {new Date(
+                  heroImg.capturedAt || heroImg.createdAt || ""
+                ).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+            )}
 
           <Link
             href={`/?category=${slide.slug}#gallery`}
@@ -166,14 +170,7 @@ export default function HeroSlider({ images }: HeroSliderProps) {
           </Link>
         </div>
 
-        <div className="flex items-end justify-between">
-          <div
-            className="origin-bottom-left -rotate-90 text-xs font-medium tracking-[0.3em] text-white/70"
-            style={{ transformOrigin: "left bottom" }}
-          >
-            FOLLOW
-          </div>
-
+        <div className="flex items-end justify-end">
           <div className="pointer-events-auto flex items-center gap-4">
             <button
               type="button"

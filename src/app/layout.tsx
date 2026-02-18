@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
+import Footer from "@/components/Footer";
+import ThemeStyles from "@/components/ThemeStyles";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,8 +57,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} ${playfair.variable} antialiased`}
       >
+        <ThemeStyles />
         <CustomCursor />
-        {children}
+        <div className="flex min-h-screen flex-col">
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

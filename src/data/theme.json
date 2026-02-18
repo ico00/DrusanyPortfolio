@@ -1,0 +1,32 @@
+{
+  "title": {
+    "fontFamily": "serif",
+    "fontSize": "clamp(2rem, 5vw, 4rem)",
+    "color": "#ffffff"
+  },
+  "heading": {
+    "fontFamily": "serif",
+    "fontSize": "1.5rem",
+    "color": "#18181b"
+  },
+  "body": {
+    "fontFamily": "sans",
+    "fontSize": "1rem",
+    "color": "#3f3f46"
+  },
+  "quote": {
+    "fontFamily": "serif",
+    "fontSize": "1.125rem",
+    "color": "#e4e4e7"
+  },
+  "nav": {
+    "fontFamily": "sans",
+    "fontSize": "0.875rem",
+    "color": "rgba(255,255,255,0.9)"
+  },
+  "caption": {
+    "fontFamily": "sans",
+    "fontSize": "0.75rem",
+    "color": "#71717a"
+  }
+}

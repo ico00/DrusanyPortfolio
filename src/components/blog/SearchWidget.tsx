@@ -3,22 +3,15 @@
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Search } from "lucide-react";
 
-interface SearchWidgetProps {
-  title?: string;
-}
-
-export default function SearchWidget({ title = "Pretraži" }: SearchWidgetProps) {
+export default function SearchWidget() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const q = searchParams.get("q") ?? "";
 
   return (
-    <aside className="rounded-lg border border-zinc-200/60 bg-white p-5">
-      <h3 className="font-serif text-lg font-normal tracking-tight text-zinc-900">
-        {title}
-      </h3>
-      <div className="mt-4 flex items-center gap-2 rounded-md border border-zinc-200/60 bg-zinc-50/50 focus-within:border-zinc-300 focus-within:bg-white focus-within:ring-1 focus-within:ring-zinc-300">
+    <aside className="rounded-lg bg-white p-5 shadow-sm">
+      <div className="flex items-center gap-2 rounded-md border border-zinc-200/60 bg-zinc-50/50 focus-within:border-zinc-300 focus-within:bg-white focus-within:ring-1 focus-within:ring-zinc-300">
         <Search className="ml-3 h-4 w-4 shrink-0 text-zinc-400" strokeWidth={2} />
         <input
           type="search"

@@ -16,7 +16,8 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 - **About** – Split layout (lijevo slika s citatom, desno sadržaj); sekcije About, Press, Gear; fiksni nav na dnu s aktivnim linkom koji prati scroll; **dekorativni navodnik** na blockquote citatima
 - **Contact** – Isti layout kao About; kontakt forma (Formspree) – name, email, subject, message; fallback na mailto
 - **Blog** – Lista postova s metapodacima (Tekst i fotografije, Datum objave, Kategorija) i ikonama; **sidebar** s pretragom (filter-as-you-type), kategorijama, Instagram widgetom i Google Maps; pojedinačni post s naslovom na vrhu, featured slikom, sadržajem (slike s poravnanjem, vizual kao galerija) i masonry galerijom (lightbox, aperture cursor); format datuma dd. mm. yyyy.; BlockNote WYSIWYG editor s **uploadom slika** u sadržaj
-- **Admin panel** – Samo u development modu: **Dashboard** (grafikoni – Recharts); galerija (upload, edit, hero, sortiranje) s **custom DateTimePicker**; About/Contact (quote, Formspree endpoint); Blog s **DatePicker**, **upload slika u sadržaj** (BlockNote `/image`), **resize** slika; **sidebar accordion**; **toast** poruke (success/error)
+- **Theme** – Prilagodba fonta, veličine i boje po elementu (title, heading, body, quote, nav, caption) putem Admin → Theme; live preview; centralna konfiguracija fontova u `themeFonts.ts` (lako dodavanje novih)
+- **Admin panel** – Samo u development modu: **Dashboard** (grafikoni – Recharts); galerija (upload, edit, hero, sortiranje) s **custom DateTimePicker**; About/Contact (quote, Formspree endpoint); Blog s **DatePicker**, **upload slika u sadržaj** (BlockNote `/image`), **resize** slika; **Theme** – prilagodba fonta, veličine i boje po elementu (title, heading, body, quote, nav, caption) s live previewom; **sidebar accordion**; **toast** poruke (success/error)
 
 ## 🛠 Tech stack
 
@@ -84,7 +85,7 @@ DrusanyPortfolio/
 ├── src/
 │   ├── app/              # Stranice i API rute
 │   │   ├── admin/        # Admin panel (dev only)
-│   │   ├── api/          # upload, update, delete, reorder, hero, gallery, pages, blog, blog-upload (featured/gallery/content), blog-delete-file
+│   │   ├── api/          # upload, update, delete, reorder, hero, gallery, pages, blog, blog-upload (featured/gallery/content), blog-delete-file, theme
 │   │   ├── about/        # About stranica
 │   │   ├── contact/      # Contact stranica
 │   │   └── blog/         # Blog lista + [slug] pojedinačni post
@@ -95,8 +96,10 @@ DrusanyPortfolio/
 │   │   ├── gear.json        # Fotografska oprema (About)
 │   │   ├── press.json       # Objavljene fotografije (About)
 │   │   ├── blog.json        # Blog postovi (slug yymmdd-naslov, title, date, categories, thumbnail, gallery)
-│   │   └── blogWidgets.json # Konfiguracija blog sidebara (search, categories, instagram, maps)
-│   └── lib/              # getGallery, pages, gear, press, blog, blogWidgets, instagram, slug utils
+│   │   ├── blogWidgets.json # Konfiguracija blog sidebara (search, categories, instagram, maps)
+│   │   ├── theme.json       # Theme konfiguracija (font, fontSize, color po elementu)
+│   │   └── themeFonts.ts   # Konfiguracija fontova za Theme (dodavanje novih fontova)
+│   └── lib/              # getGallery, pages, gear, press, blog, blogWidgets, instagram, theme, slug utils
 └── out/                  # Statični output (generira se pri build)
 ```
 
@@ -109,6 +112,7 @@ Admin je dostupan **samo kada pokreneš `npm run dev`** – u produkcijskom buil
 - **Galerija:** Sidebar accordion; odabir kategorije → upload slika; EXIF preview (datum fallback); **custom DateTimePicker** (datum + vrijeme); uređivanje opisa (title, venue, sport, slug, keywords…); slug **as you type**; drag-and-drop sortiranje; hero odabir; brisanje; **toast** poruke
 - **Pages:** About – citat na slici, naslov, BlockNote sadržaj; Contact – Formspree endpoint, email (fallback), naslov, uvodni tekst (BlockNote)
 - **Blog:** Kreiranje i uređivanje blog postova – title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, kategorije (višestruki odabir, abecedno), thumbnail, sadržaj (BlockNote s **uploadom slika** – `/image` → Upload/Embed, resize ručice), galerija (drag-and-drop, bulk delete); brisanje slika iz galerije briše i fizičke datoteke s diska
+- **Theme:** Prilagodba tipografije – font (Sans/Serif/Mono), veličina i boja za svaki element (Hero naslov, Naslovi, Body, Citat, Navigacija, Caption); custom dropdown; live preview s adaptivnom pozadinom; za statički export: uređivanje u dev modu, zatim `npm run build`; novi fontovi se dodaju u `themeFonts.ts` i `layout.tsx`
 
 **Contact forma:** Za slanje poruka koristi se [Formspree](https://formspree.io) – kreiraj besplatni form u adminu unesi endpoint. Ako nije postavljen, koristi se mailto.
 

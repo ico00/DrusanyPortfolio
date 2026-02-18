@@ -39,7 +39,7 @@ export default async function ContactPage() {
               <ArrowLeft className="h-4 w-4" />
               Back
             </Link>
-            <h1 className="mb-12 font-serif text-4xl font-light tracking-tight text-white md:text-5xl">
+            <h1 className="theme-heading mb-12 font-light tracking-tight text-white md:text-5xl">
               {title}
             </h1>
             <ProseContent

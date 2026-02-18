@@ -74,7 +74,8 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "venue": "cibona",
-      "isHero": false
+      "isHero": false,
+      "slug": "lord-of-the-dance-cibona-2008"
     },
     {
       "id": "ba9408ac-35a3-40a3-9e32-4e31c63410fd",
@@ -93,7 +94,8 @@
       "aperture": "f/4",
       "iso": 3200,
       "venue": "cibona",
-      "isHero": false
+      "isHero": false,
+      "slug": "dino-dvornik-cibona-2006"
     },
     {
       "id": "e8b5998b-1938-431a-8fab-5e8404ce3906",
@@ -112,7 +114,8 @@
       "aperture": "f/4",
       "iso": 3200,
       "venue": "cibona",
-      "isHero": false
+      "isHero": false,
+      "slug": "james-brown-cibona-2006"
     },
     {
       "id": "4894abbe-5695-4693-a6a7-fb234ab36e0d",
@@ -131,7 +134,8 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "venue": "lisinski",
-      "isHero": false
+      "isHero": false,
+      "slug": "arsen-dedic-lisinski-2009"
     },
     {
       "id": "b6f646f0-accc-45a6-9000-1bd3c0a00848",
@@ -150,7 +154,8 @@
       "aperture": "f/2.8",
       "iso": 3200,
       "venue": "cibona",
-      "isHero": false
+      "isHero": false,
+      "slug": "kodo-drummers-cibona-2009"
     },
     {
       "id": "72cd7e53-4d47-407d-b43d-a08342d71b11",
@@ -169,7 +174,9 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "venue": "cibona",
-      "isHero": false
+      "isHero": false,
+      "slug": "diana-krall-cibona-2009",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "e3b42043-2349-4436-ad2e-2d1546bd8cd9",
@@ -188,7 +195,8 @@
       "aperture": "f/2.8",
       "iso": 800,
       "venue": "cibona",
-      "isHero": false
+      "isHero": false,
+      "slug": "tommy-emmanuel-cibona-2009"
     },
     {
       "id": "607692f0-228b-4b3a-8b68-9bf7e1f4f621",
@@ -207,7 +215,8 @@
       "aperture": "f/2.8",
       "iso": 800,
       "venue": "cibona",
-      "isHero": false
+      "isHero": false,
+      "slug": "bajaga-i-instruktori-cibona-2009"
     },
     {
       "id": "8c3470f3-785d-49ed-973f-0dbbaae885af",
@@ -226,7 +235,8 @@
       "aperture": "f/2.8",
       "iso": 640,
       "venue": "cibona",
-      "isHero": false
+      "isHero": false,
+      "slug": "gibonni-cibona-2010"
     },
     {
       "id": "48871f8f-d8d5-4c3f-9f2b-1afb85c886da",
@@ -245,7 +255,8 @@
       "aperture": "f/2.8",
       "iso": 320,
       "venue": "misc",
-      "isHero": false
+      "isHero": false,
+      "slug": "the-cannons-misc-2010"
     },
     {
       "id": "48e720e2-63b6-4112-8075-a26bbedd6e18",
@@ -264,7 +275,8 @@
       "aperture": "f/2.8",
       "iso": 1250,
       "venue": "arena-zagreb",
-      "isHero": false
+      "isHero": false,
+      "slug": "leonard-cohen-arena-zagreb-2010"
     },
     {
       "id": "fa4b2155-1a72-4e1d-9940-9a7b34e9fbdb",
@@ -283,7 +295,8 @@
       "aperture": "f/2.8",
       "iso": 800,
       "venue": "arena-zagreb",
-      "isHero": false
+      "isHero": false,
+      "slug": "djordje-balasevic-arena-zagreb-2010"
     },
     {
       "id": "dc227a6b-b4fd-4f10-88c4-c829d5378fa1",
@@ -302,7 +315,8 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "venue": "arena-zagreb",
-      "isHero": false
+      "isHero": false,
+      "slug": "joe-cocker-arena-zagreb-2011"
     },
     {
       "id": "4568ee0e-7979-4131-887d-3e8af1adcb0f",
@@ -322,7 +336,8 @@
       "iso": 6400,
       "venue": "salata",
       "isHero": false,
-      "keywords": "The Pogues, Shane MacGowan, Šalata, licitar, "
+      "keywords": "The Pogues, Shane MacGowan, Šalata, licitar, ",
+      "slug": "the-pogues-salata-2011"
     },
     {
       "id": "8eb272b4-37b2-4ccb-b77b-e862f84bab14",
@@ -341,7 +356,8 @@
       "aperture": "f/2.8",
       "iso": 1250,
       "venue": "arena-zagreb",
-      "isHero": false
+      "isHero": false,
+      "slug": "george-michael-arena-zagreb-2011"
     },
     {
       "id": "1c2556a3-4e59-4c49-a805-9ba1bd438123",
@@ -360,7 +376,8 @@
       "aperture": "f/2.8",
       "iso": 1250,
       "venue": "misc",
-      "isHero": false
+      "isHero": false,
+      "slug": "natali-dizdar-misc-2011"
     },
     {
       "id": "b24e4bf7-f4f2-47c6-8054-3a804911fd85",
@@ -379,7 +396,8 @@
       "aperture": "f/2.8",
       "iso": 2000,
       "venue": "lisinski",
-      "isHero": false
+      "isHero": false,
+      "slug": "vlatko-stefanovski-lisinski-2012"
     },
     {
       "id": "3061f5b8-2d0b-4502-af82-5e94fac809f6",
@@ -398,7 +416,8 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "venue": "domsportova",
-      "isHero": false
+      "isHero": false,
+      "slug": "zaz-domsportova-2012"
     },
     {
       "id": "72f62f87-3962-4f49-a7ab-06b9087fcf7a",
@@ -417,7 +436,8 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "venue": "tvornica-kulture",
-      "isHero": false
+      "isHero": false,
+      "slug": "the-dubliners-tvornica-kulture-2012"
     },
     {
       "id": "94e9ed0c-3508-4df0-a3c5-aded67767629",
@@ -436,7 +456,8 @@
       "aperture": "f/2.8",
       "iso": 3200,
       "venue": "msu",
-      "isHero": false
+      "isHero": false,
+      "slug": "nina-romic-msu-2013"
     },
     {
       "id": "63852f38-1ddb-4b18-a4e0-fa87bf7a3f06",
@@ -455,7 +476,8 @@
       "aperture": "f/2.8",
       "iso": 3200,
       "venue": "msu",
-      "isHero": false
+      "isHero": false,
+      "slug": "olovni-ples-msu-2013"
     },
     {
       "id": "8eaf0206-b143-440b-a335-d6d4e81f400d",
@@ -474,7 +496,8 @@
       "aperture": "f/2.8",
       "iso": 2500,
       "venue": "misc",
-      "isHero": false
+      "isHero": false,
+      "slug": "bambi-molesters-misc-2013"
     },
     {
       "id": "9181f6af-e9aa-439c-ae99-46b16b358ba2",
@@ -493,7 +516,8 @@
       "aperture": "f/10",
       "iso": 160,
       "venue": "msu",
-      "isHero": false
+      "isHero": false,
+      "slug": "ivan-vragolovic-msu-2013"
     },
     {
       "id": "7af0776d-4619-46c8-a92f-f13389680968",
@@ -512,7 +536,8 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "venue": "arena-zagreb",
-      "isHero": false
+      "isHero": false,
+      "slug": "depeche-mode-arena-zagreb-2013"
     },
     {
       "id": "7d98f0c0-8716-47bd-833c-533ad52d8ea1",
@@ -531,7 +556,8 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "venue": "arena-zagreb",
-      "isHero": true
+      "isHero": true,
+      "slug": "depeche-mode-arena-zagreb-2013-2"
     },
     {
       "id": "8ed00d6a-d840-45fd-966d-15518271c2e2",
@@ -550,7 +576,8 @@
       "aperture": "f/9",
       "iso": 2500,
       "venue": "salata",
-      "isHero": false
+      "isHero": false,
+      "slug": "hladno-pivo-salata-2013"
     },
     {
       "id": "91ce6895-29d8-42c7-9461-d442ae39be67",
@@ -569,7 +596,8 @@
       "aperture": "f/2.8",
       "iso": 6400,
       "venue": "tvornica-kulture",
-      "isHero": false
+      "isHero": false,
+      "slug": "public-image-limited-tvornica-kulture-2013"
     },
     {
       "id": "ce651694-de25-4afa-ad05-15f3fbabc66a",
@@ -588,7 +616,8 @@
       "aperture": "f/8",
       "iso": 100,
       "venue": "domsportova",
-      "isHero": false
+      "isHero": false,
+      "slug": "ivan-mihaljevic-side-effects-domsportova-2013"
     },
     {
       "id": "45218423-5fc9-4b35-8319-19f0707a3afe",
@@ -607,7 +636,8 @@
       "aperture": "f/4",
       "iso": 1250,
       "venue": "domsportova",
-      "isHero": false
+      "isHero": false,
+      "slug": "whitesnake-domsportova-2013"
     },
     {
       "id": "d93d3f01-ad7c-4b5d-8b9f-06501491c273",
@@ -626,7 +656,8 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "venue": "domsportova",
-      "isHero": false
+      "isHero": false,
+      "slug": "joe-bonamassa-domsportova-2013"
     },
     {
       "id": "6c3a681e-97dc-46da-a0ec-125d1cf4e8bf",
@@ -645,7 +676,8 @@
       "aperture": "f/2.8",
       "iso": 3200,
       "venue": "kset",
-      "isHero": false
+      "isHero": false,
+      "slug": "hladno-pivo-kset-2014"
     },
     {
       "id": "f9b22570-67e5-4f3e-b4c5-e511e596a7d7",
@@ -664,7 +696,8 @@
       "aperture": "f/2.8",
       "iso": 3200,
       "venue": "domsportova",
-      "isHero": false
+      "isHero": false,
+      "slug": "masinko-domsportova-2014"
     },
     {
       "id": "9e6e7c47-bd2a-45e3-bcef-ea90014d43b8",
@@ -683,7 +716,8 @@
       "aperture": "f/2.8",
       "iso": 2500,
       "venue": "domsportova",
-      "isHero": false
+      "isHero": false,
+      "slug": "psihomodo-pop-domsportova-2014"
     },
     {
       "id": "2dcd0e2a-cc59-4666-bea1-b999f96bc73e",
@@ -702,7 +736,8 @@
       "aperture": "f/2.8",
       "iso": 6400,
       "venue": "kset",
-      "isHero": false
+      "isHero": false,
+      "slug": "goribor-kset-2014"
     },
     {
       "id": "8f528d9c-d42a-4536-a4a9-a9ba64ba5ff6",
@@ -722,7 +757,8 @@
       "iso": 2500,
       "venue": "domsportova",
       "isHero": false,
-      "keywords": "davorin bogović, rinči, zagreb, dom sportova, "
+      "keywords": "davorin bogović, rinči, zagreb, dom sportova, ",
+      "slug": "davorin-i-bogovici-domsportova-2014"
     },
     {
       "id": "750dc7be-68bb-4419-8991-c3e901ec7a8e",
@@ -741,7 +777,9 @@
       "aperture": "f/2.8",
       "iso": 2500,
       "venue": "domsportova",
-      "isHero": false
+      "isHero": false,
+      "slug": "dropkick-murphys-domsportova-2014",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "000fa44f-d470-4ee4-8c40-e50a5c6ccaf7",
@@ -760,7 +798,8 @@
       "aperture": "f/2.8",
       "iso": 2000,
       "venue": "domsportova",
-      "isHero": false
+      "isHero": false,
+      "slug": "general-woo-domsportova-2014"
     },
     {
       "id": "1f4df1e7-8951-4147-8ace-1b192dd4ba52",
@@ -779,7 +818,8 @@
       "exposure": "1/1250",
       "aperture": "f/2.8",
       "iso": 125,
-      "order": 19
+      "order": 19,
+      "slug": "2018"
     },
     {
       "id": "51f9a7ac-d63f-4963-a87f-f0710411ceed",
@@ -798,7 +838,8 @@
       "exposure": "1/2500",
       "aperture": "f/1.4",
       "iso": 800,
-      "order": 32
+      "order": 32,
+      "slug": "zagrebancija-lxiii-2018"
     },
     {
       "id": "c470b772-cac8-4ed3-8ed7-622a4f8c8e1b",
@@ -4918,14 +4959,14 @@
     },
     {
       "id": "8a904671-8fcd-473b-b1e9-509f2c4c6cf4",
-      "title": "Zagreb, 19.10.2024.: Bajaga i instruktori - 40 godina @ Arena Zagreb",
+      "title": "Bajaga i instruktori",
       "category": "concerts",
-      "alt": "Zagreb, 19.10.2024.: Bajaga i instruktori - 40 godina @ Arena Zagreb",
+      "alt": "Bajaga i instruktori",
       "src": "/uploads/full/concerts/241019-bajaga_i_instruktori-40_godina_031.webp",
       "thumb": "/uploads/thumbs/concerts/241019-bajaga_i_instruktori-40_godina_031.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2024-10-19T19:13:55.000Z",
+      "capturedAt": "2024-10-19T19:13:00.000Z",
       "createdAt": "2026-02-16T14:07:13.269Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -4933,18 +4974,20 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "keywords": "Bajaga i instruktori, 40 godina, rođendan, obljetnica, koncert, muzika, Arena Zagreb, Zagreb, Momčilo Bajagić",
-      "slug": "zagreb-19102024-bajaga-i-instruktori-40-godina-arena-zagreb-2024"
+      "slug": "bajaga-i-instruktori-arena-zagreb-2024",
+      "venue": "arena-zagreb",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "ddd9285f-a960-4759-9863-d37b6efaecdc",
-      "title": "Mortal kombat // Zagreb - Tvornica kulture, 15.3.2025.",
+      "title": "Mortal kombat",
       "category": "concerts",
-      "alt": "Mortal kombat // Zagreb - Tvornica kulture, 15.3.2025.",
+      "alt": "Mortal kombat",
       "src": "/uploads/full/concerts/250315-mortal_kombat_134-enhanced-nr.webp",
       "thumb": "/uploads/thumbs/concerts/250315-mortal_kombat_134-enhanced-nr.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2025-03-15T20:37:33.000Z",
+      "capturedAt": "2025-03-15T20:37:00.000Z",
       "createdAt": "2026-02-16T14:07:13.470Z",
       "camera": "Canon EOS R6m2",
       "lens": "35.0 mm",
@@ -4952,7 +4995,9 @@
       "aperture": "f/1.4",
       "iso": 2000,
       "keywords": "mortal kombat, tvornica kulture, zagreb, hrvatska, koncert, rock, metal",
-      "slug": "mortal-kombat-zagreb-tvornica-kulture-1532025-2025"
+      "slug": "mortal-kombat-tvornica-kulture-2025",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "ba353391-1bfa-4540-a899-40677e0d7392",

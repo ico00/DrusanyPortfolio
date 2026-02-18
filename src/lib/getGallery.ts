@@ -35,6 +35,8 @@ export interface GalleryImage {
   slug?: string;
   /** Redoslijed unutar kategorije (manji = ranije); undefined = sortiraj po datumu */
   order?: number;
+  /** Fokus točka za hero/featured prikaz: "x% y%" npr. "50% 30%" */
+  thumbnailFocus?: string;
 }
 
 export interface GalleryData {
@@ -56,7 +58,7 @@ function slugify(str: string): string {
     .replace(/^-|-$/g, "");
 }
 
-function ensureSlug(img: GalleryImage, existingSlugs: Set<string>): string {
+export function ensureSlug(img: GalleryImage, existingSlugs: Set<string>): string {
   if (img.slug?.trim()) return img.slug;
   const parts: string[] = [];
   if (img.title?.trim()) parts.push(slugify(img.title));

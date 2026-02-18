@@ -39,11 +39,19 @@ export interface MapsWidgetConfig {
   locations: MapLocation[];
 }
 
+export interface FeaturedPostsWidgetConfig {
+  id: string;
+  type: "featured-posts";
+  enabled: boolean;
+  title: string;
+}
+
 export type BlogWidgetConfig =
   | SearchWidgetConfig
   | CategoriesWidgetConfig
   | InstagramWidgetConfig
-  | MapsWidgetConfig;
+  | MapsWidgetConfig
+  | FeaturedPostsWidgetConfig;
 
 export interface BlogWidgetsData {
   widgets: BlogWidgetConfig[];
