@@ -13,6 +13,8 @@ export interface BlogPost {
   title: string;
   slug: string;
   date: string;
+  /** Vrijeme u formatu HH:mm (24h), opcionalno */
+  time?: string;
   /** @deprecated Use categories */
   category?: string;
   /** Multiple categories per post */
@@ -24,6 +26,8 @@ export interface BlogPost {
   /** Enriched gallery with dimensions (from getBlogPost) */
   galleryImages?: BlogGalleryImage[];
   body?: string; // body comes from file; deprecated in JSON
+  /** Plain text from body for search (from getBlogWithBodies) */
+  bodySearchText?: string;
 }
 
 
@@ -57,6 +61,39 @@ export async function getBlog(): Promise<BlogData> {
   }
 }
 
+/** Strip HTML to plain text for search */
+function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Get blog posts with body content for search (plain text, no HTML) */
+export async function getBlogWithBodies(): Promise<BlogData> {
+  const { posts } = await getBlog();
+  const enriched = await Promise.all(
+    posts.map(async (post) => {
+      let bodySearchText = "";
+      try {
+        const contentPath = getBlogContentPath(post.slug);
+        const body = await readFile(contentPath, "utf-8");
+        bodySearchText = stripHtml(body);
+      } catch {
+        // No body file
+      }
+      return { ...post, bodySearchText };
+    })
+  );
+  return { posts: enriched };
+}
+
 /** Enrich gallery URLs with width/height from file metadata (masonry layout) */
 async function enrichBlogGallery(urls: string[]): Promise<BlogGalleryImage[]> {
   const result: BlogGalleryImage[] = [];
@@ -80,8 +117,8 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   if (!post) return null;
 
   const galleryImages =
-    post.gallery?.length > 0
-      ? await enrichBlogGallery(post.gallery)
+    (post.gallery?.length ?? 0) > 0
+      ? await enrichBlogGallery(post.gallery!)
       : undefined;
 
   // Read body from file (src/data/blog/[slug].html)

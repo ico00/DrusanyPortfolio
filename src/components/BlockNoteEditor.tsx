@@ -13,6 +13,8 @@ interface BlockNoteEditorProps {
   placeholder?: string;
   className?: string;
   minHeight?: string;
+  /** Ako je proslijeđeno, prikazuje se tab Upload u panelu za slike */
+  uploadFile?: (file: File) => Promise<string | Record<string, any>>;
 }
 
 export default function BlockNoteEditor({
@@ -20,6 +22,7 @@ export default function BlockNoteEditor({
   onChange,
   className = "",
   minHeight = "200px",
+  uploadFile,
 }: BlockNoteEditorProps) {
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
@@ -32,6 +35,7 @@ export default function BlockNoteEditor({
         content: [],
       },
     ],
+    uploadFile,
   });
 
   // Učitaj HTML sadržaj pri mountu

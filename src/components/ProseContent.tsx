@@ -28,6 +28,18 @@ export default function ProseContent({
       span.textContent = QUOTE_CHAR;
       bq.insertBefore(span, bq.firstChild);
     });
+
+    // Wrap images in styled container (kao BlogGallery, PressSection)
+    const imgs = el.querySelectorAll("img");
+    imgs.forEach((img) => {
+      if (img.closest(".prose-img-wrapper")) return;
+      const wrapper = document.createElement("div");
+      wrapper.className = "prose-img-wrapper";
+      const alignment = img.getAttribute("data-text-alignment");
+      if (alignment) wrapper.setAttribute("data-text-alignment", alignment);
+      img.parentNode?.insertBefore(wrapper, img);
+      wrapper.appendChild(img);
+    });
   }, [html]);
 
   return (

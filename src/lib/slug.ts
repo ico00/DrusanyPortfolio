@@ -35,7 +35,20 @@ export function generateSlug(
   return parts.filter(Boolean).join("-") || `image-${Date.now()}`;
 }
 
-/** Generate blog slug from title only (as you type) */
-export function generateBlogSlug(title: string): string {
-  return slugify(title) || `post-${Date.now()}`;
+/**
+ * Format date as yymmdd (2-digit year, month, day).
+ * Input: YYYY-MM-DD
+ */
+function toYYMMDD(dateStr: string): string | null {
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
+  const [, y, m, d] = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/) ?? [];
+  if (!y || !m || !d) return null;
+  return `${y.slice(-2)}${m}${d}`;
+}
+
+/** Generate blog slug: yymmdd-naslov (npr. 251228-advent-2025) */
+export function generateBlogSlug(title: string, date?: string): string {
+  const titlePart = slugify(title) || `post-${Date.now()}`;
+  const datePrefix = date ? toYYMMDD(date) : null;
+  return datePrefix ? `${datePrefix}-${titlePart}` : titlePart;
 }

@@ -1,0 +1,38 @@
+{
+  "widgets": [
+    {
+      "id": "search",
+      "type": "search",
+      "enabled": true,
+      "title": "Pretraži"
+    },
+    {
+      "id": "categories",
+      "type": "categories",
+      "enabled": true,
+      "title": "Kategorije"
+    },
+    {
+      "id": "instagram",
+      "type": "instagram",
+      "enabled": true,
+      "title": "Instagram",
+      "username": "ivica.drusany",
+      "profileUrl": "https://www.instagram.com/ivica.drusany/",
+      "images": []
+    },
+    {
+      "id": "maps",
+      "type": "maps",
+      "enabled": true,
+      "title": "Foto Hrvatska",
+      "locations": [
+        {
+          "id": "foto-hrvatska",
+          "name": "Foto Hrvatska",
+          "embedUrl": "https://www.google.com/maps/d/embed?mid=1w4az4wVttFFCnsASlL-QQRFp4PU"
+        }
+      ]
+    }
+  ]
+}

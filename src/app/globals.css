@@ -239,6 +239,16 @@ body.custom-cursor-active * {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
   opacity: 1 !important;
 }
+
+/* BlockNote – File/Image panel (Embed, Upload): neprozirna pozadina kao ostali izbornici */
+[data-theme="dark"] .bn-panel,
+[data-theme="dark"] .bn-panel-popover {
+  background-color: rgb(39 39 42) !important;
+  color: rgb(228 228 231) !important;
+  border: 1px solid rgb(63 63 70) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  opacity: 1 !important;
+}
 [data-theme="dark"] .bn-toolbar *,
 [data-theme="dark"] .bn-formatting-toolbar *,
 [data-theme="dark"] .bn-link-toolbar * {
@@ -255,6 +265,22 @@ body.custom-cursor-active * {
   background-color: rgb(63 63 70) !important;
 }
 
+/* BlockNote – resize ručice za slike vidljive na tamnoj pozadini */
+[data-theme="dark"] [data-file-block] .bn-resize-handle {
+  background-color: rgb(228 228 231) !important;
+  border-color: rgb(63 63 70) !important;
+}
+
+/* BlockNote – Add-file gumb stiliziran za tamnu temu */
+[data-theme="dark"] [data-file-block] .bn-add-file-button {
+  background-color: rgb(63 63 70) !important;
+  color: rgb(161 161 170) !important;
+}
+[data-theme="dark"] [data-file-block] .bn-add-file-button:hover {
+  background-color: rgb(82 82 91) !important;
+  color: rgb(228 228 231) !important;
+}
+
 /* BlockNote – statična traka stila bloka (order -1 = prikaz na vrhu) */
 .bn-has-static-toolbar.bn-container {
   display: flex;
@@ -267,6 +293,49 @@ body.custom-cursor-active * {
 /* Prose – veći razmak između blokova (nakon entera) za lakše čitanje */
 .prose > * + * {
   margin-top: 1.5em;
+}
+
+/* Prose – multimedija (slike) – vizual kao BlogGallery/PressSection */
+.prose .prose-img-wrapper,
+.prose-invert .prose-img-wrapper {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin: 1.5em 0;
+}
+.prose-invert .prose-img-wrapper {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.prose .prose-img-wrapper img,
+.prose-invert .prose-img-wrapper img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  vertical-align: top;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.prose .prose-img-wrapper:hover img,
+.prose-invert .prose-img-wrapper:hover img {
+  transform: scale(1.03);
+}
+/* Poravnanje (BlockNote data-text-alignment) */
+.prose .prose-img-wrapper[data-text-alignment="center"],
+.prose-invert .prose-img-wrapper[data-text-alignment="center"] {
+  margin-left: auto;
+  margin-right: auto;
+}
+.prose .prose-img-wrapper[data-text-alignment="right"],
+.prose-invert .prose-img-wrapper[data-text-alignment="right"] {
+  margin-left: auto;
+  margin-right: 0;
+}
+.prose .prose-img-wrapper[data-text-alignment="left"],
+.prose-invert .prose-img-wrapper[data-text-alignment="left"] {
+  margin-left: 0;
+  margin-right: auto;
 }
 
 /* Prose – svi paragrafi ista boja (BlockNote postavlja inline boju samo kad je odabrana) */

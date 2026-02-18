@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     const file = formData.get("file") as File | null;
     const slug = sanitizeSlug((formData.get("slug") as string) || "");
     const date = (formData.get("date") as string) || "";
-    const type = formData.get("type") as "featured" | "gallery" | null;
+    const type = formData.get("type") as "featured" | "gallery" | "content" | null;
     const overwrite = formData.get("overwrite") === "true";
     const addWithSuffix = formData.get("addWithSuffix") === "true";
     const indexStr = formData.get("index") as string | null;
@@ -173,8 +173,22 @@ export async function POST(request: Request) {
       return Response.json({ success: true, url });
     }
 
+    if (type === "content") {
+      const contentDir = path.join(baseDir, "content");
+      await mkdir(contentDir, { recursive: true });
+      const nameToUse = (file.name || originalFilename).trim();
+      const filename = sanitizeFilename(nameToUse || "image", slug);
+      const outPath = path.join(contentDir, filename);
+      await sharp(buffer)
+        .resize(2048, undefined, { withoutEnlargement: true })
+        .webp({ quality: 85 })
+        .toFile(outPath);
+      const url = `/uploads/blog/${folderName}/content/${filename}`;
+      return Response.json({ success: true, url });
+    }
+
     return Response.json(
-      { error: "type mora biti 'featured' ili 'gallery'" },
+      { error: "type mora biti 'featured', 'gallery' ili 'content'" },
       { status: 400, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {

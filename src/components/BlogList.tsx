@@ -16,10 +16,35 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const kategorija = searchParams.get("kategorija") ?? undefined;
+  const searchQuery = searchParams.get("q") ?? "";
 
-  const filteredPosts = kategorija
+  let filteredPosts = kategorija
     ? posts.filter((p) => postHasCategory(p, kategorija))
     : posts;
+
+  if (searchQuery.trim()) {
+    const q = searchQuery.trim().toLowerCase();
+    filteredPosts = filteredPosts.filter((post) => {
+      const title = (post.title || "").toLowerCase();
+      const slug = (post.slug || "").toLowerCase();
+      const categoryLabels = getDisplayCategories(post)
+        .map((s) => getShortCategoryLabel(s).toLowerCase())
+        .join(" ");
+      const bodyText = (post.bodySearchText || "").toLowerCase();
+      return (
+        title.includes(q) ||
+        slug.includes(q) ||
+        categoryLabels.includes(q) ||
+        bodyText.includes(q)
+      );
+    });
+  }
+
+  filteredPosts = [...filteredPosts].sort((a, b) => {
+    const da = a.date + (a.time || "00:00");
+    const db = b.date + (b.time || "00:00");
+    return db.localeCompare(da);
+  });
 
   if (posts.length === 0) {
     return (
@@ -31,9 +56,11 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
     <>
       {filteredPosts.length === 0 ? (
         <p className="mt-8 text-lg leading-relaxed text-zinc-600">
-          {kategorija
-            ? `Nema članaka u kategoriji „${getBlogCategoryLabel(kategorija)}“.`
-            : "Uskoro."}
+          {searchQuery.trim()
+            ? `Nema rezultata za „${searchQuery.trim()}“.`
+            : kategorija
+              ? `Nema članaka u kategoriji „${getBlogCategoryLabel(kategorija)}“.`
+              : "Uskoro."}
         </p>
       ) : (
         <ul className="mt-12 space-y-8">

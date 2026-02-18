@@ -5,8 +5,8 @@ export interface BlogCategoryItem {
 }
 
 export const BLOG_CATEGORIES: BlogCategoryItem[] = [
-  { slug: "fotografija", label: "Fotografija" },
-  { slug: "vesti", label: "Vesti" },
+  { slug: "zagrebancije", label: "Zagrebancije" },
+  { slug: "info", label: "Info" },
   { slug: "putovanja", label: "Putovanja" },
   {
     slug: "sport",
@@ -17,8 +17,10 @@ export const BLOG_CATEGORIES: BlogCategoryItem[] = [
       { slug: "kosarka", label: "Košarka" },
     ],
   },
-  { slug: "tehnologija", label: "Tehnologija" },
-  { slug: "osobno", label: "Osobno" },
+  { slug: "koncerti", label: "koncerti" },
+  { slug: "auti", label: "Auti" },
+
+  { slug: "avioni", label: "Avioni" },
   { slug: "savjeti", label: "Savjeti" },
 ];
 

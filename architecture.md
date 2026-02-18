@@ -107,7 +107,11 @@ Sadržaj About i Contact stranica. Struktura:
 
 ### 3.3 Blog: `src/data/blog.json`
 
-Blog postovi. Struktura: `{ "posts": [ { "id", "slug", "title", "date", "categories", "thumbnail", "thumbnailFocus", "gallery" } ] }`. Sadržaj (`body`) je u `src/data/blog/[slug].html`. Galerija: niz URL-ova (`/uploads/blog/[datum]-[slug]/gallery/...`). Pri čitanju posta (`getBlogPost`) galerija se obogaćuje dimenzijama (Sharp metadata) za masonry layout – `galleryImages: { src, width, height }[]`.
+Blog postovi. Struktura: `{ "posts": [ { "id", "slug", "title", "date", "time", "categories", "thumbnail", "thumbnailFocus", "gallery" } ] }`. **Slug format:** `yymmdd-naslov` (npr. `251228-advent-2025`) – generira se putem `generateBlogSlug` iz `@/lib/slug`. Sadržaj (`body`) je u `src/data/blog/[slug].html`. Galerija: niz URL-ova (`/uploads/blog/[datum]-[slug]/gallery/...`). **Slike u sadržaju:** `/uploads/blog/[datum]-[slug]/content/*.webp` – uploadane iz BlockNote editora. Pri čitanju posta (`getBlogPost`) galerija se obogaćuje dimenzijama (Sharp metadata) za masonry layout – `galleryImages: { src, width, height }[]`. **Pretraga:** `getBlogWithBodies()` učitava body i generira `bodySearchText` (plain text bez HTML-a) za pretragu po sadržaju članka.
+
+### 3.3.1 Blog Widgets: `src/data/blogWidgets.json`
+
+Konfiguracija sidebara na blog stranici. Struktura: `{ "widgets": [ { "id", "type", "enabled", "title", ... } ] }`. Tipovi: **search** (filter-as-you-type), **categories** (kategorije s linkovima), **instagram** (username, profileUrl, images – dohvaća se putem `fetchInstagramFeed` iz `@/lib/instagram`), **maps** (locations s embedUrl iz Google My Maps – `mid=` parametar).
 
 ### 3.4 Gear: `src/data/gear.json`
 
@@ -160,7 +164,7 @@ Objavljene fotografije u medijima (About stranica). Struktura:
 - Slike se spremaju u podfoldere po kategoriji: `public/uploads/full/[category]/` i `public/uploads/thumbs/[category]/`
 - Press slike: `public/uploads/press/` (ručno dodavanje)
 - Gear slike: `public/uploads/gear/` (ručno dodavanje)
-- Blog: `public/uploads/blog/[YYYY-MM-DD]-[slug]/` – featured.webp, gallery/*.webp; originalni nazivi datoteka (sanitizeFilename)
+- Blog: `public/uploads/blog/[YYYY-MM-DD]-[slug]/` – featured.webp, gallery/*.webp, **content/*.webp** (slike iz BlockNote sadržaja); originalni nazivi datoteka (sanitizeFilename)
 - Format: WebP (Sharp resize)
 - Naziv datoteke: sanitizirani originalni naziv (lowercase, razmaci→crte, bez specijalnih znakova); ako postoji kolizija, dodaje se kratki random suffix ili broj
 - Pri static exportu, cijeli `public/` folder se kopira u `out/`
@@ -224,8 +228,9 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 - Spremanje putem `/api/pages`
 
 **AdminBlog:**
-- Lista postova, dodavanje/editiranje po slug-u
-- Polja: title, slug, **custom DatePicker** za datum, kategorije (višestruki odabir), thumbnail (opcionalno), **sadržaj (BlockNote)** – iznad galerije, galerija (drag-and-drop, bulk delete, select all)
+- Lista postova s **thumbnail** u popisu, **format datuma** `dd. mm. yyyy.` i **vrijeme u 24h**; sortiranje od najnovijeg prema najstarijem
+- Polja: title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, kategorije (višestruki odabir, **abecedno sortirane**), thumbnail (opcionalno), **sadržaj (BlockNote)** – iznad galerije, galerija (drag-and-drop, bulk delete, select all)
+- **editLoading:** Pri otvaranju uređivanja prikazuje se loader dok se body ne učitava – sprječava BlockNote popover crash (`reference.element` undefined)
 - Upload galerije: originalni nazivi datoteka; duplicate modal (Prepiši, Dodaj kao _2, Odustani); brisanje slika iz galerije briše i fizičke datoteke s diska (`/api/blog-delete-file`)
 - Spremanje putem `/api/blog`
 
@@ -237,6 +242,8 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 - **Tamna tema:** `data-theme="dark"` na html kad je admin otvoren; zinc/amber paleta
 - **Fontovi u editoru = fontovi na stranici:** font-sans (body), font-serif (naslovi) – WYSIWYG
 - **Formatting Toolbar:** Neprozirna pozadina (zinc-800), svijetli tekst; dropdowni (Stil bloka, izbornici) također neprozirni
+- **File/Image panel (`/image`):** Neprozirna pozadina (`.bn-panel`, `.bn-panel-popover`) – kao ostali izbornici; **Upload tab** – ako se proslijedi `uploadFile` prop (AdminBlog kada ima slug i datum), slike se uploadaju u `content/` putem `/api/blog-upload` type `content`; **Embed tab** – unos URL-a
+- **Resize ručice:** Slike imaju drag-handles (lijevo/desno) za promjenu širine; vidljive u dark modu (svijetla pozadina); default širina uploadanih slika: 512px (`previewWidth`)
 
 ### 4.3 API Routes (dev only)
 
@@ -319,9 +326,10 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 
 **Lokacija:** `src/app/api/blog-upload/route.ts`
 
-- Prima FormData (file, slug, date, type: featured | gallery)
+- Prima FormData (file, slug, date, type: featured | gallery | **content**)
 - Featured: `featured.webp` u `public/uploads/blog/[date]-[slug]/`
 - Gallery: originalni naziv datoteke (sanitizeFilename); duplicate → 409 s opcijama (overwrite, addWithSuffix)
+- **Content:** Slike iz BlockNote sadržaja – `content/*.webp` u istom folderu; Sharp resize 2048px, WebP
 
 #### `/api/blog-delete-file` (POST)
 
@@ -395,7 +403,7 @@ Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
 - **Tablica:** Granice, padding, header pozadina; tamna varijanta za prose-invert
 
 **Stranice:**
-- **ProseContent:** Client komponenta koja renderira HTML (dangerouslySetInnerHTML) i injektira `.quote-decor` span u svaki blockquote – Safari kompatibilno (CSS ::before ne radi u Safariju)
+- **ProseContent:** Client komponenta koja renderira HTML (dangerouslySetInnerHTML); injektira `.quote-decor` span u svaki blockquote – Safari kompatibilno; **wrapa slike** u `div.prose-img-wrapper` – vizual kao BlogGallery/PressSection (zaobljeni uglovi, sjena, hover scale 1.03); **poravnanje** – `data-text-alignment` (BlockNote) za center/left/right
 - **About / Contact:** `ProseContent` s `prose prose-invert prose-lg`, naslov (h1) odvojen, svijetli tekst na tamnoj pozadini; About i Contact imaju split layout (left image + right content)
 - **Blog:** `ProseContent` s `prose prose-zinc prose-headings:font-serif`, bijela pozadina; **formatBlogDate** – datum u formatu `dd. mm. yyyy.`
 
@@ -496,6 +504,12 @@ DrusanyPortfolio/
 │   │   ├── page.tsx       # Home (HeroSlider ili Gallery)
 │   │   └── globals.css
 │   ├── components/
+│   │   ├── blog/
+│   │   │   ├── BlogSidebar.tsx       # Sidebar s widgetima (search, categories, instagram, maps)
+│   │   │   ├── SearchWidget.tsx      # Filter-as-you-type po naslovu, slug-u, kategorijama, sadržaju
+│   │   │   ├── CategoriesWidget.tsx  # Kategorije s linkovima
+│   │   │   ├── InstagramWidget.tsx   # Fotografije s Instagram Graph API
+│   │   │   └── GoogleMapsWidget.tsx  # Embed karte iz Google My Maps
 │   │   ├── AboutImage.tsx        # Slika za About/Contact (fill, object-cover)
 │   │   ├── AboutNav.tsx          # Fiksni nav na dnu About (About, Press, Gear); aktivni link prati scroll
 │   │   ├── ContactForm.tsx       # Kontakt forma (Formspree); name, email, subject, message
@@ -523,18 +537,21 @@ DrusanyPortfolio/
 │   │   ├── HeroSlider.tsx    # 6 category slides, auto-play 4s, wheel/swipe/strelicama lijevo-desno
 │   │   └── HomeContent.tsx   # Conditional Hero/Gallery; overflow hidden na hero
 │   ├── lib/
+│   │   ├── blogWidgets.ts   # getBlogWidgets – čitanje blogWidgets.json
+│   │   ├── instagram.ts    # fetchInstagramFeed – Instagram Graph API (INSTAGRAM_ACCESS_TOKEN)
 │   │   ├── getGallery.ts   # Čitanje gallery.json, sortiranje po order (pa capturedAt desc), generiranje slug
 │   │   ├── gear.ts         # getGear – čitanje gear.json
 │   │   ├── press.ts        # getPress – čitanje press.json
 │   │   ├── pages.ts        # getPages, savePages – About/Contact (title, html, quote, email, formspreeEndpoint)
 │   │   ├── blog.ts         # getBlog, getBlogPost – čitanje blog.json, enrichBlogGallery (Sharp dimenzije)
-│   │   └── slug.ts         # slugify, generateSlug (title+venue+year) – zajednički za upload, update i AdminClient
+│   │   └── slug.ts         # slugify, generateSlug (title+venue+year), generateBlogSlug (yymmdd-naslov) – zajednički za upload, update, AdminClient, blog
 │   └── data/
 │       ├── gallery.json    # Flat-file baza slika
 │       ├── pages.json      # About (title, html, quote), Contact (title, html, email, formspreeEndpoint)
 │       ├── gear.json       # Fotografska oprema (About)
 │       ├── press.json      # Objavljene fotografije (About)
-│       └── blog.json       # Blog postovi
+│       ├── blog.json       # Blog postovi
+│       └── blogWidgets.json # Konfiguracija blog sidebara (search, categories, instagram, maps)
 ├── out/                   # Generirano pri build (gitignore)
 ├── next.config.ts
 ├── package.json
@@ -587,7 +604,7 @@ DrusanyPortfolio/
 
 - **About (`/about`):** Split layout – lijevo fiksna slika (40% širine na desktopu) s opcionalnim citatom u donjem lijevom kutu; desno scrollabilni sadržaj (Back, naslov, prose HTML, PressSection, GearSection); **AboutNav** fiksno na dnu – linkovi About, Press, Gear s aktivnim stanjem (crta ispod); scroll na vrh pri učitavanju; aktivni link prati scroll (listener na main + window)
 - **Contact (`/contact`):** Isti layout kao About – lijevo slika, desno sadržaj; sadrži Back, naslov, uvodni prose (iz pages.json), **ContactForm** (name, email, subject, message); Formspree za slanje; fallback na mailto ako Formspree nije postavljen; success/error stanja
-- **Blog (`/blog`):** Lista postova – kartice s naslovom, metapodacima (Tekst i fotografije: Ivica Drusany, Datum objave, Kategorija) i slikom ispod; bez overlayja na slikama; `/blog/[slug]` – pojedinačni post: naslov i metapodaci na vrhu, featured slika ispod, prose body, galerija na dnu; bijela pozadina
+- **Blog (`/blog`):** Lista postova – kartice s naslovom, metapodacima (Tekst i fotografije: Ivica Drusany, Datum objave, Kategorija) i slikom ispod; bez overlayja na slikama; **BlogSidebar** s desne strane – SearchWidget (filter-as-you-type po naslovu, slug-u, kategorijama, sadržaju), CategoriesWidget, InstagramWidget (fetchInstagramFeed), GoogleMapsWidget (embed iz Google My Maps); **pretraga** po `q` parametru; sortiranje od najnovijeg; `/blog/[slug]` – pojedinačni post: naslov i metapodaci na vrhu, featured slika ispod, prose body (slike s poravnanjem, vizual kao galerija), galerija na dnu; bijela pozadina
 - **Blog metapodaci:** Ikone (PenLine, Camera, Calendar, Tag); redak „Tekst i fotografije: Ivica Drusany“, „Datum objave: dd. mm. yyyy.“, „Kategorija:“ s linkovima (donja crta, border-b); razmak između blokova: inline `marginRight: "3rem"` (Safari kompatibilnost)
 - **Blog galerija:** Ista logika kao portfolio – masonry (shortest column), dimenzije iz Sharp metadata; lightbox (prev/next, swipe, Escape); aperture cursor na thumbovima i lightboxu; brisanje slika iz admina briše i fizičke datoteke
 
@@ -631,14 +648,14 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 | **Podaci** | `src/data/gallery.json` |
 | **Slike** | `public/uploads/full/[category]/` + `thumbs/[category]/` (WebP, originalni nazivi) |
 | **Admin** | `/admin` + API routes (dev only): upload, exif-preview, update, delete, hero, reorder, gallery, **pages**, **blog** |
-| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – BlockNote editor s StaticBlockTypeBar; **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija) |
+| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – BlockNote editor s StaticBlockTypeBar, **upload slika u sadržaj** (content/), **editLoading** (sprječava popover crash); **BlogCategorySelect** (abecedno); **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija) |
 | **Home** | HeroSlider (6 slides, auto-play 4s, strelice lijevo-desno, "View Gallery", title @ venue) ili masonry Gallery po `?category`; hero samo ručno odabrana |
 | **Header** | Logo (inline SVG), poravnanje lijevo, Search u nav (kad galerija, expandable hover), aktivna stranica (border-b/border-l), hover efekti (Safari: inline-block, eksplicitne boje) |
 | **Custom Cursor** | Dot (trenutno) + aperture (spring, samo preko fotografija), mix-blend-difference, desktop only |
 | **Gallery** | Balanced masonry (shortest column, heights array, aspect ratio); stupci približno jednake visine; useColumnCount (1–4 stupaca), venue filter (Concerts), sport filter (Sport), hover efekti na filterima; scroll na vrh pri učitavanju; ImageCard hover (title @ venue ili Sport // title, datum); Interiors, Animals bez opisa/datuma |
 | **Lightbox** | Fit-to-screen, numeracija + X na vrhu, caption + EXIF u jednom okviru (crna prozirna pozadina), EXIF toggle (ikona kamere), copyright popup na desni klik, URL sync `?image=slug` |
 | **Filtriranje** | Client-side preko JSON-a (`?category=slug`, `?venue=slug` za Concerts, `?sport=slug` za Sport); search filter as you type (title, alt, keywords, venue, sport, category); direktni linkovi `?image=slug` |
-| **Pages & Blog** | `pages.json` (About: title, html, quote; Contact: title, html, email, formspreeEndpoint); `gear.json`, `press.json`; **ProseContent** (HTML + .quote-decor u blockquote); About split layout (image + content), AboutNav, ContactForm (Formspree); BlockNote editor; prose blockquote s dekorativnim navodnikom, tablica; **Blog:** kategorije (višestruki odabir), masonry galerija (Sharp dimenzije), lightbox, aperture cursor, metapodaci (Tekst i fotografije, Datum objave, Kategorija) s ikonama, format datuma dd. mm. yyyy., blog-delete-file za brisanje fajlova s diska |
+| **Pages & Blog** | `pages.json` (About: title, html, quote; Contact: title, html, email, formspreeEndpoint); `gear.json`, `press.json`; **ProseContent** (HTML + .quote-decor u blockquote; **wrapa slike** u prose-img-wrapper – zaobljeni uglovi, sjena, hover scale; data-text-alignment za poravnanje); About split layout (image + content), AboutNav, ContactForm (Formspree); BlockNote editor; prose blockquote s dekorativnim navodnikom, tablica; **Blog:** slug `yymmdd-naslov`; **BlogSidebar** (SearchWidget, CategoriesWidget, InstagramWidget, GoogleMapsWidget); pretraga po naslovu/slug-u/kategorijama/sadržaju; kategorije (višestruki odabir), masonry galerija (Sharp dimenzije), lightbox, aperture cursor, metapodaci (Tekst i fotografije, Datum objave, Kategorija) s ikonama, format datuma dd. mm. yyyy.; **BlockNote slike u sadržaju** – upload (content/), resize handles, poravnanje; blog-delete-file za brisanje fajlova s diska |
 | **Export** | `output: 'export'`, `images.unoptimized: true` |
 | **Output** | `out/` folder |
 | **Design** | Minimalist, velika tipografija, masonry/full-bleed, fade-in |

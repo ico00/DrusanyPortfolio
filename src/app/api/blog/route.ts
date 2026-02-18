@@ -37,6 +37,7 @@ export async function POST(request: Request) {
       title: string;
       slug: string;
       date: string;
+      time?: string;
       category?: string;
       categories?: string[];
       thumbnail: string;
@@ -57,6 +58,7 @@ export async function POST(request: Request) {
       title: body.title || "Bez naslova",
       slug,
       date: body.date || new Date().toISOString().slice(0, 10),
+      time: body.time && /^\d{1,2}:\d{2}$/.test(body.time) ? body.time : undefined,
       categories,
       thumbnail: body.thumbnail || "",
       thumbnailFocus: body.thumbnailFocus || "50% 50%",
@@ -89,6 +91,7 @@ export async function PUT(request: Request) {
       title?: string;
       slug?: string;
       date?: string;
+      time?: string;
       category?: string;
       categories?: string[];
       thumbnail?: string;
@@ -107,6 +110,10 @@ export async function PUT(request: Request) {
     if (body.title !== undefined) blog.posts[idx].title = body.title;
     if (body.slug !== undefined) blog.posts[idx].slug = body.slug;
     if (body.date !== undefined) blog.posts[idx].date = body.date;
+    if (body.time !== undefined) {
+      blog.posts[idx].time =
+        body.time && /^\d{1,2}:\d{2}$/.test(body.time) ? body.time : undefined;
+    }
     if (body.categories !== undefined) {
       blog.posts[idx].categories = Array.isArray(body.categories)
         ? body.categories.filter(Boolean)

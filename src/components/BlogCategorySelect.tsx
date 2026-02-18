@@ -54,7 +54,9 @@ export default function BlogCategorySelect({
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const options = getBlogCategoryOptions();
+  const options = getBlogCategoryOptions().sort((a, b) =>
+    a.fullLabel.localeCompare(b.fullLabel, "hr")
+  );
   const values = multiple
     ? (Array.isArray(value) ? value : value ? [value] : []).map((v) =>
         v?.toLowerCase().trim()

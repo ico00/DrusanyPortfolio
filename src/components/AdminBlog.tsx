@@ -39,6 +39,7 @@ import {
   getDisplayCategories,
   getShortCategoryLabel,
   getPostCategories,
+  formatBlogDate,
 } from "@/data/blogCategories";
 import { THUMBNAIL_FOCUS_OPTIONS } from "@/data/thumbnailFocus";
 import { generateBlogSlug } from "@/lib/slug";
@@ -124,11 +125,13 @@ export default function AdminBlog() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [editLoading, setEditLoading] = useState(false);
   const [creating, setCreating] = useState(false);
   const [form, setForm] = useState({
     title: "",
     slug: "",
     date: new Date().toISOString().slice(0, 10),
+    time: "",
     categories: [] as string[],
     thumbnail: "",
     thumbnailFocus: "50% 50%",
@@ -202,18 +205,24 @@ export default function AdminBlog() {
 
   const openEdit = async (post: BlogPost) => {
     setEditingId(post.id);
+    setEditLoading(true);
     setSelectedGalleryUrls(new Set());
-    const full = await fetchPostWithBody(post.slug);
-    setForm({
-      title: post.title,
-      slug: post.slug,
-      date: post.date,
-      categories: getPostCategories(post),
-      thumbnail: post.thumbnail ?? "",
-      thumbnailFocus: post.thumbnailFocus ?? "50% 50%",
-      gallery: post.gallery ?? [],
-      body: full?.body ?? "",
-    });
+    try {
+      const full = await fetchPostWithBody(post.slug);
+      setForm({
+        title: post.title,
+        slug: post.slug,
+        date: post.date,
+        time: post.time ?? "",
+        categories: getPostCategories(post),
+        thumbnail: post.thumbnail ?? "",
+        thumbnailFocus: post.thumbnailFocus ?? "50% 50%",
+        gallery: post.gallery ?? [],
+        body: full?.body ?? "",
+      });
+    } finally {
+      setEditLoading(false);
+    }
   };
 
   const openCreate = () => {
@@ -222,6 +231,7 @@ export default function AdminBlog() {
       title: "",
       slug: "",
       date: new Date().toISOString().slice(0, 10),
+      time: "",
       categories: [],
       thumbnail: "",
       thumbnailFocus: "50% 50%",
@@ -471,7 +481,7 @@ export default function AdminBlog() {
     setSaving(true);
     try {
       const slug =
-        form.slug.trim() || generateBlogSlug(form.title) || crypto.randomUUID().slice(0, 8);
+        form.slug.trim() || generateBlogSlug(form.title, form.date) || crypto.randomUUID().slice(0, 8);
       const res = await fetch("/api/blog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -557,7 +567,7 @@ export default function AdminBlog() {
                   setForm((f) => ({
                     ...f,
                     title: v,
-                    slug: generateBlogSlug(v),
+                    ...(creating ? { slug: generateBlogSlug(v, f.date) } : {}),
                   }));
                 }}
                 className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
@@ -571,15 +581,32 @@ export default function AdminBlog() {
                 value={form.slug}
                 onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
                 className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
-                placeholder="url-slug"
+                placeholder="yymmdd-naslov (npr. 251228-advent-2025)"
               />
             </div>
-            <div>
-              <label className="mb-2 block text-sm text-zinc-400">Datum</label>
-              <DatePicker
-                value={form.date}
-                onChange={(v) => setForm((f) => ({ ...f, date: v }))}
-              />
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className="mb-2 block text-sm text-zinc-400">Datum</label>
+                <DatePicker
+                  value={form.date}
+                  onChange={(v) =>
+                    setForm((f) => ({
+                      ...f,
+                      date: v,
+                      ...(creating ? { slug: generateBlogSlug(f.title, v) } : {}),
+                    }))
+                  }
+                />
+              </div>
+              <div className="w-24">
+                <label className="mb-2 block text-sm text-zinc-400">Vrijeme</label>
+                <input
+                  type="time"
+                  value={form.time}
+                  onChange={(e) => setForm((f) => ({ ...f, time: e.target.value }))}
+                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                />
+              </div>
             </div>
             <div>
               <label className="mb-2 block text-sm text-zinc-400">Kategorije</label>
@@ -714,12 +741,39 @@ export default function AdminBlog() {
 
             <div>
               <label className="mb-2 block text-sm text-zinc-400">Sadržaj</label>
-              <BlockNoteEditor
-                key={editingId ?? "new"}
-                content={form.body}
-                onChange={(html) => setForm((f) => ({ ...f, body: html }))}
-                minHeight="300px"
+              {editLoading ? (
+                <div className="flex min-h-[300px] items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800/50">
+                  <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
+                </div>
+              ) : (
+                <BlockNoteEditor
+                  key={editingId ?? "new"}
+                  content={form.body}
+                  onChange={(html) => setForm((f) => ({ ...f, body: html }))}
+                  minHeight="300px"
+                  uploadFile={
+                  canUpload
+                    ? async (file: File) => {
+                        const fd = new FormData();
+                        fd.append("file", file);
+                        fd.append("slug", form.slug);
+                        fd.append("date", form.date);
+                        fd.append("type", "content");
+                        const res = await fetch("/api/blog-upload", {
+                          method: "POST",
+                          body: fd,
+                        });
+                        const data = await res.json();
+                        if (!res.ok)
+                          throw new Error(data.error || "Upload nije uspio");
+                        return {
+                          props: { url: data.url, previewWidth: 512 },
+                        };
+                      }
+                    : undefined
+                }
               />
+              )}
             </div>
 
             <div>
@@ -942,12 +996,35 @@ export default function AdminBlog() {
             Još nema članaka. Klikni &quot;Novi članak&quot; za kreiranje.
           </p>
         ) : (
-          posts.map((post) => (
+          [...posts]
+            .sort((a, b) => {
+              const da = a.date + (a.time || "00:00");
+              const db = b.date + (b.time || "00:00");
+              return db.localeCompare(da);
+            })
+            .map((post) => (
             <div
               key={post.id}
-              className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900/50 p-4"
+              className="flex items-center gap-4 rounded-lg border border-zinc-800 bg-zinc-900/50 p-4"
             >
-              <div>
+              <div className="h-14 w-20 shrink-0 overflow-hidden rounded-md bg-zinc-800">
+                {post.thumbnail ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={post.thumbnail}
+                    alt=""
+                    className="h-full w-full object-cover"
+                    style={{
+                      objectPosition: post.thumbnailFocus || "50% 50%",
+                    }}
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-zinc-600">
+                    <ImageIcon className="h-6 w-6" />
+                  </div>
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
                 <h4 className="font-medium text-zinc-200">{post.title || "Bez naslova"}</h4>
                 <p className="text-sm text-zinc-500">
                   /blog/{post.slug}
@@ -965,10 +1042,11 @@ export default function AdminBlog() {
                     </>
                   )}
                   {" · "}
-                  {post.date}
+                  {formatBlogDate(post.date)}
+                  {post.time ? ` · ${post.time}` : " · —"}
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex shrink-0 gap-2">
                 <button
                   type="button"
                   onClick={() => openEdit(post)}
@@ -987,7 +1065,7 @@ export default function AdminBlog() {
                 </button>
               </div>
             </div>
-          ))
+            ))
         )}
       </div>
 
