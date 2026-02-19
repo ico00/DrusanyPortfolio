@@ -55,7 +55,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
     imagesByCategory: [] as { name: string; count: number; slug: string }[],
     pagesCount: 2,
     blogPostsCount: 0,
-    contentHealth: {
+      contentHealth: {
       imagesWithoutExif: 0,
       imagesWithoutSlug: 0,
       blogPostsWithoutFeaturedImage: 0,

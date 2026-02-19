@@ -20,6 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: metaTitle,
     description,
     keywords: keywords?.length ? keywords.join(", ") : undefined,
+    alternates: { canonical: "/contact" },
     openGraph: {
       title: metaTitle,
       description,
@@ -65,7 +66,7 @@ export default async function ContactPage() {
               <ArrowLeft className="h-4 w-4" />
               Back
             </Link>
-            <h1 className="theme-heading mb-12 font-light tracking-tight text-white md:text-5xl">
+            <h1 className="theme-heading-on-dark mb-12 font-light tracking-tight text-white">
               {title}
             </h1>
             <ProseContent

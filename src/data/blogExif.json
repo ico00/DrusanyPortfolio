@@ -418,5 +418,761 @@
     "exposure": "1/3200",
     "aperture": "f/1.4",
     "iso": 1000
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_003.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/640",
+    "aperture": "f/5.6",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_015.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/60",
+    "aperture": "f/16",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_018.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/60",
+    "aperture": "f/16",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_024.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/60",
+    "aperture": "f/16",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_026.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/60",
+    "aperture": "f/13",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_029.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/60",
+    "aperture": "f/13",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_032.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/60",
+    "aperture": "f/13",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_039.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/250",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_043.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/60",
+    "aperture": "f/20",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_045.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/60",
+    "aperture": "f/20",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_052.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "35.0 mm",
+    "exposure": "1/5000",
+    "aperture": "f/2",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_056.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "35.0 mm",
+    "exposure": "1/4000",
+    "aperture": "f/2",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_060.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "35.0 mm",
+    "exposure": "1/6400",
+    "aperture": "f/2",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_063.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/640",
+    "aperture": "f/5.6",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_066.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/500",
+    "aperture": "f/6.3",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_081.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1000",
+    "aperture": "f/5.6",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_083.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/5.6",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_088.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/5.6",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_089.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/5.6",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_094.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/500",
+    "aperture": "f/6.3",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_096.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/500",
+    "aperture": "f/5.6",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_099.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/5.6",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_100.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/5.6",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_102.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/5.6",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_110.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/500",
+    "aperture": "f/5.6",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_150.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_155.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_163.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_197.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_202.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/6.3",
+    "iso": 400
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_206.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/6.3",
+    "iso": 400
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_213.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/2000",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_243.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_246.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1600",
+    "aperture": "f/5.6",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_249.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/640",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_254.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/640",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_256.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/5.6",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_271.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "RF16mm F2.8 STM",
+    "exposure": "1/4000",
+    "aperture": "f/2.8",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_279.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "RF16mm F2.8 STM",
+    "exposure": "1/2000",
+    "aperture": "f/2.8",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_280.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/2000",
+    "aperture": "f/5",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_281.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/5.6",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_286.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_287.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/5.6",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_289.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/5.6",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_292.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_294.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1000",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_297.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1000",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_309.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1000",
+    "aperture": "f/5",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_311.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/5",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_322.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_340.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/250",
+    "aperture": "f/9",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_346.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/640",
+    "aperture": "f/6.3",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_350.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/640",
+    "aperture": "f/6.3",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_357.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/640",
+    "aperture": "f/6.3",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_358.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/640",
+    "aperture": "f/6.3",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_363.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/640",
+    "aperture": "f/6.3",
+    "iso": 200
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_373.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_375.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_379.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_386.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_390.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_392.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_396.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_399.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_401.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_406.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_415.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_417.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_421.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/400",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_425.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_430.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_443.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_446.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_452.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_459.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/500",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_461.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/500",
+    "aperture": "f/6.3",
+    "iso": 100
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_462.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/500",
+    "aperture": "f/6.3",
+    "iso": 125
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_468.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 320
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_470.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 320
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_472.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 320
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_474.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 320
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_479.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1000",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_481.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1000",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_482.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1000",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_488.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 125
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_501.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_503.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_508.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_511.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_513.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_516.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_518.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_520.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_521.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_525.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_531.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 250
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_538.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/2000",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_540.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/8000",
+    "aperture": "f/5.6",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_542.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/2000",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_543.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/4000",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_546.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/4000",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_548.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/4000",
+    "aperture": "f/5.6",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_549.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/4000",
+    "aperture": "f/5.6",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_550.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/8000",
+    "aperture": "f/5.6",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_552.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/8000",
+    "aperture": "f/5.6",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_554.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/1250",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_556.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/6.3",
+    "iso": 160
+  },
+  "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_560.webp": {
+    "camera": "Canon EOS R6m2",
+    "lens": "150-600mm F5-6.3 DG OS HSM | Contemporary 015",
+    "exposure": "1/800",
+    "aperture": "f/5.6",
+    "iso": 160
   }
 }

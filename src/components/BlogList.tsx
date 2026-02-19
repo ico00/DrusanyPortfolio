@@ -2,6 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { PenLine, Camera, Calendar, Tag } from "lucide-react";
 import {
   getDisplayCategories,
@@ -10,42 +11,62 @@ import {
   postHasCategory,
   formatBlogDate,
 } from "@/data/blogCategories";
+import { getPostsForPage } from "@/lib/pagination";
 import type { BlogPost } from "@/lib/blog";
+import Pagination from "./blog/Pagination";
 import ViewfinderOverlay from "./ViewfinderOverlay";
 
-export default function BlogList({ posts }: { posts: BlogPost[] }) {
+export default function BlogList({
+  posts,
+  currentPage,
+  totalPages,
+}: {
+  posts: BlogPost[];
+  currentPage: number;
+  totalPages: number;
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const kategorija = searchParams.get("kategorija") ?? undefined;
   const searchQuery = searchParams.get("q") ?? "";
 
-  let filteredPosts = kategorija
-    ? posts.filter((p) => postHasCategory(p, kategorija))
-    : posts;
+  const hasActiveFilter = Boolean(kategorija || searchQuery.trim());
 
-  if (searchQuery.trim()) {
-    const q = searchQuery.trim().toLowerCase();
-    filteredPosts = filteredPosts.filter((post) => {
-      const title = (post.title || "").toLowerCase();
-      const slug = (post.slug || "").toLowerCase();
-      const categoryLabels = getDisplayCategories(post)
-        .map((s) => getShortCategoryLabel(s).toLowerCase())
-        .join(" ");
-      const bodyText = (post.bodySearchText || "").toLowerCase();
-      return (
-        title.includes(q) ||
-        slug.includes(q) ||
-        categoryLabels.includes(q) ||
-        bodyText.includes(q)
-      );
+  let displayPosts: BlogPost[];
+  let showPagination = false;
+
+  if (hasActiveFilter) {
+    let filtered = kategorija
+      ? posts.filter((p) => postHasCategory(p, kategorija))
+      : posts;
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      filtered = filtered.filter((post) => {
+        const title = (post.title || "").toLowerCase();
+        const slug = (post.slug || "").toLowerCase();
+        const categoryLabels = getDisplayCategories(post)
+          .map((s) => getShortCategoryLabel(s).toLowerCase())
+          .join(" ");
+        const bodyText = (post.bodySearchText || "").toLowerCase();
+        return (
+          title.includes(q) ||
+          slug.includes(q) ||
+          categoryLabels.includes(q) ||
+          bodyText.includes(q)
+        );
+      });
+    }
+
+    displayPosts = [...filtered].sort((a, b) => {
+      const da = a.date + (a.time || "00:00");
+      const db = b.date + (b.time || "00:00");
+      return db.localeCompare(da);
     });
+  } else {
+    displayPosts = getPostsForPage(posts, currentPage);
+    showPagination = totalPages > 1;
   }
-
-  filteredPosts = [...filteredPosts].sort((a, b) => {
-    const da = a.date + (a.time || "00:00");
-    const db = b.date + (b.time || "00:00");
-    return db.localeCompare(da);
-  });
 
   if (posts.length === 0) {
     return (
@@ -53,19 +74,35 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
     );
   }
 
+  const filterKey = `${kategorija ?? "all"}_${searchQuery.trim()}`;
+
   return (
-    <>
-      {filteredPosts.length === 0 ? (
-        <p className="mt-8 text-lg leading-relaxed text-zinc-600">
+    <AnimatePresence mode="wait">
+      {displayPosts.length === 0 ? (
+        <motion.p
+          key={filterKey}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="mt-8 text-lg leading-relaxed text-zinc-600"
+        >
           {searchQuery.trim()
             ? `Nema rezultata za „${searchQuery.trim()}“.`
             : kategorija
               ? `Nema članaka u kategoriji „${getBlogCategoryLabel(kategorija)}“.`
               : "Uskoro."}
-        </p>
+        </motion.p>
       ) : (
-        <ul className="mt-12 space-y-8">
-          {filteredPosts.map((post) => (
+        <motion.div
+          key={filterKey}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+        >
+          <ul className="mt-12 space-y-8">
+          {displayPosts.map((post) => (
             <li key={post.id}>
               <article className="group overflow-hidden rounded-lg border border-zinc-200/60 transition-colors hover:border-zinc-300">
                 <Link href={`/blog/${post.slug}`} className="block">
@@ -111,7 +148,7 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              router.push(`/blog?kategorija=${encodeURIComponent(slug)}`);
+                              router.push(`/blog?kategorija=${encodeURIComponent(slug)}`, { scroll: false });
                             }}
                             className="inline-block border-b border-transparent pb-0.5 text-zinc-300 transition-[color,border-color] duration-200 hover:border-white hover:text-white"
                           >
@@ -129,7 +166,11 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
             </li>
           ))}
         </ul>
+        {showPagination && (
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
+        )}
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 }

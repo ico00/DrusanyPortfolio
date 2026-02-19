@@ -42,6 +42,7 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
         <li>
           <Link
             href="/blog"
+            scroll={false}
             className={`block rounded-md px-3 py-2 text-sm transition-colors ${
               !activeSlug
                 ? "bg-zinc-100 font-medium text-zinc-900"
@@ -55,6 +56,7 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
           <li key={slug}>
             <Link
               href={`/blog?kategorija=${encodeURIComponent(slug)}`}
+              scroll={false}
               className={`block rounded-md px-3 py-2 text-sm transition-colors ${
                 activeSlug === slug
                   ? "bg-zinc-100 font-medium text-zinc-900"

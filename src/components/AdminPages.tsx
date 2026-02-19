@@ -26,15 +26,27 @@ interface ContactPageContent extends PageContent {
   formspreeEndpoint?: string;
 }
 
+interface BlogPageContent {
+  title: string;
+  seo?: SeoContent;
+}
+
+interface HomePageContent {
+  title: string;
+  seo?: SeoContent;
+}
+
 interface PagesData {
   about: AboutPageContent;
   contact: ContactPageContent;
+  blog?: BlogPageContent;
+  home?: HomePageContent;
 }
 
 const META_DESCRIPTION_MAX = 160;
 
 interface AdminPagesProps {
-  page: "about" | "contact";
+  page: "about" | "contact" | "blog" | "home";
 }
 
 export default function AdminPages({ page }: AdminPagesProps) {
@@ -50,6 +62,10 @@ export default function AdminPages({ page }: AdminPagesProps) {
   const [contactFormspree, setContactFormspree] = useState("");
   const [aboutSeo, setAboutSeo] = useState<SeoContent>({ metaTitle: "", metaDescription: "", keywords: "" });
   const [contactSeo, setContactSeo] = useState<SeoContent>({ metaTitle: "", metaDescription: "", keywords: "" });
+  const [blogTitle, setBlogTitle] = useState("");
+  const [blogSeo, setBlogSeo] = useState<SeoContent>({ metaTitle: "", metaDescription: "", keywords: "" });
+  const [homeTitle, setHomeTitle] = useState("");
+  const [homeSeo, setHomeSeo] = useState<SeoContent>({ metaTitle: "", metaDescription: "", keywords: "" });
   const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   const fetchPages = useCallback(async () => {
@@ -67,6 +83,10 @@ export default function AdminPages({ page }: AdminPagesProps) {
         setContactFormspree(data.contact?.formspreeEndpoint ?? "");
         setAboutSeo(data.about?.seo ?? { metaTitle: "", metaDescription: "", keywords: "" });
         setContactSeo(data.contact?.seo ?? { metaTitle: "", metaDescription: "", keywords: "" });
+        setBlogTitle(data.blog?.title ?? "Blog");
+        setBlogSeo(data.blog?.seo ?? { metaTitle: "", metaDescription: "", keywords: "" });
+        setHomeTitle(data.home?.title ?? "Drusany | Photography");
+        setHomeSeo(data.home?.seo ?? { metaTitle: "", metaDescription: "", keywords: "" });
       }
     } catch {
       setPages({ about: { title: "About", html: "" }, contact: { title: "Contact", html: "" } });
@@ -104,6 +124,14 @@ export default function AdminPages({ page }: AdminPagesProps) {
             formspreeEndpoint: contactFormspree || undefined,
             seo: contactSeo,
           },
+          blog: {
+            title: blogTitle,
+            seo: blogSeo,
+          },
+          home: {
+            title: homeTitle,
+            seo: homeSeo,
+          },
         }),
       });
       if (!res.ok) throw new Error("Failed to save");
@@ -123,16 +151,18 @@ export default function AdminPages({ page }: AdminPagesProps) {
     );
   }
 
-  const title = page === "about" ? aboutTitle : contactTitle;
-  const setTitle = page === "about" ? setAboutTitle : setContactTitle;
+  const title = page === "about" ? aboutTitle : page === "contact" ? contactTitle : page === "blog" ? blogTitle : homeTitle;
+  const setTitle = page === "about" ? setAboutTitle : page === "contact" ? setContactTitle : page === "blog" ? setBlogTitle : setHomeTitle;
   const content = page === "about" ? aboutHtml : contactHtml;
   const setContent = page === "about" ? setAboutHtml : setContactHtml;
-  const seo = page === "about" ? aboutSeo : contactSeo;
-  const setSeo = page === "about" ? setAboutSeo : setContactSeo;
+  const seo = page === "about" ? aboutSeo : page === "contact" ? contactSeo : page === "blog" ? blogSeo : homeSeo;
+  const setSeo = page === "about" ? setAboutSeo : page === "contact" ? setContactSeo : page === "blog" ? setBlogSeo : setHomeSeo;
+  const isBlogPage = page === "blog";
+  const isHomePage = page === "home";
 
   return (
     <div className="space-y-14">
-      {page === "contact" && (
+      {page === "contact" && !isBlogPage && !isHomePage && (
         <>
           <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
             <label className="mb-2 block text-sm font-medium text-zinc-400">
@@ -167,7 +197,7 @@ export default function AdminPages({ page }: AdminPagesProps) {
         </>
       )}
 
-      {page === "about" && (
+      {page === "about" && !isBlogPage && !isHomePage && (
         <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
           <label className="mb-2 block text-sm font-medium text-zinc-400">
             Citat na slici (preko lijevog panela)
@@ -193,7 +223,7 @@ export default function AdminPages({ page }: AdminPagesProps) {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder={page === "about" ? "About" : "Contact"}
+          placeholder={page === "about" ? "About" : page === "contact" ? "Contact" : page === "blog" ? "Blog" : "Drusany | Photography"}
           className="w-full rounded-lg border border-zinc-600 bg-zinc-700/50 px-4 py-3 text-xl font-semibold tracking-tight text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
         />
       </div>
@@ -256,17 +286,31 @@ export default function AdminPages({ page }: AdminPagesProps) {
         </div>
       </div>
 
-      <div>
-        <label className="mb-2 block text-sm text-zinc-400">
-          {page === "about" ? "Sadržaj About stranice" : "Uvodni tekst iznad kontakt forme"}
-        </label>
-        <BlockNoteEditor
-          key={page}
-          content={content}
-          onChange={setContent}
-          minHeight="300px"
-        />
-      </div>
+      {!isBlogPage && !isHomePage && (
+        <div>
+          <label className="mb-2 block text-sm text-zinc-400">
+            {page === "about" ? "Sadržaj About stranice" : "Uvodni tekst iznad kontakt forme"}
+          </label>
+          <BlockNoteEditor
+            key={page}
+            content={content}
+            onChange={setContent}
+            minHeight="300px"
+          />
+        </div>
+      )}
+
+      {isBlogPage && (
+        <p className="rounded-lg bg-zinc-800/50 py-4 text-center text-sm text-zinc-500">
+          SEO za glavnu blog stranicu (/blog) – popis svih članaka. Sadržaj se generira automatski.
+        </p>
+      )}
+
+      {isHomePage && (
+        <p className="rounded-lg bg-zinc-800/50 py-4 text-center text-sm text-zinc-500">
+          SEO za početnu stranicu (/) – hero slider i galerija. Sadržaj se generira automatski.
+        </p>
+      )}
 
       <div className="flex justify-end">
         <button

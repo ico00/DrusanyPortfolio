@@ -34,6 +34,8 @@ export async function PUT(request: Request) {
     const body = (await request.json()) as {
       about?: { title?: string; html?: string; quote?: string; seo?: { metaTitle?: string; metaDescription?: string; keywords?: string } };
       contact?: { title?: string; html?: string; email?: string; formspreeEndpoint?: string; seo?: { metaTitle?: string; metaDescription?: string; keywords?: string } };
+      blog?: { title?: string; seo?: { metaTitle?: string; metaDescription?: string; keywords?: string } };
+      home?: { title?: string; seo?: { metaTitle?: string; metaDescription?: string; keywords?: string } };
     };
     const pages = await withLock(PAGES_PATH, async () => {
       const p = await getPages();
@@ -64,6 +66,32 @@ export async function PUT(request: Request) {
                 keywords: body.contact.seo.keywords?.trim() ?? p.contact.seo?.keywords ?? "",
               }
             : p.contact.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
+        };
+      }
+      if (body.blog) {
+        const blog = p.blog ?? { title: "Blog", seo: { metaTitle: "", metaDescription: "", keywords: "" } };
+        p.blog = {
+          title: body.blog.title?.trim() ?? blog.title,
+          seo: body.blog.seo
+            ? {
+                metaTitle: body.blog.seo.metaTitle?.trim() ?? blog.seo?.metaTitle ?? "",
+                metaDescription: body.blog.seo.metaDescription?.trim() ?? blog.seo?.metaDescription ?? "",
+                keywords: body.blog.seo.keywords?.trim() ?? blog.seo?.keywords ?? "",
+              }
+            : blog.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
+        };
+      }
+      if (body.home) {
+        const home = p.home ?? { title: "Drusany | Photography", seo: { metaTitle: "", metaDescription: "", keywords: "" } };
+        p.home = {
+          title: body.home.title?.trim() ?? home.title,
+          seo: body.home.seo
+            ? {
+                metaTitle: body.home.seo.metaTitle?.trim() ?? home.seo?.metaTitle ?? "",
+                metaDescription: body.home.seo.metaDescription?.trim() ?? home.seo?.metaDescription ?? "",
+                keywords: body.home.seo.keywords?.trim() ?? home.seo?.keywords ?? "",
+              }
+            : home.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
         };
       }
       await savePages(p);

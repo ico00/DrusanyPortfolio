@@ -67,7 +67,7 @@ export default function Header() {
     ? "text-white/90 hover:text-white"
     : "text-zinc-600 hover:text-zinc-900";
   const navLinkClass = (active: boolean) =>
-    `inline-block pb-1 text-sm font-extralight tracking-widest transition-[color,border-color] duration-200 ${textClass} ${
+    `inline-block pb-1 text-sm font-normal tracking-widest transition-[color,border-color] duration-200 ${textClass} ${
       active
         ? isHeroMode
           ? "border-b border-white"
@@ -128,7 +128,7 @@ export default function Header() {
           >
             <button
               type="button"
-              className={`inline-flex items-center gap-1 pb-1 text-sm font-extralight tracking-widest transition-[color,border-color] duration-200 ${textClass} ${
+              className={`inline-flex items-center gap-1 pb-1 text-sm font-normal tracking-widest transition-[color,border-color] duration-200 ${textClass} ${
                 isPortfolio
                   ? isHeroMode
                     ? "border-b border-white"
@@ -155,7 +155,7 @@ export default function Header() {
                       <Link
                         key={cat.slug}
                         href={`/?category=${cat.slug}#gallery`}
-                        className={`block border-l-2 px-4 py-2 text-sm font-extralight tracking-wider transition-colors ${dropdownItemClass} ${
+                        className={`block border-l-2 px-4 py-2 text-sm font-normal tracking-wider transition-colors ${dropdownItemClass} ${
                           isActive
                             ? isHeroMode
                               ? "border-white"
@@ -257,14 +257,14 @@ export default function Header() {
             <Link
               href="/"
               onClick={() => setMobileOpen(false)}
-              className={`block py-1 pl-3 text-sm font-extralight tracking-widest transition-colors border-l-2 ${
+              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
                 isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
               } ${isHome ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
             >
               Home
             </Link>
             <div className="flex flex-col gap-2">
-              <span className={`text-sm font-extralight tracking-widest ${isHeroMode ? "text-white/60" : "text-zinc-400"}`}>Portfolio</span>
+              <span className={`text-sm font-normal tracking-widest ${isHeroMode ? "text-white/60" : "text-zinc-400"}`}>Portfolio</span>
               {PORTFOLIO_CATEGORIES.map((cat) => {
                 const isActive = isPortfolio && category?.toLowerCase() === cat.slug;
                 return (
@@ -272,7 +272,7 @@ export default function Header() {
                     key={cat.slug}
                     href={`/?category=${cat.slug}#gallery`}
                     onClick={() => setMobileOpen(false)}
-                    className={`block py-1 pl-6 text-sm font-extralight tracking-wider transition-colors border-l-2 ${
+                    className={`block py-1 pl-6 text-sm font-normal tracking-wider transition-colors border-l-2 ${
                       isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
                     } ${isActive ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
                   >
@@ -284,7 +284,7 @@ export default function Header() {
             <Link
               href="/about"
               onClick={() => setMobileOpen(false)}
-              className={`block py-1 pl-3 text-sm font-extralight tracking-widest transition-colors border-l-2 ${
+              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
                 isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
               } ${isAbout ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
             >
@@ -293,7 +293,7 @@ export default function Header() {
             <Link
               href="/blog"
               onClick={() => setMobileOpen(false)}
-              className={`block py-1 pl-3 text-sm font-extralight tracking-widest transition-colors border-l-2 ${
+              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
                 isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
               } ${isBlog ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
             >
@@ -302,7 +302,7 @@ export default function Header() {
             <Link
               href="/contact"
               onClick={() => setMobileOpen(false)}
-              className={`block py-1 pl-3 text-sm font-extralight tracking-widest transition-colors border-l-2 ${
+              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
                 isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
               } ${isContact ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
             >

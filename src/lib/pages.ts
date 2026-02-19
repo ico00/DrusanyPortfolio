@@ -23,9 +23,23 @@ export interface ContactPageContent extends PageContent {
   formspreeEndpoint?: string;
 }
 
+/** Glavna blog stranica (/blog) – samo naslov i SEO, bez HTML sadržaja */
+export interface BlogPageContent {
+  title: string;
+  seo?: SeoContent;
+}
+
+/** Početna stranica (/) – samo naslov i SEO */
+export interface HomePageContent {
+  title: string;
+  seo?: SeoContent;
+}
+
 export interface PagesData {
   about: AboutPageContent;
   contact: ContactPageContent;
+  blog?: BlogPageContent;
+  home?: HomePageContent;
 }
 
 const DEFAULT_PAGES: PagesData = {
@@ -40,6 +54,14 @@ const DEFAULT_PAGES: PagesData = {
     html: "<p>For bookings and collaboration:</p>",
     email: "hello@example.com",
     formspreeEndpoint: undefined,
+    seo: { metaTitle: "", metaDescription: "", keywords: "" },
+  },
+  blog: {
+    title: "Blog",
+    seo: { metaTitle: "", metaDescription: "", keywords: "" },
+  },
+  home: {
+    title: "Drusany | Photography",
     seo: { metaTitle: "", metaDescription: "", keywords: "" },
   },
 };
@@ -99,14 +121,47 @@ function normalizeAboutPage(
   };
 }
 
+function normalizeBlogPage(
+  raw: Partial<BlogPageContent> | null | undefined,
+  defaultPage: BlogPageContent
+): BlogPageContent {
+  const title = raw?.title?.trim() ?? defaultPage.title;
+  const seo: SeoContent = {
+    metaTitle: raw?.seo?.metaTitle?.trim() ?? "",
+    metaDescription: raw?.seo?.metaDescription?.trim() ?? "",
+    keywords: raw?.seo?.keywords?.trim() ?? "",
+  };
+  return { title, seo };
+}
+
+function normalizeHomePage(
+  raw: Partial<HomePageContent> | null | undefined,
+  defaultPage: HomePageContent
+): HomePageContent {
+  const title = raw?.title?.trim() ?? defaultPage.title;
+  const seo: SeoContent = {
+    metaTitle: raw?.seo?.metaTitle?.trim() ?? "",
+    metaDescription: raw?.seo?.metaDescription?.trim() ?? "",
+    keywords: raw?.seo?.keywords?.trim() ?? "",
+  };
+  return { title, seo };
+}
+
 export async function getPages(): Promise<PagesData> {
   try {
     const pagesPath = path.join(process.cwd(), "src", "data", "pages.json");
     const raw = await readFile(pagesPath, "utf-8");
-    const data = JSON.parse(raw) as { about?: Partial<PageContent>; contact?: Partial<PageContent> };
+    const data = JSON.parse(raw) as {
+      about?: Partial<PageContent>;
+      contact?: Partial<PageContent>;
+      blog?: Partial<BlogPageContent>;
+      home?: Partial<HomePageContent>;
+    };
     return {
       about: normalizeAboutPage(data.about, DEFAULT_PAGES.about),
       contact: normalizeContactPage(data.contact, DEFAULT_PAGES.contact),
+      blog: normalizeBlogPage(data.blog, DEFAULT_PAGES.blog!),
+      home: normalizeHomePage(data.home, DEFAULT_PAGES.home!),
     };
   } catch {
     return DEFAULT_PAGES;

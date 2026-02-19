@@ -17,6 +17,8 @@ function getCopyrightYear(): string {
 
 const SWIPE_THRESHOLD = 50;
 const BREAKPOINTS = [640, 768, 1024] as const;
+const INITIAL_COUNT = 24;
+const LOAD_MORE_BATCH = 24;
 
 function useColumnCount(): number {
   const [cols, setCols] = useState(4);
@@ -62,6 +64,40 @@ export default function BlogGallery({ images }: BlogGalleryProps) {
   const [showCopyright, setShowCopyright] = useState(false);
   const [showExif, setShowExif] = useState(false);
   const touchStartX = useRef<number>(0);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  const needsProgressive = images.length > INITIAL_COUNT;
+  const [visibleCount, setVisibleCount] = useState(() =>
+    needsProgressive ? INITIAL_COUNT : images.length
+  );
+  const visibleImages = useMemo(
+    () => images.slice(0, visibleCount),
+    [images, visibleCount]
+  );
+  const hasMore = visibleCount < images.length;
+
+  useEffect(() => {
+    setVisibleCount(
+      images.length > INITIAL_COUNT ? INITIAL_COUNT : images.length
+    );
+  }, [images.length, images[0]?.src]);
+
+  useEffect(() => {
+    if (!hasMore || !loadMoreRef.current) return;
+    const el = loadMoreRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleCount((n) => Math.min(n + LOAD_MORE_BATCH, images.length));
+          }
+        });
+      },
+      { rootMargin: "200px", threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, images.length]);
 
   const imageColumns = useMemo(() => {
     const cols: (BlogGalleryImage & { index: number })[][] = Array.from(
@@ -69,14 +105,14 @@ export default function BlogGallery({ images }: BlogGalleryProps) {
       () => []
     );
     const heights: number[] = Array.from({ length: columnCount }, () => 0);
-    images.forEach((img, i) => {
+    visibleImages.forEach((img, i) => {
       const aspectRatio = img.width > 0 ? img.height / img.width : 1;
       const shortestIdx = heights.indexOf(Math.min(...heights));
       cols[shortestIdx].push({ ...img, index: i });
       heights[shortestIdx] += aspectRatio;
     });
     return cols;
-  }, [images, columnCount]);
+  }, [visibleImages, columnCount]);
 
   const lightboxImage =
     lightboxIndex !== null ? images[lightboxIndex] ?? null : null;
@@ -207,6 +243,19 @@ export default function BlogGallery({ images }: BlogGalleryProps) {
           </div>
         ))}
       </motion.div>
+
+      {hasMore && (
+        <div
+          ref={loadMoreRef}
+          className="flex min-h-[80px] items-center justify-center py-6"
+          aria-live="polite"
+          aria-label={`Učitano ${visibleCount} od ${images.length} slika`}
+        >
+          <span className="text-xs text-zinc-400">
+            {visibleCount} / {images.length}
+          </span>
+        </div>
+      )}
 
       <AnimatePresence>
         {lightboxImage && (

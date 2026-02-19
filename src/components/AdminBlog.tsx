@@ -330,7 +330,7 @@ export default function AdminBlog() {
   const uploadGallerySingle = async (
     file: File,
     opts: { overwrite?: boolean; addWithSuffix?: boolean; index?: number } = {}
-  ): Promise<{ ok: boolean; duplicate?: boolean; data?: unknown }> => {
+  ): Promise<{ ok: boolean; duplicate?: boolean; rateLimited?: boolean; data?: unknown }> => {
     const fd = new FormData();
     fd.append("file", file);
     fd.append("originalFilename", file.name || "");
@@ -343,6 +343,7 @@ export default function AdminBlog() {
     const res = await fetch("/api/blog-upload", { method: "POST", body: fd });
     const data = await res.json();
     if (res.ok) return { ok: true, data };
+    if (res.status === 429) return { ok: false, rateLimited: true, data };
     if (res.status === 409 && data.error === "Duplicate") return { ok: false, duplicate: true, data };
     return { ok: false, data };
   };
@@ -368,11 +369,17 @@ export default function AdminBlog() {
     }
     setGalleryUploadProgress({ current: 0, total: galleryFiles.length });
     const newUrls: string[] = [];
+    let rateLimitedAt: number | null = null;
     try {
       for (let i = 0; i < galleryFiles.length; i++) {
         setGalleryUploadProgress({ current: i + 1, total: galleryFiles.length });
         const file = galleryFiles[i];
         let result = await uploadGallerySingle(file, { index: i });
+
+        if (result.rateLimited) {
+          rateLimitedAt = i;
+          break;
+        }
 
         if (result.duplicate && result.data) {
           const d = result.data as { existingSrc?: string; filename?: string; existingSize?: number };
@@ -394,6 +401,10 @@ export default function AdminBlog() {
           } else if (choice === "add") {
             result = await uploadGallerySingle(file, { addWithSuffix: true, index: i });
           }
+          if (result.rateLimited) {
+            rateLimitedAt = i;
+            break;
+          }
         }
 
         if (result.ok && result.data) {
@@ -412,28 +423,41 @@ export default function AdminBlog() {
             : `${newUrls.length} slika dodano u galeriju.`
         );
       }
-      setGalleryFiles([]);
+      if (rateLimitedAt !== null) {
+        const remaining = galleryFiles.length - rateLimitedAt;
+        setGalleryFiles(galleryFiles.slice(rateLimitedAt));
+        showToast(
+          "error",
+          `Rate limit – ${newUrls.length} od ${galleryFiles.length} uploadano. Pričekajte minutu i ponovno kliknite upload za preostalih ${remaining} slika.`
+        );
+      } else {
+        setGalleryFiles([]);
+      }
     } catch (err) {
       showToast("error", err instanceof Error ? err.message : "Upload nije uspio.");
+      setGalleryFiles([]);
     } finally {
       setGalleryUploadProgress(null);
     }
   };
 
-  const deleteBlogGalleryFile = async (url: string) => {
+  const deleteBlogGalleryFile = async (url: string): Promise<boolean> => {
     try {
-      await fetch("/api/blog-delete-file", {
+      const res = await fetch("/api/blog-delete-file", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url }),
       });
+      return res.ok;
     } catch {
-      // Ignoriraj – datoteka možda već ne postoji
+      return false;
     }
   };
 
   const removeGalleryImage = (url: string) => {
-    deleteBlogGalleryFile(url);
+    void deleteBlogGalleryFile(url).then((ok) => {
+      if (!ok) showToast("error", "Datoteka nije obrisana s diska – pokušaj ponovno.");
+    });
     setForm((f) => {
       const nextMeta = { ...f.galleryMetadata };
       delete nextMeta[url];
@@ -480,21 +504,27 @@ export default function AdminBlog() {
 
   const deselectAllGallery = () => setSelectedGalleryUrls(new Set());
 
-  const handleBulkDeleteGallery = () => {
+  const handleBulkDeleteGallery = async () => {
     if (selectedGalleryUrls.size === 0) return;
     if (!confirm(`Obrisati ${selectedGalleryUrls.size} slik${selectedGalleryUrls.size === 1 ? "u" : "a"}?`)) return;
-    selectedGalleryUrls.forEach((url) => deleteBlogGalleryFile(url));
+    const urls = Array.from(selectedGalleryUrls);
+    const urlSet = new Set(urls);
     setForm((f) => {
       const nextMeta = { ...f.galleryMetadata };
-      selectedGalleryUrls.forEach((u) => delete nextMeta[u]);
+      urls.forEach((u) => delete nextMeta[u]);
       return {
         ...f,
-        gallery: f.gallery.filter((u) => !selectedGalleryUrls.has(u)),
+        gallery: f.gallery.filter((u) => !urlSet.has(u)),
         galleryMetadata: nextMeta,
       };
     });
     setSelectedGalleryUrls(new Set());
-    showToast("success", "Slike uklonjene iz galerije.");
+    let failed = 0;
+    for (const url of urls) {
+      const ok = await deleteBlogGalleryFile(url);
+      if (!ok) failed++;
+    }
+    showToast(failed > 0 ? "error" : "success", failed > 0 ? `${failed} datoteka nije obrisano s diska.` : "Slike uklonjene iz galerije.");
   };
 
   const handleBulkApplyMetadata = () => {

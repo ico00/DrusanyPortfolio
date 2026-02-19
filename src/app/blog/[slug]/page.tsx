@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import ProseContent from "@/components/ProseContent";
 import BlogGallery from "@/components/BlogGallery";
 import BlogSidebar from "@/components/blog/BlogSidebar";
+import ScrollToTop from "@/components/blog/ScrollToTop";
 import ViewfinderOverlay from "@/components/ViewfinderOverlay";
 import { getBlog, getBlogPost } from "@/lib/blog";
 import {
@@ -37,6 +38,7 @@ export async function generateMetadata({
     title,
     description,
     keywords: keywords?.length ? keywords.join(", ") : undefined,
+    alternates: { canonical: `/blog/${slug}` },
     openGraph: {
       title,
       description,
@@ -168,6 +170,7 @@ export default async function BlogPostPage({
           </aside>
         </div>
       </div>
+      <ScrollToTop />
     </div>
   );
 }

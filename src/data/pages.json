@@ -1,12 +1,12 @@
 {
   "about": {
     "title": "About me",
-    "html": "<blockquote>Now this is a&nbsp;story all about how. My life got flipped turned upside down...</blockquote><p data-text-color=\"rgb(94, 100, 106)\" style=\"color: rgb(94, 100, 106);\">Surrounded with photography since day one, thanks to my father, I suppose it was my destiny to crack one day and take the camera in my hands. All these cameras, photo paper all over the place, film rolls in fridge, small darkroom lab in the bathroom…well I had no choice. But I cracked when digital photography was a thing so in 2005 little compact Olympus started the photo fire in me. Two years after I was getting my first DSLR – Canon 20D and after that Pandora’s Box couldn’t be closed.</p><p data-text-color=\"rgb(94, 100, 106)\" style=\"color: rgb(94, 100, 106);\">In 2006 I started my first photo blog and since then I haven’t stopped posting.</p><p data-text-color=\"rgb(94, 100, 106)\" style=\"color: rgb(94, 100, 106);\">I can’t put myself in some category or type of photographer. I just like everything photography offers, from sport, concerts, nature, animals, plane spotting, street photography, architecture…</p><p data-text-color=\"rgb(94, 100, 106)\" style=\"color: rgb(94, 100, 106);\">So during all my photo years I have some nice collaborations with agencies and news portals, I’ve been a member of Croatian Sports Journalist Association (CSJA) and AIPS (International Sports Press Association), shot some major sports events like UEFA Champions League, EHF Euro 2018, Snow Queen Trophy, WRC, FIFA World Cup qualifiers, KHL, IAAF World Challenge Meeting but also a lot of minor events.</p><p data-text-color=\"rgb(94, 100, 106)\" style=\"color: rgb(94, 100, 106);\">I was standing in photo pit while in front of me were legends like Deep Purple, James Brown, The Pogues, Depeche Mode, Joe Cocker, Leonard Cohen, The Dubliners, Skunk Anansie, Whitesnake, Texas, Flogging Molly, Dropkick Murphys and many more.</p><p></p>",
+    "html": "<blockquote>Now this is a story all about how. My life got flipped turned upside down...</blockquote><p>Surrounded with photography since day one, thanks to my father, I suppose it was my destiny to crack one day and take the camera in my hands. All these cameras, photo paper all over the place, film rolls in fridge, small darkroom lab in the bathroom…well I had no choice. But I cracked when digital photography was a thing so in 2005 little compact Olympus started the photo fire in me. Two years after I was getting my first DSLR – Canon 20D and after that Pandora’s Box couldn’t be closed.</p><p>In 2006 I started my first photo blog and since then I haven’t stopped posting.</p><p>I can’t put myself in some category or type of photographer. I just like everything photography offers, from sport, concerts, nature, animals, plane spotting, street photography, architecture…</p><p>So during all my photo years I have some nice collaborations with agencies and news portals, I’ve been a member of Croatian Sports Journalist Association (CSJA) and AIPS (International Sports Press Association), shot some major sports events like UEFA Champions League, EHF Euro 2018, Snow Queen Trophy, WRC, FIFA World Cup qualifiers, KHL, IAAF World Challenge Meeting but also a lot of minor events.</p><p>I was standing in photo pit while in front of me were legends like Deep Purple, James Brown, The Pogues, Depeche Mode, Joe Cocker, Leonard Cohen, The Dubliners, Skunk Anansie, Whitesnake, Texas, Flogging Molly, Dropkick Murphys and many more.</p><p></p>",
     "quote": "Please allow me to introduce myself I'm a photographer of wealth and taste. I've been around for a long, long years, Took thousands photos of everything",
     "seo": {
-      "metaTitle": "",
-      "metaDescription": "",
-      "keywords": ""
+      "metaTitle": "Ivica Drusany Photographer Zagreb | About",
+      "metaDescription": "Ivica Drusany is a photographer based in Zagreb, Croatia capturing a wide range of subjects with a particular passion for sports and concert photography.",
+      "keywords": "ivica drusany, photographer zagreb, croatia photographer, concert photographer zagreb, sports photographer zagreb"
     }
   },
   "contact": {
@@ -16,8 +16,24 @@
     "formspreeEndpoint": "https://formspree.io/f/mnjbvnag",
     "seo": {
       "metaTitle": "",
-      "metaDescription": "",
-      "keywords": ""
+      "metaDescription": "Contact Photographer Zagreb | Ivica Drusany",
+      "keywords": "ivica drusany, photographer, zagreb, croatia, contact, form, colaboration, job,"
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "seo": {
+      "metaTitle": "Fotografski blog | Ivica Drusany",
+      "metaDescription": "Fotografski blog s foto pričama, iskustvima, testovima, reportažama s koncerata, sportskih događaja i svakodnevnih scena koje bilježi Ivica Drusany.",
+      "keywords": "fotografski blog, foto priče, foto reportaže, koncertna fotografija, sportska fotografija, fotograf Zagreb, ivica drusany, savjeti,"
+    }
+  },
+  "home": {
+    "title": "Ivica Drusany | Photography",
+    "seo": {
+      "metaTitle": "Ivica Drusany Photography | Zagreb, Croatia",
+      "metaDescription": "Photography portfolio of Ivica Drusany featuring concert, sports, interiors, animals, food & drink and urban photography captured in Zagreb, Croatia and beyond.",
+      "keywords": "ivica drusany, photography portfolio, photographer zagreb, concert photography, sports photography, interiors photography, animals photography, food & drinks photography,"
     }
   }
 }

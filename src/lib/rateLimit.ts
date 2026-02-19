@@ -7,7 +7,7 @@
  */
 
 const WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS) || 60 * 1000; // 1 min
-const MAX_REQUESTS = Number(process.env.RATE_LIMIT_MAX_REQUESTS) || 60; // 60 req/min po IP
+const MAX_REQUESTS = Number(process.env.RATE_LIMIT_MAX_REQUESTS) || 200; // 200 req/min (bulk upload 100+ slika)
 
 type Entry = { count: number; resetAt: number };
 const store = new Map<string, Entry>();

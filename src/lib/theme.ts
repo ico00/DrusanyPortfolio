@@ -13,6 +13,7 @@ export interface ThemeElement {
 export interface ThemeConfig {
   title: ThemeElement;
   heading: ThemeElement;
+  headingOnDark: ThemeElement;
   body: ThemeElement;
   quote: ThemeElement;
   nav: ThemeElement;
@@ -22,11 +23,13 @@ export interface ThemeConfig {
 const THEME_PATH = path.join(process.cwd(), "src", "data", "theme.json");
 
 export async function getTheme(): Promise<ThemeConfig> {
+  const defaults = getDefaultTheme();
   try {
     const raw = await readFile(THEME_PATH, "utf-8");
-    return JSON.parse(raw) as ThemeConfig;
+    const data = JSON.parse(raw) as Partial<ThemeConfig>;
+    return { ...defaults, ...data } as ThemeConfig;
   } catch {
-    return getDefaultTheme();
+    return defaults;
   }
 }
 
@@ -39,8 +42,13 @@ export function getDefaultTheme(): ThemeConfig {
     },
     heading: {
       fontFamily: "serif",
-      fontSize: "1.5rem",
+      fontSize: "clamp(1.75rem, 4vw, 3rem)",
       color: "#18181b",
+    },
+    headingOnDark: {
+      fontFamily: "serif",
+      fontSize: "clamp(1.75rem, 4vw, 3rem)",
+      color: "#ffffff",
     },
     body: {
       fontFamily: "sans",
@@ -74,7 +82,7 @@ export function themeToCssVariables(theme: ThemeConfig): string {
     vars.push(`${prefix}-size: ${el.fontSize};`);
     vars.push(`${prefix}-color: ${el.color};`);
   }
-  return `:root { ${vars.join(" ")} }`;
+  return `body { ${vars.join(" ")} }`;
 }
 
 export async function saveTheme(theme: ThemeConfig): Promise<void> {

@@ -31,8 +31,15 @@ html {
 /* Standalone heading (izvan prose) – font, veličina, boja */
 .theme-heading {
   font-family: var(--theme-heading-font, var(--font-serif));
-  font-size: var(--theme-heading-size, 1.5rem);
+  font-size: var(--theme-heading-size, clamp(1.75rem, 4vw, 3rem));
   color: var(--theme-heading-color, #18181b);
+}
+/* Naslov na tamnoj pozadini (About, Contact) – specifičnost da nadjača Tailwind reset */
+h1.theme-heading-on-dark,
+h2.theme-heading-on-dark {
+  font-family: var(--theme-headingOnDark-font, var(--font-serif));
+  font-size: var(--theme-headingOnDark-size, clamp(1.75rem, 4vw, 3rem));
+  color: var(--theme-headingOnDark-color, #ffffff);
 }
 .prose p, .prose li, .prose-invert p, .prose-invert li {
   font-family: var(--theme-body-font, var(--font-sans));

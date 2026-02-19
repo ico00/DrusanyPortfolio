@@ -9,6 +9,7 @@ import type { ThemeConfig, ThemeElement, ThemeFontFamily } from "@/lib/theme";
 const ELEMENT_LABELS: Record<keyof ThemeConfig, string> = {
   title: "Hero naslov",
   heading: "Naslovi (h1–h6)",
+  headingOnDark: "Naslov na tamnoj pozadini (About, Contact)",
   body: "Body tekst",
   quote: "Citat (blockquote)",
   nav: "Navigacija",
@@ -18,6 +19,7 @@ const ELEMENT_LABELS: Record<keyof ThemeConfig, string> = {
 const PREVIEW_TEXT: Record<keyof ThemeConfig, string> = {
   title: "Hero naslov",
   heading: "Naslov stranice",
+  headingOnDark: "Naslov stranice",
   body: "Ovo je primjer body teksta koji se prikazuje na stranici.",
   quote: "Ovo je primjer citata u blockquote stilu.",
   nav: "Home Portfolio About",

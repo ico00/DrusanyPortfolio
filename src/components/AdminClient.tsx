@@ -300,14 +300,14 @@ export default function AdminClient() {
   } | null>(null);
   const duplicateResolveRef = useRef<((action: "overwrite" | "add" | "cancel") => void) | null>(null);
   const editFormRef = useRef<HTMLFormElement | null>(null);
-  const [adminTab, setAdminTab] = useState<"dashboard" | "gallery" | "about" | "contact" | "blog" | "theme">("dashboard");
+  const [adminTab, setAdminTab] = useState<"dashboard" | "gallery" | "about" | "contact" | "blogPage" | "homePage" | "blog" | "theme">("dashboard");
   const [pagesExpanded, setPagesExpanded] = useState(false);
   const [galleryExpanded, setGalleryExpanded] = useState(false);
   const [galleryFilter, setGalleryFilter] = useState<"" | "no-slug" | "no-exif">("");
   const [galleryFilterIds, setGalleryFilterIds] = useState<string[]>([]);
 
   useEffect(() => {
-    if (adminTab === "about" || adminTab === "contact") {
+    if (adminTab === "about" || adminTab === "contact" || adminTab === "blogPage" || adminTab === "homePage") {
       setPagesExpanded(true);
       setGalleryExpanded(false);
     }
@@ -869,7 +869,7 @@ export default function AdminClient() {
                   });
                 }}
                 className={`flex w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                  adminTab === "about" || adminTab === "contact"
+                  adminTab === "about" || adminTab === "contact" || adminTab === "blogPage" || adminTab === "homePage"
                     ? "border-l-2 border-blue-500/80 bg-zinc-800 text-white"
                     : "border-l-2 border-transparent text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-200"
                 }`}
@@ -893,6 +893,17 @@ export default function AdminClient() {
                   <div className="ml-6 mt-0.5 space-y-0.5 border-l border-zinc-700 pl-2">
                     <button
                       type="button"
+                      onClick={() => setAdminTab("homePage")}
+                      className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
+                        adminTab === "homePage"
+                          ? "text-white"
+                          : "text-zinc-400 hover:text-zinc-200"
+                      }`}
+                    >
+                      Home
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => setAdminTab("about")}
                       className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
                         adminTab === "about"
@@ -912,6 +923,17 @@ export default function AdminClient() {
                       }`}
                     >
                       Contact
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAdminTab("blogPage")}
+                      className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
+                        adminTab === "blogPage"
+                          ? "text-white"
+                          : "text-zinc-400 hover:text-zinc-200"
+                      }`}
+                    >
+                      Blog page
                     </button>
                   </div>
                 </div>
@@ -964,6 +986,8 @@ export default function AdminClient() {
                     : "Gallery")}
               {adminTab === "about" && "About"}
               {adminTab === "contact" && "Contact"}
+              {adminTab === "blogPage" && "Blog page"}
+              {adminTab === "homePage" && "Home page"}
               {adminTab === "blog" && "Blog"}
               {adminTab === "theme" && "Theme"}
             </h1>
@@ -977,6 +1001,8 @@ export default function AdminClient() {
                     : "Select a category from the sidebar")}
               {adminTab === "about" && "Edit About page content"}
               {adminTab === "contact" && "Edit Contact page content"}
+              {adminTab === "blogPage" && "SEO za glavnu blog stranicu (/blog)"}
+              {adminTab === "homePage" && "SEO za početnu stranicu (/)"}
               {adminTab === "blog" && "Create and manage blog posts"}
               {adminTab === "theme" && "Customize fonts, sizes and colors"}
             </p>
@@ -999,9 +1025,17 @@ export default function AdminClient() {
           </div>
         )}
 
-        {(adminTab === "about" || adminTab === "contact") && (
+        {(adminTab === "about" || adminTab === "contact" || adminTab === "blogPage" || adminTab === "homePage") && (
           <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8">
-            <AdminPages page={adminTab} />
+            <AdminPages
+              page={
+                adminTab === "blogPage"
+                  ? "blog"
+                  : adminTab === "homePage"
+                    ? "home"
+                    : adminTab
+              }
+            />
           </div>
         )}
 

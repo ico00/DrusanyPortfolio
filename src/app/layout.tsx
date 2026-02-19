@@ -30,6 +30,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://drusany.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  alternates: { canonical: "/" },
   title: {
     default: "Drusany | Photography",
     template: "%s | Drusany",
