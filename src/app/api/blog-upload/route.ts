@@ -3,60 +3,11 @@ import path from "path";
 import sharp from "sharp";
 import exifr from "exifr";
 import { getBlogUploadDir } from "@/lib/blog";
+import { hasValidImageSignature } from "@/lib/imageValidation";
+import { getExifExtras } from "@/lib/exif";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 const BLOG_EXIF_PATH = path.join(process.cwd(), "src", "data", "blogExif.json");
-
-function formatExposure(sec: unknown): string | null {
-  if (typeof sec !== "number" || sec <= 0) return null;
-  if (sec >= 1) return `${sec}"`;
-  const frac = 1 / sec;
-  if (frac >= 1 && Math.abs(frac - Math.round(frac)) < 0.01) return `1/${Math.round(frac)}`;
-  return `${sec}s`;
-}
-
-function formatAperture(fnum: unknown): string | null {
-  if (typeof fnum !== "number" || fnum <= 0) return null;
-  return `f/${fnum}`;
-}
-
-function formatLensInfo(arr: unknown): string | null {
-  if (!Array.isArray(arr) || arr.length < 4) return null;
-  const [minFocal, maxFocal, minF, maxF] = arr.map(Number);
-  if (!minFocal || minFocal <= 0) return null;
-  const focal =
-    minFocal === maxFocal ? `${minFocal}mm` : `${minFocal}-${maxFocal}mm`;
-  const fnum = minF > 0 ? ` f/${minF}` : "";
-  return `${focal}${fnum}`.trim() || null;
-}
-
-function getExifExtras(exif: Record<string, unknown>): {
-  camera: string | null;
-  lens: string | null;
-  exposure: string | null;
-  aperture: string | null;
-  iso: number | null;
-} {
-  const make = typeof exif.Make === "string" ? exif.Make.trim() : "";
-  const model = typeof exif.Model === "string" ? exif.Model.trim() : "";
-  const camera =
-    model && (!make || !model.toLowerCase().startsWith(make.toLowerCase()))
-      ? [make, model].filter(Boolean).join(" ")
-      : model || make || null;
-  let lens =
-    (typeof exif.LensModel === "string" && exif.LensModel.trim()) || null;
-  if (!lens) lens = formatLensInfo(exif.LensInfo);
-  if (!lens && typeof exif.Lens === "string" && exif.Lens.trim()) {
-    lens = exif.Lens.trim();
-  }
-  if (!lens && typeof exif.LensMake === "string" && exif.LensMake.trim()) {
-    lens = exif.LensMake.trim();
-  }
-  const exposure = formatExposure(exif.ExposureTime);
-  const aperture = formatAperture(exif.FNumber);
-  const iso =
-    typeof exif.ISO === "number" && exif.ISO > 0 ? exif.ISO : null;
-  return { camera, lens, exposure, aperture, iso };
-}
 
 async function saveBlogExif(url: string, exif: { camera?: string; lens?: string; exposure?: string; aperture?: string; iso?: number }) {
   let data: Record<string, { camera?: string; lens?: string; exposure?: string; aperture?: string; iso?: number }> = {};
@@ -76,6 +27,7 @@ async function saveBlogExif(url: string, exif: { camera?: string; lens?: string;
 }
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
 
 function sanitizeSlug(str: string): string {
   return str
@@ -136,6 +88,8 @@ async function fileExists(filePath: string): Promise<boolean> {
 }
 
 export async function POST(request: Request) {
+  const rateLimitRes = checkRateLimit(request);
+  if (rateLimitRes) return rateLimitRes;
   if (process.env.NODE_ENV !== "development") {
     return Response.json(
       { error: "Samo u development modu" },
@@ -187,8 +141,25 @@ export async function POST(request: Request) {
       );
     }
 
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      return Response.json(
+        {
+          error: `Datoteka prevelika. Maksimalno: ${MAX_FILE_SIZE_BYTES / 1024 / 1024} MB`,
+        },
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     const baseDir = getBlogUploadDir(slug, date);
     const buffer = Buffer.from(await file.arrayBuffer());
+    if (!hasValidImageSignature(buffer)) {
+      return Response.json(
+        {
+          error: "Neispravna datoteka: nije valjana slika (provjera magic bytes)",
+        },
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
     if (type === "featured") {
       await mkdir(baseDir, { recursive: true });

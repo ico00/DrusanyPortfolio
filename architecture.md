@@ -16,6 +16,8 @@ Ovaj dokument opisuje arhitekturu statičnog fotografskog portfolija izgrađenog
 | **Lucide Icons** | latest | Ikone za UI (hamburger, strelice, social) |
 | **Sharp** | 0.34+ | Image processing (resize, WebP) |
 | **exifr** | 7.x | EXIF metadata extraction (datum, naslov, camera, lens, exposure, aperture, ISO) |
+| **sanitize-html** | 2.x | HTML sanitizacija pri čitanju sadržaja (getPages, getBlogPost) |
+| **proper-lockfile** | 4.x | File locking za JSON (gallery, blog, pages) – read-modify-write |
 | **BlockNote** | 0.46.x | Block-based rich text editor (About, Contact, Blog) – shadcn UI |
 | **react-day-picker** | 9.x | Custom kalendar za datum/vrijeme u adminu |
 | **Recharts** | 3.x | Dashboard grafikoni (bar, pie) |
@@ -111,9 +113,31 @@ Blog postovi. Struktura: `{ "posts": [ { "id", "slug", "title", "date", "time", 
 
 ### 3.3.1 Blog Widgets: `src/data/blogWidgets.json`
 
-Konfiguracija sidebara na blog stranici. Struktura: `{ "widgets": [ { "id", "type", "enabled", "title", ... } ] }`. Tipovi: **search** (filter-as-you-type), **categories** (kategorije s linkovima), **instagram** (username, profileUrl, images – dohvaća se putem `fetchInstagramFeed` iz `@/lib/instagram`), **maps** (locations s embedUrl iz Google My Maps – `mid=` parametar).
+Konfiguracija sidebara na blog stranici. Struktura: `{ "widgets": [ { "id", "type", "enabled", "title", ... } ] }`. Tipovi: **search** (filter-as-you-type), **categories** (kategorije s linkovima), **featured-posts** (istaknuti članci – postovi s `featured: true`, do 3), **maps** (locations s embedUrl iz Google My Maps – `mid=` parametar). *Instagram widget uklonjen.*
 
-### 3.4 Gear: `src/data/gear.json`
+### 3.3.2 Blog EXIF: `src/data/blogExif.json`
+
+EXIF metapodaci za slike u blog galerijama. Struktura: `{ "/uploads/blog/.../gallery/filename.webp": { camera, lens, exposure, aperture, iso } }`. Koristi se u BlogGallery za prikaz EXIF-a u lightboxu. **Novi uploadi** – EXIF se automatski sprema pri uploadu putem `/api/blog-upload`. **Postojeće slike** – skripta `scripts/populate-blog-exif.mjs` (exifr) popunjava iz originalnih datoteka; pokreni `node scripts/populate-blog-exif.mjs`.
+
+### 3.4 SEO Engine
+
+Per-Page SEO modul upravljan iz Admin panela. Svaki post i stranica imaju `seo` objekt s poljima: **metaTitle**, **metaDescription**, **keywords**.
+
+**JSON Schema:**
+- **pages.json:** Svaka stranica (about, contact) ima `seo: { metaTitle?, metaDescription?, keywords? }`
+- **blog.json:** Svaki post ima `seo: { metaTitle?, metaDescription?, keywords? }`
+
+**Admin UI (AdminBlog, AdminPages):**
+- Sekcija "SEO Settings" s inputima za metaTitle, metaDescription, keywords
+- metaDescription: brojač znakova; upozorenje ako pređe 160 (preporučeno za Google rezultate)
+- metaTitle: ako ostane prazno, koristi se naslov posta/stranice
+
+**Next.js Metadata:**
+- `generateMetadata({ params })` u `src/app/blog/[slug]/page.tsx` – čita blog.json, pronalazi post po slug-u, vraća title i description za `<head>`
+- `generateMetadata()` u `src/app/about/page.tsx` i `src/app/contact/page.tsx` – čita pages.json, vraća title i description
+- **Open Graph:** Blog postovi koriste thumbnail posta (`post.thumbnail`) kao OG sliku pri dijeljenju na društvenim mrežama; `metadataBase` u layout.tsx omogućuje relativne putanje (NEXT_PUBLIC_SITE_URL)
+
+### 3.5 Gear: `src/data/gear.json`
 
 Fotografska oprema (About stranica). Struktura:
 
@@ -137,7 +161,7 @@ Fotografska oprema (About stranica). Struktura:
 - **category**: Opcionalno – kamere, objektivi, itd.
 - **width/height**: Za originalni aspect ratio – dodaj s `npm run gear:dimensions`
 
-### 3.5 Press: `src/data/press.json`
+### 3.6 Press: `src/data/press.json`
 
 Objavljene fotografije u medijima (About stranica). Struktura:
 
@@ -159,7 +183,7 @@ Objavljene fotografije u medijima (About stranica). Struktura:
 - **caption**: Ime medija / naslov objave (opcionalno)
 - **link**: URL članka (opcionalno) – ako postoji, slika je klikabilna
 
-### 3.6 Theme: `src/data/theme.json`
+### 3.7 Theme: `src/data/theme.json`
 
 Konfiguracija tipografije i boja za elemente stranice. Struktura:
 
@@ -180,7 +204,7 @@ Konfiguracija tipografije i boja za elemente stranice. Struktura:
 - **ThemeStyles** (layout) injektira CSS varijable u `:root`; prose i utility klase (`.theme-title`, `.theme-heading`, `.theme-nav`, `.theme-caption`) koriste te varijable
 - **Dodavanje novih fontova:** 1) `layout.tsx` – import iz `next/font/google`, dodaj `.variable` u body; 2) `themeFonts.ts` – dodaj zapis u `THEME_FONTS`
 
-### 3.7 Original Images: `public/uploads/`
+### 3.8 Original Images: `public/uploads/`
 
 - Slike se spremaju u podfoldere po kategoriji: `public/uploads/full/[category]/` i `public/uploads/thumbs/[category]/`
 - Press slike: `public/uploads/press/` (ručno dodavanje)
@@ -188,6 +212,7 @@ Konfiguracija tipografije i boja za elemente stranice. Struktura:
 - Blog: `public/uploads/blog/[YYYY-MM-DD]-[slug]/` – featured.webp, gallery/*.webp, **content/*.webp** (slike iz BlockNote sadržaja); originalni nazivi datoteka (sanitizeFilename)
 - Format: WebP (Sharp resize)
 - Naziv datoteke: sanitizirani originalni naziv (lowercase, razmaci→crte, bez specijalnih znakova); ako postoji kolizija, dodaje se kratki random suffix ili broj
+- **Validacija:** Magic bytes provjera (JPEG/PNG/GIF/WebP) prije obrade; ograničenje veličine 20 MB
 - Pri static exportu, cijeli `public/` folder se kopira u `out/`
 
 ```
@@ -234,6 +259,7 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 - **VenueSelect:** Dropdown za venue (samo za Concerts) – Arena Zagreb, Cibona, Dom sportova, KD Vatroslav Lisinski, KSET, Misc, Šalata, Tvornica kulture
 - **SportSelect:** Dropdown za vrstu sporta (samo za Sport) – Athletics, Auto-Moto, Basketball, Fencing, Football, Handball, Martial Arts (poredan abecedno)
 - **Hero toggle:** Postavljanje/uklanjanje hero slike po kategoriji (samo ručno); hero slika u galeriji istaknuta amber obrubom
+- **Generiraj slugove:** Kad je Content health filter "no-slug" aktivan, gumb "Generiraj slugove" poziva `/api/gallery/generate-slugs` – bulk generira slug za sve slike bez njega
 - **Delete:** Brisanje slike (uklanja iz JSON-a i diska)
 - **Drag-and-drop sortiranje:** Fotografije u galeriji mogu se povući za promjenu redoslijeda; novi redoslijed se sprema putem `/api/reorder`
 
@@ -276,28 +302,33 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 **Lokacija:** `src/app/api/upload/route.ts`
 
 **Tijek:**
-1. Prima `FormData` (file, title, category, alt, capturedAt, isHero, venue, sport, keywords, slug)
-2. Kreira podfoldere `full/[category]/` i `thumbs/[category]/` (category se sanitizira)
-3. Naziv datoteke: originalni naziv sanitiziran (lowercase, razmaci→crte); ako postoji kolizija, dodaje se suffix
-4. Sharp: resize na 2048px (full) i 600px (thumb), WebP
-5. **exifr:** Čita EXIF (makerNote: true, xmp: true, iptc: true) – datum (DateTimeOriginal, fallback: CreateDate, DateTime, ModifyDate), naslov, keywords (IPTC/XMP), camera, lens, exposure, aperture, ISO
-6. Ako forma šalje `capturedAt`, koristi ga; inače EXIF datum
-7. **Slug:** Generira iz title+venue+year putem `generateSlug` (iz `@/lib/slug`); provjera jedinstvenosti unutar kategorije; pri overwrite zadržava postojeći
-8. Generira UUID, sprema u `gallery.json` s putanjama `/uploads/full/[category]/filename.webp`
-9. Vraća `{ success, id, src, thumb, image }`
+1. **Rate limit** provjera (60 req/min po IP)
+2. Prima `FormData` (file, title, category, alt, capturedAt, isHero, venue, sport, keywords, slug)
+3. Provjera veličine (max 20 MB), magic bytes (JPEG/PNG/GIF/WebP)
+4. Kreira podfoldere `full/[category]/` i `thumbs/[category]/` (category se sanitizira)
+5. Naziv datoteke: originalni naziv sanitiziran (lowercase, razmaci→crte); ako postoji kolizija, dodaje se suffix
+6. Sharp: resize na 2048px (full) i 600px (thumb), WebP
+7. **exifr:** Čita EXIF (makerNote: true, xmp: true, iptc: true) – datum (DateTimeOriginal, fallback: CreateDate, DateTime, ModifyDate), naslov, keywords (IPTC/XMP), camera, lens, exposure, aperture, ISO – koristi zajednički modul `@/lib/exif`
+8. Ako forma šalje `capturedAt`, koristi ga; inače EXIF datum
+9. **Slug:** Generira iz title+venue+year putem `generateSlug` (iz `@/lib/slug`); provjera jedinstvenosti unutar kategorije; pri overwrite zadržava postojeći
+10. **File locking** (`withLock`) prije read-modify-write u `gallery.json`
+11. Generira UUID, sprema u `gallery.json` s putanjama `/uploads/full/[category]/filename.webp`
+12. Vraća `{ success, id, src, thumb, image }`
 
 #### `/api/exif-preview` (POST)
 
 **Lokacija:** `src/app/api/exif-preview/route.ts`
 
-- Prima `FormData` s datotekom
-- **exifr:** Parsira cijeli EXIF (makerNote: true, xmp: true, iptc: true) – datum (DateTimeOriginal, fallback: CreateDate, DateTime, ModifyDate), naslov, keywords (dc:subject, Keywords, IPTC), camera, lens, exposure, aperture, ISO
+- **Rate limit** provjera
+- Prima `FormData` s datotekom; provjera veličine (20 MB), magic bytes
+- **exifr:** Parsira cijeli EXIF – koristi `@/lib/exif` (formatDateForInput, getExifDescription, getKeywords, getExifExtras)
 - Vraća `{ date, description, keywords, camera, lens, exposure, aperture, iso }` za auto-fill u admin formi
 
 #### `/api/update` (POST)
 
 **Lokacija:** `src/app/api/update/route.ts`
 
+- **Rate limit** provjera; **file locking** (`withLock`) za `gallery.json`
 - Prima `{ id, title?, alt?, category?, capturedAt?, venue?, sport?, keywords?, slug?, camera?, lens?, exposure?, aperture?, iso? }`
 - Ažurira zapis u `gallery.json` po ID-u
 - **Auto-slug:** Kad se mijenjaju `title`, `venue` ili `capturedAt`, slug se automatski regenerira iz novih vrijednosti (koristi `generateSlug` iz `@/lib/slug`); provjera jedinstvenosti unutar kategorije (suffix `-2`, `-3` ako postoji kolizija); ako se mijenja samo slug (bez title/venue/datuma), ostaje ručno postavljeni slug
@@ -306,6 +337,7 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 
 **Lokacija:** `src/app/api/delete/route.ts`
 
+- **Rate limit** provjera; **file locking** (`withLock`) za `gallery.json`
 - Prima `{ id }`
 - Briše sliku iz `gallery.json` i fajlove iz `public/uploads/` (koristi punu putanju iz `src`/`thumb` – radi za staru i novu strukturu foldera)
 
@@ -313,6 +345,7 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 
 **Lokacija:** `src/app/api/reorder/route.ts`
 
+- **Rate limit** provjera; **file locking** (`withLock`)
 - Prima `{ category, order: string[] }` – array ID-eva slika u željenom redoslijedu
 - Ažurira polje `order` za svaku sliku u kategoriji (0, 1, 2, …)
 - Koristi se nakon drag-and-drop u admin galeriji
@@ -321,6 +354,7 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 
 **Lokacija:** `src/app/api/hero/route.ts`
 
+- **Rate limit** provjera; **file locking** (`withLock`)
 - Prima `{ id, isHero }`
 - Postavlja/uklanja `isHero` za sliku u kategoriji (samo jedna hero po kategoriji)
 
@@ -334,20 +368,24 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 
 **Lokacija:** `src/app/api/pages/route.ts`
 
-- **GET:** Vraća `{ about, contact }` iz `pages.json` (koristi `getPages`)
-- **PUT:** Prima `{ about?: { title?, html?, quote? }, contact?: { title?, html?, email?, formspreeEndpoint? } }`, sprema u `pages.json` putem `savePages`
+- **GET:** Vraća `{ about, contact }` iz `pages.json`; `getPages` koristi `sanitizeProseHtml` za HTML sadržaj
+- **PUT:** **Rate limit** provjera; **file locking** (`withLock`); prima `{ about?, contact? }`, sprema putem `savePages`
 
-#### `/api/blog` (GET, POST)
+#### `/api/blog` (GET, POST, PUT, DELETE)
 
 **Lokacija:** `src/app/api/blog/route.ts`
 
-- **GET:** Vraća blog postove iz `blog.json`
-- **POST:** Prima novi ili ažurirani post (slug, title, date, categories, body, thumbnail, thumbnailFocus, gallery), sprema u `blog.json` i body u `src/data/blog/[slug].html`
+- **GET:** Vraća blog postove iz `blog.json`; `getBlogPost` koristi `sanitizeProseHtml` pri čitanju body-a
+- **POST/PUT/DELETE:** **Rate limit** provjera; **file locking** (`withLock`) za `blog.json`
+- **POST:** Prima novi post; slug se generira putem `normalizeBlogSlug` (format `yymmdd-naslov`)
+- **PUT:** Ažuriranje posta; pri promjeni slug-a/datuma – `blogCleanup` premješta uploads folder, briše orphan datoteke
+- **DELETE:** Briše post; `deleteBlogPostFiles` briše `[slug].html` i `public/uploads/blog/[date]-[slug]/`
 
 #### `/api/blog-upload` (POST)
 
 **Lokacija:** `src/app/api/blog-upload/route.ts`
 
+- **Rate limit** provjera; provjera veličine (20 MB), magic bytes; koristi `@/lib/exif` za EXIF
 - Prima FormData (file, slug, date, type: featured | gallery | **content**)
 - Featured: `featured.webp` u `public/uploads/blog/[date]-[slug]/`
 - Gallery: originalni naziv datoteke (sanitizeFilename); duplicate → 409 s opcijama (overwrite, addWithSuffix)
@@ -357,14 +395,40 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 
 **Lokacija:** `src/app/api/blog-delete-file/route.ts`
 
-- Prima `{ url }` – putanja `/uploads/blog/...`; briše fizičku datoteku s diska kad se slika ukloni iz galerije
+- **Rate limit** provjera
+- Prima `{ url }` – putanja `/uploads/blog/...`; **path traversal zaštita** – provjera da rezolvirana putanja ostane unutar `public/uploads/blog/`; briše fizičku datoteku s diska kad se slika ukloni iz galerije
+
+#### `/api/gallery/generate-slugs` (POST)
+
+**Lokacija:** `src/app/api/gallery/generate-slugs/route.ts`
+
+- **Rate limit** provjera; **file locking** (`withLock`)
+- Generira slug za sve slike u galeriji koje nemaju slug (koristi `ensureSlug` iz `getGallery`)
+- Dostupno samo u development modu
+- Vraća `{ success, updated, total }`; koristi se iz Admin galerije kad je filter "no-slug" aktivan – gumb "Generiraj slugove"
+
+#### `/api/content-health` (GET)
+
+**Lokacija:** `src/app/api/content-health/route.ts`
+
+- Vraća statistiku sadržaja: `imagesWithoutExif`, `imagesWithoutSlug`, `blogPostsWithoutFeaturedImage`, `imageIdsWithoutExif`, `imageIdsWithoutSlug`
+- Koristi se u Admin Dashboard za Content health sekciju – klik na filter otvara galeriju s odgovarajućim filterom ili prelazi na Blog
+
+#### `/api/health` (GET)
+
+**Lokacija:** `src/app/api/health/route.ts`
+
+- Health check za CI/CD – provjerava čitljivost JSON datoteka i postojanje kritičnih resursa
+- **Provjere:** `gallery.json`, `blog.json`, `pages.json`, `theme.json` (čitljivi, valjana struktura); `public/uploads/` (postoji); za svaki blog post – `src/data/blog/[slug].html` postoji
+- **Odgovor:** 200 ako sve OK, 503 ako nešto ne valja; JSON `{ status: "ok"|"degraded", checks: {...} }`
+- Prerenderira se pri buildu (`force-static`) – uključen u statični export; koristan za CI pipeline
 
 #### `/api/theme` (GET, PUT)
 
 **Lokacija:** `src/app/api/theme/route.ts`
 
 - **GET:** Vraća theme konfiguraciju iz `theme.json` (font, fontSize, color po elementu)
-- **PUT:** Prima `ThemeConfig`, sprema u `theme.json`; dostupno samo u development modu
+- **PUT:** **Rate limit** provjera; prima `ThemeConfig`, sprema u `theme.json`; dostupno samo u development modu
 
 ---
 
@@ -442,7 +506,7 @@ Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
 **Stranice:**
 - **ProseContent:** Client komponenta koja renderira HTML (dangerouslySetInnerHTML); injektira `.quote-decor` span u svaki blockquote – Safari kompatibilno; **wrapa slike** u `div.prose-img-wrapper` – vizual kao BlogGallery/PressSection (zaobljeni uglovi, sjena, hover scale 1.03); **poravnanje** – `data-text-alignment` (BlockNote) za center/left/right
 - **About / Contact:** `ProseContent` s `prose prose-invert prose-lg`, naslov (h1) odvojen, svijetli tekst na tamnoj pozadini; About i Contact imaju split layout (left image + right content)
-- **Blog:** `ProseContent` s `prose prose-zinc prose-headings:font-serif`, bijela pozadina; **formatBlogDate** – datum u formatu `dd. mm. yyyy.`
+- **Blog:** `ProseContent` s `prose prose-zinc prose-headings:font-serif`, bijela pozadina; **formatBlogDate** – datum u formatu `dd. mm. yyyy.`; **Footer** – copyright (© year, All rights reserved / Sva prava pridržana ovisno o stranici)
 
 **BlockNote editor (admin):** Razmak između blokova – `.blocknote-editor-wrapper .bn-block-group > .bn-block-outer { margin-bottom: 1.5rem }` u globals.css; quote blok s dekorativnim navodnikom (CSS ::before)
 
@@ -476,8 +540,12 @@ npm run dev
 
 - Pokreće dev server na `http://localhost:3000`
 - Admin panel dostupan na `/admin`
-- API routes aktivne: `/api/upload`, `/api/exif-preview`, `/api/update`, `/api/delete`, `/api/hero`, `/api/reorder`, `/api/gallery`, `/api/pages`, `/api/blog`
+- API routes aktivne: `/api/upload`, `/api/exif-preview`, `/api/update`, `/api/delete`, `/api/hero`, `/api/reorder`, `/api/gallery`, `/api/gallery/generate-slugs`, `/api/content-health`, `/api/health`, `/api/pages`, `/api/blog`, `/api/theme`
 - Hot reload za brze promjene
+
+### 7.2.1 Skripte za održavanje
+
+- **populate-blog-exif.mjs:** `node scripts/populate-blog-exif.mjs` – popunjava `blogExif.json` EXIF podacima iz postojećih blog galerijskih slika (exifr); za nove slike EXIF se automatski sprema pri uploadu
 
 ### 7.5 Preview statičnog builda
 
@@ -529,6 +597,9 @@ DrusanyPortfolio/
 │   │   │   ├── gallery/route.ts
 │   │   │   ├── hero/route.ts
 │   │   │   ├── pages/route.ts
+│   │   │   ├── content-health/route.ts
+│   │   │   ├── health/route.ts
+│   │   │   ├── gallery/generate-slugs/route.ts
 │   │   │   ├── reorder/route.ts
 │   │   │   ├── theme/route.ts
 │   │   │   ├── update/route.ts
@@ -538,15 +609,15 @@ DrusanyPortfolio/
 │   │   │   ├── page.tsx
 │   │   │   └── [slug]/page.tsx
 │   │   ├── contact/page.tsx
-│   │   ├── layout.tsx       # CustomCursor, ThemeStyles u body
+│   │   ├── layout.tsx       # CustomCursor, ThemeStyles, Footer u body
 │   │   ├── page.tsx       # Home (HeroSlider ili Gallery)
 │   │   └── globals.css
 │   ├── components/
 │   │   ├── blog/
-│   │   │   ├── BlogSidebar.tsx       # Sidebar s widgetima (search, categories, instagram, maps)
+│   │   │   ├── BlogSidebar.tsx       # Sidebar s widgetima (search, categories, featured-posts, maps)
 │   │   │   ├── SearchWidget.tsx      # Filter-as-you-type po naslovu, slug-u, kategorijama, sadržaju
 │   │   │   ├── CategoriesWidget.tsx  # Kategorije s linkovima
-│   │   │   ├── InstagramWidget.tsx   # Fotografije s Instagram Graph API
+│   │   │   ├── FeaturedPostsWidget.tsx # Istaknuti članci (featured postovi, do 3)
 │   │   │   └── GoogleMapsWidget.tsx  # Embed karte iz Google My Maps
 │   │   ├── AboutImage.tsx        # Slika za About/Contact (fill, object-cover)
 │   │   ├── AboutNav.tsx          # Fiksni nav na dnu About (About, Press, Gear); aktivni link prati scroll
@@ -554,7 +625,7 @@ DrusanyPortfolio/
 │   │   ├── PressSection.tsx      # About – objavljene fotografije (masonry)
 │   │   ├── GearSection.tsx       # About – fotografska oprema (masonry)
 │   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog, Theme)
-│   │   ├── AdminDashboard.tsx    # Dashboard (bar/pie grafikoni – Recharts; cursor/background off, tooltip stilizacija)
+│   │   ├── AdminDashboard.tsx    # Dashboard (bar/pie grafikoni – Recharts; Content health – no-exif/no-slug/no-featured; tooltip stilizacija)
 │   │   ├── AdminPages.tsx        # About/Contact editor (BlockNote, quote, FormspreeEndpoint)
 │   │   ├── AdminBlog.tsx         # Blog post editor (BlockNote, galerija, bulk delete)
 │   │   ├── BlogGallery.tsx       # Blog galerija (masonry, lightbox, aperture cursor)
@@ -569,6 +640,7 @@ DrusanyPortfolio/
 │   │   ├── CategorySelect.tsx    # Custom category dropdown
 │   │   ├── VenueSelect.tsx       # Venue dropdown (Concerts)
 │   │   ├── SportSelect.tsx       # Sport type dropdown (Sport)
+│   │   ├── Footer.tsx           # Copyright (© year, All rights reserved / Sva prava pridržana)
 │   │   ├── ThemeAdmin.tsx        # Theme customization (font, size, color po elementu; custom dropdown)
 │   │   ├── ThemeStyles.tsx      # Injektira theme CSS varijable u :root
 │   │   ├── CustomCursor.tsx   # Custom cursor (dot + aperture, desktop only)
@@ -578,13 +650,18 @@ DrusanyPortfolio/
 │   │   └── HomeContent.tsx   # Conditional Hero/Gallery; overflow hidden na hero
 │   ├── lib/
 │   │   ├── blogWidgets.ts   # getBlogWidgets – čitanje blogWidgets.json
-│   │   ├── instagram.ts    # fetchInstagramFeed – Instagram Graph API (INSTAGRAM_ACCESS_TOKEN)
+│   │   ├── blogCleanup.ts  # Čišćenje orphan datoteka pri promjeni slug-a/datuma; brisanje posta
+│   │   ├── exif.ts         # Zajednički EXIF modul (formatExposure, formatAperture, getExifExtras, getExifDescription, getKeywords, dateToISO, formatDateForInput)
 │   │   ├── getGallery.ts   # Čitanje gallery.json, sortiranje po order (pa capturedAt desc), generiranje slug
 │   │   ├── gear.ts         # getGear – čitanje gear.json
+│   │   ├── imageValidation.ts # Magic bytes provjera (JPEG/PNG/GIF/WebP)
+│   │   ├── jsonLock.ts     # File locking (proper-lockfile) za gallery, blog, pages
+│   │   ├── pages.ts        # getPages, savePages – About/Contact; sanitizeProseHtml pri čitanju
 │   │   ├── press.ts        # getPress – čitanje press.json
-│   │   ├── pages.ts        # getPages, savePages – About/Contact (title, html, quote, email, formspreeEndpoint)
-│   │   ├── blog.ts         # getBlog, getBlogPost – čitanje blog.json, enrichBlogGallery (Sharp dimenzije)
-│   │   ├── slug.ts         # slugify, generateSlug (title+venue+year), generateBlogSlug (yymmdd-naslov) – zajednički za upload, update, AdminClient, blog
+│   │   ├── blog.ts         # getBlog, getBlogPost – čitanje blog.json, sanitizeProseHtml za body, enrichBlogGallery (Sharp)
+│   │   ├── rateLimit.ts    # Rate limiting (60 req/min po IP) za admin API
+│   │   ├── sanitize.ts     # sanitizeProseHtml – HTML sanitizacija (sanitize-html)
+│   │   ├── slug.ts         # slugify, generateSlug (title+venue+year), generateBlogSlug, isValidBlogSlug, normalizeBlogSlug (yymmdd-naslov)
 │   │   └── theme.ts        # getTheme, saveTheme, themeToCssVariables – čitanje/spremanje theme.json
 │   └── data/
 │       ├── gallery.json    # Flat-file baza slika
@@ -592,7 +669,10 @@ DrusanyPortfolio/
 │       ├── gear.json       # Fotografska oprema (About)
 │       ├── press.json      # Objavljene fotografije (About)
 │       ├── blog.json       # Blog postovi
-│       └── blogWidgets.json # Konfiguracija blog sidebara (search, categories, instagram, maps)
+│       ├── blogExif.json   # EXIF za blog galerijske slike (camera, lens, exposure, aperture, iso)
+│       └── blogWidgets.json # Konfiguracija blog sidebara (search, categories, featured-posts, maps)
+├── scripts/
+│   └── populate-blog-exif.mjs  # Popunjava blogExif.json iz postojećih slika (exifr)
 ├── out/                   # Generirano pri build (gitignore)
 ├── next.config.ts
 ├── package.json
@@ -645,7 +725,7 @@ DrusanyPortfolio/
 
 - **About (`/about`):** Split layout – lijevo fiksna slika (40% širine na desktopu) s opcionalnim citatom u donjem lijevom kutu; desno scrollabilni sadržaj (Back, naslov, prose HTML, PressSection, GearSection); **AboutNav** fiksno na dnu – linkovi About, Press, Gear s aktivnim stanjem (crta ispod); scroll na vrh pri učitavanju; aktivni link prati scroll (listener na main + window)
 - **Contact (`/contact`):** Isti layout kao About – lijevo slika, desno sadržaj; sadrži Back, naslov, uvodni prose (iz pages.json), **ContactForm** (name, email, subject, message); Formspree za slanje; fallback na mailto ako Formspree nije postavljen; success/error stanja
-- **Blog (`/blog`):** Lista postova – kartice s naslovom, metapodacima (Tekst i fotografije: Ivica Drusany, Datum objave, Kategorija) i slikom ispod; bez overlayja na slikama; **BlogSidebar** s desne strane – SearchWidget (filter-as-you-type po naslovu, slug-u, kategorijama, sadržaju), CategoriesWidget, InstagramWidget (fetchInstagramFeed), GoogleMapsWidget (embed iz Google My Maps); **pretraga** po `q` parametru; sortiranje od najnovijeg; `/blog/[slug]` – pojedinačni post: naslov i metapodaci na vrhu, featured slika ispod, prose body (slike s poravnanjem, vizual kao galerija), galerija na dnu; bijela pozadina
+- **Blog (`/blog`):** Lista postova – kartice s naslovom, metapodacima (Tekst i fotografije: Ivica Drusany, Datum objave, Kategorija) i slikom ispod; bez overlayja na slikama; **BlogSidebar** s desne strane – SearchWidget (filter-as-you-type po naslovu, slug-u, kategorijama, sadržaju), CategoriesWidget, **FeaturedPostsWidget** (istaknuti članci, do 3), GoogleMapsWidget (embed iz Google My Maps); **pretraga** po `q` parametru; sortiranje od najnovijeg; `/blog/[slug]` – pojedinačni post: naslov i metapodaci na vrhu, featured slika ispod, prose body (slike s poravnanjem, vizual kao galerija), galerija na dnu (EXIF iz blogExif.json); bijela pozadina; **Footer** na dnu stranice
 - **Blog metapodaci:** Ikone (PenLine, Camera, Calendar, Tag); redak „Tekst i fotografije: Ivica Drusany“, „Datum objave: dd. mm. yyyy.“, „Kategorija:“ s linkovima (donja crta, border-b); razmak između blokova: inline `marginRight: "3rem"` (Safari kompatibilnost)
 - **Blog galerija:** Ista logika kao portfolio – masonry (shortest column), dimenzije iz Sharp metadata; lightbox (prev/next, swipe, Escape); aperture cursor na thumbovima i lightboxu; brisanje slika iz admina briše i fizičke datoteke
 
@@ -671,7 +751,13 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 ## 9. Sigurnosne napomene
 
 - Admin i API su **samo u developmentu** – u produkciji ne postoje
-- Ako se ikad doda server-side admin u produkciji, obavezno: autentikacija, rate limiting, validacija file tipova
+- **Path traversal zaštita** – `blog-delete-file` provjerava da rezolvirana putanja ostane unutar `public/uploads/blog/`
+- **Ograničenje uploada** – 20 MB po datoteci (upload, blog-upload, exif-preview)
+- **Magic bytes provjera** – `imageValidation.ts` provjerava file signature (JPEG/PNG/GIF/WebP) prije obrade
+- **HTML sanitizacija** – `sanitizeProseHtml` (sanitize-html) pri čitanju u `getPages`, `getBlogPost`
+- **Rate limiting** – `src/lib/rateLimit.ts`: in-memory limiter (60 req/min po IP, `RATE_LIMIT_MAX_REQUESTS`, `RATE_LIMIT_WINDOW_MS`); primijenjen na sve admin API rute. Za produkciju s više instanci zamijeniti s Redis (npr. @upstash/ratelimit)
+- **File locking** – `jsonLock.ts` (proper-lockfile) za `gallery.json`, `blog.json`, `pages.json` – sprječava race condition
+- Ako se ikad doda server-side admin u produkciji, obavezno: autentikacija
 - `gallery.json` i `public/uploads/` trebaju biti u git repozitoriju ako želite verzionirati sadržaj (ili .gitignore ako koristite eksterni CMS za produkciju)
 
 ---
@@ -688,15 +774,17 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 | **EXIF** | exifr (datum, naslov, keywords, camera, lens, exposure, aperture, ISO) – čita se samo pri uploadu |
 | **Podaci** | `src/data/gallery.json` |
 | **Slike** | `public/uploads/full/[category]/` + `thumbs/[category]/` (WebP, originalni nazivi) |
-| **Admin** | `/admin` + API routes (dev only): upload, exif-preview, update, delete, hero, reorder, gallery, **pages**, **blog**, **theme** |
-| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – BlockNote editor s StaticBlockTypeBar, **upload slika u sadržaj** (content/), **editLoading** (sprječava popover crash); **BlogCategorySelect** (abecedno); **Theme** – Customize Theme (font, veličina, boja za title, heading, body, quote, nav, caption); custom dropdown (kao CategorySelect); live preview; **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija) |
+| **Admin** | `/admin` + API routes (dev only): upload, exif-preview, update, delete, hero, reorder, gallery, **pages**, **blog**, **theme**; rate limiting, file locking |
+| **Sigurnost** | Path traversal fix, 20 MB limit, magic bytes, HTML sanitizacija, rate limiting |
+| **Pouzdanost** | File locking (JSON), čišćenje orphan datoteka (blog slug), HTTP 500 pri greškama |
+| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – BlockNote editor s StaticBlockTypeBar, **upload slika u sadržaj** (content/), **editLoading** (sprječava popover crash); **BlogCategorySelect** (abecedno); **Theme** – Customize Theme (font, veličina, boja); custom dropdown; live preview; **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija); **Content health** – slike bez EXIF-a/slug-a, blog postovi bez featured slike; klik otvara galeriju s filterom ili Blog |
 | **Home** | HeroSlider (6 slides, auto-play 4s, strelice lijevo-desno, "View Gallery", title @ venue) ili masonry Gallery po `?category`; hero samo ručno odabrana |
 | **Header** | Logo (inline SVG), poravnanje lijevo, Search u nav (kad galerija, expandable hover), aktivna stranica (border-b/border-l), hover efekti (Safari: inline-block, eksplicitne boje) |
 | **Custom Cursor** | Dot (trenutno) + aperture (spring, samo preko fotografija), mix-blend-difference, desktop only |
 | **Gallery** | Balanced masonry (shortest column, heights array, aspect ratio); stupci približno jednake visine; useColumnCount (1–4 stupaca), venue filter (Concerts), sport filter (Sport), hover efekti na filterima; scroll na vrh pri učitavanju; ImageCard hover (title @ venue ili Sport // title, datum); Interiors, Animals bez opisa/datuma |
 | **Lightbox** | Fit-to-screen, numeracija + X na vrhu, caption + EXIF u jednom okviru (crna prozirna pozadina), EXIF toggle (ikona kamere), copyright popup na desni klik, URL sync `?image=slug` |
 | **Filtriranje** | Client-side preko JSON-a (`?category=slug`, `?venue=slug` za Concerts, `?sport=slug` za Sport); search filter as you type (title, alt, keywords, venue, sport, category); direktni linkovi `?image=slug` |
-| **Pages & Blog** | `pages.json` (About: title, html, quote; Contact: title, html, email, formspreeEndpoint); `gear.json`, `press.json`; **ProseContent** (HTML + .quote-decor u blockquote; **wrapa slike** u prose-img-wrapper – zaobljeni uglovi, sjena, hover scale; data-text-alignment za poravnanje); About split layout (image + content), AboutNav, ContactForm (Formspree); BlockNote editor; prose blockquote s dekorativnim navodnikom, tablica; **Blog:** slug `yymmdd-naslov`; **BlogSidebar** (SearchWidget, CategoriesWidget, InstagramWidget, GoogleMapsWidget); pretraga po naslovu/slug-u/kategorijama/sadržaju; kategorije (višestruki odabir), masonry galerija (Sharp dimenzije), lightbox, aperture cursor, metapodaci (Tekst i fotografije, Datum objave, Kategorija) s ikonama, format datuma dd. mm. yyyy.; **BlockNote slike u sadržaju** – upload (content/), resize handles, poravnanje; blog-delete-file za brisanje fajlova s diska |
+| **Pages & Blog** | `pages.json` (About: title, html, quote; Contact: title, html, email, formspreeEndpoint); `gear.json`, `press.json`; **ProseContent** (HTML + .quote-decor u blockquote; **sanitizeProseHtml** pri čitanju; **wrapa slike** u prose-img-wrapper – zaobljeni uglovi, sjena, hover scale; data-text-alignment za poravnanje); About split layout (image + content), AboutNav, ContactForm (Formspree); BlockNote editor; prose blockquote s dekorativnim navodnikom, tablica; **Blog:** slug `yymmdd-naslov` (validacija); **BlogSidebar** (SearchWidget, CategoriesWidget, FeaturedPostsWidget, GoogleMapsWidget); pretraga po naslovu/slug-u/kategorijama/sadržaju; kategorije (višestruki odabir), masonry galerija (Sharp dimenzije), lightbox, aperture cursor, metapodaci (Tekst i fotografije, Datum objave, Kategorija) s ikonama, format datuma dd. mm. yyyy.; **BlockNote slike u sadržaju** – upload (content/), resize handles, poravnanje; blog-delete-file za brisanje fajlova s diska; **blogCleanup** pri promjeni slug-a/datuma |
 | **Export** | `output: 'export'`, `images.unoptimized: true` |
 | **Output** | `out/` folder |
 | **Design** | Minimalist, velika tipografija, masonry/full-bleed, fade-in |

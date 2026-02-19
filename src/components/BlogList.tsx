@@ -11,6 +11,7 @@ import {
   formatBlogDate,
 } from "@/data/blogCategories";
 import type { BlogPost } from "@/lib/blog";
+import ViewfinderOverlay from "./ViewfinderOverlay";
 
 export default function BlogList({ posts }: { posts: BlogPost[] }) {
   const searchParams = useSearchParams();
@@ -68,7 +69,7 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
             <li key={post.id}>
               <article className="group overflow-hidden rounded-lg border border-zinc-200/60 transition-colors hover:border-zinc-300">
                 <Link href={`/blog/${post.slug}`} className="block">
-                  <div className="aspect-video overflow-hidden bg-zinc-100">
+                  <div className="relative aspect-video overflow-hidden bg-zinc-100">
                     {post.thumbnail ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
@@ -82,6 +83,7 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
                     ) : (
                       <div className="h-full w-full bg-zinc-800" />
                     )}
+                    {post.thumbnail && <ViewfinderOverlay />}
                   </div>
                   <div className="bg-zinc-950 p-6">
                     <h2 className="font-serif text-2xl font-normal tracking-tight text-white md:text-3xl">

@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import SearchWidget from "./SearchWidget";
 import CategoriesWidget from "./CategoriesWidget";
-import InstagramWidget from "./InstagramWidget";
 import GoogleMapsWidget from "./GoogleMapsWidget";
 import FeaturedPostsWidget from "./FeaturedPostsWidget";
 import {
@@ -9,12 +8,9 @@ import {
   type BlogWidgetConfig,
   type SearchWidgetConfig,
   type CategoriesWidgetConfig,
-  type InstagramWidgetConfig,
   type MapsWidgetConfig,
   type FeaturedPostsWidgetConfig,
 } from "@/lib/blogWidgets";
-import { fetchInstagramFeed } from "@/lib/instagram";
-import { getBlog } from "@/lib/blog";
 import type { BlogPost } from "@/lib/blog";
 
 interface BlogSidebarProps {
@@ -63,19 +59,6 @@ async function WidgetRenderer({
           />
         </Suspense>
       );
-    case "instagram": {
-      const ig = widget as InstagramWidgetConfig;
-      const images =
-        ig.images.length > 0 ? ig.images : await fetchInstagramFeed();
-      return (
-        <InstagramWidget
-          title={ig.title}
-          username={ig.username}
-          profileUrl={ig.profileUrl}
-          images={images}
-        />
-      );
-    }
     case "maps": {
       const maps = widget as MapsWidgetConfig;
       return (

@@ -52,3 +52,25 @@ export function generateBlogSlug(title: string, date?: string): string {
   const datePrefix = date ? toYYMMDD(date) : null;
   return datePrefix ? `${datePrefix}-${titlePart}` : titlePart;
 }
+
+/** Provjeri da slug odgovara formatu yymmdd-naslov (6 znamenki, crtica, naslov) */
+export function isValidBlogSlug(slug: string): boolean {
+  if (!slug || typeof slug !== "string") return false;
+  const trimmed = slug.trim();
+  return /^\d{6}-[a-z0-9]+(-[a-z0-9]+)*$/.test(trimmed);
+}
+
+/**
+ * Vraća valjani blog slug. Ako je predani slug u ispravnom formatu, vraća ga.
+ * Inače generira iz title + date.
+ */
+export function normalizeBlogSlug(
+  slug: string | undefined,
+  title: string,
+  date: string
+): string {
+  if (slug?.trim() && isValidBlogSlug(slug.trim())) {
+    return slug.trim();
+  }
+  return generateBlogSlug(title, date);
+}

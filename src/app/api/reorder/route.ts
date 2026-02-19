@@ -1,6 +1,8 @@
 import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import type { GalleryData } from "@/lib/getGallery";
+import { withLock } from "@/lib/jsonLock";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 function normalizeCategory(cat: string): string {
   return cat
@@ -11,6 +13,8 @@ function normalizeCategory(cat: string): string {
 }
 
 export async function POST(request: Request) {
+  const rateLimitRes = checkRateLimit(request);
+  if (rateLimitRes) return rateLimitRes;
   if (process.env.NODE_ENV !== "development") {
     return new Response(
       JSON.stringify({ error: "Reorder only available in development mode" }),
@@ -35,18 +39,20 @@ export async function POST(request: Request) {
 
     const categorySlug = normalizeCategory(category);
     const galleryPath = path.join(process.cwd(), "src", "data", "gallery.json");
-    const galleryRaw = await readFile(galleryPath, "utf-8");
-    const gallery: GalleryData = JSON.parse(galleryRaw);
+    await withLock(galleryPath, async () => {
+      const galleryRaw = await readFile(galleryPath, "utf-8");
+      const gallery: GalleryData = JSON.parse(galleryRaw);
 
-    const orderMap = new Map(order.map((id, i) => [id, i]));
+      const orderMap = new Map(order.map((id, i) => [id, i]));
 
-    for (const img of gallery.images) {
-      if (normalizeCategory(img.category) === categorySlug && orderMap.has(img.id)) {
-        (img as { order?: number }).order = orderMap.get(img.id)!;
+      for (const img of gallery.images) {
+        if (normalizeCategory(img.category) === categorySlug && orderMap.has(img.id)) {
+          (img as { order?: number }).order = orderMap.get(img.id)!;
+        }
       }
-    }
 
-    await writeFile(galleryPath, JSON.stringify(gallery, null, 2));
+      await writeFile(galleryPath, JSON.stringify(gallery, null, 2));
+    });
 
     return Response.json({ success: true });
   } catch (error) {

@@ -10,7 +10,12 @@
       ],
       "thumbnail": "/uploads/blog/2025-12-21-251221-immich/featured.webp",
       "thumbnailFocus": "56% 55%",
-      "gallery": []
+      "gallery": [],
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "",
+        "keywords": ""
+      }
     },
     {
       "id": "85bdb9fe-d492-4829-bc36-4a4d49c96e8c",
@@ -108,7 +113,12 @@
         "/uploads/blog/2024-11-17-241117-fiat-500/gallery/241117-fiat_500_169.webp",
         "/uploads/blog/2024-11-17-241117-fiat-500/gallery/241117-fiat_500_172.webp",
         "/uploads/blog/2024-11-17-241117-fiat-500/gallery/241117-fiat_500_173.webp"
-      ]
+      ],
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "",
+        "keywords": ""
+      }
     },
     {
       "id": "b079da7e-74af-479f-9255-30927caed42e",
@@ -230,7 +240,12 @@
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_556.webp",
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_560.webp"
       ],
-      "featured": true
+      "featured": true,
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "",
+        "keywords": ""
+      }
     },
     {
       "id": "76bfeffd-7c3b-43e1-a24b-7cfc65f957b3",
@@ -282,7 +297,12 @@
         "/uploads/blog/2025-03-23-250323-zagrebancije-festival-svjetla-2025/gallery/250323-festival_svjetla_236.webp",
         "/uploads/blog/2025-03-23-250323-zagrebancije-festival-svjetla-2025/gallery/250323-festival_svjetla_248.webp"
       ],
-      "featured": true
+      "featured": true,
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "",
+        "keywords": ""
+      }
     },
     {
       "id": "a6fbcfc6-8fab-4829-8bd3-c9076be67258",
@@ -505,6 +525,11 @@
         "/uploads/blog/2025-12-29-251228-advent-2025/gallery/251228-advent_263.webp": {
           "title": "Zagrebancije: Advent 2025."
         }
+      },
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "",
+        "keywords": ""
       }
     }
   ]

@@ -1,5 +1,11 @@
+import path from "path";
 import { getBlog, getBlogPost, saveBlog, saveBlogBody } from "@/lib/blog";
-import type { BlogGalleryMetadata } from "@/lib/blog";
+import type { BlogGalleryMetadata, BlogSeo } from "@/lib/blog";
+import { withLock } from "@/lib/jsonLock";
+import { checkRateLimit } from "@/lib/rateLimit";
+import { normalizeBlogSlug } from "@/lib/slug";
+
+const BLOG_JSON_PATH = path.join(process.cwd(), "src", "data", "blog.json");
 
 export const dynamic = "force-static";
 
@@ -19,13 +25,15 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error("Blog fetch error:", error);
     return Response.json(
-      { posts: [] },
-      { status: 200, headers: { "Content-Type": "application/json" } }
+      { error: "Failed to fetch blog" },
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }
 
 export async function POST(request: Request) {
+  const rateLimitRes = checkRateLimit(request);
+  if (rateLimitRes) return rateLimitRes;
   if (process.env.NODE_ENV !== "development") {
     return Response.json(
       { error: "Only available in development mode" },
@@ -47,10 +55,12 @@ export async function POST(request: Request) {
       galleryMetadata?: Record<string, BlogGalleryMetadata>;
       featured?: boolean;
       body: string;
+      seo?: BlogSeo;
     };
-    const blog = await getBlog();
     const id = crypto.randomUUID();
-    const slug = (body.slug || id.slice(0, 8)).trim();
+    const date = body.date || new Date().toISOString().slice(0, 10);
+    const title = body.title || "Bez naslova";
+    const slug = normalizeBlogSlug(body.slug?.trim(), title, date);
     const categories = Array.isArray(body.categories)
       ? body.categories.filter(Boolean)
       : body.category
@@ -58,9 +68,9 @@ export async function POST(request: Request) {
         : [];
     const post = {
       id,
-      title: body.title || "Bez naslova",
+      title,
       slug,
-      date: body.date || new Date().toISOString().slice(0, 10),
+      date,
       time: body.time && /^\d{1,2}:\d{2}$/.test(body.time) ? body.time : undefined,
       categories,
       thumbnail: body.thumbnail || "",
@@ -68,10 +78,14 @@ export async function POST(request: Request) {
       gallery: Array.isArray(body.gallery) ? body.gallery : ([] as string[]),
       galleryMetadata: body.galleryMetadata ?? {},
       featured: body.featured ?? false,
+      seo: body.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
     };
-    await saveBlogBody(slug, body.body || "");
-    blog.posts.unshift(post);
-    await saveBlog(blog);
+    await withLock(BLOG_JSON_PATH, async () => {
+      await saveBlogBody(slug, body.body || "");
+      const blog = await getBlog();
+      blog.posts.unshift(post);
+      await saveBlog(blog);
+    });
     return Response.json({ ...post, body: body.body || "" });
   } catch (error) {
     console.error("Blog create error:", error);
@@ -83,6 +97,8 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
+  const rateLimitRes = checkRateLimit(request);
+  if (rateLimitRes) return rateLimitRes;
   if (process.env.NODE_ENV !== "development") {
     return Response.json(
       { error: "Only available in development mode" },
@@ -105,18 +121,24 @@ export async function PUT(request: Request) {
       galleryMetadata?: Record<string, BlogGalleryMetadata>;
       featured?: boolean;
       body?: string;
+      seo?: BlogSeo;
     };
-    const blog = await getBlog();
-    const idx = blog.posts.findIndex((p) => p.id === body.id);
-    if (idx < 0) {
-      return Response.json(
-        { error: "Post not found" },
-        { status: 404, headers: { "Content-Type": "application/json" } }
-      );
-    }
-    if (body.title !== undefined) blog.posts[idx].title = body.title;
-    if (body.slug !== undefined) blog.posts[idx].slug = body.slug;
-    if (body.date !== undefined) blog.posts[idx].date = body.date;
+    const result = await withLock(BLOG_JSON_PATH, async () => {
+      const blog = await getBlog();
+      const idx = blog.posts.findIndex((p) => p.id === body.id);
+      if (idx < 0) {
+        return { error: "not_found" as const };
+      }
+      const oldSlug = blog.posts[idx].slug;
+      const oldDate = blog.posts[idx].date;
+
+      if (body.title !== undefined) blog.posts[idx].title = body.title;
+      if (body.date !== undefined) blog.posts[idx].date = body.date;
+      if (body.slug !== undefined) {
+        const title = body.title ?? blog.posts[idx].title;
+        const date = body.date ?? blog.posts[idx].date;
+        blog.posts[idx].slug = normalizeBlogSlug(body.slug, title, date);
+      }
     if (body.time !== undefined) {
       blog.posts[idx].time =
         body.time && /^\d{1,2}:\d{2}$/.test(body.time) ? body.time : undefined;
@@ -135,11 +157,36 @@ export async function PUT(request: Request) {
     if (body.gallery !== undefined) blog.posts[idx].gallery = body.gallery;
     if (body.galleryMetadata !== undefined) blog.posts[idx].galleryMetadata = body.galleryMetadata;
     if (body.featured !== undefined) blog.posts[idx].featured = !!body.featured;
-    if (body.body !== undefined) {
-      await saveBlogBody(blog.posts[idx].slug, body.body);
+    if (body.seo !== undefined) {
+      blog.posts[idx].seo = {
+        metaTitle: body.seo.metaTitle?.trim() ?? "",
+        metaDescription: body.seo.metaDescription?.trim() ?? "",
+        keywords: body.seo.keywords?.trim() ?? "",
+      };
     }
-    await saveBlog(blog);
-    const post = blog.posts[idx];
+      if (body.body !== undefined) {
+        await saveBlogBody(blog.posts[idx].slug, body.body);
+      }
+      await saveBlog(blog);
+      return { post: blog.posts[idx], oldSlug, oldDate, slugChanged: body.slug !== undefined && body.slug !== oldSlug, dateChanged: body.date !== undefined && body.date !== oldDate };
+    });
+
+    if (result && "error" in result && result.error === "not_found") {
+      return Response.json(
+        { error: "Post not found" },
+        { status: 404, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const { post, oldSlug, oldDate, slugChanged, dateChanged } = result!;
+    const newSlug = post.slug;
+    const newDate = post.date;
+
+    if ((slugChanged || dateChanged) && (oldSlug !== newSlug || oldDate !== newDate)) {
+      const { cleanupBlogOrphanFiles } = await import("@/lib/blogCleanup");
+      await cleanupBlogOrphanFiles(oldSlug, oldDate, newSlug, newDate, post);
+    }
+
     return Response.json(post);
   } catch (error) {
     console.error("Blog update error:", error);
@@ -151,6 +198,8 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const rateLimitRes = checkRateLimit(request);
+  if (rateLimitRes) return rateLimitRes;
   if (process.env.NODE_ENV !== "development") {
     return Response.json(
       { error: "Only available in development mode" },
@@ -167,9 +216,18 @@ export async function DELETE(request: Request) {
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
-    const blog = await getBlog();
-    blog.posts = blog.posts.filter((p) => p.id !== id);
-    await saveBlog(blog);
+    const deletedPost = await withLock(BLOG_JSON_PATH, async () => {
+      const blog = await getBlog();
+      const post = blog.posts.find((p) => p.id === id);
+      const toDelete = post ? { slug: post.slug, date: post.date } : null;
+      blog.posts = blog.posts.filter((p) => p.id !== id);
+      await saveBlog(blog);
+      return toDelete;
+    });
+    if (deletedPost) {
+      const { deleteBlogPostFiles } = await import("@/lib/blogCleanup");
+      await deleteBlogPostFiles(deletedPost.slug, deletedPost.date);
+    }
     return Response.json({ success: true });
   } catch (error) {
     console.error("Blog delete error:", error);

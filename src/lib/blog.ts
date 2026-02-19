@@ -1,6 +1,7 @@
 import { readFile, writeFile, mkdir } from "fs/promises";
 import path from "path";
 import sharp from "sharp";
+import { sanitizeProseHtml } from "./sanitize";
 
 export interface BlogGalleryImage {
   src: string;
@@ -28,11 +29,18 @@ export interface BlogGalleryMetadata {
   description?: string;
 }
 
+export interface BlogSeo {
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string;
+}
+
 export interface BlogPost {
   id: string;
   title: string;
   slug: string;
   date: string;
+  seo?: BlogSeo;
   /** Vrijeme u formatu HH:mm (24h), opcionalno */
   time?: string;
   /** @deprecated Use categories */
@@ -180,7 +188,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   try {
     const contentPath = getBlogContentPath(slug);
     const body = await readFile(contentPath, "utf-8");
-    return { ...post, body, galleryImages };
+    return { ...post, body: sanitizeProseHtml(body), galleryImages };
   } catch {
     return { ...post, galleryImages };
   }

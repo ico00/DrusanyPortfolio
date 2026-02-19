@@ -1,8 +1,12 @@
 import { readFile, writeFile, unlink } from "fs/promises";
 import path from "path";
 import type { GalleryData } from "@/lib/getGallery";
+import { withLock } from "@/lib/jsonLock";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 export async function POST(request: Request) {
+  const rateLimitRes = checkRateLimit(request);
+  if (rateLimitRes) return rateLimitRes;
   if (process.env.NODE_ENV !== "development") {
     return new Response(
       JSON.stringify({ error: "Delete only available in development mode" }),
@@ -21,36 +25,42 @@ export async function POST(request: Request) {
     }
 
     const galleryPath = path.join(process.cwd(), "src", "data", "gallery.json");
-    const galleryRaw = await readFile(galleryPath, "utf-8");
-    const gallery: GalleryData = JSON.parse(galleryRaw);
+    const result = await withLock(galleryPath, async () => {
+      const galleryRaw = await readFile(galleryPath, "utf-8");
+      const gallery: GalleryData = JSON.parse(galleryRaw);
 
-    const index = gallery.images.findIndex((img) => img.id === id);
-    if (index === -1) {
+      const index = gallery.images.findIndex((img) => img.id === id);
+      if (index === -1) {
+        return { error: "not_found" as const };
+      }
+
+      const img = gallery.images[index];
+
+      const deleteFile = async (relativePath: string) => {
+        const fullPath = path.join(process.cwd(), "public", relativePath.slice(1));
+        try {
+          await unlink(fullPath);
+        } catch (err) {
+          if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
+            console.warn("Could not delete file:", fullPath, err);
+          }
+        }
+      };
+
+      await deleteFile(img.src);
+      if (img.thumb) await deleteFile(img.thumb);
+
+      gallery.images.splice(index, 1);
+      await writeFile(galleryPath, JSON.stringify(gallery, null, 2));
+      return { success: true as const };
+    });
+
+    if (result && "error" in result && result.error === "not_found") {
       return new Response(
         JSON.stringify({ error: "Image not found" }),
         { status: 404, headers: { "Content-Type": "application/json" } }
       );
     }
-
-    const img = gallery.images[index];
-
-    const deleteFile = async (relativePath: string) => {
-      const fullPath = path.join(process.cwd(), "public", relativePath.slice(1));
-      try {
-        await unlink(fullPath);
-      } catch (err) {
-        if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
-          console.warn("Could not delete file:", fullPath, err);
-        }
-      }
-    };
-
-    await deleteFile(img.src);
-    if (img.thumb) await deleteFile(img.thumb);
-
-    gallery.images.splice(index, 1);
-    await writeFile(galleryPath, JSON.stringify(gallery, null, 2));
-
     return Response.json({ success: true, id });
   } catch (error) {
     console.error("Delete error:", error);

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -6,6 +7,31 @@ import AboutImage from "@/components/AboutImage";
 import ContactForm from "@/components/ContactForm";
 import ProseContent from "@/components/ProseContent";
 import { getPages } from "@/lib/pages";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pages = await getPages();
+  const { title, seo } = pages.contact;
+  const metaTitle = seo?.metaTitle?.trim() || title;
+  const description = seo?.metaDescription?.trim() || undefined;
+  const keywords = seo?.keywords?.trim()
+    ? seo.keywords.split(",").map((k) => k.trim()).filter(Boolean)
+    : undefined;
+  return {
+    title: metaTitle,
+    description,
+    keywords: keywords?.length ? keywords.join(", ") : undefined,
+    openGraph: {
+      title: metaTitle,
+      description,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metaTitle,
+      description,
+    },
+  };
+}
 
 export default async function ContactPage() {
   const pages = await getPages();

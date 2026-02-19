@@ -15,16 +15,6 @@ export interface CategoriesWidgetConfig {
   title: string;
 }
 
-export interface InstagramWidgetConfig {
-  id: string;
-  type: "instagram";
-  enabled: boolean;
-  title: string;
-  username: string;
-  profileUrl: string;
-  images: string[];
-}
-
 export interface MapLocation {
   id: string;
   name: string;
@@ -49,7 +39,6 @@ export interface FeaturedPostsWidgetConfig {
 export type BlogWidgetConfig =
   | SearchWidgetConfig
   | CategoriesWidgetConfig
-  | InstagramWidgetConfig
   | MapsWidgetConfig
   | FeaturedPostsWidgetConfig;
 

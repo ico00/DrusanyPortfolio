@@ -1,8 +1,11 @@
 import { unlink } from "fs/promises";
 import path from "path";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 /** Briše datoteku iz blog galerije (public/uploads/blog/...) */
 export async function POST(request: Request) {
+  const rateLimitRes = checkRateLimit(request);
+  if (rateLimitRes) return rateLimitRes;
   if (process.env.NODE_ENV !== "development") {
     return Response.json(
       { error: "Samo u development modu" },
@@ -28,7 +31,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const fullPath = path.join(process.cwd(), "public", normalized.slice(1));
+    const fullPath = path.resolve(path.join(process.cwd(), "public", normalized.slice(1)));
+    const allowedDir = path.resolve(process.cwd(), "public", "uploads", "blog");
+    if (!fullPath.startsWith(allowedDir + path.sep) && fullPath !== allowedDir) {
+      return Response.json(
+        { error: "Neispravna putanja" },
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
     try {
       await unlink(fullPath);
     } catch (err) {

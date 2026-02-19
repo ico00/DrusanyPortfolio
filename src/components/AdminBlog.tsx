@@ -44,7 +44,10 @@ import {
 } from "@/data/blogCategories";
 import { THUMBNAIL_FOCUS_OPTIONS } from "@/data/thumbnailFocus";
 import { generateBlogSlug } from "@/lib/slug";
-import type { BlogPost } from "@/lib/blog";
+import type { BlogPost, BlogSeo } from "@/lib/blog";
+import { Search } from "lucide-react";
+
+const META_DESCRIPTION_MAX = 160;
 
 function SortableGalleryItem({
   url,
@@ -140,6 +143,7 @@ export default function AdminBlog() {
     galleryMetadata: {} as Record<string, { title?: string; description?: string }>,
     featured: false,
     body: "",
+    seo: { metaTitle: "", metaDescription: "", keywords: "" } as BlogSeo,
   });
   const [bulkTitle, setBulkTitle] = useState("");
   const [bulkDescription, setBulkDescription] = useState("");
@@ -226,6 +230,7 @@ export default function AdminBlog() {
         galleryMetadata: post.galleryMetadata ?? {},
         featured: post.featured ?? false,
         body: full?.body ?? "",
+        seo: post.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
       });
     } finally {
       setEditLoading(false);
@@ -246,6 +251,7 @@ export default function AdminBlog() {
       galleryMetadata: {},
       featured: false,
       body: "",
+      seo: { metaTitle: "", metaDescription: "", keywords: "" },
     });
   };
 
@@ -691,6 +697,79 @@ export default function AdminBlog() {
                 {form.featured ? "Prikazuje se u widgetu istaknutih" : "Dodaj u istaknute"}
               </span>
             </div>
+            <div className="rounded-lg border border-zinc-800 bg-zinc-900/30 p-4">
+              <h3 className="mb-4 flex items-center gap-2 text-sm font-medium text-zinc-400">
+                <Search className="h-4 w-4" />
+                SEO Settings
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="mb-1 block text-xs text-zinc-500">Meta Title</label>
+                  <input
+                    type="text"
+                    value={form.seo?.metaTitle ?? ""}
+                    onChange={(e) =>
+                      setForm((f) => ({
+                        ...f,
+                        seo: { ...f.seo, metaTitle: e.target.value },
+                      }))
+                    }
+                    placeholder={`Prazno = koristi naslov članka (${form.title || "—"})`}
+                    className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                  />
+                  <p className="mt-1 text-xs text-zinc-500">
+                    Ako ostane prazno, koristi se naslov članka
+                  </p>
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs text-zinc-500">
+                    Meta Description
+                    <span
+                      className={`ml-2 ${(form.seo?.metaDescription?.length ?? 0) > META_DESCRIPTION_MAX ? "text-amber-400" : "text-zinc-500"}`}
+                    >
+                      {(form.seo?.metaDescription?.length ?? 0)}/160
+                    </span>
+                  </label>
+                  <textarea
+                    value={form.seo?.metaDescription ?? ""}
+                    onChange={(e) =>
+                      setForm((f) => ({
+                        ...f,
+                        seo: { ...f.seo, metaDescription: e.target.value },
+                      }))
+                    }
+                    rows={3}
+                    placeholder="Opis članka za pretraživače i društvene mreže"
+                    className={`w-full rounded-lg border px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-1 ${
+                      (form.seo?.metaDescription?.length ?? 0) > META_DESCRIPTION_MAX
+                        ? "border-amber-500 bg-zinc-800/50 focus:border-amber-500 focus:ring-amber-500"
+                        : "border-zinc-700 bg-zinc-800/50 focus:border-zinc-500 focus:ring-zinc-500"
+                    }`}
+                  />
+                  {(form.seo?.metaDescription?.length ?? 0) > META_DESCRIPTION_MAX && (
+                    <p className="mt-1 text-xs text-amber-400">
+                      Preporučeno max. 160 znakova za prikaz u rezultatima pretrage
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs text-zinc-500">Keywords (zarezom odvojeno)</label>
+                  <input
+                    type="text"
+                    value={form.seo?.keywords ?? ""}
+                    onChange={(e) =>
+                      setForm((f) => ({
+                        ...f,
+                        seo: { ...f.seo, keywords: e.target.value },
+                      }))
+                    }
+                    placeholder="fotografija, advent, Zagreb, ..."
+                    className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                  />
+                </div>
+              </div>
+            </div>
+
             <div>
               <label className="mb-2 block text-sm text-zinc-400">Kategorije</label>
               <BlogCategorySelect

@@ -34,10 +34,12 @@
     "lucide-react": "^0.563.0",
     "masonry-layout": "^4.2.2",
     "next": "16.1.6",
+    "proper-lockfile": "^4.1.2",
     "react": "19.2.3",
     "react-day-picker": "^9.13.2",
     "react-dom": "19.2.3",
     "recharts": "^3.7.0",
+    "sanitize-html": "^2.17.1",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
@@ -45,8 +47,10 @@
     "@types/imagesloaded": "^4.1.7",
     "@types/masonry-layout": "^4.2.8",
     "@types/node": "^20",
+    "@types/proper-lockfile": "^4.1.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sanitize-html": "^2.16.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",

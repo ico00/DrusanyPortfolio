@@ -48,14 +48,8 @@ export async function GET() {
   } catch (error) {
     console.error("Content health fetch error:", error);
     return Response.json(
-      {
-        imagesWithoutExif: 0,
-        imagesWithoutSlug: 0,
-        blogPostsWithoutFeaturedImage: 0,
-        imageIdsWithoutExif: [],
-        imageIdsWithoutSlug: [],
-      },
-      { status: 200 }
+      { error: "Failed to fetch content health" },
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }

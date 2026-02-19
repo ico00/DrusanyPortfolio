@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -6,12 +7,50 @@ import Header from "@/components/Header";
 import ProseContent from "@/components/ProseContent";
 import BlogGallery from "@/components/BlogGallery";
 import BlogSidebar from "@/components/blog/BlogSidebar";
+import ViewfinderOverlay from "@/components/ViewfinderOverlay";
 import { getBlog, getBlogPost } from "@/lib/blog";
 import {
   getDisplayCategories,
   getShortCategoryLabel,
   formatBlogDate,
 } from "@/data/blogCategories";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
+  if (!post || slug === "_") {
+    return { title: "Blog" };
+  }
+  const title = post.seo?.metaTitle?.trim() || post.title;
+  const description = post.seo?.metaDescription?.trim() || undefined;
+  const keywords = post.seo?.keywords?.trim()
+    ? post.seo.keywords.split(",").map((k) => k.trim()).filter(Boolean)
+    : undefined;
+  const ogImage = post.thumbnail
+    ? { url: post.thumbnail, width: 1200, height: 630, alt: post.title }
+    : undefined;
+  return {
+    title,
+    description,
+    keywords: keywords?.length ? keywords.join(", ") : undefined,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      images: ogImage ? [ogImage] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: post.thumbnail ? [post.thumbnail] : undefined,
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const { posts } = await getBlog();
@@ -98,7 +137,7 @@ export default async function BlogPostPage({
 
             {post.thumbnail && (
               <div className="relative mt-6 w-full overflow-hidden bg-zinc-100 md:mt-8">
-                <div className="aspect-[21/9] w-full">
+                <div className="relative aspect-video w-full">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={post.thumbnail}
@@ -106,6 +145,7 @@ export default async function BlogPostPage({
                     className="h-full w-full object-cover"
                     style={{ objectPosition: focusPoint }}
                   />
+                  <ViewfinderOverlay />
                 </div>
               </div>
             )}

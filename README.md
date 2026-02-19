@@ -9,13 +9,14 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 ## ✨ Značajke
 
 - **Galerija** – Balanced masonry layout (stupci približno jednake visine), filtriranje po kategorijama (Concerts, Sport, Animals, Interiors, Zagreb, Food & Drink)
+- **Sigurnost i pouzdanost** – Path traversal zaštita, ograničenje uploada (20 MB), magic bytes provjera, HTML sanitizacija, rate limiting, file locking za JSON, čišćenje orphan datoteka pri promjeni blog slug-a
 - **Lightbox** – Puni prikaz slike, EXIF podaci (camera, lens, aperture…), navigacija strelicama ili swipeom
 - **Hero slider** – Početna stranica s 6 slideova po kategorijama, auto-play
 - **Pretraga** – Filter as you type (naslov, venue, sport, keywords)
 - **Direktni linkovi** – URL slug po slici (npr. `/?category=concerts&image=depeche-mode-arena-zagreb-2013`)
 - **About** – Split layout (lijevo slika s citatom, desno sadržaj); sekcije About, Press, Gear; fiksni nav na dnu s aktivnim linkom koji prati scroll; **dekorativni navodnik** na blockquote citatima
 - **Contact** – Isti layout kao About; kontakt forma (Formspree) – name, email, subject, message; fallback na mailto
-- **Blog** – Lista postova s metapodacima (Tekst i fotografije, Datum objave, Kategorija) i ikonama; **sidebar** s pretragom (filter-as-you-type), kategorijama, Instagram widgetom i Google Maps; pojedinačni post s naslovom na vrhu, featured slikom, sadržajem (slike s poravnanjem, vizual kao galerija) i masonry galerijom (lightbox, aperture cursor); format datuma dd. mm. yyyy.; BlockNote WYSIWYG editor s **uploadom slika** u sadržaj
+- **Blog** – Lista postova s metapodacima (Tekst i fotografije, Datum objave, Kategorija) i ikonama; **sidebar** s pretragom (filter-as-you-type), kategorijama, **istaknutim člancima** (featured) i Google Maps; pojedinačni post s naslovom na vrhu, featured slikom, sadržajem (slike s poravnanjem, vizual kao galerija) i masonry galerijom (lightbox, aperture cursor, EXIF); format datuma dd. mm. yyyy.; BlockNote WYSIWYG editor s **uploadom slika** u sadržaj; **Footer** (copyright)
 - **Theme** – Prilagodba fonta, veličine i boje po elementu (title, heading, body, quote, nav, caption) putem Admin → Theme; live preview; centralna konfiguracija fontova u `themeFonts.ts` (lako dodavanje novih)
 - **Admin panel** – Samo u development modu: **Dashboard** (grafikoni – Recharts); galerija (upload, edit, hero, sortiranje) s **custom DateTimePicker**; About/Contact (quote, Formspree endpoint); Blog s **DatePicker**, **upload slika u sadržaj** (BlockNote `/image`), **resize** slika; **Theme** – prilagodba fonta, veličine i boje po elementu (title, heading, body, quote, nav, caption) s live previewom; **sidebar accordion**; **toast** poruke (success/error)
 
@@ -32,6 +33,8 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 | Framer Motion | Animacije |
 | Sharp | Image processing (WebP, resize) |
 | exifr | EXIF metadata (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate, naslov, camera, lens…) |
+| sanitize-html | HTML sanitizacija pri čitanju sadržaja |
+| proper-lockfile | File locking za JSON (gallery, blog, pages) |
 
 ## 📋 Preduvjeti
 
@@ -76,6 +79,8 @@ Otvori [http://localhost:3000](http://localhost:3000) u pregledniku.
 | `npm run build` | Generira statični output u folder `out/` |
 | `npm run preview` | Servira `out/` folder lokalno (za testiranje produkcijskog builda) |
 | `npm run lint` | Pokreće ESLint |
+| `node scripts/populate-blog-exif.mjs` | Popunjava blogExif.json EXIF podacima iz postojećih blog galerijskih slika |
+| `curl localhost:3000/api/health` | Health check (dev) – provjerava JSON datoteke i kritične resurse; u buildu prerenderira se u `out/api/health` |
 
 ## 📁 Struktura projekta
 
@@ -85,7 +90,7 @@ DrusanyPortfolio/
 ├── src/
 │   ├── app/              # Stranice i API rute
 │   │   ├── admin/        # Admin panel (dev only)
-│   │   ├── api/          # upload, update, delete, reorder, hero, gallery, pages, blog, blog-upload (featured/gallery/content), blog-delete-file, theme
+│   │   ├── api/          # upload, update, delete, reorder, hero, gallery, gallery/generate-slugs, content-health, health, pages, blog, blog-upload, blog-delete-file, theme
 │   │   ├── about/        # About stranica
 │   │   ├── contact/      # Contact stranica
 │   │   └── blog/         # Blog lista + [slug] pojedinačni post
@@ -96,10 +101,14 @@ DrusanyPortfolio/
 │   │   ├── gear.json        # Fotografska oprema (About)
 │   │   ├── press.json       # Objavljene fotografije (About)
 │   │   ├── blog.json        # Blog postovi (slug yymmdd-naslov, title, date, categories, thumbnail, gallery)
-│   │   ├── blogWidgets.json # Konfiguracija blog sidebara (search, categories, instagram, maps)
+│   │   ├── blogExif.json    # EXIF za blog galerijske slike (populate-blog-exif.mjs)
+│   │   ├── blogWidgets.json # Konfiguracija blog sidebara (search, categories, featured-posts, maps)
 │   │   ├── theme.json       # Theme konfiguracija (font, fontSize, color po elementu)
 │   │   └── themeFonts.ts   # Konfiguracija fontova za Theme (dodavanje novih fontova)
-│   └── lib/              # getGallery, pages, gear, press, blog, blogWidgets, instagram, theme, slug utils
+│   └── lib/              # getGallery, pages, gear, press, blog, blogWidgets, theme, slug, exif, sanitize, imageValidation, jsonLock, blogCleanup, rateLimit
+├── .env.example          # NEXT_PUBLIC_SITE_URL, RATE_LIMIT_* (opcionalno)
+├── scripts/
+│   └── populate-blog-exif.mjs  # Popunjava blogExif.json iz postojećih slika (node scripts/populate-blog-exif.mjs)
 └── out/                  # Statični output (generira se pri build)
 ```
 
@@ -108,8 +117,9 @@ DrusanyPortfolio/
 Admin je dostupan **samo kada pokreneš `npm run dev`** – u produkcijskom buildu se ne uključuje.
 
 **Funkcionalnosti:**
-- **Dashboard:** Pregled sadržaja – bar/pie grafikoni (Recharts)
-- **Galerija:** Sidebar accordion; odabir kategorije → upload slika; EXIF preview (datum fallback); **custom DateTimePicker** (datum + vrijeme); uređivanje opisa (title, venue, sport, slug, keywords…); slug **as you type**; drag-and-drop sortiranje; hero odabir; brisanje; **toast** poruke
+- **Dashboard:** Pregled sadržaja – bar/pie grafikoni (Recharts); **Content health** – slike bez EXIF-a, slike bez slug-a, blog postovi bez featured slike (klik otvara galeriju s filterom ili Blog)
+- **Sigurnost:** Rate limiting (60 req/min po IP), path traversal zaštita, ograničenje uploada 20 MB, magic bytes provjera, HTML sanitizacija; file locking za JSON; čišćenje orphan datoteka pri promjeni blog slug-a
+- **Galerija:** Sidebar accordion; odabir kategorije → upload slika; EXIF preview (datum fallback); **custom DateTimePicker** (datum + vrijeme); uređivanje opisa (title, venue, sport, slug, keywords…); slug **as you type**; drag-and-drop sortiranje; hero odabir; brisanje; **Content health** – gumb "Generiraj slugove" kad je filter no-slug; **toast** poruke
 - **Pages:** About – citat na slici, naslov, BlockNote sadržaj; Contact – Formspree endpoint, email (fallback), naslov, uvodni tekst (BlockNote)
 - **Blog:** Kreiranje i uređivanje blog postova – title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, kategorije (višestruki odabir, abecedno), thumbnail, sadržaj (BlockNote s **uploadom slika** – `/image` → Upload/Embed, resize ručice), galerija (drag-and-drop, bulk delete); brisanje slika iz galerije briše i fizičke datoteke s diska
 - **Theme:** Prilagodba tipografije – font (Sans/Serif/Mono), veličina i boja za svaki element (Hero naslov, Naslovi, Body, Citat, Navigacija, Caption); custom dropdown; live preview s adaptivnom pozadinom; za statički export: uređivanje u dev modu, zatim `npm run build`; novi fontovi se dodaju u `themeFonts.ts` i `layout.tsx`
@@ -128,6 +138,8 @@ Projekt se builda u čisto statični output (`out/`). Može se deployati na:
 ## 📖 Dokumentacija
 
 Detaljna arhitektura, API rute, design sustav i konvencije su opisani u **[architecture.md](./architecture.md)**.
+
+**Konfiguracija:** Kopiraj `.env.example` u `.env` i postavi `NEXT_PUBLIC_SITE_URL` (za Open Graph, canonical linkove). Opcionalno: `RATE_LIMIT_MAX_REQUESTS`, `RATE_LIMIT_WINDOW_MS` za rate limiting.
 
 ## 📄 Licenca
 

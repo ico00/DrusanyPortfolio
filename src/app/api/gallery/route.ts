@@ -9,8 +9,8 @@ export async function GET() {
   } catch (error) {
     console.error("Gallery fetch error:", error);
     return Response.json(
-      { images: [] },
-      { status: 200, headers: { "Content-Type": "application/json" } }
+      { error: "Failed to fetch gallery" },
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }

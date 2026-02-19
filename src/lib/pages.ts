@@ -1,9 +1,17 @@
 import { readFile, writeFile } from "fs/promises";
 import path from "path";
+import { sanitizeProseHtml } from "./sanitize";
+
+export interface SeoContent {
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string;
+}
 
 export interface PageContent {
   title: string;
   html: string;
+  seo?: SeoContent;
 }
 
 export interface AboutPageContent extends PageContent {
@@ -25,12 +33,14 @@ const DEFAULT_PAGES: PagesData = {
     title: "About",
     html: "<p>Photographer focused on natural light and authentic moments.</p>",
     quote: undefined,
+    seo: { metaTitle: "", metaDescription: "", keywords: "" },
   },
   contact: {
     title: "Contact",
     html: "<p>For bookings and collaboration:</p>",
     email: "hello@example.com",
     formspreeEndpoint: undefined,
+    seo: { metaTitle: "", metaDescription: "", keywords: "" },
   },
 };
 
@@ -58,7 +68,12 @@ function normalizePage(
     title = extracted.title || fallbackTitle;
     html = extracted.html;
   }
-  return { title, html };
+  const seo: SeoContent = {
+    metaTitle: raw?.seo?.metaTitle?.trim() || "",
+    metaDescription: raw?.seo?.metaDescription?.trim() || "",
+    keywords: raw?.seo?.keywords?.trim() || "",
+  };
+  return { title, html: sanitizeProseHtml(html), seo };
 }
 
 function normalizeContactPage(
