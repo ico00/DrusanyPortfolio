@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
   Loader2,
   Plus,
@@ -35,12 +35,17 @@ import { CSS } from "@dnd-kit/utilities";
 import BlockNoteEditor from "./BlockNoteEditorDynamic";
 import DatePicker from "./DatePicker";
 import BlogCategorySelect from "./BlogCategorySelect";
+import StatusSelect from "./StatusSelect";
+import FilterSelect from "./FilterSelect";
+import FilterMultiSelect from "./FilterMultiSelect";
 import {
   getBlogCategoryLabel,
   getDisplayCategories,
   getShortCategoryLabel,
   getPostCategories,
   formatBlogDate,
+  getBlogCategoryOptions,
+  postHasCategory,
 } from "@/data/blogCategories";
 import { THUMBNAIL_FOCUS_OPTIONS } from "@/data/thumbnailFocus";
 import { generateBlogSlug } from "@/lib/slug";
@@ -48,6 +53,16 @@ import type { BlogPost, BlogSeo } from "@/lib/blog";
 import { Search } from "lucide-react";
 
 const META_DESCRIPTION_MAX = 160;
+
+const HR_MONTHS = [
+  "siječanj", "veljača", "ožujak", "travanj", "svibanj", "lipanj",
+  "srpanj", "kolovoz", "rujan", "listopad", "studeni", "prosinac",
+];
+function formatMonthOption(yearMonth: string): string {
+  const [y, m] = yearMonth.split("-").map(Number);
+  if (!y || !m || m < 1 || m > 12) return yearMonth;
+  return `${y}. ${HR_MONTHS[m - 1]}`;
+}
 
 function SortableGalleryItem({
   url,
@@ -124,7 +139,15 @@ function SortableGalleryItem({
   );
 }
 
-export default function AdminBlog() {
+interface AdminBlogProps {
+  contentHealthFilter?: "" | "no-seo" | "no-featured";
+  onClearContentHealthFilter?: () => void;
+}
+
+export default function AdminBlog({
+  contentHealthFilter = "",
+  onClearContentHealthFilter,
+}: AdminBlogProps) {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -142,6 +165,7 @@ export default function AdminBlog() {
     gallery: [] as string[],
     galleryMetadata: {} as Record<string, { title?: string; description?: string }>,
     featured: false,
+    status: "draft" as "draft" | "published",
     body: "",
     seo: { metaTitle: "", metaDescription: "", keywords: "" } as BlogSeo,
   });
@@ -165,8 +189,26 @@ export default function AdminBlog() {
   } | null>(null);
   const duplicateResolveRef = useRef<((action: "overwrite" | "add" | "cancel") => void) | null>(null);
   const [selectedGalleryUrls, setSelectedGalleryUrls] = useState<Set<string>>(new Set());
+  const [listStatusFilter, setListStatusFilter] = useState<string>("");
+  const [listCategoryFilter, setListCategoryFilter] = useState<string[]>([]);
+  const [listMonthFilter, setListMonthFilter] = useState<string>("");
+  const [listDateSort, setListDateSort] = useState<"newest" | "oldest">("newest");
   const featuredInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
+
+  const listMonthOptions = useMemo(() => {
+    const months = new Set<string>();
+    for (const p of posts) {
+      const m = p.date?.slice(0, 7);
+      if (m && /^\d{4}-\d{2}$/.test(m)) months.add(m);
+    }
+    return [
+      { value: "", label: "Svi datumi" },
+      ...Array.from(months)
+        .sort((a, b) => b.localeCompare(a))
+        .map((m) => ({ value: m, label: formatMonthOption(m) })),
+    ];
+  }, [posts]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -229,6 +271,7 @@ export default function AdminBlog() {
         gallery: post.gallery ?? [],
         galleryMetadata: post.galleryMetadata ?? {},
         featured: post.featured ?? false,
+        status: post.status === "draft" ? "draft" : "published",
         body: full?.body ?? "",
         seo: post.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
       });
@@ -250,6 +293,7 @@ export default function AdminBlog() {
       gallery: [],
       galleryMetadata: {},
       featured: false,
+      status: "draft",
       body: "",
       seo: { metaTitle: "", metaDescription: "", keywords: "" },
     });
@@ -705,8 +749,23 @@ export default function AdminBlog() {
                 />
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <label className="text-sm text-zinc-400">Istaknuti post</label>
+            <div className="flex flex-wrap items-center gap-6">
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-zinc-400">Status</label>
+                <div className="w-40">
+                  <StatusSelect
+                    value={form.status}
+                    onChange={(v) =>
+                      setForm((f) => ({ ...f, status: v }))
+                    }
+                  />
+                </div>
+                <span className="text-xs text-zinc-500">
+                  {form.status === "draft" ? "Ne prikazuje se javno" : "Vidljivo na blogu"}
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <label className="text-sm text-zinc-400">Istaknuti post</label>
               <button
                 type="button"
                 onClick={() => setForm((f) => ({ ...f, featured: !f.featured }))}
@@ -726,6 +785,7 @@ export default function AdminBlog() {
               <span className="text-xs text-zinc-500">
                 {form.featured ? "Prikazuje se u widgetu istaknutih" : "Dodaj u istaknute"}
               </span>
+              </div>
             </div>
             <div className="rounded-lg border border-zinc-800 bg-zinc-900/30 p-4">
               <h3 className="mb-4 flex items-center gap-2 text-sm font-medium text-zinc-400">
@@ -1220,18 +1280,107 @@ export default function AdminBlog() {
         </div>
       ) : null}
 
+      {/* Filter bar za listu blogova */}
+      <div className="mb-4 flex flex-wrap items-end gap-4 rounded-lg border border-zinc-800 bg-zinc-900/50 p-4">
+        <div className="w-36">
+          <FilterSelect
+            label="Status"
+            value={listStatusFilter}
+            onChange={setListStatusFilter}
+            options={[
+              { value: "", label: "Svi" },
+              { value: "draft", label: "Draft" },
+              { value: "published", label: "Objavljeno" },
+            ]}
+          />
+        </div>
+        <div className="w-48">
+          <FilterMultiSelect
+            label="Kategorija"
+            value={listCategoryFilter}
+            onChange={setListCategoryFilter}
+            placeholder="Sve kategorije"
+            options={getBlogCategoryOptions()
+              .sort((a, b) => a.fullLabel.localeCompare(b.fullLabel, "hr"))
+              .map((c) => ({ value: c.slug, label: c.fullLabel }))}
+          />
+        </div>
+        <div className="w-40">
+          <FilterSelect
+            label="Mjesec"
+            value={listMonthFilter}
+            onChange={setListMonthFilter}
+            options={listMonthOptions}
+          />
+        </div>
+        <div className="w-32">
+          <FilterSelect
+            label="Sort"
+            value={listDateSort}
+            onChange={(v) => setListDateSort(v as "newest" | "oldest")}
+            options={[
+              { value: "newest", label: "Najnovije" },
+              { value: "oldest", label: "Najstarije" },
+            ]}
+          />
+        </div>
+      </div>
+
+      {contentHealthFilter && onClearContentHealthFilter && (
+        <div className="mb-6 flex items-center justify-between gap-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3">
+          <span className="text-sm text-amber-400">
+            {contentHealthFilter === "no-seo"
+              ? "Prikazani su samo članci bez meta opisa (SEO)"
+              : "Prikazani su samo članci bez istaknute slike"}
+          </span>
+          <button
+            type="button"
+            onClick={onClearContentHealthFilter}
+            className="rounded-md px-3 py-1.5 text-sm font-medium text-amber-400 transition-colors hover:bg-amber-500/20 hover:text-amber-300"
+          >
+            Poništi filter
+          </button>
+        </div>
+      )}
+
       <div className="space-y-2">
-        {posts.length === 0 ? (
+        {(() => {
+          let filtered =
+            contentHealthFilter === "no-seo"
+              ? posts.filter((p) => !p.seo?.metaDescription?.trim())
+              : contentHealthFilter === "no-featured"
+                ? posts.filter((p) => !p.thumbnail || !String(p.thumbnail).trim())
+                : posts;
+          if (listStatusFilter) {
+            filtered = filtered.filter(
+              (p) => (p.status ?? "published") === listStatusFilter
+            );
+          }
+          if (listCategoryFilter.length > 0) {
+            filtered = filtered.filter((p) =>
+              listCategoryFilter.some((slug) => postHasCategory(p, slug))
+            );
+          }
+          if (listMonthFilter) {
+            filtered = filtered.filter(
+              (p) => p.date?.slice(0, 7) === listMonthFilter
+            );
+          }
+          const sorted = [...filtered].sort((a, b) => {
+            const da = a.date + (a.time || "00:00");
+            const db = b.date + (b.time || "00:00");
+            return listDateSort === "oldest"
+              ? da.localeCompare(db)
+              : db.localeCompare(da);
+          });
+          return sorted.length === 0 ? (
           <p className="rounded-lg bg-zinc-800/50 py-8 text-center text-sm text-zinc-500">
-            Još nema članaka. Klikni &quot;Novi članak&quot; za kreiranje.
+            {contentHealthFilter || listStatusFilter || listCategoryFilter.length > 0 || listMonthFilter
+              ? "Nema članaka koji odgovaraju filterima."
+              : "Još nema članaka. Klikni &quot;Novi članak&quot; za kreiranje."}
           </p>
         ) : (
-          [...posts]
-            .sort((a, b) => {
-              const da = a.date + (a.time || "00:00");
-              const db = b.date + (b.time || "00:00");
-              return db.localeCompare(da);
-            })
+          sorted
             .map((post) => (
             <div
               key={post.id}
@@ -1277,6 +1426,23 @@ export default function AdminBlog() {
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-2">
+                <span
+                  className={`rounded px-2 py-1 text-xs font-medium ${
+                    post.status === "draft"
+                      ? "bg-amber-500/20 text-amber-400"
+                      : "bg-emerald-500/20 text-emerald-400"
+                  }`}
+                >
+                  {post.status === "draft" ? "Draft" : "Objavljeno"}
+                </span>
+                <span className="flex items-center gap-1 rounded px-2 py-1.5 text-xs text-zinc-500">
+                  SEO
+                  {post.seo?.metaDescription?.trim() ? (
+                    <Check className="h-4 w-4 text-emerald-500" strokeWidth={2.5} />
+                  ) : (
+                    <X className="h-4 w-4 text-red-500" strokeWidth={2.5} />
+                  )}
+                </span>
                 <button
                   type="button"
                   onClick={async () => {
@@ -1330,8 +1496,8 @@ export default function AdminBlog() {
                 </button>
               </div>
             </div>
-            ))
-        )}
+            )));
+        })()}
       </div>
 
       {duplicateModal && (

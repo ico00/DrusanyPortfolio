@@ -305,6 +305,7 @@ export default function AdminClient() {
   const [galleryExpanded, setGalleryExpanded] = useState(false);
   const [galleryFilter, setGalleryFilter] = useState<"" | "no-slug" | "no-exif">("");
   const [galleryFilterIds, setGalleryFilterIds] = useState<string[]>([]);
+  const [blogFilter, setBlogFilter] = useState<"" | "no-seo" | "no-featured">("");
 
   useEffect(() => {
     if (adminTab === "about" || adminTab === "contact" || adminTab === "blogPage" || adminTab === "homePage") {
@@ -988,7 +989,12 @@ export default function AdminClient() {
               {adminTab === "contact" && "Contact"}
               {adminTab === "blogPage" && "Blog page"}
               {adminTab === "homePage" && "Home page"}
-              {adminTab === "blog" && "Blog"}
+              {adminTab === "blog" &&
+                (blogFilter
+                  ? blogFilter === "no-seo"
+                    ? "Blog posts without SEO"
+                    : "Blog posts without featured image"
+                  : "Blog")}
               {adminTab === "theme" && "Theme"}
             </h1>
             <p className="mt-1 text-sm text-zinc-400">
@@ -1003,7 +1009,10 @@ export default function AdminClient() {
               {adminTab === "contact" && "Edit Contact page content"}
               {adminTab === "blogPage" && "SEO za glavnu blog stranicu (/blog)"}
               {adminTab === "homePage" && "SEO za početnu stranicu (/)"}
-              {adminTab === "blog" && "Create and manage blog posts"}
+              {adminTab === "blog" &&
+                (blogFilter
+                  ? `Content health filter: ${blogFilter === "no-seo" ? "missing meta description" : "missing featured image"}`
+                  : "Create and manage blog posts")}
               {adminTab === "theme" && "Customize fonts, sizes and colors"}
             </p>
           </div>
@@ -1017,7 +1026,8 @@ export default function AdminClient() {
                   setGalleryFilterIds(imageIds ?? []);
                   setCategory("");
                   setAdminTab("gallery");
-                } else if (filter === "no-featured") {
+                } else if (filter === "no-featured" || filter === "no-seo") {
+                  setBlogFilter(filter);
                   setAdminTab("blog");
                 }
               }}
@@ -1041,7 +1051,10 @@ export default function AdminClient() {
 
         {adminTab === "blog" && (
           <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8">
-            <AdminBlog />
+            <AdminBlog
+              contentHealthFilter={blogFilter}
+              onClearContentHealthFilter={() => setBlogFilter("")}
+            />
           </div>
         )}
         {adminTab === "theme" && (

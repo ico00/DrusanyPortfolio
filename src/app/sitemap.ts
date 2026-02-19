@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getBlog } from "@/lib/blog";
+import { getBlog, getPublishedPosts } from "@/lib/blog";
 import { getTotalPages, sortPostsByDate } from "@/lib/pagination";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://drusany.com";
@@ -33,7 +33,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const { posts } = await getBlog();
-  const sorted = sortPostsByDate(posts);
+  const published = getPublishedPosts(posts);
+  const sorted = sortPostsByDate(published);
   const totalPages = getTotalPages(sorted.length);
 
   const blogListPages: MetadataRoute.Sitemap = [];

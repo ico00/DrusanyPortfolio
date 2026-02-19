@@ -37,11 +37,15 @@ export async function GET() {
     const postsWithoutFeatured = posts.filter(
       (p) => !p.thumbnail || !String(p.thumbnail).trim()
     ).length;
+    const postsWithoutSeo = posts.filter(
+      (p) => !p.seo?.metaDescription?.trim()
+    ).length;
 
     return Response.json({
       imagesWithoutExif: imagesWithoutExif.length,
       imagesWithoutSlug: imagesWithoutSlug.length,
       blogPostsWithoutFeaturedImage: postsWithoutFeatured,
+      blogPostsWithoutSeo: postsWithoutSeo,
       imageIdsWithoutExif: imagesWithoutExif.map((img) => img.id).filter(Boolean) as string[],
       imageIdsWithoutSlug: imagesWithoutSlug.map((img) => img.id).filter(Boolean) as string[],
     });

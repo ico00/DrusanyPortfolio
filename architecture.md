@@ -109,7 +109,7 @@ Sadržaj About i Contact stranica. Struktura:
 
 ### 3.3 Blog: `src/data/blog.json`
 
-Blog postovi. Struktura: `{ "posts": [ { "id", "slug", "title", "date", "time", "categories", "thumbnail", "thumbnailFocus", "gallery" } ] }`. **Slug format:** `yymmdd-naslov` (npr. `251228-advent-2025`) – generira se putem `generateBlogSlug` iz `@/lib/slug`. Sadržaj (`body`) je u `src/data/blog/[slug].html`. Galerija: niz URL-ova (`/uploads/blog/[datum]-[slug]/gallery/...`). **Slike u sadržaju:** `/uploads/blog/[datum]-[slug]/content/*.webp` – uploadane iz BlockNote editora. Pri čitanju posta (`getBlogPost`) galerija se obogaćuje dimenzijama (Sharp metadata) za masonry layout – `galleryImages: { src, width, height }[]`. **Pretraga:** `getBlogWithBodies()` učitava body i generira `bodySearchText` (plain text bez HTML-a) za pretragu po sadržaju članka.
+Blog postovi. Struktura: `{ "posts": [ { "id", "slug", "title", "date", "time", "categories", "thumbnail", "thumbnailFocus", "gallery", "status" } ] }`. **Status:** `"draft" | "published"` – draft postovi se ne prikazuju javno; `getPublishedPosts()` filtrira; postovi bez `status` tretiraju se kao objavljeni. **Slug format:** `yymmdd-naslov` (npr. `251228-advent-2025`) – generira se putem `generateBlogSlug` iz `@/lib/slug`. Sadržaj (`body`) je u `src/data/blog/[slug].html`. Galerija: niz URL-ova (`/uploads/blog/[datum]-[slug]/gallery/...`). **Slike u sadržaju:** `/uploads/blog/[datum]-[slug]/content/*.webp` – uploadane iz BlockNote editora. Pri čitanju posta (`getBlogPost`) galerija se obogaćuje dimenzijama (Sharp metadata) za masonry layout – `galleryImages: { src, width, height }[]`. **Pretraga:** `getBlogWithBodies()` učitava body i generira `bodySearchText` (plain text bez HTML-a) za pretragu po sadržaju članka; koristi samo published postove.
 
 ### 3.3.1 Blog Widgets: `src/data/blogWidgets.json`
 
@@ -283,8 +283,9 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 - Spremanje putem `/api/pages`
 
 **AdminBlog:**
-- Lista postova s **thumbnail** u popisu, **format datuma** `dd. mm. yyyy.` i **vrijeme u 24h**; sortiranje od najnovijeg prema najstarijem
-- Polja: title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, kategorije (višestruki odabir, **abecedno sortirane**), thumbnail (opcionalno), **sadržaj (BlockNote)** – iznad galerije, galerija (drag-and-drop, bulk delete, select all)
+- Lista postova s **thumbnail** u popisu, **format datuma** `dd. mm. yyyy.` i **vrijeme u 24h**; **badge** za status (Draft / Objavljeno) i SEO
+- **Filter bar:** Status (Svi / Draft / Objavljeno), Kategorija (višestruki odabir, OR logika), Mjesec (dinamički iz datuma postova, hrvatski nazivi), Sort (Najnovije / Najstarije); custom dropdowni (`FilterSelect`, `FilterMultiSelect`)
+- Polja: **status** (Draft / Objavljeno, custom `StatusSelect`; default za novi: Draft), title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, kategorije (višestruki odabir, **abecedno sortirane**), thumbnail (opcionalno), **sadržaj (BlockNote)** – iznad galerije, galerija (drag-and-drop, bulk delete, select all)
 - **editLoading:** Pri otvaranju uređivanja prikazuje se loader dok se body ne učitava – sprječava BlockNote popover crash (`reference.element` undefined)
 - Upload galerije: originalni nazivi datoteka; duplicate modal (Prepiši, Dodaj kao _2, Odustani); brisanje slika iz galerije briše i fizičke datoteke s diska (`/api/blog-delete-file`)
 - Spremanje putem `/api/blog`
@@ -636,7 +637,7 @@ DrusanyPortfolio/
 │   │   ├── PressSection.tsx      # About – objavljene fotografije (masonry)
 │   │   ├── GearSection.tsx       # About – fotografska oprema (masonry)
 │   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog, Theme)
-│   │   ├── AdminDashboard.tsx    # Dashboard (bar/pie grafikoni – Recharts; Content health – no-exif/no-slug/no-featured; tooltip stilizacija)
+│   │   ├── AdminDashboard.tsx    # Dashboard (bar/pie grafikoni – Recharts; Content health s ikonama – Camera, Tag, ImageOff, Search; tooltip stilizacija)
 │   │   ├── AdminPages.tsx        # About/Contact editor (BlockNote, quote, FormspreeEndpoint)
 │   │   ├── AdminBlog.tsx         # Blog post editor (BlockNote, galerija, bulk delete)
 │   │   ├── BlogGallery.tsx       # Blog galerija (masonry, lightbox, aperture cursor)
@@ -788,7 +789,7 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 | **Admin** | `/admin` + API routes (dev only): upload, exif-preview, update, delete, hero, reorder, gallery, **pages**, **blog**, **theme**; rate limiting, file locking |
 | **Sigurnost** | Path traversal fix, 20 MB limit, magic bytes, HTML sanitizacija, rate limiting |
 | **Pouzdanost** | File locking (JSON), čišćenje orphan datoteka (blog slug), HTTP 500 pri greškama |
-| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – BlockNote editor s StaticBlockTypeBar, **upload slika u sadržaj** (content/), **editLoading** (sprječava popover crash); **BlogCategorySelect** (abecedno); **Theme** – Customize Theme (font, veličina, boja za title, heading, **headingOnDark**, body, quote, nav, caption); custom dropdown; live preview; **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija); **Content health** – slike bez EXIF-a/slug-a, blog postovi bez featured slike; klik otvara galeriju s filterom ili Blog |
+| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – **status** (draft/published, StatusSelect), **filter bar** (Status, Kategorija multi, Mjesec, Sort), BlockNote editor s StaticBlockTypeBar, **upload slika u sadržaj** (content/), **editLoading** (sprječava popover crash); **BlogCategorySelect** (abecedno); **FilterSelect**, **FilterMultiSelect**; **Theme** – Customize Theme (font, veličina, boja za title, heading, **headingOnDark**, body, quote, nav, caption); custom dropdown; live preview; **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija); **Content health** – metrike s ikonama (Camera, Tag, ImageOff, Search), chips layout; klik otvara galeriju s filterom ili Blog |
 | **Home** | HeroSlider (6 slides, auto-play 4s, strelice lijevo-desno, "View Gallery", title @ venue) ili masonry Gallery po `?category`; hero samo ručno odabrana |
 | **Header** | Logo (inline SVG), poravnanje lijevo, Search u nav (kad galerija, expandable hover), aktivna stranica (border-b/border-l), hover efekti (Safari: inline-block, eksplicitne boje) |
 | **Custom Cursor** | Dot (trenutno) + aperture (spring, samo preko fotografija), mix-blend-difference, desktop only |

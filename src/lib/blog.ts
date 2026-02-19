@@ -57,6 +57,8 @@ export interface BlogPost {
   galleryImages?: BlogGalleryImage[];
   /** Istaknuti post – prikazuje se u widgetu s 3 istaknuta posta */
   featured?: boolean;
+  /** Status objave – draft se ne prikazuje javno */
+  status?: "draft" | "published";
   body?: string; // body comes from file; deprecated in JSON
   /** Plain text from body for search (from getBlogWithBodies) */
   bodySearchText?: string;
@@ -93,6 +95,11 @@ export async function getBlog(): Promise<BlogData> {
   }
 }
 
+/** Filtrira samo objavljene postove (status !== "draft") */
+export function getPublishedPosts(posts: BlogPost[]): BlogPost[] {
+  return posts.filter((p) => p.status !== "draft");
+}
+
 /** Strip HTML to plain text for search */
 function stripHtml(html: string): string {
   return html
@@ -107,11 +114,12 @@ function stripHtml(html: string): string {
     .trim();
 }
 
-/** Get blog posts with body content for search (plain text, no HTML) */
+/** Get blog posts with body content for search (plain text, no HTML). Samo published. */
 export async function getBlogWithBodies(): Promise<BlogData> {
   const { posts } = await getBlog();
+  const published = getPublishedPosts(posts);
   const enriched = await Promise.all(
-    posts.map(async (post) => {
+    published.map(async (post) => {
       let bodySearchText = "";
       try {
         const contentPath = getBlogContentPath(post.slug);
@@ -177,7 +185,7 @@ async function enrichBlogGallery(
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   const { posts } = await getBlog();
   const post = posts.find((p) => p.slug === slug) ?? null;
-  if (!post) return null;
+  if (!post || post.status === "draft") return null;
 
   const galleryImages =
     (post.gallery?.length ?? 0) > 0

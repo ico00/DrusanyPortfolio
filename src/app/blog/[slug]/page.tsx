@@ -9,7 +9,7 @@ import BlogGallery from "@/components/BlogGallery";
 import BlogSidebar from "@/components/blog/BlogSidebar";
 import ScrollToTop from "@/components/blog/ScrollToTop";
 import ViewfinderOverlay from "@/components/ViewfinderOverlay";
-import { getBlog, getBlogPost } from "@/lib/blog";
+import { getBlog, getBlogPost, getPublishedPosts } from "@/lib/blog";
 import {
   getDisplayCategories,
   getShortCategoryLabel,
@@ -56,7 +56,8 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const { posts } = await getBlog();
-  return posts.length > 0 ? posts.map((p) => ({ slug: p.slug })) : [{ slug: "_" }];
+  const published = getPublishedPosts(posts);
+  return published.length > 0 ? published.map((p) => ({ slug: p.slug })) : [{ slug: "_" }];
 }
 
 export default async function BlogPostPage({

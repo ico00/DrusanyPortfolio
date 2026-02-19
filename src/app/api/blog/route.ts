@@ -54,6 +54,7 @@ export async function POST(request: Request) {
       gallery: string[];
       galleryMetadata?: Record<string, BlogGalleryMetadata>;
       featured?: boolean;
+      status?: "draft" | "published";
       body: string;
       seo?: BlogSeo;
     };
@@ -78,6 +79,7 @@ export async function POST(request: Request) {
       gallery: Array.isArray(body.gallery) ? body.gallery : ([] as string[]),
       galleryMetadata: body.galleryMetadata ?? {},
       featured: body.featured ?? false,
+      status: body.status === "draft" ? "draft" : "published",
       seo: body.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
     };
     await withLock(BLOG_JSON_PATH, async () => {
@@ -120,6 +122,7 @@ export async function PUT(request: Request) {
       gallery?: string[];
       galleryMetadata?: Record<string, BlogGalleryMetadata>;
       featured?: boolean;
+      status?: "draft" | "published";
       body?: string;
       seo?: BlogSeo;
     };
@@ -157,6 +160,7 @@ export async function PUT(request: Request) {
     if (body.gallery !== undefined) blog.posts[idx].gallery = body.gallery;
     if (body.galleryMetadata !== undefined) blog.posts[idx].galleryMetadata = body.galleryMetadata;
     if (body.featured !== undefined) blog.posts[idx].featured = !!body.featured;
+    if (body.status !== undefined) blog.posts[idx].status = body.status === "draft" ? "draft" : "published";
     if (body.seo !== undefined) {
       blog.posts[idx].seo = {
         metaTitle: body.seo.metaTitle?.trim() ?? "",

@@ -14,7 +14,18 @@ import {
   Cell,
   Legend,
 } from "recharts";
-import { ImageIcon, FileText, BookOpen, Loader2, Layout, Cross } from "lucide-react";
+import {
+  ImageIcon,
+  FileText,
+  BookOpen,
+  Loader2,
+  Layout,
+  Activity,
+  Camera,
+  Tag,
+  ImageOff,
+  Search,
+} from "lucide-react";
 import { CATEGORIES } from "./CategorySelect";
 
 function normalizeCategory(cat: string): string {
@@ -43,7 +54,7 @@ const CARD_ACCENTS = [
 
 interface AdminDashboardProps {
   onContentHealthClick?: (
-    filter: "no-slug" | "no-exif" | "no-featured",
+    filter: "no-slug" | "no-exif" | "no-featured" | "no-seo",
     imageIds?: string[]
   ) => void;
 }
@@ -59,6 +70,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
       imagesWithoutExif: 0,
       imagesWithoutSlug: 0,
       blogPostsWithoutFeaturedImage: 0,
+      blogPostsWithoutSeo: 0,
       imageIdsWithoutExif: [] as string[],
       imageIdsWithoutSlug: [] as string[],
     },
@@ -82,6 +94,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
             imagesWithoutExif: 0,
             imagesWithoutSlug: 0,
             blogPostsWithoutFeaturedImage: 0,
+            blogPostsWithoutSeo: 0,
             imageIdsWithoutExif: [],
             imageIdsWithoutSlug: [],
           };
@@ -127,6 +140,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
           imagesWithoutExif: 0,
           imagesWithoutSlug: 0,
           blogPostsWithoutFeaturedImage: 0,
+          blogPostsWithoutSeo: 0,
           imageIdsWithoutExif: [],
           imageIdsWithoutSlug: [],
         },
@@ -160,13 +174,13 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
     <div className="space-y-8">
       {/* Content health */}
       <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
-        <h3 className="mb-3 flex items-center gap-2 text-sm font-medium text-amber-400">
+        <h3 className="mb-4 flex items-center gap-2 text-sm font-medium text-amber-400">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20">
-            <Cross className="h-4 w-4 text-amber-400" strokeWidth={2.5} />
+            <Activity className="h-4 w-4 text-amber-400" strokeWidth={2.5} />
           </span>
           Content health
         </h3>
-        <div className="flex flex-wrap gap-4 text-sm">
+        <div className="flex flex-wrap gap-3">
           <button
             type="button"
             onClick={() =>
@@ -175,14 +189,15 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                 stats.contentHealth.imageIdsWithoutExif
               )
             }
-            className={`text-left transition-colors hover:underline ${
+            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:underline ${
               stats.contentHealth.imagesWithoutExif > 0
-                ? "text-amber-400 hover:text-amber-300"
-                : "text-zinc-500 cursor-default hover:no-underline"
+                ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
+                : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
             title={stats.contentHealth.imagesWithoutExif > 0 ? "Prikaži u galeriji" : undefined}
           >
-            Images without EXIF: {stats.contentHealth.imagesWithoutExif}
+            <Camera className="h-4 w-4 shrink-0" />
+            <span>Images without EXIF: <strong>{stats.contentHealth.imagesWithoutExif}</strong></span>
           </button>
           <button
             type="button"
@@ -192,27 +207,41 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                 stats.contentHealth.imageIdsWithoutSlug
               )
             }
-            className={`text-left transition-colors hover:underline ${
+            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:underline ${
               stats.contentHealth.imagesWithoutSlug > 0
-                ? "text-amber-400 hover:text-amber-300"
-                : "text-zinc-500 cursor-default hover:no-underline"
+                ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
+                : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
             title={stats.contentHealth.imagesWithoutSlug > 0 ? "Prikaži u galeriji" : undefined}
           >
-            Images without slug: {stats.contentHealth.imagesWithoutSlug}
+            <Tag className="h-4 w-4 shrink-0" />
+            <span>Images without slug: <strong>{stats.contentHealth.imagesWithoutSlug}</strong></span>
           </button>
           <button
             type="button"
             onClick={() => onContentHealthClick?.("no-featured")}
-            className={`text-left transition-colors hover:underline ${
+            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:underline ${
               stats.contentHealth.blogPostsWithoutFeaturedImage > 0
-                ? "text-amber-400 hover:text-amber-300"
-                : "text-zinc-500 cursor-default hover:no-underline"
+                ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
+                : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
             title={stats.contentHealth.blogPostsWithoutFeaturedImage > 0 ? "Prikaži u blogu" : undefined}
           >
-            Blog posts without featured image:{" "}
-            {stats.contentHealth.blogPostsWithoutFeaturedImage}
+            <ImageOff className="h-4 w-4 shrink-0" />
+            <span>Blog posts without featured image: <strong>{stats.contentHealth.blogPostsWithoutFeaturedImage}</strong></span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onContentHealthClick?.("no-seo")}
+            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:underline ${
+              stats.contentHealth.blogPostsWithoutSeo > 0
+                ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
+                : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
+            }`}
+            title={stats.contentHealth.blogPostsWithoutSeo > 0 ? "Prikaži u blogu" : undefined}
+          >
+            <Search className="h-4 w-4 shrink-0" />
+            <span>Blog posts without SEO: <strong>{stats.contentHealth.blogPostsWithoutSeo}</strong></span>
           </button>
         </div>
       </div>
