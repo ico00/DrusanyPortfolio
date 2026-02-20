@@ -91,7 +91,7 @@ DrusanyPortfolio/
 ├── public/uploads/       # Slike (full 2048px + thumbs 600px, WebP)
 ├── src/
 │   ├── app/              # Stranice i API rute
-│   │   ├── admin/        # Admin panel (dev only)
+│   │   ├── admin/        # Admin panel (dev only): layout, page, blog/ (lista, edit/[id], new)
 │   │   ├── api/          # upload, update, delete, reorder, hero, gallery, gallery/generate-slugs, media, media-delete, media-detach, content-health, health, pages, blog, blog-upload, blog-delete-file, theme
 │   │   ├── about/        # About stranica
 │   │   ├── contact/      # Contact stranica
@@ -99,8 +99,10 @@ DrusanyPortfolio/
 │   │   ├── sitemap.ts    # Generira sitemap.xml pri buildu
 │   │   └── robots.ts     # Generira robots.txt pri buildu
 │   ├── components/       # Gallery, Header, AdminClient, AdminMedia, BlockNoteEditor, AdminPages, AdminBlog, BlogGallery, BlogList…
+│   ├── contexts/        # UnsavedChangesContext (admin)
 │   ├── data/
-│   │   ├── gallery.json     # Metapodaci o slikama
+│   │   ├── adminUI.ts       # Centralizirani UI stringovi za admin
+│   │   ├── gallery.json    # Metapodaci o slikama
 │   │   ├── pages.json       # About (title, html, quote), Contact (title, html, email, formspreeEndpoint)
 │   │   ├── gear.json        # Fotografska oprema (About)
 │   │   ├── press.json       # Objavljene fotografije (About)
@@ -125,7 +127,7 @@ Admin je dostupan **samo kada pokreneš `npm run dev`** – u produkcijskom buil
 - **Sigurnost:** Rate limiting (200 req/min po IP – bulk upload), path traversal zaštita, ograničenje uploada 20 MB, magic bytes provjera, HTML sanitizacija; file locking za JSON; čišćenje orphan datoteka pri promjeni blog slug-a
 - **Galerija:** Sidebar accordion; odabir kategorije → upload slika; EXIF preview (datum fallback); **custom DateTimePicker** (datum + vrijeme); uređivanje opisa (title, venue, sport, slug, keywords…); slug **as you type**; drag-and-drop sortiranje; hero odabir; brisanje; **Content health** – gumb "Generiraj slugove" kad je filter no-slug; **toast** poruke
 - **Pages:** About – citat na slici, naslov, BlockNote sadržaj; Contact – Formspree endpoint, email (fallback), naslov, uvodni tekst (BlockNote)
-- **Blog:** Kreiranje i uređivanje blog postova – **status** (draft / published, custom StatusSelect); title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, kategorije (višestruki odabir, abecedno), thumbnail, sadržaj (BlockNote s **uploadom slika** – `/image` → Upload/Embed, resize ručice), galerija (drag-and-drop, bulk delete); **filter bar** u listi – Status, Kategorija (višestruki odabir), Mjesec, Sort; brisanje slika iz galerije briše i fizičke datoteke s diska
+- **Blog:** Kreiranje i uređivanje blog postova – **status** (draft / published, custom StatusSelect); title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, kategorije (višestruki odabir, abecedno), thumbnail, sadržaj (BlockNote s **uploadom slika** – `/image` → Upload/Embed, resize ručice), galerija (drag-and-drop, bulk delete); **filter bar** u listi – Status, Kategorija (višestruki odabir), Mjesec, Sort; **SEO** – meta description placeholder (Fotografije + event + lokacija + godina + što se vidi); brisanje slika iz galerije briše i fizičke datoteke s diska
 - **Media:** Agregirani prikaz svih slika (portfolio, blog, stranice) – filter po tipu, search as you type, paginacija (25/stranica, Go to page), lightbox u punoj rezoluciji; akcije: Download, Copy URL, Detach (odvajanje od stranice – datoteka ostaje), Delete; **multiple selection** – bulk Delete, Download, Copy URLs, Detach; Media link dostupan i na `/admin/blog` ruti
 - **Theme:** Prilagodba tipografije – font (Sans/Serif/Mono), veličina i boja za svaki element (Hero naslov, Naslovi, **Naslov na tamnoj pozadini** – About/Contact, Body, Citat, Navigacija, Caption); custom dropdown; live preview s adaptivnom pozadinom; za statički export: uređivanje u dev modu, zatim `npm run build`; novi fontovi se dodaju u `themeFonts.ts` i `layout.tsx`
 

@@ -129,7 +129,7 @@ Per-Page SEO modul upravljan iz Admin panela. Svaki post i stranica imaju `seo` 
 
 **Admin UI (AdminBlog, AdminPages):**
 - Sekcija "SEO Settings" s inputima za metaTitle, metaDescription, keywords
-- metaDescription: brojač znakova; upozorenje ako pređe 160 (preporučeno za Google rezultate)
+- metaDescription: brojač znakova; upozorenje ako pređe 160 (preporučeno za Google rezultate); placeholder: **Fotografije + event + lokacija + godina + što se vidi**
 - metaTitle: ako ostane prazno, koristi se naslov posta/stranice
 
 **Next.js Metadata:**
@@ -251,7 +251,7 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 
 ### 4.2 Admin Route: `/admin`
 
-**Lokacija:** `src/app/admin/page.tsx` + `src/components/AdminClient.tsx`
+**Lokacija:** `src/app/admin/layout.tsx`, `src/app/admin/page.tsx` + `src/components/AdminClient.tsx`; Blog: `src/app/admin/blog/` (page, edit/[id], new) + AdminBlogPageClient, AdminBlogEditClient, AdminBlogNewClient
 
 **Funkcionalnost:**
 - **Sidebar accordion:** Samo jedan podmeni (Gallery ili Pages) može biti otvoren; animacija otvaranja/zatvaranja (grid-template-rows)
@@ -638,7 +638,12 @@ DrusanyPortfolio/
 ├── src/
 │   ├── app/
 │   │   ├── admin/
-│   │   │   └── page.tsx   # Admin panel (dev only)
+│   │   │   ├── layout.tsx       # Admin layout (sidebar, tamna tema)
+│   │   │   ├── page.tsx         # Admin panel (Dashboard, Gallery, Pages, Media, Theme)
+│   │   │   └── blog/
+│   │   │       ├── page.tsx     # Lista blog postova (AdminBlogPageClient)
+│   │   │       ├── edit/[id]/page.tsx   # Uređivanje posta (AdminBlogEditClient)
+│   │   │       └── new/page.tsx # Novi post (AdminBlogNewClient)
 │   │   ├── api/
 │   │   │   ├── blog/route.ts
 │   │   │   ├── blog-delete-file/route.ts
@@ -690,6 +695,7 @@ DrusanyPortfolio/
 │   │   ├── BlogList.tsx          # Lista blog postova (metapodaci, filtriranje)
 │   │   ├── BlockNoteEditor.tsx   # BlockNote WYSIWYG (HTML)
 │   │   ├── BlockNoteEditorDynamic.tsx  # Dynamic import, ssr: false
+│   │   ├── BlockNoteErrorBoundary.tsx  # Error boundary za BlockNote editor
 │   │   ├── StaticBlockTypeBar.tsx # Traka stila bloka (cursor position)
 │   │   ├── DateTimePicker.tsx    # Datum + vrijeme (react-day-picker, tamna tema)
 │   │   ├── DatePicker.tsx        # Samo datum (Blog)
@@ -717,18 +723,23 @@ DrusanyPortfolio/
 │   │   ├── pages.ts        # getPages, savePages – About/Contact; sanitizeProseHtml pri čitanju
 │   │   ├── press.ts        # getPress – čitanje press.json
 │   │   ├── blog.ts         # getBlog, getBlogPost – čitanje blog.json, sanitizeProseHtml za body, enrichBlogGallery (Sharp)
-│   │   ├── rateLimit.ts    # Rate limiting (60 req/min po IP) za admin API
+│   │   ├── rateLimit.ts    # Rate limiting (200 req/min po IP) za admin API
 │   │   ├── sanitize.ts     # sanitizeProseHtml – HTML sanitizacija (sanitize-html)
 │   │   ├── slug.ts         # slugify, generateSlug (title+venue+year), generateBlogSlug, isValidBlogSlug, normalizeBlogSlug (yymmdd-naslov)
 │   │   └── theme.ts        # getTheme, saveTheme, themeToCssVariables – čitanje/spremanje theme.json
+│   ├── contexts/
+│   │   └── UnsavedChangesContext.tsx  # Upozorenje pri napuštanju stranice s nespremljenim promjenama (admin)
 │   └── data/
-│       ├── gallery.json    # Flat-file baza slika
+│       ├── adminUI.ts     # Centralizirani UI stringovi za admin (labels, placeholders)
+│       ├── gallery.json   # Flat-file baza slika
 │       ├── pages.json      # About (title, html, quote), Contact (title, html, email, formspreeEndpoint)
 │       ├── gear.json       # Fotografska oprema (About)
 │       ├── press.json      # Objavljene fotografije (About)
 │       ├── blog.json       # Blog postovi
 │       ├── blogExif.json   # EXIF za blog galerijske slike (camera, lens, exposure, aperture, iso)
-│       └── blogWidgets.json # Konfiguracija blog sidebara (search, categories, featured-posts, maps)
+│       ├── blogWidgets.json # Konfiguracija blog sidebara (search, categories, featured-posts, maps)
+│       ├── theme.json     # Theme konfiguracija (font, fontSize, color po elementu)
+│       └── themeFonts.ts  # Konfiguracija fontova za Theme (dodavanje novih fontova)
 ├── scripts/
 │   └── populate-blog-exif.mjs  # Popunjava blogExif.json iz postojećih slika (exifr)
 ├── out/                   # Generirano pri build (gitignore)
