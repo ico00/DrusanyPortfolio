@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { getBlog, getPublishedPosts } from "@/lib/blog";
 import { getTotalPages, sortPostsByDate } from "@/lib/pagination";
 
+export const dynamic = "force-static";
+
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://drusany.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

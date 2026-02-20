@@ -1,4 +1,5 @@
 import path from "path";
+import { rename } from "fs/promises";
 import { getBlog, getBlogPost, saveBlog, saveBlogBody } from "@/lib/blog";
 import type { BlogGalleryMetadata, BlogSeo } from "@/lib/blog";
 import { withLock } from "@/lib/jsonLock";
@@ -67,6 +68,17 @@ export async function POST(request: Request) {
       : body.category
         ? [body.category]
         : [];
+    let thumbnail = body.thumbnail || "";
+    if (thumbnail.endsWith("featured-pending.webp")) {
+      const pendingPath = path.join(process.cwd(), "public", thumbnail.replace(/^\//, ""));
+      const canonicalPath = pendingPath.replace("featured-pending.webp", "featured.webp");
+      try {
+        await rename(pendingPath, canonicalPath);
+        thumbnail = thumbnail.replace("featured-pending.webp", "featured.webp");
+      } catch {
+        thumbnail = body.thumbnail || "";
+      }
+    }
     const post = {
       id,
       title,
@@ -74,12 +86,12 @@ export async function POST(request: Request) {
       date,
       time: body.time && /^\d{1,2}:\d{2}$/.test(body.time) ? body.time : undefined,
       categories,
-      thumbnail: body.thumbnail || "",
+      thumbnail,
       thumbnailFocus: body.thumbnailFocus || "50% 50%",
       gallery: Array.isArray(body.gallery) ? body.gallery : ([] as string[]),
       galleryMetadata: body.galleryMetadata ?? {},
       featured: body.featured ?? false,
-      status: body.status === "draft" ? "draft" : "published",
+      status: (body.status === "draft" ? "draft" : "published") as "draft" | "published",
       seo: body.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
     };
     await withLock(BLOG_JSON_PATH, async () => {
@@ -155,7 +167,20 @@ export async function PUT(request: Request) {
       blog.posts[idx].categories = body.category ? [body.category] : [];
       delete blog.posts[idx].category;
     }
-    if (body.thumbnail !== undefined) blog.posts[idx].thumbnail = body.thumbnail;
+    if (body.thumbnail !== undefined) {
+      let thumbnailToStore = body.thumbnail;
+      if (body.thumbnail.endsWith("featured-pending.webp")) {
+        const pendingPath = path.join(process.cwd(), "public", body.thumbnail.replace(/^\//, ""));
+        const canonicalPath = pendingPath.replace("featured-pending.webp", "featured.webp");
+        try {
+          await rename(pendingPath, canonicalPath);
+          thumbnailToStore = body.thumbnail.replace("featured-pending.webp", "featured.webp");
+        } catch {
+          thumbnailToStore = body.thumbnail;
+        }
+      }
+      blog.posts[idx].thumbnail = thumbnailToStore;
+    }
     if (body.thumbnailFocus !== undefined) blog.posts[idx].thumbnailFocus = body.thumbnailFocus;
     if (body.gallery !== undefined) blog.posts[idx].gallery = body.gallery;
     if (body.galleryMetadata !== undefined) blog.posts[idx].galleryMetadata = body.galleryMetadata;

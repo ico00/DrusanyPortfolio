@@ -13,8 +13,11 @@ function getCopyrightYear(): string {
 
 export default function Footer() {
   const pathname = usePathname();
+  const isAbout = pathname === "/about";
   const isBlog = pathname?.startsWith("/blog");
   const rightsText = isBlog ? "Sva prava pridržana" : "All rights reserved";
+
+  if (isAbout) return null;
 
   return (
     <footer className="border-t border-zinc-800/50 bg-zinc-950 py-6">

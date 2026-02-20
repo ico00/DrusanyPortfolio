@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { Calendar } from "lucide-react";
 import { AdminDateDropdown } from "./AdminDateDropdown";
+import { ADMIN_UI } from "@/data/adminUI";
 import "react-day-picker/style.css";
 
 function parseDateTime(value: string): { date: Date; hour: number; minute: number } {
@@ -93,17 +94,17 @@ export default function DateTimePicker({
         type="button"
         id={id}
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-left text-zinc-100 transition-colors hover:border-zinc-600 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+        className={ADMIN_UI.datePicker.triggerClass}
       >
         <Calendar className="h-4 w-4 shrink-0 text-zinc-500" />
         <span className={value ? "" : "text-zinc-500"}>
-          {value ? formatDisplay(value) : "Select date and time"}
+          {value ? formatDisplay(value) : ADMIN_UI.datePicker.placeholderDateTime}
         </span>
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-50 mt-1 rounded-xl border border-zinc-700 bg-zinc-900 p-4 shadow-xl">
-          <div className="rdp-admin-dark">
+        <div className={ADMIN_UI.datePicker.dropdownClass}>
+          <div className={ADMIN_UI.datePicker.wrapperClass}>
             <DayPicker
               mode="single"
               selected={tempDate}

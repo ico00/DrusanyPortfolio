@@ -24,7 +24,7 @@ export default function FilterSelect({
   onChange,
   options,
   label,
-  placeholder = "Odaberi",
+  placeholder = "Select",
   id,
   className = "",
 }: FilterSelectProps) {

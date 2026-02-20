@@ -6,7 +6,7 @@ import { ChevronDown, FileEdit, FileCheck } from "lucide-react";
 
 const OPTIONS = [
   { value: "draft" as const, label: "Draft", icon: FileEdit },
-  { value: "published" as const, label: "Objavljeno", icon: FileCheck },
+  { value: "published" as const, label: "Published", icon: FileCheck },
 ] as const;
 
 interface StatusSelectProps {
@@ -46,7 +46,7 @@ export default function StatusSelect({
         className="flex min-h-[42px] w-full items-center justify-between gap-2 rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-left text-zinc-100 transition-colors hover:border-zinc-600 hover:bg-zinc-800 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
         aria-expanded={open}
         aria-haspopup="listbox"
-        aria-label="Status objave"
+        aria-label="Post status"
       >
         <span className="flex min-w-0 flex-1 items-center gap-2">
           {(() => {

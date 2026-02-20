@@ -163,14 +163,14 @@ export async function POST(request: Request) {
 
     if (type === "featured") {
       await mkdir(baseDir, { recursive: true });
-      const outPath = path.join(baseDir, "featured.webp");
+      const outPath = path.join(baseDir, "featured-pending.webp");
       await sharp(buffer)
         .rotate()
         .keepExif()
         .resize(2048, undefined, { withoutEnlargement: true })
         .webp({ quality: 85 })
         .toFile(outPath);
-      const url = `/uploads/blog/${folderName}/featured.webp`;
+      const url = `/uploads/blog/${folderName}/featured-pending.webp`;
       return Response.json({ success: true, url });
     }
 

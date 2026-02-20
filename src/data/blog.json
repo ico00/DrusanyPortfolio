@@ -15,7 +15,10 @@
         "metaTitle": "",
         "metaDescription": "",
         "keywords": ""
-      }
+      },
+      "galleryMetadata": {},
+      "featured": false,
+      "status": "published"
     },
     {
       "id": "85bdb9fe-d492-4829-bc36-4a4d49c96e8c",
@@ -25,8 +28,8 @@
       "categories": [
         "auti"
       ],
-      "thumbnail": "/uploads/blog/2024-11-17-241117-fiat-500/featured.webp",
-      "thumbnailFocus": "69% 55%",
+      "thumbnail": "/uploads/blog/2024-11-17-241117-fiat-500/gallery/241117-fiat_500_066.webp",
+      "thumbnailFocus": "80% 66%",
       "gallery": [
         "/uploads/blog/2024-11-17-241117-fiat-500/gallery/241117-fiat_500_001.webp",
         "/uploads/blog/2024-11-17-241117-fiat-500/gallery/241117-fiat_500_003.webp",
@@ -118,7 +121,10 @@
         "metaTitle": "",
         "metaDescription": "",
         "keywords": ""
-      }
+      },
+      "galleryMetadata": {},
+      "featured": false,
+      "status": "published"
     },
     {
       "id": "b079da7e-74af-479f-9255-30927caed42e",

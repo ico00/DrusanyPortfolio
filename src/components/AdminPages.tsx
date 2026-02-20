@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useCallback } from "react";
 import { Loader2, Check, AlertCircle, Search } from "lucide-react";
 import BlockNoteEditor from "./BlockNoteEditorDynamic";
+import { ADMIN_UI } from "@/data/adminUI";
 
 interface SeoContent {
   metaTitle?: string;
@@ -210,14 +211,14 @@ export default function AdminPages({ page }: AdminPagesProps) {
             className="w-full rounded-lg border border-zinc-600 bg-zinc-700/50 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
           />
           <p className="mt-1 text-xs text-zinc-500">
-            Prikazuje se u donjem lijevom kutu slike na About stranici
+            Shown in the bottom-left corner of the image on the About page
           </p>
         </div>
       )}
 
       <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
         <label className="mb-2 block text-sm font-medium text-zinc-400">
-          Naslov stranice
+          Page title
         </label>
         <input
           type="text"
@@ -240,11 +241,11 @@ export default function AdminPages({ page }: AdminPagesProps) {
               type="text"
               value={seo.metaTitle ?? ""}
               onChange={(e) => setSeo((s) => ({ ...s, metaTitle: e.target.value }))}
-              placeholder={`Prazno = koristi naslov stranice (${title || "—"})`}
+              placeholder={`Empty = use page title (${title || "—"})`}
               className="w-full rounded-lg border border-zinc-600 bg-zinc-700/50 px-4 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
             />
             <p className="mt-1 text-xs text-zinc-500">
-              Ako ostane prazno, koristi se naslov stranice
+              If empty, page title is used
             </p>
           </div>
           <div>
@@ -260,7 +261,7 @@ export default function AdminPages({ page }: AdminPagesProps) {
               value={seo.metaDescription ?? ""}
               onChange={(e) => setSeo((s) => ({ ...s, metaDescription: e.target.value }))}
               rows={3}
-              placeholder="Opis stranice za pretraživače i društvene mreže"
+              placeholder="Page description for search engines and social networks"
               className={`w-full rounded-lg border px-4 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-1 ${
                 (seo.metaDescription?.length ?? 0) > META_DESCRIPTION_MAX
                   ? "border-amber-500 focus:border-amber-500 focus:ring-amber-500"
@@ -269,17 +270,17 @@ export default function AdminPages({ page }: AdminPagesProps) {
             />
             {(seo.metaDescription?.length ?? 0) > META_DESCRIPTION_MAX && (
               <p className="mt-1 text-xs text-amber-400">
-                Preporučeno max. 160 znakova za prikaz u rezultatima pretrage
+                Recommended max. 160 characters for search results display
               </p>
             )}
           </div>
           <div>
-            <label className="mb-1 block text-xs text-zinc-500">Keywords (zarezom odvojeno)</label>
+            <label className="mb-1 block text-xs text-zinc-500">Keywords (comma-separated)</label>
             <input
               type="text"
               value={seo.keywords ?? ""}
               onChange={(e) => setSeo((s) => ({ ...s, keywords: e.target.value }))}
-              placeholder="fotografija, portfolio, ..."
+              placeholder="photography, portfolio, ..."
               className="w-full rounded-lg border border-zinc-600 bg-zinc-700/50 px-4 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
             />
           </div>
@@ -289,7 +290,7 @@ export default function AdminPages({ page }: AdminPagesProps) {
       {!isBlogPage && !isHomePage && (
         <div>
           <label className="mb-2 block text-sm text-zinc-400">
-            {page === "about" ? "Sadržaj About stranice" : "Uvodni tekst iznad kontakt forme"}
+            {page === "about" ? "About page content" : "Intro text above contact form"}
           </label>
           <BlockNoteEditor
             key={page}
@@ -302,13 +303,13 @@ export default function AdminPages({ page }: AdminPagesProps) {
 
       {isBlogPage && (
         <p className="rounded-lg bg-zinc-800/50 py-4 text-center text-sm text-zinc-500">
-          SEO za glavnu blog stranicu (/blog) – popis svih članaka. Sadržaj se generira automatski.
+          SEO for main blog page (/blog) – list of all posts. Content is generated automatically.
         </p>
       )}
 
       {isHomePage && (
         <p className="rounded-lg bg-zinc-800/50 py-4 text-center text-sm text-zinc-500">
-          SEO za početnu stranicu (/) – hero slider i galerija. Sadržaj se generira automatski.
+          SEO for home page (/) – hero slider and gallery. Content is generated automatically.
         </p>
       )}
 
@@ -332,8 +333,8 @@ export default function AdminPages({ page }: AdminPagesProps) {
 
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg ${
-            toast.type === "success" ? "bg-emerald-600 text-white" : "bg-red-600 text-white"
+          className={`${ADMIN_UI.toast.container} ${
+            toast.type === "success" ? ADMIN_UI.toast.success : ADMIN_UI.toast.error
           }`}
         >
           {toast.type === "success" ? (
@@ -341,7 +342,7 @@ export default function AdminPages({ page }: AdminPagesProps) {
           ) : (
             <AlertCircle className="h-5 w-5" />
           )}
-          <span className="text-sm font-medium">{toast.message}</span>
+          <span className={ADMIN_UI.toast.text}>{toast.message}</span>
         </div>
       )}
     </div>

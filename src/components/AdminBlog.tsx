@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo, memo } from "react";
+import { useRouter } from "next/navigation";
 import {
   Loader2,
   Plus,
@@ -33,6 +34,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import BlockNoteEditor from "./BlockNoteEditorDynamic";
+import BlockNoteErrorBoundary from "./BlockNoteErrorBoundary";
 import DatePicker from "./DatePicker";
 import BlogCategorySelect from "./BlogCategorySelect";
 import StatusSelect from "./StatusSelect";
@@ -51,28 +53,34 @@ import { THUMBNAIL_FOCUS_OPTIONS } from "@/data/thumbnailFocus";
 import { generateBlogSlug } from "@/lib/slug";
 import type { BlogPost, BlogSeo } from "@/lib/blog";
 import { Search } from "lucide-react";
+import { useUnsavedChanges } from "@/contexts/UnsavedChangesContext";
+import { ADMIN_UI } from "@/data/adminUI";
 
 const META_DESCRIPTION_MAX = 160;
 
-const HR_MONTHS = [
-  "siječanj", "veljača", "ožujak", "travanj", "svibanj", "lipanj",
-  "srpanj", "kolovoz", "rujan", "listopad", "studeni", "prosinac",
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
 ];
 function formatMonthOption(yearMonth: string): string {
   const [y, m] = yearMonth.split("-").map(Number);
   if (!y || !m || m < 1 || m > 12) return yearMonth;
-  return `${y}. ${HR_MONTHS[m - 1]}`;
+  return `${MONTHS[m - 1]} ${y}`;
 }
 
 function SortableGalleryItem({
   url,
   selected,
+  isFeatured,
   onToggleSelect,
+  onSetFeatured,
   onRemove,
 }: {
   url: string;
   selected: boolean;
+  isFeatured: boolean;
   onToggleSelect: () => void;
+  onSetFeatured: () => void;
   onRemove: () => void;
 }) {
   const {
@@ -96,7 +104,11 @@ function SortableGalleryItem({
       className={`group relative overflow-hidden rounded-lg border bg-zinc-900/50 transition-colors ${
         isDragging ? "z-50 opacity-90 ring-2 ring-zinc-500" : ""
       } ${
-        selected ? "border-zinc-500 ring-2 ring-zinc-500/50" : "border-zinc-800"
+        isFeatured
+          ? "border-amber-500/80 ring-2 ring-amber-500/30"
+          : selected
+            ? "border-zinc-500 ring-2 ring-zinc-500/50"
+            : "border-zinc-800"
       }`}
     >
       <button
@@ -104,7 +116,7 @@ function SortableGalleryItem({
         {...attributes}
         {...listeners}
         className="absolute left-2 top-2 z-10 flex cursor-grab items-center justify-center rounded p-1.5 text-zinc-500 transition-colors hover:bg-zinc-800/80 hover:text-zinc-300 active:cursor-grabbing"
-        aria-label="Povuci za promjenu redoslijeda"
+        aria-label={ADMIN_UI.blog.dragReorder}
       >
         <GripVertical className="h-5 w-5" />
       </button>
@@ -112,7 +124,7 @@ function SortableGalleryItem({
         type="button"
         onClick={(e) => { e.stopPropagation(); onToggleSelect(); }}
         className="absolute right-2 top-2 z-10 rounded p-1.5 transition-colors hover:bg-zinc-800/80"
-        aria-label={selected ? "Odznači" : "Označi"}
+        aria-label={selected ? ADMIN_UI.blog.deselect : ADMIN_UI.blog.select}
       >
         {selected ? (
           <CheckSquare className="h-5 w-5 text-zinc-100" />
@@ -128,9 +140,19 @@ function SortableGalleryItem({
       <div className="absolute inset-0 flex items-center justify-center gap-2 bg-zinc-900/80 opacity-0 transition-opacity group-hover:opacity-100">
         <button
           type="button"
+          onClick={(e) => { e.stopPropagation(); onSetFeatured(); }}
+          className={`rounded-full p-2 transition-colors ${
+            isFeatured ? "bg-amber-500/80 text-white" : "bg-zinc-700 text-zinc-400 hover:bg-amber-500/80 hover:text-white"
+          }`}
+          aria-label={isFeatured ? ADMIN_UI.blog.featuredImage : ADMIN_UI.blog.setFeatured}
+        >
+          <Star className={`h-4 w-4 ${isFeatured ? "fill-current" : ""}`} />
+        </button>
+        <button
+          type="button"
           onClick={(e) => { e.stopPropagation(); onRemove(); }}
           className="rounded-full bg-zinc-700 p-2 text-zinc-400 transition-colors hover:bg-red-600/80 hover:text-white"
-          aria-label="Obriši sliku"
+          aria-label={ADMIN_UI.blog.removeImage}
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -139,20 +161,77 @@ function SortableGalleryItem({
   );
 }
 
+const MemoizedBlockNoteSection = memo(function MemoizedBlockNoteSection({
+  content,
+  onBodyChange,
+  slug,
+  date,
+  canUpload,
+  editorKey,
+  onRetry,
+}: {
+  content: string;
+  onBodyChange: (html: string) => void;
+  slug: string;
+  date: string;
+  canUpload: boolean;
+  editorKey: string;
+  onRetry: () => void;
+}) {
+  const uploadFileFn = useCallback(
+    async (file: File): Promise<{ props: { url: string; previewWidth: number } }> => {
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("slug", slug);
+      fd.append("date", date);
+      fd.append("type", "content");
+      const res = await fetch("/api/blog-upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || ADMIN_UI.messages.uploadError);
+      return { props: { url: data.url, previewWidth: 512 } };
+    },
+    [slug, date]
+  );
+  return (
+    <BlockNoteErrorBoundary onRetry={onRetry}>
+      <BlockNoteEditor
+        key={editorKey}
+        content={content}
+        onChange={onBodyChange}
+        minHeight="300px"
+        uploadFile={canUpload ? uploadFileFn : undefined}
+      />
+    </BlockNoteErrorBoundary>
+  );
+});
+
 interface AdminBlogProps {
   contentHealthFilter?: "" | "no-seo" | "no-featured";
   onClearContentHealthFilter?: () => void;
+  /** Samo popis – Edit vodi na /admin/blog/edit/[id] */
+  listOnly?: boolean;
+  /** Samo forma – za stranicu /admin/blog/edit/[id] */
+  formOnly?: boolean;
+  /** ID posta za edit (kad je formOnly) */
+  editId?: string | null;
+  /** Novi članak (formOnly) */
+  createMode?: boolean;
 }
 
 export default function AdminBlog({
   contentHealthFilter = "",
   onClearContentHealthFilter,
+  listOnly = false,
+  formOnly = false,
+  editId = null,
+  createMode = false,
 }: AdminBlogProps) {
+  const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editLoading, setEditLoading] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(formOnly && editId ? editId : null);
+  const [editLoading, setEditLoading] = useState(!!(formOnly && editId));
   const [creating, setCreating] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -172,6 +251,10 @@ export default function AdminBlog({
   const [bulkTitle, setBulkTitle] = useState("");
   const [bulkDescription, setBulkDescription] = useState("");
   const [uploadingFeatured, setUploadingFeatured] = useState(false);
+  const [thumbnailCacheBust, setThumbnailCacheBust] = useState<string | null>(null);
+  const thumbnailBustCounterRef = useRef(0);
+  const [listThumbnailBust, setListThumbnailBust] = useState<Record<string, number>>({});
+  const [editorRetryKey, setEditorRetryKey] = useState(0);
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const [galleryPreviewUrls, setGalleryPreviewUrls] = useState<string[]>([]);
   const [galleryDragActive, setGalleryDragActive] = useState(false);
@@ -188,7 +271,31 @@ export default function AdminBlog({
     existingSize: number | null;
   } | null>(null);
   const duplicateResolveRef = useRef<((action: "overwrite" | "add" | "cancel") => void) | null>(null);
+  const applyToAllRef = useRef<"overwrite" | "add" | "cancel" | null>(null);
   const [selectedGalleryUrls, setSelectedGalleryUrls] = useState<Set<string>>(new Set());
+  const initialFormRef = useRef<string | null>(null);
+  const unsavedCtx = useUnsavedChanges();
+
+  const getFormSnapshot = useCallback((f: typeof form) => {
+    return JSON.stringify({
+      ...f,
+      categories: [...(f.categories ?? [])].sort(),
+      galleryMetadata: Object.fromEntries(
+        Object.entries(f.galleryMetadata ?? {}).sort(([a], [b]) => a.localeCompare(b))
+      ),
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!unsavedCtx) return;
+    if (!editingId && !creating) {
+      unsavedCtx.setUnsavedChanges(false);
+      return;
+    }
+    if (editLoading) return;
+    const isDirty = initialFormRef.current !== null && getFormSnapshot(form) !== initialFormRef.current;
+    unsavedCtx.setUnsavedChanges(isDirty);
+  }, [form, editingId, creating, editLoading, getFormSnapshot, unsavedCtx]);
   const [listStatusFilter, setListStatusFilter] = useState<string>("");
   const [listCategoryFilter, setListCategoryFilter] = useState<string[]>([]);
   const [listMonthFilter, setListMonthFilter] = useState<string>("");
@@ -203,7 +310,7 @@ export default function AdminBlog({
       if (m && /^\d{4}-\d{2}$/.test(m)) months.add(m);
     }
     return [
-      { value: "", label: "Svi datumi" },
+      { value: "", label: ADMIN_UI.blog.allDates },
       ...Array.from(months)
         .sort((a, b) => b.localeCompare(a))
         .map((m) => ({ value: m, label: formatMonthOption(m) })),
@@ -233,6 +340,25 @@ export default function AdminBlog({
     fetchBlog();
   }, [fetchBlog]);
 
+  const formOnlyEditLoaded = useRef(false);
+  useEffect(() => {
+    if (formOnly && editId && posts.length > 0 && !formOnlyEditLoaded.current) {
+      const post = posts.find((p) => p.id === editId);
+      if (post) {
+        formOnlyEditLoaded.current = true;
+        openEdit(post);
+      }
+    }
+  }, [formOnly, editId, posts]);
+
+  const formOnlyCreateLoaded = useRef(false);
+  useEffect(() => {
+    if (formOnly && createMode && !formOnlyCreateLoaded.current) {
+      formOnlyCreateLoaded.current = true;
+      openCreate();
+    }
+  }, [formOnly, createMode]);
+
   useEffect(() => {
     if (galleryFiles.length === 0) {
       setGalleryPreviewUrls([]);
@@ -254,13 +380,15 @@ export default function AdminBlog({
     return res.json();
   }, []);
 
-  const openEdit = async (post: BlogPost) => {
+  const openEdit = useCallback(async (post: BlogPost) => {
     setEditingId(post.id);
     setEditLoading(true);
     setSelectedGalleryUrls(new Set());
+    setThumbnailCacheBust(null);
+    setEditorRetryKey((k) => k + 1);
     try {
       const full = await fetchPostWithBody(post.slug);
-      setForm({
+      const formData = {
         title: post.title,
         slug: post.slug,
         date: post.date,
@@ -271,45 +399,78 @@ export default function AdminBlog({
         gallery: post.gallery ?? [],
         galleryMetadata: post.galleryMetadata ?? {},
         featured: post.featured ?? false,
-        status: post.status === "draft" ? "draft" : "published",
+        status: (post.status === "draft" ? "draft" : "published") as "draft" | "published",
         body: full?.body ?? "",
         seo: post.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
+      };
+      setForm(formData);
+      initialFormRef.current = JSON.stringify({
+        ...formData,
+        categories: [...formData.categories].sort(),
+        galleryMetadata: Object.fromEntries(
+          Object.entries(formData.galleryMetadata ?? {}).sort(([a], [b]) => a.localeCompare(b))
+        ),
       });
     } finally {
       setEditLoading(false);
     }
-  };
+  }, [fetchPostWithBody]);
+
+  const handleEditClick = useCallback(
+    (post: BlogPost) => {
+      if (listOnly) {
+        router.push(`/admin/blog/edit/${post.id}`);
+      } else {
+        openEdit(post);
+      }
+    },
+    [listOnly, router, openEdit]
+  );
 
   const openCreate = () => {
     setCreating(true);
-    setForm({
+    setThumbnailCacheBust(null);
+    setEditorRetryKey((k) => k + 1);
+    const formData = {
       title: "",
       slug: "",
       date: new Date().toISOString().slice(0, 10),
       time: "",
-      categories: [],
+      categories: [] as string[],
       thumbnail: "",
       thumbnailFocus: "50% 50%",
-      gallery: [],
-      galleryMetadata: {},
+      gallery: [] as string[],
+      galleryMetadata: {} as Record<string, { title?: string; description?: string }>,
       featured: false,
-      status: "draft",
+      status: "draft" as const,
       body: "",
-      seo: { metaTitle: "", metaDescription: "", keywords: "" },
-    });
+      seo: { metaTitle: "", metaDescription: "", keywords: "" } as BlogSeo,
+    };
+    setForm(formData);
+    initialFormRef.current = getFormSnapshot(formData);
   };
 
-  const closeForm = () => {
+  const closeForm = useCallback(async () => {
+    if (unsavedCtx?.hasUnsavedChanges) {
+      const leave = await unsavedCtx.confirmUnsaved();
+      if (!leave) return;
+    }
     setEditingId(null);
     setCreating(false);
     setSelectedGalleryUrls(new Set());
-  };
+    setThumbnailCacheBust(null);
+    initialFormRef.current = null;
+    unsavedCtx?.setUnsavedChanges(false);
+    if (formOnly) {
+      router.push("/admin/blog");
+    }
+  }, [formOnly, router, unsavedCtx]);
 
   const uploadFeatured = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !form.slug.trim() || !form.date.trim()) {
-      if (!form.slug.trim()) showToast("error", "Unesi naslov i spremi članak prije uploada.");
-      else if (!form.date.trim()) showToast("error", "Unesi datum prije uploada.");
+      if (!form.slug.trim()) showToast("error", ADMIN_UI.messages.slugDateRequired);
+      else if (!form.date.trim()) showToast("error", ADMIN_UI.messages.dateRequired);
       e.target.value = "";
       return;
     }
@@ -322,11 +483,14 @@ export default function AdminBlog({
       fd.append("type", "featured");
       const res = await fetch("/api/blog-upload", { method: "POST", body: fd });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Upload nije uspio");
+      if (!res.ok) throw new Error(data.error || ADMIN_UI.messages.uploadError);
+      document.activeElement instanceof HTMLElement && document.activeElement.blur();
+      thumbnailBustCounterRef.current += 1;
       setForm((f) => ({ ...f, thumbnail: data.url }));
-      showToast("success", "Istaknuta slika uploadana.");
+      setThumbnailCacheBust(`${Date.now()}-${thumbnailBustCounterRef.current}-${Math.random().toString(36).slice(2)}`);
+      showToast("success", ADMIN_UI.messages.featuredUploadSuccess);
     } catch (err) {
-      showToast("error", err instanceof Error ? err.message : "Upload nije uspio.");
+      showToast("error", err instanceof Error ? err.message : ADMIN_UI.messages.uploadError);
     } finally {
       setUploadingFeatured(false);
       e.target.value = "";
@@ -338,7 +502,7 @@ export default function AdminBlog({
       f.type.startsWith("image/")
     );
     if (selected.length === 0 && e.target.files?.length) {
-      showToast("error", "Odaberi slike (JPEG, PNG, WebP ili GIF).");
+      showToast("error", ADMIN_UI.messages.imageFormatError);
       return;
     }
     setGalleryFiles(selected);
@@ -365,7 +529,7 @@ export default function AdminBlog({
       f.type.startsWith("image/")
     );
     if (selected.length === 0 && e.dataTransfer.files?.length) {
-      showToast("error", "Odaberi slike (JPEG, PNG, WebP ili GIF).");
+      showToast("error", ADMIN_UI.messages.imageFormatError);
       return;
     }
     setGalleryFiles(selected);
@@ -393,7 +557,8 @@ export default function AdminBlog({
   };
 
   const handleDuplicateChoice = useCallback(
-    (action: "overwrite" | "add" | "cancel") => {
+    (action: "overwrite" | "add" | "cancel", applyToAll?: boolean) => {
+      if (applyToAll) applyToAllRef.current = action;
       duplicateResolveRef.current?.(action);
       duplicateResolveRef.current = null;
       setDuplicateModal(null);
@@ -401,17 +566,26 @@ export default function AdminBlog({
     []
   );
 
+  const handleBodyChange = useCallback((html: string) => {
+    setForm((f) => ({ ...f, body: html }));
+  }, []);
+
+  const handleEditorRetry = useCallback(() => {
+    setEditorRetryKey((k) => k + 1);
+  }, []);
+
   const uploadGalleryBatch = async () => {
     if (
       galleryFiles.length === 0 ||
       !form.slug.trim() ||
       !form.date.trim()
     ) {
-      if (!form.slug.trim()) showToast("error", "Unesi naslov i spremi članak prije uploada.");
-      else if (!form.date.trim()) showToast("error", "Unesi datum prije uploada.");
+      if (!form.slug.trim()) showToast("error", ADMIN_UI.messages.slugDateRequired);
+      else if (!form.date.trim()) showToast("error", ADMIN_UI.messages.dateRequired);
       return;
     }
     setGalleryUploadProgress({ current: 0, total: galleryFiles.length });
+    applyToAllRef.current = null;
     const newUrls: string[] = [];
     let rateLimitedAt: number | null = null;
     try {
@@ -426,19 +600,24 @@ export default function AdminBlog({
         }
 
         if (result.duplicate && result.data) {
-          const d = result.data as { existingSrc?: string; filename?: string; existingSize?: number };
-          const filePreviewUrl = URL.createObjectURL(file);
-          const choice = await new Promise<"overwrite" | "add" | "cancel">((resolve) => {
-            duplicateResolveRef.current = resolve;
-            setDuplicateModal({
-              file,
-              filePreviewUrl,
-              existingSrc: d.existingSrc || "",
-              filename: d.filename || "",
-              existingSize: d.existingSize ?? null,
+          let choice: "overwrite" | "add" | "cancel";
+          if (applyToAllRef.current) {
+            choice = applyToAllRef.current;
+          } else {
+            const d = result.data as { existingSrc?: string; filename?: string; existingSize?: number };
+            const filePreviewUrl = URL.createObjectURL(file);
+            choice = await new Promise<"overwrite" | "add" | "cancel">((resolve) => {
+              duplicateResolveRef.current = resolve;
+              setDuplicateModal({
+                file,
+                filePreviewUrl,
+                existingSrc: d.existingSrc || "",
+                filename: d.filename || "",
+                existingSize: d.existingSize ?? null,
+              });
             });
-          });
-          URL.revokeObjectURL(filePreviewUrl);
+            URL.revokeObjectURL(filePreviewUrl);
+          }
 
           if (choice === "overwrite") {
             result = await uploadGallerySingle(file, { overwrite: true, index: i });
@@ -454,31 +633,23 @@ export default function AdminBlog({
         if (result.ok && result.data) {
           newUrls.push((result.data as { url: string }).url);
         } else if (!result.duplicate) {
-          const err = (result.data as { error?: string })?.error || "Upload nije uspio";
+          const err = (result.data as { error?: string })?.error || ADMIN_UI.messages.uploadError;
           showToast("error", err);
         }
       }
       if (newUrls.length > 0) {
         setForm((f) => ({ ...f, gallery: [...f.gallery, ...newUrls] }));
-        showToast(
-          "success",
-          newUrls.length === 1
-            ? "Slika dodana u galeriju."
-            : `${newUrls.length} slika dodano u galeriju.`
-        );
+        showToast("success", ADMIN_UI.blog.imageAdded(newUrls.length));
       }
       if (rateLimitedAt !== null) {
         const remaining = galleryFiles.length - rateLimitedAt;
         setGalleryFiles(galleryFiles.slice(rateLimitedAt));
-        showToast(
-          "error",
-          `Rate limit – ${newUrls.length} od ${galleryFiles.length} uploadano. Pričekajte minutu i ponovno kliknite upload za preostalih ${remaining} slika.`
-        );
+        showToast("error", ADMIN_UI.blog.rateLimit(newUrls.length, galleryFiles.length, remaining));
       } else {
         setGalleryFiles([]);
       }
     } catch (err) {
-      showToast("error", err instanceof Error ? err.message : "Upload nije uspio.");
+      showToast("error", err instanceof Error ? err.message : ADMIN_UI.messages.uploadError);
       setGalleryFiles([]);
     } finally {
       setGalleryUploadProgress(null);
@@ -500,7 +671,7 @@ export default function AdminBlog({
 
   const removeGalleryImage = (url: string) => {
     void deleteBlogGalleryFile(url).then((ok) => {
-      if (!ok) showToast("error", "Datoteka nije obrisana s diska – pokušaj ponovno.");
+      if (!ok) showToast("error", ADMIN_UI.blog.fileNotDeleted);
     });
     setForm((f) => {
       const nextMeta = { ...f.galleryMetadata };
@@ -550,7 +721,7 @@ export default function AdminBlog({
 
   const handleBulkDeleteGallery = async () => {
     if (selectedGalleryUrls.size === 0) return;
-    if (!confirm(`Obrisati ${selectedGalleryUrls.size} slik${selectedGalleryUrls.size === 1 ? "u" : "a"}?`)) return;
+    if (!confirm(ADMIN_UI.blog.deleteImagesConfirm(selectedGalleryUrls.size))) return;
     const urls = Array.from(selectedGalleryUrls);
     const urlSet = new Set(urls);
     setForm((f) => {
@@ -568,7 +739,7 @@ export default function AdminBlog({
       const ok = await deleteBlogGalleryFile(url);
       if (!ok) failed++;
     }
-    showToast(failed > 0 ? "error" : "success", failed > 0 ? `${failed} datoteka nije obrisano s diska.` : "Slike uklonjene iz galerije.");
+    showToast(failed > 0 ? "error" : "success", failed > 0 ? ADMIN_UI.blog.deleteFailed(failed) : ADMIN_UI.blog.removedFromGallery);
   };
 
   const handleBulkApplyMetadata = () => {
@@ -576,7 +747,7 @@ export default function AdminBlog({
     const title = bulkTitle.trim() || undefined;
     const description = bulkDescription.trim() || undefined;
     if (!title && !description) {
-      showToast("error", "Unesi naslov ili opis.");
+      showToast("error", "Enter title or description.");
       return;
     }
     setForm((f) => {
@@ -592,7 +763,7 @@ export default function AdminBlog({
     });
     setBulkTitle("");
     setBulkDescription("");
-    showToast("success", `Primijenjeno na ${selectedGalleryUrls.size} slik${selectedGalleryUrls.size === 1 ? "u" : "a"}. Klikni Spremi da se sačuvaju.`);
+    showToast("success", ADMIN_UI.blog.appliedTo(selectedGalleryUrls.size));
   };
 
   const handleSaveEdit = async () => {
@@ -608,11 +779,14 @@ export default function AdminBlog({
         }),
       });
       if (!res.ok) throw new Error("Failed to update");
-      showToast("success", "Članak ažuriran.");
+      showToast("success", ADMIN_UI.messages.blogSaveSuccess);
+      const savedId = editingId;
+      unsavedCtx?.setUnsavedChanges(false);
       closeForm();
-      fetchBlog();
+      await fetchBlog();
+      setListThumbnailBust((prev) => ({ ...prev, [savedId]: Date.now() }));
     } catch {
-      showToast("error", "Ažuriranje nije uspjelo.");
+      showToast("error", ADMIN_UI.messages.blogSaveError);
     } finally {
       setSaving(false);
     }
@@ -632,26 +806,32 @@ export default function AdminBlog({
         }),
       });
       if (!res.ok) throw new Error("Failed to create");
-      showToast("success", "Članak kreiran.");
+      const created = await res.json();
+      showToast("success", ADMIN_UI.messages.blogCreateSuccess);
+      unsavedCtx?.setUnsavedChanges(false);
       closeForm();
-      fetchBlog();
+      await fetchBlog();
+      if (created?.id) {
+        setListThumbnailBust((prev) => ({ ...prev, [created.id]: Date.now() }));
+      }
     } catch {
-      showToast("error", "Kreiranje nije uspjelo.");
+      showToast("error", ADMIN_UI.messages.blogCreateError);
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Obrisati ovaj članak?")) return;
+    if (!confirm(ADMIN_UI.messages.blogDeleteConfirm)) return;
     try {
       const res = await fetch(`/api/blog?id=${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete");
-      showToast("success", "Članak obrisan.");
+      showToast("success", ADMIN_UI.messages.blogDeleteSuccess);
+      unsavedCtx?.setUnsavedChanges(false);
       closeForm();
       fetchBlog();
     } catch {
-      showToast("error", "Brisanje nije uspjelo.");
+      showToast("error", ADMIN_UI.messages.blogDeleteError);
     }
   };
 
@@ -670,15 +850,15 @@ export default function AdminBlog({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-zinc-200">Članci bloga</h2>
+        <h2 className="text-lg font-semibold text-zinc-200">{ADMIN_UI.blog.blogPosts}</h2>
         {!isFormOpen && (
           <button
             type="button"
-            onClick={openCreate}
+            onClick={listOnly ? () => router.push("/admin/blog/new") : openCreate}
             className="flex items-center gap-2 rounded-lg bg-zinc-700 px-4 py-2 text-sm font-medium text-zinc-100 transition-colors hover:bg-zinc-600"
           >
             <Plus className="h-4 w-4" />
-            Novi članak
+            {ADMIN_UI.blog.newPost}
           </button>
         )}
       </div>
@@ -687,7 +867,7 @@ export default function AdminBlog({
         <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-lg font-semibold text-zinc-200">
-              {creating ? "Novi članak" : "Uredi članak"}
+              {creating ? ADMIN_UI.blog.newPost : ADMIN_UI.blog.editPost}
             </h3>
             <button
               type="button"
@@ -699,7 +879,7 @@ export default function AdminBlog({
           </div>
           <div className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm text-zinc-400">Naslov</label>
+              <label className="mb-2 block text-sm text-zinc-400">{ADMIN_UI.blog.title}</label>
               <input
                 type="text"
                 value={form.title}
@@ -712,7 +892,7 @@ export default function AdminBlog({
                   }));
                 }}
                 className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
-                placeholder="Naslov članka"
+                placeholder={ADMIN_UI.blog.postTitlePlaceholder}
               />
             </div>
             <div>
@@ -722,12 +902,12 @@ export default function AdminBlog({
                 value={form.slug}
                 onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
                 className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
-                placeholder="yymmdd-naslov (npr. 251228-advent-2025)"
+                placeholder="yymmdd-slug (e.g. 251228-advent-2025)"
               />
             </div>
             <div className="flex gap-4">
               <div className="flex-1">
-                <label className="mb-2 block text-sm text-zinc-400">Datum</label>
+                <label className="mb-2 block text-sm text-zinc-400">{ADMIN_UI.blog.date}</label>
                 <DatePicker
                   value={form.date}
                   onChange={(v) =>
@@ -740,7 +920,7 @@ export default function AdminBlog({
                 />
               </div>
               <div className="w-24">
-                <label className="mb-2 block text-sm text-zinc-400">Vrijeme</label>
+                <label className="mb-2 block text-sm text-zinc-400">{ADMIN_UI.blog.time}</label>
                 <input
                   type="time"
                   value={form.time}
@@ -761,11 +941,11 @@ export default function AdminBlog({
                   />
                 </div>
                 <span className="text-xs text-zinc-500">
-                  {form.status === "draft" ? "Ne prikazuje se javno" : "Vidljivo na blogu"}
+                  {form.status === "draft" ? ADMIN_UI.blog.draftHint : ADMIN_UI.blog.publishedHint}
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <label className="text-sm text-zinc-400">Istaknuti post</label>
+                <label className="text-sm text-zinc-400">{ADMIN_UI.blog.featuredPost}</label>
               <button
                 type="button"
                 onClick={() => setForm((f) => ({ ...f, featured: !f.featured }))}
@@ -774,8 +954,8 @@ export default function AdminBlog({
                     ? "text-amber-400 hover:text-amber-300"
                     : "text-zinc-500 hover:text-zinc-400"
                 }`}
-                title={form.featured ? "Ukloni iz istaknutih" : "Dodaj u istaknute"}
-                aria-label={form.featured ? "Ukloni iz istaknutih" : "Dodaj u istaknute"}
+                title={form.featured ? ADMIN_UI.blog.removeFromFeatured : ADMIN_UI.blog.addToFeatured}
+                aria-label={form.featured ? ADMIN_UI.blog.removeFromFeatured : ADMIN_UI.blog.addToFeatured}
               >
                 <Star
                   className={`h-5 w-5 ${form.featured ? "fill-amber-400" : ""}`}
@@ -783,7 +963,7 @@ export default function AdminBlog({
                 />
               </button>
               <span className="text-xs text-zinc-500">
-                {form.featured ? "Prikazuje se u widgetu istaknutih" : "Dodaj u istaknute"}
+                {form.featured ? ADMIN_UI.blog.showsInWidget : ADMIN_UI.blog.addToFeatured}
               </span>
               </div>
             </div>
@@ -829,7 +1009,7 @@ export default function AdminBlog({
                       }))
                     }
                     rows={3}
-                    placeholder="Opis članka za pretraživače i društvene mreže"
+                    placeholder="Fotografije + event + lokacija + godina + što se vidi"
                     className={`w-full rounded-lg border px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-1 ${
                       (form.seo?.metaDescription?.length ?? 0) > META_DESCRIPTION_MAX
                         ? "border-amber-500 bg-zinc-800/50 focus:border-amber-500 focus:ring-amber-500"
@@ -870,7 +1050,7 @@ export default function AdminBlog({
                     categories: Array.isArray(v) ? v : v ? [v] : [],
                   }))
                 }
-                placeholder="Odaberi kategorije"
+                placeholder={ADMIN_UI.blog.selectCategories}
                 multiple
               />
             </div>
@@ -878,7 +1058,7 @@ export default function AdminBlog({
             <div>
               <label className="mb-2 block text-sm text-zinc-400">Istaknuta slika</label>
               <p className="mb-2 text-xs text-zinc-500">
-                Unesi datum i naslov prije uploada. Slike idu u{" "}
+                {ADMIN_UI.blog.enterDateTitleBefore}{" "}
                 <code className="rounded bg-zinc-800 px-1">/uploads/blog/[datum]-[slug]/</code>
               </p>
               <div className="flex flex-wrap items-start gap-4">
@@ -907,10 +1087,11 @@ export default function AdminBlog({
                             (e.target as HTMLElement).focus();
                           }
                         }}
-                        title="Klikni na sliku da postaviš fokus točku"
+                        title={ADMIN_UI.blog.clickForFocus}
                       >
                         <img
-                          src={form.thumbnail}
+                          key={`${form.thumbnail}-${thumbnailCacheBust ?? ""}`}
+                          src={form.thumbnail + (thumbnailCacheBust ? `?t=${thumbnailCacheBust}` : "")}
                           alt=""
                           className="pointer-events-none h-full w-full object-cover"
                           style={{ objectPosition: form.thumbnailFocus }}
@@ -936,13 +1117,13 @@ export default function AdminBlog({
                         type="button"
                         onClick={() => setForm((f) => ({ ...f, thumbnail: "" }))}
                         className="absolute right-2 top-2 z-10 rounded-full bg-zinc-800/90 p-2 text-zinc-400 backdrop-blur-sm transition-colors hover:bg-red-600/90 hover:text-white"
-                        aria-label="Ukloni istaknutu sliku"
+                        aria-label={ADMIN_UI.blog.removeFeaturedImage}
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                     <p className="text-xs text-zinc-500">
-                      Klikni na sliku da postaviš fokus točku · ili odaberi iz mreže:
+                      {ADMIN_UI.blog.clickForFocus} · {ADMIN_UI.blog.orSelectFromGrid}
                     </p>
                     <div className="grid w-fit grid-cols-3 gap-0.5">
                       {THUMBNAIL_FOCUS_OPTIONS.map((opt) => (
@@ -985,53 +1166,35 @@ export default function AdminBlog({
                     ) : (
                       <Upload className="h-4 w-4" />
                     )}
-                    {form.thumbnail ? "Zamijeni" : "Upload istaknute slike"}
+                    {form.thumbnail ? "Replace" : "Upload featured image"}
                   </button>
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="mb-2 block text-sm text-zinc-400">Sadržaj</label>
+              <label className="mb-2 block text-sm text-zinc-400">{ADMIN_UI.blog.content}</label>
               {editLoading ? (
                 <div className="flex min-h-[300px] items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800/50">
                   <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
                 </div>
               ) : (
-                <BlockNoteEditor
-                  key={editingId ?? "new"}
+                <MemoizedBlockNoteSection
                   content={form.body}
-                  onChange={(html) => setForm((f) => ({ ...f, body: html }))}
-                  minHeight="300px"
-                  uploadFile={
-                  canUpload
-                    ? async (file: File) => {
-                        const fd = new FormData();
-                        fd.append("file", file);
-                        fd.append("slug", form.slug);
-                        fd.append("date", form.date);
-                        fd.append("type", "content");
-                        const res = await fetch("/api/blog-upload", {
-                          method: "POST",
-                          body: fd,
-                        });
-                        const data = await res.json();
-                        if (!res.ok)
-                          throw new Error(data.error || "Upload nije uspio");
-                        return {
-                          props: { url: data.url, previewWidth: 512 },
-                        };
-                      }
-                    : undefined
-                }
-              />
+                  onBodyChange={handleBodyChange}
+                  slug={form.slug}
+                  date={form.date}
+                  canUpload={canUpload}
+                  editorKey={`${editingId ?? "new"}-${editorRetryKey}`}
+                  onRetry={handleEditorRetry}
+                />
               )}
             </div>
 
             <div>
               <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
                 <label className="text-sm text-zinc-400">
-                  Galerija članka
+                  {ADMIN_UI.blog.galleryLabel}
                   {form.gallery.length > 0 && (
                     <span className="ml-2 text-zinc-500">({form.gallery.length})</span>
                   )}
@@ -1045,17 +1208,17 @@ export default function AdminBlog({
                           onClick={selectAllGallery}
                           className="text-sm text-zinc-500 hover:text-zinc-300"
                         >
-                          Odaberi sve
+                          {ADMIN_UI.blog.selectAll}
                         </button>
                         <button
                           type="button"
                           onClick={deselectAllGallery}
                           className="text-sm text-zinc-500 hover:text-zinc-300"
                         >
-                          Odznači sve
+                          {ADMIN_UI.blog.deselectAll}
                         </button>
                         <span className="text-sm text-zinc-500">
-                          {selectedGalleryUrls.size} odabrano
+                          {ADMIN_UI.blog.selectedCount(selectedGalleryUrls.size)}
                         </span>
                         <button
                           type="button"
@@ -1063,7 +1226,7 @@ export default function AdminBlog({
                           disabled={!bulkTitle.trim() && !bulkDescription.trim()}
                           className="flex items-center gap-2 rounded-lg bg-zinc-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-zinc-500 disabled:opacity-50 disabled:hover:bg-zinc-600"
                         >
-                          Primijeni na odabrano
+                          {ADMIN_UI.blog.applyToSelected}
                         </button>
                         <button
                           type="button"
@@ -1071,7 +1234,7 @@ export default function AdminBlog({
                           className="flex items-center gap-2 rounded-lg bg-red-600/80 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-600"
                         >
                           <Trash2 className="h-4 w-4" />
-                          Obriši odabrano
+                          {ADMIN_UI.blog.deleteSelected}
                         </button>
                       </>
                     ) : (
@@ -1080,7 +1243,7 @@ export default function AdminBlog({
                         onClick={selectAllGallery}
                         className="text-sm text-zinc-500 hover:text-zinc-300"
                       >
-                        Odaberi sve
+                        {ADMIN_UI.blog.selectAll}
                       </button>
                     )}
                   </div>
@@ -1091,28 +1254,28 @@ export default function AdminBlog({
               {selectedGalleryUrls.size > 0 && (
                 <div className="mb-4 flex flex-wrap items-end gap-3 rounded-lg border border-zinc-700 bg-zinc-800/50 p-3">
                   <div className="min-w-[12rem] flex-1">
-                    <label className="mb-1 block text-xs text-zinc-500">Naslov (za odabrane)</label>
+                    <label className="mb-1 block text-xs text-zinc-500">{ADMIN_UI.blog.titleForSelected}</label>
                     <input
                       type="text"
                       value={bulkTitle}
                       onChange={(e) => setBulkTitle(e.target.value)}
-                      placeholder="npr. Advent u Zagrebu"
+                      placeholder={ADMIN_UI.blog.titlePlaceholder}
                       className="w-full rounded border border-zinc-600 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none"
                     />
                   </div>
                   <div className="min-w-[12rem] flex-1">
-                    <label className="mb-1 block text-xs text-zinc-500">Opis (za odabrane)</label>
+                    <label className="mb-1 block text-xs text-zinc-500">{ADMIN_UI.blog.descriptionForSelected}</label>
                     <input
                       type="text"
                       value={bulkDescription}
                       onChange={(e) => setBulkDescription(e.target.value)}
-                      placeholder="npr. Trg bana Jelačića, prosinac 2025."
+                      placeholder={ADMIN_UI.blog.descriptionPlaceholder}
                       className="w-full rounded border border-zinc-600 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none"
                     />
                   </div>
                   <p className="w-full text-xs text-zinc-500">
-                    Klikni <strong>Spremi</strong> (gore) da se promjene sačuvaju. Nakon toga pokreni{" "}
-                    <code className="rounded bg-zinc-800 px-1">npm run build</code> da se promjene vide na stranici.
+                    {ADMIN_UI.blog.clickSaveToPersist}{" "}
+                    <code className="rounded bg-zinc-800 px-1">npm run build</code> {ADMIN_UI.blog.clickSaveSuffix}
                   </p>
                 </div>
               )}
@@ -1144,7 +1307,16 @@ export default function AdminBlog({
                           key={url}
                           url={url}
                           selected={selectedGalleryUrls.has(url)}
+                          isFeatured={form.thumbnail === url}
                           onToggleSelect={() => toggleGallerySelect(url)}
+                          onSetFeatured={() => {
+                            setForm((f) => ({
+                              ...f,
+                              thumbnail: url,
+                              thumbnailFocus: f.thumbnail === url ? f.thumbnailFocus : "50% 50%",
+                            }));
+                            setThumbnailCacheBust(`${Date.now()}-${Math.random().toString(36).slice(2)}`);
+                          }}
                           onRemove={() => removeGalleryImage(url)}
                         />
                       ))}
@@ -1157,8 +1329,8 @@ export default function AdminBlog({
               <div className={!canUpload ? "pointer-events-none opacity-50" : ""}>
                 <label className="mb-3 block text-xs text-zinc-500">
                   {galleryFiles.length > 0
-                    ? `Odabrano slika: ${galleryFiles.length}`
-                    : "Nove slike"}
+                    ? ADMIN_UI.blog.selectedImages(galleryFiles.length)
+                    : ADMIN_UI.blog.newImages}
                 </label>
                 <div className="flex flex-wrap gap-3">
                   <label
@@ -1216,7 +1388,7 @@ export default function AdminBlog({
                       <>
                         <Upload className="mb-2 h-10 w-10 text-zinc-500" />
                         <span className="text-sm text-zinc-500">
-                          Klikni ili povuci slike
+                          {ADMIN_UI.blog.clickOrDrag}
                         </span>
                       </>
                     )}
@@ -1237,12 +1409,12 @@ export default function AdminBlog({
                   ) : galleryFiles.length > 1 ? (
                     <>
                       <ImageIcon className="h-4 w-4" />
-                      Dodaj {galleryFiles.length} u galeriju
+                      {ADMIN_UI.blog.addToGallery(galleryFiles.length)}
                     </>
                   ) : (
                     <>
                       <ImageIcon className="h-4 w-4" />
-                      Dodaj u galeriju
+                      {ADMIN_UI.blog.addToGallery()}
                     </>
                   )}
                 </button>
@@ -1256,7 +1428,7 @@ export default function AdminBlog({
                 onClick={() => handleDelete(editingId)}
                 className="rounded-lg border border-red-800/60 px-4 py-2 text-sm text-red-400 transition-colors hover:bg-red-900/30"
               >
-                Obriši
+                {ADMIN_UI.blog.delete}
               </button>
             )}
             <button
@@ -1268,12 +1440,10 @@ export default function AdminBlog({
               {saving ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Spremanje...
+                  Saving...
                 </>
-              ) : creating ? (
-                "Kreiraj članak"
               ) : (
-                "Spremi"
+                creating ? ADMIN_UI.blog.createPost : ADMIN_UI.blog.save
               )}
             </button>
           </div>
@@ -1288,18 +1458,18 @@ export default function AdminBlog({
             value={listStatusFilter}
             onChange={setListStatusFilter}
             options={[
-              { value: "", label: "Svi" },
+              { value: "", label: "All" },
               { value: "draft", label: "Draft" },
-              { value: "published", label: "Objavljeno" },
+              { value: "published", label: "Published" },
             ]}
           />
         </div>
         <div className="w-48">
           <FilterMultiSelect
-            label="Kategorija"
+            label="Category"
             value={listCategoryFilter}
             onChange={setListCategoryFilter}
-            placeholder="Sve kategorije"
+            placeholder="All categories"
             options={getBlogCategoryOptions()
               .sort((a, b) => a.fullLabel.localeCompare(b.fullLabel, "hr"))
               .map((c) => ({ value: c.slug, label: c.fullLabel }))}
@@ -1307,7 +1477,7 @@ export default function AdminBlog({
         </div>
         <div className="w-40">
           <FilterSelect
-            label="Mjesec"
+            label="Month"
             value={listMonthFilter}
             onChange={setListMonthFilter}
             options={listMonthOptions}
@@ -1319,8 +1489,8 @@ export default function AdminBlog({
             value={listDateSort}
             onChange={(v) => setListDateSort(v as "newest" | "oldest")}
             options={[
-              { value: "newest", label: "Najnovije" },
-              { value: "oldest", label: "Najstarije" },
+              { value: "newest", label: "Newest" },
+              { value: "oldest", label: "Oldest" },
             ]}
           />
         </div>
@@ -1330,15 +1500,15 @@ export default function AdminBlog({
         <div className="mb-6 flex items-center justify-between gap-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3">
           <span className="text-sm text-amber-400">
             {contentHealthFilter === "no-seo"
-              ? "Prikazani su samo članci bez meta opisa (SEO)"
-              : "Prikazani su samo članci bez istaknute slike"}
+              ? "Showing only posts without meta description (SEO)"
+              : ADMIN_UI.blog.noFeaturedFilter}
           </span>
           <button
             type="button"
             onClick={onClearContentHealthFilter}
             className="rounded-md px-3 py-1.5 text-sm font-medium text-amber-400 transition-colors hover:bg-amber-500/20 hover:text-amber-300"
           >
-            Poništi filter
+            Clear filter
           </button>
         </div>
       )}
@@ -1376,8 +1546,8 @@ export default function AdminBlog({
           return sorted.length === 0 ? (
           <p className="rounded-lg bg-zinc-800/50 py-8 text-center text-sm text-zinc-500">
             {contentHealthFilter || listStatusFilter || listCategoryFilter.length > 0 || listMonthFilter
-              ? "Nema članaka koji odgovaraju filterima."
-              : "Još nema članaka. Klikni &quot;Novi članak&quot; za kreiranje."}
+              ? ADMIN_UI.blog.noPostsFilter
+              : ADMIN_UI.blog.noPostsYet}
           </p>
         ) : (
           sorted
@@ -1390,7 +1560,7 @@ export default function AdminBlog({
                 {post.thumbnail ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
-                    src={post.thumbnail}
+                    src={post.thumbnail + (listThumbnailBust[post.id] ? `?t=${listThumbnailBust[post.id]}` : "")}
                     alt=""
                     className="h-full w-full object-cover"
                     style={{
@@ -1433,7 +1603,7 @@ export default function AdminBlog({
                       : "bg-emerald-500/20 text-emerald-400"
                   }`}
                 >
-                  {post.status === "draft" ? "Draft" : "Objavljeno"}
+                  {post.status === "draft" ? "Draft" : "Published"}
                 </span>
                 <span className="flex items-center gap-1 rounded px-2 py-1.5 text-xs text-zinc-500">
                   SEO
@@ -1462,7 +1632,7 @@ export default function AdminBlog({
                         showToast("success", next ? "Dodano u istaknute" : "Uklonjeno iz istaknutih");
                       }
                     } catch {
-                      showToast("error", "Promjena nije uspjela.");
+                      showToast("error", "Change failed.");
                     }
                   }}
                   className={`rounded p-2 transition-colors ${
@@ -1470,8 +1640,8 @@ export default function AdminBlog({
                       ? "text-amber-400 hover:text-amber-300"
                       : "text-zinc-500 hover:text-zinc-400"
                   }`}
-                  title={post.featured ? "Ukloni iz istaknutih" : "Dodaj u istaknute"}
-                  aria-label={post.featured ? "Ukloni iz istaknutih" : "Dodaj u istaknute"}
+                  title={post.featured ? ADMIN_UI.blog.removeFromFeatured : ADMIN_UI.blog.addToFeatured}
+                  aria-label={post.featured ? ADMIN_UI.blog.removeFromFeatured : ADMIN_UI.blog.addToFeatured}
                 >
                   <Star
                     className={`h-4 w-4 ${post.featured ? "fill-amber-400" : ""}`}
@@ -1480,7 +1650,7 @@ export default function AdminBlog({
                 </button>
                 <button
                   type="button"
-                  onClick={() => openEdit(post)}
+                  onClick={() => handleEditClick(post)}
                   className="rounded p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
                   aria-label="Edit"
                 >
@@ -1502,22 +1672,22 @@ export default function AdminBlog({
 
       {duplicateModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/90 p-4"
+          className={ADMIN_UI.modal.overlayZ50}
           onClick={() => handleDuplicateChoice("cancel")}
         >
           <div
-            className="w-full max-w-2xl rounded-xl border border-zinc-700 bg-zinc-900 p-6 shadow-xl"
+            className={ADMIN_UI.modal.cardWide}
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="mb-4 text-lg font-semibold text-zinc-200">
-              Duplikat: &quot;{duplicateModal.filename}&quot; već postoji u galeriji
+            <h3 className={ADMIN_UI.modal.titleMb4}>
+              {ADMIN_UI.duplicateModal.titlePrefix} &quot;{duplicateModal.filename}&quot; {ADMIN_UI.duplicateModal.titleSuffix}
             </h3>
-            <p className="mb-4 text-sm text-zinc-500">
-              Kako želiš nastaviti?
+            <p className={ADMIN_UI.modal.bodyMb4}>
+              {ADMIN_UI.duplicateModal.question}
             </p>
             <div className="mb-6 flex gap-4">
               <div className="flex flex-1 flex-col items-center">
-                <p className="mb-2 text-xs font-medium text-zinc-500">Nova (upload)</p>
+                <p className="mb-2 text-xs font-medium text-zinc-500">{ADMIN_UI.duplicateModal.newLabel}</p>
                 <img
                   src={duplicateModal.filePreviewUrl}
                   alt="Nova"
@@ -1530,7 +1700,7 @@ export default function AdminBlog({
                 </p>
               </div>
               <div className="flex flex-1 flex-col items-center">
-                <p className="mb-2 text-xs font-medium text-zinc-500">Postojeća u galeriji</p>
+                <p className="mb-2 text-xs font-medium text-zinc-500">{ADMIN_UI.duplicateModal.existingLabel}</p>
                 <img
                   src={duplicateModal.existingSrc}
                   alt="Postojeća"
@@ -1549,23 +1719,44 @@ export default function AdminBlog({
               <button
                 type="button"
                 onClick={() => handleDuplicateChoice("overwrite")}
-                className="rounded-lg bg-zinc-700 px-4 py-2.5 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-600"
+                className={ADMIN_UI.buttons.neutral}
               >
-                Prepiši
+                {ADMIN_UI.duplicateModal.overwrite}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDuplicateChoice("overwrite", true)}
+                className={ADMIN_UI.buttons.neutral}
+              >
+                {ADMIN_UI.duplicateModal.overwriteAll}
               </button>
               <button
                 type="button"
                 onClick={() => handleDuplicateChoice("add")}
-                className="rounded-lg bg-zinc-700 px-4 py-2.5 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-600"
+                className={ADMIN_UI.buttons.neutral}
               >
-                Dodaj kao _2
+                {ADMIN_UI.duplicateModal.addSuffix}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDuplicateChoice("add", true)}
+                className={ADMIN_UI.buttons.neutral}
+              >
+                {ADMIN_UI.duplicateModal.addAllSuffix}
               </button>
               <button
                 type="button"
                 onClick={() => handleDuplicateChoice("cancel")}
-                className="rounded-lg border border-zinc-600 bg-zinc-800 px-4 py-2.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-zinc-700"
+                className={ADMIN_UI.buttons.secondary}
               >
-                Odustani (preskoči)
+                {ADMIN_UI.duplicateModal.cancel}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDuplicateChoice("cancel", true)}
+                className={ADMIN_UI.buttons.secondary}
+              >
+                {ADMIN_UI.duplicateModal.cancelAll}
               </button>
             </div>
           </div>
@@ -1574,8 +1765,8 @@ export default function AdminBlog({
 
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg ${
-            toast.type === "success" ? "bg-emerald-600 text-white" : "bg-red-600 text-white"
+          className={`${ADMIN_UI.toast.container} ${
+            toast.type === "success" ? ADMIN_UI.toast.success : ADMIN_UI.toast.error
           }`}
         >
           {toast.type === "success" ? (
@@ -1583,7 +1774,7 @@ export default function AdminBlog({
           ) : (
             <AlertCircle className="h-5 w-5" />
           )}
-          <span className="text-sm font-medium">{toast.message}</span>
+          <span className={ADMIN_UI.toast.text}>{toast.message}</span>
         </div>
       )}
     </div>

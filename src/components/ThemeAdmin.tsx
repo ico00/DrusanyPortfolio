@@ -56,11 +56,11 @@ function ThemeFontSelect({
         className="flex w-full items-center justify-between gap-2 rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-left text-zinc-100 transition-colors hover:border-zinc-600 hover:bg-zinc-800 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
         aria-expanded={open}
         aria-haspopup="listbox"
-        aria-label="Odaberi font"
+        aria-label="Select font"
       >
         <span className="flex items-center gap-3">
           <Type className="h-4 w-4 text-zinc-500" />
-          <span>{selected?.label ?? "Odaberi font"}</span>
+          <span>{selected?.label ?? "Select font"}</span>
         </span>
         <ChevronDown
           className={`h-4 w-4 text-zinc-500 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
@@ -188,7 +188,7 @@ export default function ThemeAdmin() {
     return (
       <div className="flex items-center gap-2 text-zinc-500">
         <Loader2 className="h-5 w-5 animate-spin" />
-        Učitavanje theme postavki…
+        Loading theme settings…
       </div>
     );
   }
@@ -196,10 +196,10 @@ export default function ThemeAdmin() {
   if (!theme) {
     return (
       <div className="rounded-lg border border-amber-800/50 bg-amber-900/20 p-4 text-amber-200">
-        <p className="font-medium">Theme API nije dostupan</p>
+        <p className="font-medium">Theme API is not available</p>
         <p className="mt-1 text-sm text-amber-200/80">
-          Uređivanje theme-a radi samo u development modu (<code>npm run dev</code>).
-          Za produkciju uredi <code>src/data/theme.json</code> ručno i pokreni{" "}
+          Theme editing only works in development mode (<code>npm run dev</code>).
+          For production, edit <code>src/data/theme.json</code> manually and run{" "}
           <code>npm run build</code>.
         </p>
       </div>
@@ -224,12 +224,12 @@ export default function ThemeAdmin() {
           ) : (
             <Save className="h-4 w-4" />
           )}
-          {saved ? "Spremljeno" : "Spremi"}
+          {saved ? "Saved" : "Save"}
         </button>
       </div>
 
       <p className="text-sm text-zinc-400">
-        Promjene se primjenjuju nakon spremanja. Za statički export pokreni{" "}
+        Changes apply after saving. For static export run{" "}
         <code className="rounded bg-zinc-800 px-1.5 py-0.5">npm run build</code>.
       </p>
 

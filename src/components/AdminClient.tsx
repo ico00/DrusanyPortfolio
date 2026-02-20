@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Tamna tema za cijelu admin stranicu (uključujući BlockNote popovere koji renderaju u body)
 function useAdminDarkTheme() {
@@ -14,6 +15,7 @@ import { DrusanyLogo } from "./Header";
 import {
   Upload,
   Image as ImageIcon,
+  Images,
   Trash2,
   Check,
   AlertCircle,
@@ -36,6 +38,7 @@ import AdminPages from "./AdminPages";
 import AdminBlog from "./AdminBlog";
 import AdminDashboard from "./AdminDashboard";
 import ThemeAdmin from "./ThemeAdmin";
+import AdminMedia from "./AdminMedia";
 import {
   DndContext,
   closestCenter,
@@ -59,6 +62,7 @@ import FoodDrinkSelect from "./FoodDrinkSelect";
 import DateTimePicker from "./DateTimePicker";
 import { generateSlug } from "@/lib/slug";
 import { THUMBNAIL_FOCUS_OPTIONS } from "@/data/thumbnailFocus";
+import { ADMIN_UI } from "@/data/adminUI";
 
 interface GalleryImage {
   id: string;
@@ -151,7 +155,7 @@ function SortableImageCard({
         {...listeners}
         disabled={reordering}
         className="absolute left-2 top-2 z-10 flex cursor-grab items-center justify-center rounded p-1.5 text-zinc-500 transition-colors hover:bg-zinc-800/80 hover:text-zinc-300 active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50"
-        aria-label="Povuci za promjenu redoslijeda"
+        aria-label="Drag to reorder"
       >
         <GripVertical className="h-5 w-5" />
       </button>
@@ -232,6 +236,7 @@ function SortableImageCard({
 
 export default function AdminClient() {
   useAdminDarkTheme();
+  const router = useRouter();
 
   const [files, setFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
@@ -299,9 +304,19 @@ export default function AdminClient() {
     existingSize: number | null;
   } | null>(null);
   const duplicateResolveRef = useRef<((action: "overwrite" | "add" | "cancel") => void) | null>(null);
+  const applyToAllRef = useRef<"overwrite" | "add" | "cancel" | null>(null);
   const editFormRef = useRef<HTMLFormElement | null>(null);
-  const [adminTab, setAdminTab] = useState<"dashboard" | "gallery" | "about" | "contact" | "blogPage" | "homePage" | "blog" | "theme">("dashboard");
+  const searchParams = useSearchParams();
+  const tabFromUrl = searchParams.get("tab");
+  const [adminTab, setAdminTab] = useState<"dashboard" | "gallery" | "about" | "contact" | "blogPage" | "homePage" | "media" | "blog" | "theme">("dashboard");
   const [pagesExpanded, setPagesExpanded] = useState(false);
+
+  useEffect(() => {
+    const valid = ["dashboard", "gallery", "about", "contact", "blogPage", "homePage", "media", "blog", "theme"];
+    if (tabFromUrl && valid.includes(tabFromUrl)) {
+      setAdminTab(tabFromUrl as typeof adminTab);
+    }
+  }, [tabFromUrl]);
   const [galleryExpanded, setGalleryExpanded] = useState(false);
   const [galleryFilter, setGalleryFilter] = useState<"" | "no-slug" | "no-exif">("");
   const [galleryFilterIds, setGalleryFilterIds] = useState<string[]>([]);
@@ -381,7 +396,8 @@ export default function AdminClient() {
   };
 
   const handleDuplicateChoice = useCallback(
-    (action: "overwrite" | "add" | "cancel") => {
+    (action: "overwrite" | "add" | "cancel", applyToAll?: boolean) => {
+      if (applyToAll) applyToAllRef.current = action;
       duplicateResolveRef.current?.(action);
       duplicateResolveRef.current = null;
       setDuplicateModal(null);
@@ -398,6 +414,7 @@ export default function AdminClient() {
 
     setLoading(true);
     setUploadProgress({ current: 0, total: files.length });
+    applyToAllRef.current = null;
     let successCount = 0;
     let failCount = 0;
     let lastError: string | null = null;
@@ -409,20 +426,25 @@ export default function AdminClient() {
         let result = await uploadSingleFile(file, { isHero: i === 0 && isHero });
 
         if (result.duplicate && result.data) {
-          const d = result.data as { existingSrc?: string; existingThumb?: string; filename?: string; existingSize?: number };
-          const filePreviewUrl = URL.createObjectURL(file);
-          const choice = await new Promise<"overwrite" | "add" | "cancel">((resolve) => {
-            duplicateResolveRef.current = resolve;
-            setDuplicateModal({
-              file,
-              filePreviewUrl,
-              existingSrc: d.existingSrc || "",
-              existingThumb: d.existingThumb || "",
-              filename: d.filename || "",
-              existingSize: d.existingSize ?? null,
+          let choice: "overwrite" | "add" | "cancel";
+          if (applyToAllRef.current) {
+            choice = applyToAllRef.current;
+          } else {
+            const d = result.data as { existingSrc?: string; existingThumb?: string; filename?: string; existingSize?: number };
+            const filePreviewUrl = URL.createObjectURL(file);
+            choice = await new Promise<"overwrite" | "add" | "cancel">((resolve) => {
+              duplicateResolveRef.current = resolve;
+              setDuplicateModal({
+                file,
+                filePreviewUrl,
+                existingSrc: d.existingSrc || "",
+                existingThumb: d.existingThumb || "",
+                filename: d.filename || "",
+                existingSize: d.existingSize ?? null,
+              });
             });
-          });
-          URL.revokeObjectURL(filePreviewUrl);
+            URL.revokeObjectURL(filePreviewUrl);
+          }
 
           if (choice === "overwrite") {
             result = await uploadSingleFile(file, { isHero: i === 0 && isHero, overwrite: true });
@@ -942,7 +964,18 @@ export default function AdminClient() {
             </div>
             <button
               type="button"
-              onClick={() => setAdminTab("blog")}
+              onClick={() => setAdminTab("media")}
+              className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                adminTab === "media"
+                  ? "border-l-2 border-cyan-500/80 bg-zinc-800 text-white"
+                  : "border-l-2 border-transparent text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-200"
+              }`}
+            >
+              <Images className={`h-5 w-5 shrink-0 ${adminTab === "media" ? "text-cyan-400" : ""}`} />
+              Media
+            </button>
+            <Link
+              href="/admin/blog"
               className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
                 adminTab === "blog"
                   ? "border-l-2 border-violet-500/80 bg-zinc-800 text-white"
@@ -951,7 +984,7 @@ export default function AdminClient() {
             >
               <BookOpen className={`h-5 w-5 shrink-0 ${adminTab === "blog" ? "text-violet-400" : ""}`} />
               Blog
-            </button>
+            </Link>
             <button
               type="button"
               onClick={() => setAdminTab("theme")}
@@ -989,6 +1022,7 @@ export default function AdminClient() {
               {adminTab === "contact" && "Contact"}
               {adminTab === "blogPage" && "Blog page"}
               {adminTab === "homePage" && "Home page"}
+              {adminTab === "media" && "Media"}
               {adminTab === "blog" &&
                 (blogFilter
                   ? blogFilter === "no-seo"
@@ -1007,8 +1041,9 @@ export default function AdminClient() {
                     : "Select a category from the sidebar")}
               {adminTab === "about" && "Edit About page content"}
               {adminTab === "contact" && "Edit Contact page content"}
-              {adminTab === "blogPage" && "SEO za glavnu blog stranicu (/blog)"}
-              {adminTab === "homePage" && "SEO za početnu stranicu (/)"}
+              {adminTab === "blogPage" && "SEO for main blog page (/blog)"}
+              {adminTab === "homePage" && "SEO for home page (/)"}
+              {adminTab === "media" && "All images and where they are used"}
               {adminTab === "blog" &&
                 (blogFilter
                   ? `Content health filter: ${blogFilter === "no-seo" ? "missing meta description" : "missing featured image"}`
@@ -1027,14 +1062,18 @@ export default function AdminClient() {
                   setCategory("");
                   setAdminTab("gallery");
                 } else if (filter === "no-featured" || filter === "no-seo") {
-                  setBlogFilter(filter);
-                  setAdminTab("blog");
+                  router.push(`/admin/blog?filter=${filter}`);
                 }
               }}
             />
           </div>
         )}
 
+        {adminTab === "media" && (
+          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8">
+            <AdminMedia />
+          </div>
+        )}
         {(adminTab === "about" || adminTab === "contact" || adminTab === "blogPage" || adminTab === "homePage") && (
           <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8">
             <AdminPages
@@ -1049,14 +1088,6 @@ export default function AdminClient() {
           </div>
         )}
 
-        {adminTab === "blog" && (
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8">
-            <AdminBlog
-              contentHealthFilter={blogFilter}
-              onClearContentHealthFilter={() => setBlogFilter("")}
-            />
-          </div>
-        )}
         {adminTab === "theme" && (
           <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8">
             <ThemeAdmin />
@@ -1321,7 +1352,7 @@ export default function AdminClient() {
                         <button
                           type="button"
                           onClick={async () => {
-                            if (!confirm(`Generirati slug za ${categoryImages.length} slika?`)) return;
+                            if (!confirm(`Generate slug for ${categoryImages.length} image(s)?`)) return;
                             try {
                               const res = await fetch("/api/gallery/generate-slugs", {
                                 method: "POST",
@@ -1463,22 +1494,22 @@ export default function AdminClient() {
         {/* Duplicate resolution modal */}
         {duplicateModal && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/90 p-4"
+            className={ADMIN_UI.modal.overlayZ50}
             onClick={() => handleDuplicateChoice("cancel")}
           >
             <div
-              className="w-full max-w-2xl rounded-xl border border-zinc-700 bg-zinc-900 p-6 shadow-xl"
+              className={ADMIN_UI.modal.cardWide}
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="mb-4 text-lg font-semibold text-zinc-200">
-                Duplicate: &quot;{duplicateModal.filename}&quot; already exists
+              <h3 className={ADMIN_UI.modal.titleMb4}>
+                {ADMIN_UI.duplicateModal.titlePrefix} &quot;{duplicateModal.filename}&quot; {ADMIN_UI.duplicateModal.titleSuffix}
               </h3>
-              <p className="mb-4 text-sm text-zinc-500">
-                Choose how to proceed:
+              <p className={ADMIN_UI.modal.bodyMb4}>
+                {ADMIN_UI.duplicateModal.question}
               </p>
               <div className="mb-6 flex gap-4">
                 <div className="flex flex-1 flex-col items-center">
-                  <p className="mb-2 text-xs font-medium text-zinc-500">New (uploading)</p>
+                  <p className="mb-2 text-xs font-medium text-zinc-500">{ADMIN_UI.duplicateModal.newLabel}</p>
                   <img
                     src={duplicateModal.filePreviewUrl}
                     alt="New"
@@ -1491,7 +1522,7 @@ export default function AdminClient() {
                   </p>
                 </div>
                 <div className="flex flex-1 flex-col items-center">
-                  <p className="mb-2 text-xs font-medium text-zinc-500">Existing in gallery</p>
+                  <p className="mb-2 text-xs font-medium text-zinc-500">{ADMIN_UI.duplicateModal.existingLabel}</p>
                   <img
                     src={duplicateModal.existingThumb || duplicateModal.existingSrc}
                     alt="Existing"
@@ -1510,23 +1541,44 @@ export default function AdminClient() {
                 <button
                   type="button"
                   onClick={() => handleDuplicateChoice("overwrite")}
-                  className="rounded-lg bg-zinc-700 px-4 py-2.5 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-600"
+                  className={ADMIN_UI.buttons.neutral}
                 >
-                  Overwrite
+                  {ADMIN_UI.duplicateModal.overwrite}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDuplicateChoice("overwrite", true)}
+                  className={ADMIN_UI.buttons.neutral}
+                >
+                  {ADMIN_UI.duplicateModal.overwriteAll}
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDuplicateChoice("add")}
-                  className="rounded-lg bg-zinc-700 px-4 py-2.5 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-600"
+                  className={ADMIN_UI.buttons.neutral}
                 >
-                  Add as _2
+                  {ADMIN_UI.duplicateModal.addSuffix}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDuplicateChoice("add", true)}
+                  className={ADMIN_UI.buttons.neutral}
+                >
+                  {ADMIN_UI.duplicateModal.addAllSuffix}
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDuplicateChoice("cancel")}
-                  className="rounded-lg border border-zinc-600 bg-zinc-800 px-4 py-2.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-zinc-700"
+                  className={ADMIN_UI.buttons.secondary}
                 >
-                  Cancel (skip)
+                  {ADMIN_UI.duplicateModal.cancel}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDuplicateChoice("cancel", true)}
+                  className={ADMIN_UI.buttons.secondary}
+                >
+                  {ADMIN_UI.duplicateModal.cancelAll}
                 </button>
               </div>
             </div>
@@ -1712,7 +1764,7 @@ export default function AdminClient() {
                             (e.target as HTMLElement).focus();
                           }
                         }}
-                        title="Klikni na sliku da postaviš fokus točku"
+                        title="Click on image to set focus point"
                       >
                         <img
                           src={editingImg.src}
@@ -1738,7 +1790,7 @@ export default function AdminClient() {
                         })()}
                       </div>
                       <p className="mt-1 text-xs text-zinc-500">
-                        Klikni na sliku ili odaberi iz mreže:
+                        Click on image or select from grid:
                       </p>
                       <div className="mt-1 grid w-fit grid-cols-3 gap-0.5">
                         {THUMBNAIL_FOCUS_OPTIONS.map((opt) => (
@@ -1874,10 +1926,8 @@ export default function AdminClient() {
         {/* Toast */}
         {toast && (
           <div
-            className={`fixed bottom-6 right-6 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg ${
-              toast.type === "success"
-                ? "bg-emerald-600 text-white"
-                : "bg-red-600 text-white"
+            className={`${ADMIN_UI.toast.container} ${
+              toast.type === "success" ? ADMIN_UI.toast.success : ADMIN_UI.toast.error
             }`}
           >
             {toast.type === "success" ? (
@@ -1885,7 +1935,7 @@ export default function AdminClient() {
             ) : (
               <AlertCircle className="h-5 w-5" />
             )}
-            <span className="text-sm font-medium">{toast.message}</span>
+            <span className={ADMIN_UI.toast.text}>{toast.message}</span>
           </div>
         )}
         </div>

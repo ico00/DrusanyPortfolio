@@ -194,7 +194,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                 ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
                 : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
-            title={stats.contentHealth.imagesWithoutExif > 0 ? "Prikaži u galeriji" : undefined}
+            title={stats.contentHealth.imagesWithoutExif > 0 ? "Show in gallery" : undefined}
           >
             <Camera className="h-4 w-4 shrink-0" />
             <span>Images without EXIF: <strong>{stats.contentHealth.imagesWithoutExif}</strong></span>
@@ -212,7 +212,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                 ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
                 : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
-            title={stats.contentHealth.imagesWithoutSlug > 0 ? "Prikaži u galeriji" : undefined}
+            title={stats.contentHealth.imagesWithoutSlug > 0 ? "Show in gallery" : undefined}
           >
             <Tag className="h-4 w-4 shrink-0" />
             <span>Images without slug: <strong>{stats.contentHealth.imagesWithoutSlug}</strong></span>
@@ -225,7 +225,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                 ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
                 : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
-            title={stats.contentHealth.blogPostsWithoutFeaturedImage > 0 ? "Prikaži u blogu" : undefined}
+            title={stats.contentHealth.blogPostsWithoutFeaturedImage > 0 ? "Show in blog" : undefined}
           >
             <ImageOff className="h-4 w-4 shrink-0" />
             <span>Blog posts without featured image: <strong>{stats.contentHealth.blogPostsWithoutFeaturedImage}</strong></span>
@@ -238,7 +238,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                 ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
                 : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
-            title={stats.contentHealth.blogPostsWithoutSeo > 0 ? "Prikaži u blogu" : undefined}
+            title={stats.contentHealth.blogPostsWithoutSeo > 0 ? "Show in blog" : undefined}
           >
             <Search className="h-4 w-4 shrink-0" />
             <span>Blog posts without SEO: <strong>{stats.contentHealth.blogPostsWithoutSeo}</strong></span>
