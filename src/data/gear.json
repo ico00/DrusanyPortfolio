@@ -14,6 +14,27 @@
       "title": "Canon R6 MK II",
       "category": "cameras"
     },
+    {
+      "id": "7",
+      "src": "/uploads/gear/canon-16.png",
+      "alt": "Canon RF 16mm f/2.8 STM",
+      "title": "Canon RF 16mm f/2.8 STM",
+      "category": "lenses"
+    },
+    {
+      "id": "8",
+      "src": "/uploads/gear/canon-17-40.png",
+      "alt": "Canon EF 17-40mm f/4 L USM",
+      "title": "Canon EF 17-40mm f/4 L USM",
+      "category": "lenses"
+    },
+    {
+      "id": "6",
+      "src": "/uploads/gear/sigma-35.png",
+      "alt": "Sigma 35mm f/1.4 Art",
+      "title": "Sigma 35mm f/1.4 DG HSM Art",
+      "category": "lenses"
+    },
 
     {
       "id": "3",
@@ -34,6 +55,23 @@
       "src": "/uploads/gear/canon-100macro.png",
       "alt": "Canon RF 100mm f/2.8 L IS USM Macro",
       "title": "Canon RF 100mm f/2.8 L IS USM Macro",
+      "category": "lenses"
+    },
+
+
+
+    {
+      "id": "9",
+      "src": "/uploads/gear/sigma-150-600.png",
+      "alt": "Sigma 150-600mm f/5-6.3 DG OS HSM",
+      "title": "Sigma 150-600mm f/5-6.3 DG OS HSM",
+      "category": "lenses"
+    },
+    {
+      "id": "10",
+      "src": "/uploads/gear/canon-135.png",
+      "alt": "Canon EF 135mm f/2L USM",
+      "title": "Canon EF 135mm f/2L USM",
       "category": "lenses"
     }
   ]

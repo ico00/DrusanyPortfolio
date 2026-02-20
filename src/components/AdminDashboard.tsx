@@ -9,10 +9,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  PieChart,
-  Pie,
   Cell,
-  Legend,
 } from "recharts";
 import {
   ImageIcon,
@@ -27,6 +24,10 @@ import {
   Search,
 } from "lucide-react";
 import { CATEGORIES } from "./CategorySelect";
+import {
+  getBlogCategoryOptions,
+  postHasCategory,
+} from "@/data/blogCategories";
 
 function normalizeCategory(cat: string): string {
   return cat
@@ -62,8 +63,10 @@ interface AdminDashboardProps {
 export default function AdminDashboard({ onContentHealthClick }: AdminDashboardProps) {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
-    totalImages: 0,
+    portfolioImages: 0,
+    blogImages: 0,
     imagesByCategory: [] as { name: string; count: number; slug: string }[],
+    imagesByBlogCategory: [] as { name: string; count: number; slug: string }[],
     pagesCount: 2,
     blogPostsCount: 0,
       contentHealth: {
@@ -102,6 +105,12 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
       const images = galleryData.images ?? [];
       const posts = blogData.posts ?? [];
 
+      const blogImagesCount = posts.reduce(
+        (sum, p) =>
+          sum + (p.thumbnail?.trim() ? 1 : 0) + (p.gallery?.length ?? 0),
+        0
+      );
+
       const byCategory: Record<string, number> = {};
       const knownSlugs = new Set(CATEGORIES.map((c) => c.slug));
       for (const img of images) {
@@ -123,17 +132,45 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
         ...(otherCount > 0 ? [{ name: "Other", slug: "other", count: otherCount }] : []),
       ];
 
+      const blogCategoryOptions = getBlogCategoryOptions();
+      const byBlogCategory: Record<string, number> = {};
+      for (const opt of blogCategoryOptions) {
+        byBlogCategory[opt.slug] = 0;
+      }
+      for (const post of posts) {
+        const imgCount =
+          (post.thumbnail?.trim() ? 1 : 0) + (post.gallery?.length ?? 0);
+        for (const opt of blogCategoryOptions) {
+          if (postHasCategory(post, opt.slug)) {
+            byBlogCategory[opt.slug] =
+              (byBlogCategory[opt.slug] ?? 0) + imgCount;
+          }
+        }
+      }
+      const imagesByBlogCategory = blogCategoryOptions
+        .map((opt) => ({
+          name: opt.fullLabel,
+          slug: opt.slug,
+          count: byBlogCategory[opt.slug] ?? 0,
+        }))
+        .filter((d) => d.count > 0)
+        .sort((a, b) => b.count - a.count);
+
       setStats({
-        totalImages: images.length,
+        portfolioImages: images.length,
+        blogImages: blogImagesCount,
         imagesByCategory,
+        imagesByBlogCategory,
         pagesCount: 2,
         blogPostsCount: posts.length,
         contentHealth,
       });
     } catch {
       setStats({
-        totalImages: 0,
+        portfolioImages: 0,
+        blogImages: 0,
         imagesByCategory: [],
+        imagesByBlogCategory: [],
         pagesCount: 2,
         blogPostsCount: 0,
         contentHealth: {
@@ -161,14 +198,6 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
       </div>
     );
   }
-
-  const pieData = stats.imagesByCategory
-    .filter((d) => d.count > 0)
-    .map((d, i) => ({
-      name: d.name,
-      value: d.count,
-      color: CHART_COLORS[i % CHART_COLORS.length],
-    }));
 
   return (
     <div className="space-y-8">
@@ -247,25 +276,36 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
       </div>
 
       {/* Summary cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
         <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[0].border}`}>
           <div className="flex items-center gap-3">
             <div className={`rounded-lg p-3 ${CARD_ACCENTS[0].bg}`}>
               <ImageIcon className={`h-6 w-6 ${CARD_ACCENTS[0].icon}`} />
             </div>
             <div>
-              <p className="text-sm text-zinc-500">Total images</p>
-              <p className="text-2xl font-semibold text-zinc-100">{stats.totalImages}</p>
+              <p className="text-sm text-zinc-500">Portfolio</p>
+              <p className="text-2xl font-semibold text-zinc-100">{stats.portfolioImages}</p>
             </div>
           </div>
         </div>
         <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[1].border}`}>
           <div className="flex items-center gap-3">
             <div className={`rounded-lg p-3 ${CARD_ACCENTS[1].bg}`}>
-              <Layout className={`h-6 w-6 ${CARD_ACCENTS[1].icon}`} />
+              <BookOpen className={`h-6 w-6 ${CARD_ACCENTS[1].icon}`} />
             </div>
             <div>
-              <p className="text-sm text-zinc-500">Categories</p>
+              <p className="text-sm text-zinc-500">Blog</p>
+              <p className="text-2xl font-semibold text-zinc-100">{stats.blogImages}</p>
+            </div>
+          </div>
+        </div>
+        <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[2].border}`}>
+          <div className="flex items-center gap-3">
+            <div className={`rounded-lg p-3 ${CARD_ACCENTS[2].bg}`}>
+              <Layout className={`h-6 w-6 ${CARD_ACCENTS[2].icon}`} />
+            </div>
+            <div>
+              <p className="text-sm text-zinc-500">Portfolio Categories</p>
               <p className="text-2xl font-semibold text-zinc-100">
                 {stats.imagesByCategory.filter((c) => c.count > 0).length}
               </p>
@@ -275,7 +315,20 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
         <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[2].border}`}>
           <div className="flex items-center gap-3">
             <div className={`rounded-lg p-3 ${CARD_ACCENTS[2].bg}`}>
-              <FileText className={`h-6 w-6 ${CARD_ACCENTS[2].icon}`} />
+              <BookOpen className={`h-6 w-6 ${CARD_ACCENTS[2].icon}`} />
+            </div>
+            <div>
+              <p className="text-sm text-zinc-500">Blog Categories</p>
+              <p className="text-2xl font-semibold text-zinc-100">
+                {stats.imagesByBlogCategory.length}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[3].border}`}>
+          <div className="flex items-center gap-3">
+            <div className={`rounded-lg p-3 ${CARD_ACCENTS[3].bg}`}>
+              <FileText className={`h-6 w-6 ${CARD_ACCENTS[3].icon}`} />
             </div>
             <div>
               <p className="text-sm text-zinc-500">Static pages</p>
@@ -300,7 +353,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
           <h3 className="mb-6 text-lg font-semibold text-zinc-200">
-            Images by category
+            Images by category in portfolio
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -341,25 +394,25 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
           <h3 className="mb-6 text-lg font-semibold text-zinc-200">
-            Category distribution
+            Images by category in blog
           </h3>
           <div className="h-64">
-            {pieData.length > 0 ? (
+            {stats.imagesByBlogCategory.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={80}
-                    paddingAngle={2}
-                    dataKey="value"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={index} fill={entry.color} />
-                    ))}
-                  </Pie>
+                <BarChart
+                  data={stats.imagesByBlogCategory}
+                  margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fill: "#a1a1aa", fontSize: 12 }}
+                    axisLine={{ stroke: "#52525b" }}
+                  />
+                  <YAxis
+                    tick={{ fill: "#a1a1aa", fontSize: 12 }}
+                    axisLine={{ stroke: "#52525b" }}
+                  />
                   <Tooltip
                     cursor={false}
                     contentStyle={{
@@ -371,17 +424,16 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                     labelStyle={{ color: "#fafafa", fontWeight: 600, fontSize: 14 }}
                     itemStyle={{ color: "#e4e4e7", fontSize: 13 }}
                   />
-                  <Legend
-                    wrapperStyle={{ fontSize: "12px" }}
-                    formatter={(value) => (
-                      <span className="text-zinc-400">{value}</span>
-                    )}
-                  />
-                </PieChart>
+                  <Bar dataKey="count" radius={[4, 4, 0, 0]} background={false}>
+                    {stats.imagesByBlogCategory.map((_, index) => (
+                      <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                    ))}
+                  </Bar>
+                </BarChart>
               </ResponsiveContainer>
             ) : (
               <div className="flex h-full items-center justify-center text-zinc-500">
-                No images yet
+                No images in blog yet
               </div>
             )}
           </div>

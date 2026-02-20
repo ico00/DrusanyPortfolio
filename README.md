@@ -16,11 +16,11 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 - **Hero slider** – Početna stranica s 6 slideova po kategorijama, auto-play
 - **Pretraga** – Filter as you type (naslov, venue, sport, keywords)
 - **Direktni linkovi** – URL slug po slici (npr. `/?category=concerts&image=depeche-mode-arena-zagreb-2013`)
-- **About** – Split layout (lijevo slika s citatom, desno sadržaj); sekcije About, Press, Gear; fiksni nav na dnu s aktivnim linkom koji prati scroll; **dekorativni navodnik** na blockquote citatima
+- **About** – Split layout (lijevo slika s citatom, desno sadržaj); sekcije About, Press, **Gear** (grupirano po kategorijama: Cameras, Lenses, Accessories; kartice bez lightboxa); fiksni nav na dnu s aktivnim linkom koji prati scroll; **dekorativni navodnik** na blockquote citatima
 - **Contact** – Isti layout kao About; kontakt forma (Formspree) – name, email, subject, message; fallback na mailto
 - **Blog** – Lista postova s metapodacima (Tekst i fotografije, Datum objave, Kategorija) i ikonama; **status** (draft / published) – draft postovi se ne prikazuju javno; **sidebar** s pretragom (filter-as-you-type), kategorijama, **istaknutim člancima** (featured) i Google Maps; **glatka animacija** pri promjeni filtera kategorija; pojedinačni post s naslovom na vrhu, featured slikom, sadržajem (slike s poravnanjem, vizual kao galerija) i masonry galerijom (lightbox, aperture cursor, EXIF); **progresivno učitavanje** galerije – za postove s 100+ slika prikazuje se prva grupa, zatim učitavanje pri skrolanju; format datuma dd. mm. yyyy.; BlockNote WYSIWYG editor s **uploadom slika** u sadržaj; **Footer** (copyright); **ScrollToTop** gumb – pozicioniran desno od ruba sadržaja članka
 - **Theme** – Prilagodba fonta, veličine i boje po elementu (title, heading, **headingOnDark** – naslov na tamnoj pozadini za About/Contact, body, quote, nav, caption) putem Admin → Theme; live preview; centralna konfiguracija fontova u `themeFonts.ts` (lako dodavanje novih)
-- **Admin panel** – Samo u development modu: **Dashboard** (grafikoni – Recharts); galerija (upload, edit, hero, sortiranje) s **custom DateTimePicker**; About/Contact (quote, Formspree endpoint); Blog s **DatePicker**, **upload slika u sadržaj** (BlockNote `/image`), **resize** slika; **Media** – agregirani prikaz svih slika (portfolio, blog, stranice), filter, search as you type, paginacija, lightbox, Download/Copy URL/Detach/Delete, **multiple selection** (bulk akcije); **Theme** – prilagodba fonta, veličine i boje po elementu (title, heading, body, quote, nav, caption) s live previewom; **sidebar accordion**; **toast** poruke (success/error)
+- **Admin panel** – Samo u development modu: **Dashboard** (kartice: Portfolio, Blog, Portfolio Categories, Blog Categories, Static pages, Blog posts; bar charti "Images by category in portfolio" i "Images by category in blog"; Content health); galerija (upload, edit, hero, sortiranje) s **custom DateTimePicker**; About/Contact (quote, Formspree endpoint); Blog s **DatePicker**, **upload slika u sadržaj** (BlockNote `/image`), **resize** slika; **Media** – agregirani prikaz svih slika (portfolio, blog, stranice), filter, search as you type, paginacija, lightbox, Download/Copy URL/Detach/Delete, **multiple selection** (bulk akcije); **Theme** – prilagodba fonta, veličine i boje po elementu (title, heading, body, quote, nav, caption) s live previewom; **sidebar accordion**; **toast** poruke (success/error)
 
 ## 🛠 Tech stack
 
@@ -30,7 +30,7 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 | Tailwind CSS 4 | Styling |
 | BlockNote | Rich text editor (About, Contact, Blog) |
 | react-day-picker | Custom datum/vrijeme picker u adminu |
-| Recharts | Dashboard grafikoni (bar, pie) |
+| Recharts | Dashboard grafikoni (bar charts) |
 | Formspree | Contact form submissions (optional, fallback: mailto) |
 | Framer Motion | Animacije |
 | Sharp | Image processing (WebP, resize) |
@@ -123,7 +123,7 @@ DrusanyPortfolio/
 Admin je dostupan **samo kada pokreneš `npm run dev`** – u produkcijskom buildu se ne uključuje.
 
 **Funkcionalnosti:**
-- **Dashboard:** Pregled sadržaja – bar/pie grafikoni (Recharts); **Content health** – metrike s ikonama (Camera, Tag, ImageOff, Search); slike bez EXIF-a, slike bez slug-a, blog postovi bez featured slike (klik otvara galeriju s filterom ili Blog)
+- **Dashboard:** Kartice (Portfolio, Blog, Portfolio Categories, Blog Categories, Static pages, Blog posts); bar charti "Images by category in portfolio" i "Images by category in blog"; **Content health** – metrike s ikonama (Camera, Tag, ImageOff, Search); slike bez EXIF-a, slike bez slug-a, blog postovi bez featured slike (klik otvara galeriju s filterom ili Blog)
 - **Sigurnost:** Rate limiting (200 req/min po IP – bulk upload), path traversal zaštita, ograničenje uploada 20 MB, magic bytes provjera, HTML sanitizacija; file locking za JSON; čišćenje orphan datoteka pri promjeni blog slug-a
 - **Galerija:** Sidebar accordion; odabir kategorije → upload slika; EXIF preview (datum fallback); **custom DateTimePicker** (datum + vrijeme); uređivanje opisa (title, venue, sport, slug, keywords…); slug **as you type**; drag-and-drop sortiranje; hero odabir; brisanje; **Content health** – gumb "Generiraj slugove" kad je filter no-slug; **toast** poruke
 - **Pages:** About – citat na slici, naslov, BlockNote sadržaj; Contact – Formspree endpoint, email (fallback), naslov, uvodni tekst (BlockNote)

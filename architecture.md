@@ -20,7 +20,7 @@ Ovaj dokument opisuje arhitekturu statičnog fotografskog portfolija izgrađenog
 | **proper-lockfile** | 4.x | File locking za JSON (gallery, blog, pages) – read-modify-write |
 | **BlockNote** | 0.46.x | Block-based rich text editor (About, Contact, Blog) – shadcn UI |
 | **react-day-picker** | 9.x | Custom kalendar za datum/vrijeme u adminu |
-| **Recharts** | 3.x | Dashboard grafikoni (bar, pie) |
+| **Recharts** | 3.x | Dashboard grafikoni (bar charts) |
 
 ### Instalacija
 
@@ -685,10 +685,10 @@ DrusanyPortfolio/
 │   │   ├── AboutNav.tsx          # Fiksni nav na dnu About (About, Press, Gear); aktivni link prati scroll
 │   │   ├── ContactForm.tsx       # Kontakt forma (Formspree); name, email, subject, message
 │   │   ├── PressSection.tsx      # About – objavljene fotografije (masonry)
-│   │   ├── GearSection.tsx       # About – fotografska oprema (masonry)
+│   │   ├── GearSection.tsx       # About – fotografska oprema (grupirano po kategorijama: Cameras, Lenses, Accessories; kartice, bez lightboxa)
 │   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog, Media, Theme)
 │   │   ├── AdminMedia.tsx       # Media library (agregirani prikaz, filter, search, paginacija, detach, bulk)
-│   │   ├── AdminDashboard.tsx    # Dashboard (bar/pie grafikoni – Recharts; Content health s ikonama – Camera, Tag, ImageOff, Search; tooltip stilizacija)
+│   │   ├── AdminDashboard.tsx    # Dashboard – kartice (Portfolio, Blog, Portfolio Categories, Blog Categories, Static pages, Blog posts); bar charti "Images by category in portfolio" i "Images by category in blog"; Content health s ikonama – Camera, Tag, ImageOff, Search
 │   │   ├── AdminPages.tsx        # About/Contact editor (BlockNote, quote, FormspreeEndpoint)
 │   │   ├── AdminBlog.tsx         # Blog post editor (BlockNote, galerija, bulk delete)
 │   │   ├── BlogGallery.tsx       # Blog galerija (masonry, lightbox, aperture cursor)
