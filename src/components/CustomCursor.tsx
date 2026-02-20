@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { motion, useSpring } from "framer-motion";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { Aperture } from "lucide-react";
 
 const APERTURE_SIZE = 32;
@@ -12,22 +12,29 @@ export default function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isOverPhoto, setIsOverPhoto] = useState(false);
-  const [dotPos, setDotPos] = useState({ x: 0, y: 0 });
+  const hasMovedRef = useRef(false);
 
-  const apertureX = useSpring(0, { stiffness: 400, damping: 30 });
-  const apertureY = useSpring(0, { stiffness: 400, damping: 30 });
+  const dotX = useMotionValue(0);
+  const dotY = useMotionValue(0);
+  const apertureX = useSpring(0, { stiffness: 500, damping: 28 });
+  const apertureY = useSpring(0, { stiffness: 500, damping: 28 });
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
-      setIsVisible(true);
-      setDotPos({ x: e.clientX, y: e.clientY });
-      apertureX.set(e.clientX);
-      apertureY.set(e.clientY);
+      if (!hasMovedRef.current) {
+        hasMovedRef.current = true;
+        setIsVisible(true);
+      }
+      dotX.set(e.clientX - DOT_SIZE / 2);
+      dotY.set(e.clientY - DOT_SIZE / 2);
+      apertureX.set(e.clientX - APERTURE_SIZE / 2);
+      apertureY.set(e.clientY - APERTURE_SIZE / 2);
     },
-    [apertureX, apertureY]
+    [dotX, dotY, apertureX, apertureY]
   );
 
   const handleMouseLeave = useCallback(() => {
+    hasMovedRef.current = false;
     setIsVisible(false);
   }, []);
 
@@ -71,14 +78,14 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Dot - subtle when not over photo, mix-blend-difference for artistic invert */}
+      {/* Dot - instant tracking, no React re-renders on move */}
       <motion.div
         className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full bg-white mix-blend-difference"
         style={{
           width: DOT_SIZE,
           height: DOT_SIZE,
-          x: dotPos.x - DOT_SIZE / 2,
-          y: dotPos.y - DOT_SIZE / 2,
+          x: dotX,
+          y: dotY,
         }}
         animate={{
           opacity: isVisible ? (isOverPhoto ? 1 : 0.85) : 0,
@@ -87,7 +94,7 @@ export default function CustomCursor() {
         transition={{ duration: 0.15, ease: "easeOut" }}
       />
 
-      {/* Aperture icon - only over photos */}
+      {/* Aperture icon - only over photos, snappier spring */}
       <motion.div
         className="pointer-events-none fixed left-0 top-0 z-[9999] flex items-center justify-center mix-blend-difference"
         style={{
@@ -95,8 +102,6 @@ export default function CustomCursor() {
           height: APERTURE_SIZE,
           x: apertureX,
           y: apertureY,
-          translateX: -APERTURE_SIZE / 2,
-          translateY: -APERTURE_SIZE / 2,
         }}
         animate={{
           opacity: isVisible && isOverPhoto ? 1 : 0,

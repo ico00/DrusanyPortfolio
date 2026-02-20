@@ -270,7 +270,21 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 - **Delete:** Brisanje slike (uklanja iz JSON-a i diska)
 - **Drag-and-drop sortiranje:** Fotografije u galeriji mogu se povući za promjenu redoslijeda; novi redoslijed se sprema putem `/api/reorder`
 
-### 4.3 Admin Pages & Blog (BlockNote editor)
+### 4.3 Admin Media
+
+**Lokacija:** `src/components/AdminMedia.tsx`, `src/app/api/media/route.ts`, `src/app/api/media-delete/route.ts`, `src/app/api/media-detach/route.ts`
+
+**Funkcionalnost:**
+- **Agregirani prikaz slika** – `/api/media` agregira sve slike iz galerije (portfolio), bloga (thumbnail, galerija, sadržaj) i stranica (About, Contact); prikazuje filename, thumb, upload date, usages (gdje se slika koristi)
+- **Filter i pretraga** – Filter po tipu (All, Portfolio, Blog, Page); search filter as you type (filename, URL, usages)
+- **Prikaz** – List view (tablica) i Grid view; paginacija 25 po stranici s "Go to page" inputom
+- **Lightbox** – Klik na thumb otvara lightbox u punoj rezoluciji (isti izgled kao na blogu/portfoliju – Framer Motion, gradient overlay, prev/next strelice)
+- **Akcije po slici** – Download, Copy URL, Detach (dropdown za odabir usage-a), Delete (samo za `/uploads/`)
+- **Detach** – Odvajanje slike od stranice (kao WordPress) – datoteka ostaje na disku; podržano: portfolio (uklanja iz gallery.json), blog (thumbnail, galerija, sadržaj), stranice (uklanja img tag iz HTML-a)
+- **Multiple selection** – Checkbox po retku/kartici; bulk akcije: Delete selected, Download selected, Copy URLs, Detach selected (odvaja sve odabrane od svih njihovih usages)
+- **Admin layout** – Media link dostupan i na `/admin/blog` ruti (AdminBlogLayoutInner sidebar); `/admin?tab=media` otvara Media tab
+
+### 4.4 Admin Pages & Blog (BlockNote editor)
 
 **Lokacija:** `src/components/AdminPages.tsx`, `src/components/AdminBlog.tsx`, `src/components/BlockNoteEditor.tsx`
 
@@ -301,7 +315,7 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 - **File/Image panel (`/image`):** Neprozirna pozadina (`.bn-panel`, `.bn-panel-popover`) – kao ostali izbornici; **Upload tab** – ako se proslijedi `uploadFile` prop (AdminBlog kada ima slug i datum), slike se uploadaju u `content/` putem `/api/blog-upload` type `content`; **Embed tab** – unos URL-a
 - **Resize ručice:** Slike imaju drag-handles (lijevo/desno) za promjenu širine; vidljive u dark modu (svijetla pozadina); default širina uploadanih slika: 512px (`previewWidth`)
 
-### 4.3 API Routes (dev only)
+### 4.5 API Routes (dev only)
 
 Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaju 403 u produkciji.
 
@@ -414,6 +428,34 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 - Generira slug za sve slike u galeriji koje nemaju slug (koristi `ensureSlug` iz `getGallery`)
 - Dostupno samo u development modu
 - Vraća `{ success, updated, total }`; koristi se iz Admin galerije kad je filter "no-slug" aktivan – gumb "Generiraj slugove"
+
+#### `/api/media` (GET)
+
+**Lokacija:** `src/app/api/media/route.ts`
+
+- Agregira sve slike iz gallery.json, blog.json (+ HTML sadržaj), pages.json
+- Vraća `{ items: MediaItem[] }` – svaki item ima `url`, `thumb`, `filename`, `usages[]`, `uploadDate`
+- `uploadDate`: iz `createdAt` (gallery) ili `mtime` datoteke na disku
+- `force-static` (kompatibilno s `output: export`)
+
+#### `/api/media-delete` (POST)
+
+**Lokacija:** `src/app/api/media-delete/route.ts`
+
+- **Rate limit** provjera; samo development
+- Prima `{ url }` – putanja mora biti unutar `public/uploads/`
+- Briše datoteku s diska; ne ažurira reference u gallery/blog/pages
+
+#### `/api/media-detach` (POST)
+
+**Lokacija:** `src/app/api/media-detach/route.ts`
+
+- **Rate limit** provjera; samo development
+- Prima `{ url, usage: { type, label, context } }`
+- **Portfolio:** Uklanja unos iz `gallery.json` (match po src/thumb)
+- **Blog:** Uklanja iz `post.thumbnail`, `post.gallery` ili HTML sadržaja (regex uklanja img tag)
+- **Page:** Uklanja img tag iz About/Contact HTML-a u `pages.json`
+- Datoteka ostaje na disku
 
 #### `/api/content-health` (GET)
 
@@ -549,7 +591,7 @@ npm run dev
 
 - Pokreće dev server na `http://localhost:3000`
 - Admin panel dostupan na `/admin`
-- API routes aktivne: `/api/upload`, `/api/exif-preview`, `/api/update`, `/api/delete`, `/api/hero`, `/api/reorder`, `/api/gallery`, `/api/gallery/generate-slugs`, `/api/content-health`, `/api/health`, `/api/pages`, `/api/blog`, `/api/theme`
+- API routes aktivne: `/api/upload`, `/api/exif-preview`, `/api/update`, `/api/delete`, `/api/hero`, `/api/reorder`, `/api/gallery`, `/api/gallery/generate-slugs`, `/api/media`, `/api/media-delete`, `/api/media-detach`, `/api/content-health`, `/api/health`, `/api/pages`, `/api/blog`, `/api/theme`
 - Hot reload za brze promjene
 
 ### 7.2.1 Skripte za održavanje
@@ -600,6 +642,9 @@ DrusanyPortfolio/
 │   │   ├── api/
 │   │   │   ├── blog/route.ts
 │   │   │   ├── blog-delete-file/route.ts
+│   │   │   ├── media/route.ts
+│   │   │   ├── media-delete/route.ts
+│   │   │   ├── media-detach/route.ts
 │   │   │   ├── blog-upload/route.ts
 │   │   │   ├── delete/route.ts
 │   │   │   ├── exif-preview/route.ts
@@ -636,7 +681,8 @@ DrusanyPortfolio/
 │   │   ├── ContactForm.tsx       # Kontakt forma (Formspree); name, email, subject, message
 │   │   ├── PressSection.tsx      # About – objavljene fotografije (masonry)
 │   │   ├── GearSection.tsx       # About – fotografska oprema (masonry)
-│   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog, Theme)
+│   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog, Media, Theme)
+│   │   ├── AdminMedia.tsx       # Media library (agregirani prikaz, filter, search, paginacija, detach, bulk)
 │   │   ├── AdminDashboard.tsx    # Dashboard (bar/pie grafikoni – Recharts; Content health s ikonama – Camera, Tag, ImageOff, Search; tooltip stilizacija)
 │   │   ├── AdminPages.tsx        # About/Contact editor (BlockNote, quote, FormspreeEndpoint)
 │   │   ├── AdminBlog.tsx         # Blog post editor (BlockNote, galerija, bulk delete)
@@ -729,8 +775,8 @@ DrusanyPortfolio/
 ### Custom Cursor (desktop only)
 
 - **CustomCursor.tsx** u layoutu; aktivno samo kad `(hover: hover)` (touch uređaji isključeni)
-- **Dot:** Bijela točka (10px), `mix-blend-mode: difference`; vidljiva uvijek; **trenutno praćenje** (bez kašnjenja, direktni state)
-- **Aperture ikona:** Prikazuje se samo preko fotografija (`data-cursor-aperture` na galeriji, hero slideru, lightboxu, **blog galeriji**); scale 1.5 na hover nad klikabilnim elementima; **spring animacija** (stiffness 400) – glatko prati miš
+- **Dot:** Bijela točka (10px), `mix-blend-mode: difference`; **trenutni odziv** – `useMotionValue` za x/y, ažurira se direktno u `mousemove` bez React re-rendera; `setIsVisible` samo pri prvom pomicanju (ref), ne na svaki move
+- **Aperture ikona:** Prikazuje se samo preko fotografija (`data-cursor-aperture` na galeriji, hero slideru, lightboxu, **blog galeriji**); scale 1.5 na hover nad klikabilnim elementima; **spring animacija** (stiffness 500, damping 28) – namjerno kašnjenje, glatko prati miš
 - **globals.css:** `body.custom-cursor-active * { cursor: none }`
 
 ### About, Contact, Blog stranice
@@ -763,7 +809,7 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 ## 9. Sigurnosne napomene
 
 - Admin i API su **samo u developmentu** – u produkciji ne postoje
-- **Path traversal zaštita** – `blog-delete-file` provjerava da rezolvirana putanja ostane unutar `public/uploads/blog/`
+- **Path traversal zaštita** – `blog-delete-file` provjerava da rezolvirana putanja ostane unutar `public/uploads/blog/`; `media-delete` unutar `public/uploads/`
 - **Ograničenje uploada** – 20 MB po datoteci (upload, blog-upload, exif-preview)
 - **Magic bytes provjera** – `imageValidation.ts` provjerava file signature (JPEG/PNG/GIF/WebP) prije obrade
 - **HTML sanitizacija** – `sanitizeProseHtml` (sanitize-html) pri čitanju u `getPages`, `getBlogPost`
@@ -786,13 +832,13 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 | **EXIF** | exifr (datum, naslov, keywords, camera, lens, exposure, aperture, ISO) – čita se samo pri uploadu |
 | **Podaci** | `src/data/gallery.json` |
 | **Slike** | `public/uploads/full/[category]/` + `thumbs/[category]/` (WebP, originalni nazivi) |
-| **Admin** | `/admin` + API routes (dev only): upload, exif-preview, update, delete, hero, reorder, gallery, **pages**, **blog**, **theme**; rate limiting, file locking |
+| **Admin** | `/admin` + API routes (dev only): upload, exif-preview, update, delete, hero, reorder, gallery, **media**, **media-delete**, **media-detach**, pages, blog, theme; rate limiting, file locking |
 | **Sigurnost** | Path traversal fix, 20 MB limit, magic bytes, HTML sanitizacija, rate limiting |
 | **Pouzdanost** | File locking (JSON), čišćenje orphan datoteka (blog slug), HTTP 500 pri greškama |
-| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – **status** (draft/published, StatusSelect), **filter bar** (Status, Kategorija multi, Mjesec, Sort), BlockNote editor s StaticBlockTypeBar, **upload slika u sadržaj** (content/), **editLoading** (sprječava popover crash); **BlogCategorySelect** (abecedno); **FilterSelect**, **FilterMultiSelect**; **Theme** – Customize Theme (font, veličina, boja za title, heading, **headingOnDark**, body, quote, nav, caption); custom dropdown; live preview; **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija); **Content health** – metrike s ikonama (Camera, Tag, ImageOff, Search), chips layout; klik otvara galeriju s filterom ili Blog |
+| **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – **status** (draft/published, StatusSelect), **filter bar** (Status, Kategorija multi, Mjesec, Sort), BlockNote editor s StaticBlockTypeBar, **upload slika u sadržaj** (content/), **editLoading** (sprječava popover crash); **BlogCategorySelect** (abecedno); **FilterSelect**, **FilterMultiSelect**; **AdminMedia** – agregirani prikaz slika (portfolio, blog, stranice), filter, search as you type, paginacija (25/stranica, Go to page), lightbox, Download/Copy URL/Detach/Delete, **multiple selection** (bulk Delete, Download, Copy URLs, Detach); **Theme** – Customize Theme (font, veličina, boja za title, heading, **headingOnDark**, body, quote, nav, caption); custom dropdown; live preview; **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija); **Content health** – metrike s ikonama (Camera, Tag, ImageOff, Search), chips layout; klik otvara galeriju s filterom ili Blog; Media link u sidebaru i na `/admin/blog` ruti; `?tab=media` u URL-u za direktan pristup |
 | **Home** | HeroSlider (6 slides, auto-play 4s, strelice lijevo-desno, "View Gallery", title @ venue) ili masonry Gallery po `?category`; hero samo ručno odabrana |
 | **Header** | Logo (inline SVG), poravnanje lijevo, Search u nav (kad galerija, expandable hover), aktivna stranica (border-b/border-l), hover efekti (Safari: inline-block, eksplicitne boje) |
-| **Custom Cursor** | Dot (trenutno) + aperture (spring, samo preko fotografija), mix-blend-difference, desktop only |
+| **Custom Cursor** | Dot (useMotionValue, trenutni odziv) + aperture (useSpring, kašnjenje), mix-blend-difference, desktop only |
 | **Gallery** | Balanced masonry (shortest column, heights array, aspect ratio); stupci približno jednake visine; useColumnCount (1–4 stupaca), venue filter (Concerts), sport filter (Sport), hover efekti na filterima; scroll na vrh pri učitavanju; ImageCard hover (title @ venue ili Sport // title, datum); Interiors, Animals bez opisa/datuma |
 | **Lightbox** | Fit-to-screen, numeracija + X na vrhu, caption + EXIF u jednom okviru (crna prozirna pozadina), EXIF toggle (ikona kamere), copyright popup na desni klik, URL sync `?image=slug` |
 | **Filtriranje** | Client-side preko JSON-a (`?category=slug`, `?venue=slug` za Concerts, `?sport=slug` za Sport); search filter as you type (title, alt, keywords, venue, sport, category); direktni linkovi `?image=slug` |
