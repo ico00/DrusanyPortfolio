@@ -5,7 +5,6 @@ export interface BlogCategoryItem {
 }
 
 export const BLOG_CATEGORIES: BlogCategoryItem[] = [
-  { slug: "zagrebancije", label: "Zagrebancije" },
   { slug: "info", label: "Info" },
   { slug: "putovanja", label: "Putovanja" },
   {
@@ -15,13 +14,29 @@ export const BLOG_CATEGORIES: BlogCategoryItem[] = [
       { slug: "nogomet", label: "Nogomet" },
       { slug: "rukomet", label: "Rukomet" },
       { slug: "kosarka", label: "Košarka" },
+      { slug: "atletika", label: "Atletika" },
+      { slug: "automobilizam", label: "Automobilizam" },
     ],
   },
-  { slug: "koncerti", label: "koncerti" },
+  { slug: "koncerti", label: "Koncerti" },
   { slug: "auti", label: "Auti" },
+  { slug: "kucnecarolije", label: "Kućne čarolije" },
+  { slug: "macro", label: "Macro" },
 
   { slug: "avioni", label: "Avioni" },
   { slug: "savjeti", label: "Savjeti" },
+  {
+    slug: "gradovi",
+    label: "Gradovi",
+    subcategories: [
+      { slug: "zagrebancije", label: "Zagrebancije" },
+      { slug: "amsterdam", label: "Amsterdam" },
+      { slug: "london", label: "London" },
+      { slug: "edinburgh", label: "Edinburgh" },
+      { slug: "barcelona", label: "Barcelona" },
+      { slug: "budimpesta", label: "Budimpešta" },
+    ],
+  },
 ];
 
 /** Flattened list of all selectable slugs (parent + sub) for dropdown */

@@ -5,6 +5,9 @@
   "scripts": {
     "press:dimensions": "node scripts/add-press-dimensions.mjs",
     "gear:dimensions": "node scripts/add-gear-dimensions.mjs",
+    "blog:import": "node scripts/import-wordpress-blog.mjs",
+    "blog:import:all": "node scripts/import-wordpress-blog.mjs --all",
+    "blog:cleanup-categories": "node scripts/cleanup-blog-categories.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

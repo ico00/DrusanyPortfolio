@@ -88,7 +88,7 @@ body.custom-cursor-active * {
 
 /* RichTextEditor – svijetli tekst na tamnoj pozadini */
 .ProseMirror {
-  color: rgb(228 228 231); /* zinc-200 */
+  color: rgb(244 244 245); /* zinc-100 – svjetliji za bolju čitljivost */
 }
 .ProseMirror h1,
 .ProseMirror h2,
@@ -98,7 +98,7 @@ body.custom-cursor-active * {
 }
 .ProseMirror p,
 .ProseMirror li {
-  color: rgb(228 228 231);
+  color: rgb(244 244 245);
 }
 .ProseMirror.ProseMirror-empty::before {
   color: rgb(113 113 122); /* zinc-500 */
@@ -112,19 +112,19 @@ body.custom-cursor-active * {
 .bn-editor-dark {
   --radius: 0.5rem;
   --background: rgb(39 39 42); /* zinc-800 */
-  --foreground: rgb(228 228 231); /* zinc-200 */
+  --foreground: rgb(244 244 245); /* zinc-100 – svjetliji za bolju čitljivost */
   --card: rgb(39 39 42);
-  --card-foreground: rgb(228 228 231);
+  --card-foreground: rgb(244 244 245);
   --popover: rgb(39 39 42);
-  --popover-foreground: rgb(228 228 231);
+  --popover-foreground: rgb(244 244 245);
   --primary: rgb(245 158 11); /* amber-500 */
   --primary-foreground: rgb(24 24 27); /* zinc-900 */
   --secondary: rgb(63 63 70); /* zinc-600 */
-  --secondary-foreground: rgb(228 228 231);
+  --secondary-foreground: rgb(244 244 245);
   --muted: rgb(63 63 70);
-  --muted-foreground: rgb(161 161 170); /* zinc-400 */
+  --muted-foreground: rgb(212 212 216); /* zinc-300 – svjetliji od zinc-400 */
   --accent: rgb(63 63 70);
-  --accent-foreground: rgb(228 228 231);
+  --accent-foreground: rgb(244 244 245);
   --destructive: rgb(185 28 28);
   --border: rgb(63 63 70);
   --input: rgb(63 63 70);
@@ -136,6 +136,12 @@ body.custom-cursor-active * {
     border-color: var(--border);
     outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
   }
+}
+
+/* BlockNote – jedinstvena pozadina (traka + sadržaj = isti zinc-800) */
+.blocknote-editor-wrapper .bn-container,
+.blocknote-editor-wrapper .bn-editor {
+  background-color: rgb(39 39 42) !important; /* zinc-800 */
 }
 
 /* BlockNote – razmak između blokova (paragrafi, naslovi, itd.) */
@@ -150,7 +156,7 @@ body.custom-cursor-active * {
 .blocknote-editor-wrapper .bn-editor,
 .blocknote-editor-wrapper .bn-block-content,
 .blocknote-editor-wrapper .bn-inline-content {
-  color: rgb(228 228 231);
+  color: rgb(244 244 245); /* zinc-100 – svjetliji za bolju čitljivost */
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 .blocknote-editor-wrapper .bn-editor h1,
@@ -168,7 +174,7 @@ body.custom-cursor-active * {
 [data-theme="dark"] .bn-container,
 [data-theme="dark"] .bn-container[data-color-scheme="dark"] {
   --bn-colors-side-menu: rgb(251 191 36); /* amber-400 */
-  --bn-colors-menu-text: rgb(228 228 231);
+  --bn-colors-menu-text: rgb(244 244 245);
   --bn-colors-menu-background: rgb(39 39 42);
   --bn-colors-hovered-text: rgb(244 244 245);
   --bn-colors-hovered-background: rgb(63 63 70);
@@ -195,7 +201,7 @@ body.custom-cursor-active * {
 [data-theme="dark"] [data-slot="select-content"] {
   z-index: 99999 !important;
   background-color: rgb(39 39 42) !important;
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
   border-color: rgb(63 63 70) !important;
   opacity: 1 !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
@@ -204,17 +210,17 @@ body.custom-cursor-active * {
 [data-theme="dark"] .bn-color-picker-dropdown,
 [data-theme="dark"] .bn-menu-dropdown.bn-color-picker-dropdown {
   background-color: rgb(39 39 42) !important;
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
   border: 1px solid rgb(63 63 70) !important;
   opacity: 1 !important;
 }
 [data-theme="dark"] .bn-color-picker-dropdown *,
 [data-theme="dark"] .bn-menu-dropdown.bn-color-picker-dropdown * {
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
 }
 [data-theme="dark"] .bn-color-picker-dropdown [data-slot="dropdown-menu-item"],
 [data-theme="dark"] .bn-menu-dropdown.bn-color-picker-dropdown [data-slot="dropdown-menu-item"] {
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
 }
 [data-theme="dark"] .bn-color-picker-dropdown [data-slot="dropdown-menu-item"]:hover,
 [data-theme="dark"] .bn-color-picker-dropdown [data-slot="dropdown-menu-item"][data-highlighted],
@@ -224,7 +230,7 @@ body.custom-cursor-active * {
   color: rgb(244 244 245) !important;
 }
 [data-theme="dark"] [data-slot="select-content"] * {
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
 }
 [data-theme="dark"] [data-slot="select-content"] [data-slot="select-item"]:hover,
 [data-theme="dark"] [data-slot="select-content"] [data-slot="select-item"][data-highlighted] {
@@ -238,7 +244,7 @@ body.custom-cursor-active * {
 }
 [data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"],
 [data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-label"] {
-  color: rgb(228 228 231);
+  color: rgb(244 244 245);
 }
 [data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"]:hover,
 [data-theme="dark"] [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"]:focus,
@@ -252,7 +258,7 @@ body.custom-cursor-active * {
 [data-theme="dark"] [data-slot="dropdown-menu-sub-content"] [data-slot="dropdown-menu-item"],
 [data-theme="dark"] [data-slot="dropdown-menu-sub-content"] [data-slot="dropdown-menu-checkbox-item"],
 [data-theme="dark"] [data-slot="dropdown-menu-sub-content"] [data-slot="dropdown-menu-label"] {
-  color: rgb(228 228 231);
+  color: rgb(244 244 245);
 }
 
 /* BlockNote – slash menu i grid suggestion menu (tip bloka) */
@@ -260,12 +266,12 @@ body.custom-cursor-active * {
 [data-theme="dark"] .bn-grid-suggestion-menu {
   z-index: 99999 !important;
   background-color: rgb(39 39 42) !important;
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
   border: 1px solid rgb(63 63 70) !important;
 }
 [data-theme="dark"] .bn-suggestion-menu-item,
 [data-theme="dark"] .bn-grid-suggestion-menu-item {
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
 }
 [data-theme="dark"] .bn-suggestion-menu-item:hover,
 [data-theme="dark"] .bn-suggestion-menu-item[data-selected],
@@ -283,7 +289,7 @@ body.custom-cursor-active * {
 [data-theme="dark"] .bn-formatting-toolbar,
 [data-theme="dark"] .bn-link-toolbar {
   background-color: rgb(39 39 42) !important;
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
   border: 1px solid rgb(63 63 70) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
   opacity: 1 !important;
@@ -293,7 +299,7 @@ body.custom-cursor-active * {
 [data-theme="dark"] .bn-panel,
 [data-theme="dark"] .bn-panel-popover {
   background-color: rgb(39 39 42) !important;
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
   border: 1px solid rgb(63 63 70) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
   opacity: 1 !important;
@@ -301,16 +307,16 @@ body.custom-cursor-active * {
 [data-theme="dark"] .bn-toolbar *,
 [data-theme="dark"] .bn-formatting-toolbar *,
 [data-theme="dark"] .bn-link-toolbar * {
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
 }
 [data-theme="dark"] .bn-toolbar button,
 [data-theme="dark"] .bn-formatting-toolbar button,
 [data-theme="dark"] .bn-link-toolbar button {
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
 }
 [data-theme="dark"] .bn-toolbar [data-slot="select-trigger"],
 [data-theme="dark"] .bn-formatting-toolbar [data-slot="select-trigger"] {
-  color: rgb(228 228 231) !important;
+  color: rgb(244 244 245) !important;
   background-color: rgb(63 63 70) !important;
 }
 
@@ -337,6 +343,15 @@ body.custom-cursor-active * {
 }
 .bn-static-block-type-bar .bn-select {
   min-width: 140px;
+}
+/* BlockNote – svjetliji tekst u traci "Block style" i BlockTypeSelect */
+.bn-static-block-type-bar .bn-select,
+.bn-static-block-type-bar .bn-select *,
+.bn-static-block-type-bar [data-slot="select-trigger"] {
+  color: rgb(244 244 245) !important; /* zinc-100 */
+}
+.bn-static-block-type-bar > span {
+  color: rgb(212 212 216) !important; /* zinc-300 – "Block style:" label */
 }
 
 /* Prose – veći razmak između blokova (nakon entera) za lakše čitanje */
@@ -525,10 +540,10 @@ body.custom-cursor-active * {
   --rdp-today-color: rgb(245 158 11);
 }
 .rdp-admin-dark .rdp-root {
-  color: rgb(228 228 231);
+  color: rgb(244 244 245);
 }
 .rdp-admin-dark .rdp-caption_label {
-  color: rgb(228 228 231);
+  color: rgb(244 244 245);
 }
 .rdp-admin-dark .rdp-weekday {
   color: rgb(161 161 170);

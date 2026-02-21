@@ -70,7 +70,7 @@ export default function BlockNoteEditor({
 
   return (
     <div
-      className={`blocknote-editor-wrapper rounded-lg border border-zinc-700 bg-zinc-800/50 dark ${className}`}
+      className={`blocknote-editor-wrapper rounded-lg border border-zinc-700 bg-zinc-800 dark ${className}`}
       style={{ minHeight }}
       data-theme="dark"
     >

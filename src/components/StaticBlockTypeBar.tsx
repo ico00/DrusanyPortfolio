@@ -9,10 +9,10 @@ import { BlockTypeSelect } from "@blocknote/react";
 export function StaticBlockTypeBar() {
   return (
     <div
-      className="bn-static-block-type-bar flex shrink-0 items-center gap-2 border-b border-zinc-700 bg-zinc-800/95 px-3 py-2"
+      className="bn-static-block-type-bar flex shrink-0 items-center gap-2 border-b border-zinc-700 bg-zinc-800 px-3 py-2"
       style={{ order: -1 }}
     >
-      <span className="text-xs text-zinc-400">Stil bloka:</span>
+      <span className="text-xs text-zinc-300">Block style:</span>
       <BlockTypeSelect />
     </div>
   );

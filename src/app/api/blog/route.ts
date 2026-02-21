@@ -14,6 +14,15 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get("slug");
+    const id = searchParams.get("id");
+    if (id) {
+      const { getBlogPostById } = await import("@/lib/blog");
+      const post = await getBlogPostById(id);
+      if (!post) {
+        return Response.json({ error: "Post not found" }, { status: 404 });
+      }
+      return Response.json(post);
+    }
     if (slug) {
       const post = await getBlogPost(slug);
       if (!post) {

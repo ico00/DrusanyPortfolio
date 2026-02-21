@@ -14,11 +14,11 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 - **Sigurnost i pouzdanost** – Path traversal zaštita, ograničenje uploada (20 MB), magic bytes provjera, HTML sanitizacija, rate limiting, file locking za JSON, čišćenje orphan datoteka pri promjeni blog slug-a
 - **Lightbox** – Puni prikaz slike, EXIF podaci (camera, lens, aperture…), navigacija strelicama ili swipeom
 - **Hero slider** – Početna stranica s 6 slideova po kategorijama, auto-play
-- **Pretraga** – Filter as you type (naslov, venue, sport, keywords)
+- **Pretraga** – Debounced (200ms portfolio, 300ms blog) – trenutni odziv pri tipkanju; filter (naslov, venue, sport, keywords)
 - **Direktni linkovi** – URL slug po slici (npr. `/?category=concerts&image=depeche-mode-arena-zagreb-2013`)
 - **About** – Split layout (lijevo slika s citatom, desno sadržaj); sekcije About, Press, **Gear** (grupirano po kategorijama: Cameras, Lenses, Accessories; kartice bez lightboxa); fiksni nav na dnu s aktivnim linkom koji prati scroll; **dekorativni navodnik** na blockquote citatima
 - **Contact** – Isti layout kao About; kontakt forma (Formspree) – name, email, subject, message; fallback na mailto
-- **Blog** – Lista postova s metapodacima (Tekst i fotografije, Datum objave, Kategorija) i ikonama; **status** (draft / published) – draft postovi se ne prikazuju javno; **sidebar** s pretragom (filter-as-you-type), kategorijama, **istaknutim člancima** (featured) i Google Maps; **glatka animacija** pri promjeni filtera kategorija; pojedinačni post s naslovom na vrhu, featured slikom, sadržajem (slike s poravnanjem, vizual kao galerija) i masonry galerijom (lightbox, aperture cursor, EXIF); **progresivno učitavanje** galerije – za postove s 100+ slika prikazuje se prva grupa, zatim učitavanje pri skrolanju; format datuma dd. mm. yyyy.; BlockNote WYSIWYG editor s **uploadom slika** u sadržaj; **Footer** (copyright); **ScrollToTop** gumb – pozicioniran desno od ruba sadržaja članka
+- **Blog** – Lista postova (migrirano iz WordPressa – `npm run blog:import:all`); metapodaci (Tekst i fotografije, Datum objave, Kategorija) i ikonama; **status** (draft / published) – draft postovi se ne prikazuju javno; **sidebar** s pretragom (debounced 300ms), kategorijama (abecedno sortirane), **istaknutim člancima** (featured) i Google Maps; **glatka animacija** pri promjeni filtera kategorija; pojedinačni post s naslovom na vrhu, featured slikom, sadržajem (slike s poravnanjem, vizual kao galerija) i masonry galerijom (lightbox, aperture cursor, EXIF); **progresivno učitavanje** galerije – za postove s 100+ slika prikazuje se prva grupa, zatim učitavanje pri skrolanju; format datuma dd. mm. yyyy.; BlockNote WYSIWYG editor s **uploadom slika** u sadržaj; **Footer** (copyright); **ScrollToTop** gumb – pozicioniran desno od ruba sadržaja članka
 - **Theme** – Prilagodba fonta, veličine i boje po elementu (title, heading, **headingOnDark** – naslov na tamnoj pozadini za About/Contact, body, quote, nav, caption) putem Admin → Theme; live preview; centralna konfiguracija fontova u `themeFonts.ts` (lako dodavanje novih)
 - **Admin panel** – Samo u development modu: **Dashboard** (kartice: Portfolio, Blog, Portfolio Categories, Blog Categories, Static pages, Blog posts; bar charti "Images by category in portfolio" i "Images by category in blog"; Content health); galerija (upload, edit, hero, sortiranje) s **custom DateTimePicker**; About/Contact (quote, Formspree endpoint); Blog s **DatePicker**, **upload slika u sadržaj** (BlockNote `/image`), **resize** slika; **Media** – agregirani prikaz svih slika (portfolio, blog, stranice), filter, search as you type, paginacija, lightbox, Download/Copy URL/Detach/Delete, **multiple selection** (bulk akcije); **Theme** – prilagodba fonta, veličine i boje po elementu (title, heading, body, quote, nav, caption) s live previewom; **sidebar accordion**; **toast** poruke (success/error)
 
@@ -82,6 +82,9 @@ Otvori [http://localhost:3000](http://localhost:3000) u pregledniku.
 | `npm run preview` | Servira `out/` folder lokalno (za testiranje produkcijskog builda) |
 | `npm run lint` | Pokreće ESLint |
 | `node scripts/populate-blog-exif.mjs` | Popunjava blogExif.json EXIF podacima iz postojećih blog galerijskih slika |
+| `npm run blog:import` | Import 1 posta iz WordPress SQL dumpa (provjera) |
+| `npm run blog:import:all` | Import svih postova iz WordPressa (stari blog) |
+| `npm run blog:cleanup-categories` | Uklanja kategorije iz postova koje više ne postoje |
 | `curl localhost:3000/api/health` | Health check (dev) – provjerava JSON datoteke i kritične resurse; u buildu prerenderira se u `out/api/health` |
 
 ## 📁 Struktura projekta
@@ -114,7 +117,9 @@ DrusanyPortfolio/
 │   └── lib/              # getGallery, pages, gear, press, blog, blogWidgets, theme, slug, exif, sanitize, imageValidation, jsonLock, blogCleanup, rateLimit
 ├── .env.example          # NEXT_PUBLIC_SITE_URL, RATE_LIMIT_* (opcionalno)
 ├── scripts/
-│   └── populate-blog-exif.mjs  # Popunjava blogExif.json iz postojećih slika (node scripts/populate-blog-exif.mjs)
+│   ├── populate-blog-exif.mjs      # Popunjava blogExif.json iz postojećih slika
+│   ├── import-wordpress-blog.mjs   # Import starih postova iz WordPress SQL dumpa (blog:import, blog:import:all)
+│   └── cleanup-blog-categories.mjs # Čišćenje kategorija (blog:cleanup-categories)
 └── out/                  # Statični output (generira se pri build)
 ```
 
@@ -127,7 +132,7 @@ Admin je dostupan **samo kada pokreneš `npm run dev`** – u produkcijskom buil
 - **Sigurnost:** Rate limiting (200 req/min po IP – bulk upload), path traversal zaštita, ograničenje uploada 20 MB, magic bytes provjera, HTML sanitizacija; file locking za JSON; čišćenje orphan datoteka pri promjeni blog slug-a
 - **Galerija:** Sidebar accordion; odabir kategorije → upload slika; EXIF preview (datum fallback); **custom DateTimePicker** (datum + vrijeme); uređivanje opisa (title, venue, sport, slug, keywords…); slug **as you type**; drag-and-drop sortiranje; hero odabir; brisanje; **Content health** – gumb "Generiraj slugove" kad je filter no-slug; **toast** poruke
 - **Pages:** About – citat na slici, naslov, BlockNote sadržaj; Contact – Formspree endpoint, email (fallback), naslov, uvodni tekst (BlockNote)
-- **Blog:** Kreiranje i uređivanje blog postova – **status** (draft / published, custom StatusSelect); title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, kategorije (višestruki odabir, abecedno), thumbnail, sadržaj (BlockNote s **uploadom slika** – `/image` → Upload/Embed, resize ručice), galerija (drag-and-drop, bulk delete); **filter bar** u listi – Status, Kategorija (višestruki odabir), Mjesec, Sort; **SEO** – meta description placeholder (Fotografije + event + lokacija + godina + što se vidi); brisanje slika iz galerije briše i fizičke datoteke s diska
+- **Blog:** Kreiranje i uređivanje blog postova – **status** (draft / published, custom StatusSelect); title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, **Category** (višestruki odabir, abecedno), thumbnail, sadržaj (BlockNote s **uploadom slika** – `/image` → Upload/Embed, resize ručice; **Block style** label, debounced body updates za fluidniji editor), galerija (drag-and-drop, bulk delete); **filter bar** u listi – Status, Category (višestruki odabir), Mjesec, Sort; lista skrivena kad je forma otvorena; **formOnly** (`/admin/blog/edit/[id]`, `/admin/blog/new`) učitava samo jedan post – brže; **SEO** – meta description placeholder (Fotografije + event + lokacija + godina + što se vidi); brisanje slika iz galerije briše i fizičke datoteke s diska
 - **Media:** Agregirani prikaz svih slika (portfolio, blog, stranice) – filter po tipu, search as you type, paginacija (25/stranica, Go to page), lightbox u punoj rezoluciji; akcije: Download, Copy URL, Detach (odvajanje od stranice – datoteka ostaje), Delete; **multiple selection** – bulk Delete, Download, Copy URLs, Detach; Media link dostupan i na `/admin/blog` ruti
 - **Theme:** Prilagodba tipografije – font (Sans/Serif/Mono), veličina i boja za svaki element (Hero naslov, Naslovi, **Naslov na tamnoj pozadini** – About/Contact, Body, Citat, Navigacija, Caption); custom dropdown; live preview s adaptivnom pozadinom; za statički export: uređivanje u dev modu, zatim `npm run build`; novi fontovi se dodaju u `themeFonts.ts` i `layout.tsx`
 

@@ -29,7 +29,9 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
   const activeSlug = searchParams.get("kategorija") ?? undefined;
   const counts = getCategoryCounts(posts);
   const options = getBlogCategoryOptions();
-  const items = options.filter((opt) => counts[opt.slug] != null);
+  const items = options
+    .filter((opt) => counts[opt.slug] != null)
+    .sort((a, b) => a.label.localeCompare(b.label, "hr"));
 
   if (items.length === 0) {
     return null;

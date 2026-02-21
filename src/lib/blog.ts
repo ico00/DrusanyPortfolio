@@ -182,6 +182,20 @@ async function enrichBlogGallery(
   return result;
 }
 
+/** Get single post by id (for admin edit). Returns full post with body. */
+export async function getBlogPostById(id: string): Promise<BlogPost | null> {
+  const { posts } = await getBlog();
+  const post = posts.find((p) => p.id === id) ?? null;
+  if (!post) return null;
+  try {
+    const contentPath = getBlogContentPath(post.slug);
+    const body = await readFile(contentPath, "utf-8");
+    return { ...post, body: sanitizeProseHtml(body) };
+  } catch {
+    return { ...post };
+  }
+}
+
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   const { posts } = await getBlog();
   const post = posts.find((p) => p.slug === slug) ?? null;

@@ -12,8 +12,21 @@ import {
   User,
   Lightbulb,
   Tag,
+  Search,
 } from "lucide-react";
 import { getBlogCategoryOptions } from "@/data/blogCategories";
+
+/** Normalize za pretragu: lowercase, bez dijakritika */
+function normalizeForSearch(s: string): string {
+  return (s || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[čć]/g, "c")
+    .replace(/[š]/g, "s")
+    .replace(/[ž]/g, "z")
+    .replace(/[đ]/g, "dj");
+}
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   fotografija: Camera,
@@ -52,11 +65,22 @@ export default function BlogCategorySelect({
   multiple = false,
 }: BlogCategorySelectProps) {
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const ref = useRef<HTMLDivElement>(null);
 
-  const options = getBlogCategoryOptions().sort((a, b) =>
+  const allOptions = getBlogCategoryOptions().sort((a, b) =>
     a.fullLabel.localeCompare(b.fullLabel, "hr")
   );
+  const searchNorm = normalizeForSearch(searchQuery);
+  const options = searchNorm
+    ? allOptions.filter(
+        (o) =>
+          normalizeForSearch(o.fullLabel).includes(searchNorm) ||
+          normalizeForSearch(o.label).includes(searchNorm) ||
+          normalizeForSearch(o.slug).includes(searchNorm)
+      )
+    : allOptions;
   const values = multiple
     ? (Array.isArray(value) ? value : value ? [value] : []).map((v) =>
         v?.toLowerCase().trim()
@@ -79,6 +103,13 @@ export default function BlogCategorySelect({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (open) {
+      setSearchQuery("");
+      setTimeout(() => searchInputRef.current?.focus(), 50);
+    }
+  }, [open]);
 
   return (
     <div ref={ref} className={`relative ${className}`}>
@@ -150,9 +181,33 @@ export default function BlogCategorySelect({
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
             role="listbox"
-            className="absolute left-0 right-0 top-full z-[100] mt-1.5 max-h-64 overflow-auto rounded-xl border border-zinc-700 bg-zinc-900 py-1.5 shadow-xl shadow-black/30 ring-1 ring-zinc-800"
+            className="absolute left-0 right-0 top-full z-[100] mt-1.5 w-full min-w-[200px] max-h-80 overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900 shadow-xl shadow-black/30 ring-1 ring-zinc-800"
           >
-            {options.map((opt) => {
+            <div
+              className="sticky top-0 z-10 border-b border-zinc-800 bg-zinc-900 px-3 py-2"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-2">
+                <Search className="h-4 w-4 shrink-0 text-zinc-500" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.stopPropagation()}
+                  placeholder="Pretraži kategorije…"
+                  className="min-w-0 flex-1 bg-transparent text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none"
+                  aria-label="Pretraži kategorije"
+                />
+              </div>
+            </div>
+            <div className="max-h-56 overflow-auto py-1.5">
+            {options.length === 0 ? (
+              <p className="px-4 py-6 text-center text-sm text-zinc-500">
+                Nema rezultata za &quot;{searchQuery}&quot;
+              </p>
+            ) : (
+            options.map((opt) => {
               const Icon = getIcon(opt.slug);
               const isSelected = multiple
                 ? values.includes(opt.slug)
@@ -189,7 +244,9 @@ export default function BlogCategorySelect({
                   )}
                 </button>
               );
-            })}
+            })
+            )}
+            </div>
             {isCustom && !multiple && (
               <button
                 type="button"

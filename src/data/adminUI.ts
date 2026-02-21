@@ -161,6 +161,7 @@ export const ADMIN_UI = {
     allDates: "All dates",
     blogPosts: "Blog posts",
     content: "Content",
+    category: "Category",
     date: "Date",
     time: "Time",
     draftHint: "Not shown publicly",

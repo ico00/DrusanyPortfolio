@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ChevronDown, Menu, X, Search } from "lucide-react";
@@ -48,7 +48,6 @@ export default function Header() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const category = searchParams.get("category");
-  const searchQuery = searchParams.get("q") ?? "";
   const isBlogPage = pathname === "/blog" || pathname.startsWith("/blog/");
   const isHeroMode = !category && !isBlogPage;
 
@@ -62,6 +61,37 @@ export default function Header() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchExpanded, setSearchExpanded] = useState(false);
+
+  const urlQuery = searchParams.get("q") ?? "";
+  const [localSearchQuery, setLocalSearchQuery] = useState(urlQuery);
+  const portfolioSearchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    setLocalSearchQuery(urlQuery);
+  }, [urlQuery]);
+
+  useEffect(() => {
+    return () => {
+      if (portfolioSearchDebounceRef.current) clearTimeout(portfolioSearchDebounceRef.current);
+    };
+  }, []);
+
+  const applyPortfolioSearch = (q: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (q.trim()) params.set("q", q);
+    else params.delete("q");
+    const query = params.toString();
+    router.replace(query ? `${pathname}?${query}#gallery` : pathname, { scroll: false });
+  };
+
+  const handlePortfolioSearchChange = (q: string) => {
+    setLocalSearchQuery(q);
+    if (portfolioSearchDebounceRef.current) clearTimeout(portfolioSearchDebounceRef.current);
+    portfolioSearchDebounceRef.current = setTimeout(() => {
+      portfolioSearchDebounceRef.current = null;
+      applyPortfolioSearch(q);
+    }, 200);
+  };
 
   const textClass = isHeroMode
     ? "text-white/90 hover:text-white"
@@ -191,25 +221,18 @@ export default function Header() {
             <div
               className="ml-6 flex flex-row-reverse items-center gap-2 overflow-hidden"
               onMouseEnter={() => setSearchExpanded(true)}
-              onMouseLeave={() => !searchQuery && setSearchExpanded(false)}
+              onMouseLeave={() => !localSearchQuery && setSearchExpanded(false)}
             >
               <Search className="h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2} />
               <span
                 className={`inline-flex overflow-hidden border-b border-zinc-300 transition-[width] duration-200 ${
-                  searchQuery || searchExpanded ? "w-28" : "w-0"
+                  localSearchQuery || searchExpanded ? "w-28" : "w-0"
                 }`}
               >
                 <input
                   type="search"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    const q = e.target.value;
-                    const params = new URLSearchParams(searchParams.toString());
-                    if (q.trim()) params.set("q", q);
-                    else params.delete("q");
-                    const query = params.toString();
-                    router.replace(query ? `${pathname}?${query}#gallery` : pathname, { scroll: false });
-                  }}
+                  value={localSearchQuery}
+                  onChange={(e) => handlePortfolioSearchChange(e.target.value)}
                   placeholder="Search..."
                   className="w-28 min-w-28 bg-transparent py-0.5 pl-1.5 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
                   aria-label="Search images"
@@ -237,15 +260,8 @@ export default function Header() {
                 <Search className="h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2} />
                 <input
                   type="search"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    const q = e.target.value;
-                    const params = new URLSearchParams(searchParams.toString());
-                    if (q.trim()) params.set("q", q);
-                    else params.delete("q");
-                    const query = params.toString();
-                    router.replace(query ? `${pathname}?${query}#gallery` : pathname, { scroll: false });
-                  }}
+                  value={localSearchQuery}
+                  onChange={(e) => handlePortfolioSearchChange(e.target.value)}
                   placeholder="Search..."
                   className={`flex-1 bg-transparent text-sm outline-none placeholder:opacity-60 ${
                     isHeroMode ? "text-white placeholder-white/50" : "text-zinc-900 placeholder-zinc-400"

@@ -16,6 +16,8 @@ import {
   Square,
   CheckSquare,
   Star,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import {
   DndContext,
@@ -300,6 +302,9 @@ export default function AdminBlog({
   const [listCategoryFilter, setListCategoryFilter] = useState<string[]>([]);
   const [listMonthFilter, setListMonthFilter] = useState<string>("");
   const [listDateSort, setListDateSort] = useState<"newest" | "oldest">("newest");
+  const [listPage, setListPage] = useState(1);
+
+  const ADMIN_POSTS_PER_PAGE = 20;
   const featuredInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
@@ -316,6 +321,25 @@ export default function AdminBlog({
         .map((m) => ({ value: m, label: formatMonthOption(m) })),
     ];
   }, [posts]);
+
+  useEffect(() => {
+    setListPage(1);
+  }, [listStatusFilter, listCategoryFilter, listMonthFilter, listDateSort, contentHealthFilter]);
+
+  const filteredCount = useMemo(() => {
+    let f = posts;
+    if (contentHealthFilter === "no-seo") f = f.filter((p) => !p.seo?.metaDescription?.trim());
+    else if (contentHealthFilter === "no-featured") f = f.filter((p) => !p.thumbnail?.trim());
+    if (listStatusFilter) f = f.filter((p) => (p.status ?? "published") === listStatusFilter);
+    if (listCategoryFilter.length > 0) f = f.filter((p) => listCategoryFilter.some((s) => postHasCategory(p, s)));
+    if (listMonthFilter) f = f.filter((p) => p.date?.slice(0, 7) === listMonthFilter);
+    return f.length;
+  }, [posts, contentHealthFilter, listStatusFilter, listCategoryFilter, listMonthFilter]);
+
+  useEffect(() => {
+    const maxPage = Math.max(1, Math.ceil(filteredCount / ADMIN_POSTS_PER_PAGE));
+    if (listPage > maxPage) setListPage(maxPage);
+  }, [filteredCount, listPage]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -336,20 +360,37 @@ export default function AdminBlog({
     }
   }, []);
 
+  const fetchSinglePost = useCallback(async (id: string) => {
+    try {
+      const res = await fetch(`/api/blog?id=${encodeURIComponent(id)}`);
+      if (res.ok) return res.json();
+    } catch {
+      // ignore
+    }
+    return null;
+  }, []);
+
   useEffect(() => {
+    if (formOnly && editId) {
+      setLoading(true);
+      fetchSinglePost(editId).then((post) => {
+        setLoading(false);
+        if (post) {
+          formOnlyEditLoaded.current = true;
+          openEdit(post);
+        }
+      });
+      return;
+    }
+    if (formOnly && createMode) {
+      setLoading(false);
+      return;
+    }
     fetchBlog();
-  }, [fetchBlog]);
+  // openEdit intentionally omitted – used in async .then() when already defined
+  }, [formOnly, editId, createMode, fetchSinglePost, fetchBlog]);
 
   const formOnlyEditLoaded = useRef(false);
-  useEffect(() => {
-    if (formOnly && editId && posts.length > 0 && !formOnlyEditLoaded.current) {
-      const post = posts.find((p) => p.id === editId);
-      if (post) {
-        formOnlyEditLoaded.current = true;
-        openEdit(post);
-      }
-    }
-  }, [formOnly, editId, posts]);
 
   const formOnlyCreateLoaded = useRef(false);
   useEffect(() => {
@@ -380,14 +421,14 @@ export default function AdminBlog({
     return res.json();
   }, []);
 
-  const openEdit = useCallback(async (post: BlogPost) => {
+  const openEdit = useCallback(async (post: BlogPost & { body?: string }) => {
     setEditingId(post.id);
     setEditLoading(true);
     setSelectedGalleryUrls(new Set());
     setThumbnailCacheBust(null);
     setEditorRetryKey((k) => k + 1);
     try {
-      const full = await fetchPostWithBody(post.slug);
+      const full = post.body !== undefined ? post : await fetchPostWithBody(post.slug);
       const formData = {
         title: post.title,
         slug: post.slug,
@@ -404,6 +445,7 @@ export default function AdminBlog({
         seo: post.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
       };
       setForm(formData);
+      bodyRef.current = formData.body;
       initialFormRef.current = JSON.stringify({
         ...formData,
         categories: [...formData.categories].sort(),
@@ -442,19 +484,26 @@ export default function AdminBlog({
       gallery: [] as string[],
       galleryMetadata: {} as Record<string, { title?: string; description?: string }>,
       featured: false,
-      status: "draft" as const,
+      status: "published" as const,
       body: "",
       seo: { metaTitle: "", metaDescription: "", keywords: "" } as BlogSeo,
     };
     setForm(formData);
+    bodyRef.current = "";
     initialFormRef.current = getFormSnapshot(formData);
   };
 
-  const closeForm = useCallback(async () => {
-    if (unsavedCtx?.hasUnsavedChanges) {
+  const closeForm = useCallback(async (opts?: { skipUnsavedCheck?: boolean }) => {
+    const skipCheck = opts?.skipUnsavedCheck;
+    if (!skipCheck && unsavedCtx?.hasUnsavedChanges) {
       const leave = await unsavedCtx.confirmUnsaved();
       if (!leave) return;
     }
+    if (bodyDebounceRef.current) {
+      clearTimeout(bodyDebounceRef.current);
+      bodyDebounceRef.current = null;
+    }
+    bodyRef.current = null;
     setEditingId(null);
     setCreating(false);
     setSelectedGalleryUrls(new Set());
@@ -566,8 +615,17 @@ export default function AdminBlog({
     []
   );
 
+  const bodyRef = useRef<string | null>(null);
+  const bodyDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const BODY_DEBOUNCE_MS = 200;
+
   const handleBodyChange = useCallback((html: string) => {
-    setForm((f) => ({ ...f, body: html }));
+    bodyRef.current = html;
+    if (bodyDebounceRef.current) clearTimeout(bodyDebounceRef.current);
+    bodyDebounceRef.current = setTimeout(() => {
+      bodyDebounceRef.current = null;
+      setForm((f) => ({ ...f, body: html }));
+    }, BODY_DEBOUNCE_MS);
   }, []);
 
   const handleEditorRetry = useCallback(() => {
@@ -753,11 +811,15 @@ export default function AdminBlog({
     setForm((f) => {
       const nextMeta = { ...f.galleryMetadata };
       selectedGalleryUrls.forEach((url) => {
+        const existing = nextMeta[url] ?? {};
         nextMeta[url] = {
-          ...(nextMeta[url] ?? {}),
+          ...existing,
           ...(title !== undefined && { title }),
-          ...(description !== undefined && { description }),
+          ...(description !== undefined ? { description } : {}),
         };
+        if (description === undefined && "description" in nextMeta[url]) {
+          delete nextMeta[url].description;
+        }
       });
       return { ...f, galleryMetadata: nextMeta };
     });
@@ -768,21 +830,28 @@ export default function AdminBlog({
 
   const handleSaveEdit = async () => {
     if (!editingId) return;
+    if (bodyDebounceRef.current) {
+      clearTimeout(bodyDebounceRef.current);
+      bodyDebounceRef.current = null;
+      setForm((f) => ({ ...f, body: bodyRef.current ?? f.body }));
+    }
     setSaving(true);
     try {
+      const bodyToSave = bodyRef.current ?? form.body;
       const res = await fetch("/api/blog", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: editingId,
           ...form,
+          body: bodyToSave,
         }),
       });
       if (!res.ok) throw new Error("Failed to update");
       showToast("success", ADMIN_UI.messages.blogSaveSuccess);
       const savedId = editingId;
       unsavedCtx?.setUnsavedChanges(false);
-      closeForm();
+      closeForm({ skipUnsavedCheck: true });
       await fetchBlog();
       setListThumbnailBust((prev) => ({ ...prev, [savedId]: Date.now() }));
     } catch {
@@ -793,15 +862,22 @@ export default function AdminBlog({
   };
 
   const handleCreate = async () => {
+    if (bodyDebounceRef.current) {
+      clearTimeout(bodyDebounceRef.current);
+      bodyDebounceRef.current = null;
+      setForm((f) => ({ ...f, body: bodyRef.current ?? f.body }));
+    }
     setSaving(true);
     try {
       const slug =
         form.slug.trim() || generateBlogSlug(form.title, form.date) || crypto.randomUUID().slice(0, 8);
+      const bodyToSave = bodyRef.current ?? form.body;
       const res = await fetch("/api/blog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          body: bodyToSave,
           slug: slug || crypto.randomUUID().slice(0, 8),
         }),
       });
@@ -809,7 +885,7 @@ export default function AdminBlog({
       const created = await res.json();
       showToast("success", ADMIN_UI.messages.blogCreateSuccess);
       unsavedCtx?.setUnsavedChanges(false);
-      closeForm();
+      closeForm({ skipUnsavedCheck: true });
       await fetchBlog();
       if (created?.id) {
         setListThumbnailBust((prev) => ({ ...prev, [created.id]: Date.now() }));
@@ -828,7 +904,7 @@ export default function AdminBlog({
       if (!res.ok) throw new Error("Failed to delete");
       showToast("success", ADMIN_UI.messages.blogDeleteSuccess);
       unsavedCtx?.setUnsavedChanges(false);
-      closeForm();
+      closeForm({ skipUnsavedCheck: true });
       fetchBlog();
     } catch {
       showToast("error", ADMIN_UI.messages.blogDeleteError);
@@ -871,7 +947,7 @@ export default function AdminBlog({
             </h3>
             <button
               type="button"
-              onClick={closeForm}
+              onClick={() => closeForm()}
               className="rounded p-1 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300"
             >
               <X className="h-5 w-5" />
@@ -967,9 +1043,9 @@ export default function AdminBlog({
               </span>
               </div>
             </div>
-            <div className="rounded-lg border border-zinc-800 bg-zinc-900/30 p-4">
-              <h3 className="mb-4 flex items-center gap-2 text-sm font-medium text-zinc-400">
-                <Search className="h-4 w-4" />
+            <div className="rounded-lg border-2 border-sky-500/30 bg-sky-950/25 p-4 ring-1 ring-sky-500/10">
+              <h3 className="mb-4 flex items-center gap-2 text-sm font-medium text-sky-300">
+                <Search className="h-4 w-4 text-sky-400" />
                 SEO Settings
               </h3>
               <div className="space-y-4">
@@ -1041,7 +1117,7 @@ export default function AdminBlog({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm text-zinc-400">Kategorije</label>
+              <label className="mb-2 block text-sm text-zinc-400">{ADMIN_UI.blog.category}</label>
               <BlogCategorySelect
                 value={form.categories}
                 onChange={(v) =>
@@ -1185,7 +1261,7 @@ export default function AdminBlog({
                   slug={form.slug}
                   date={form.date}
                   canUpload={canUpload}
-                  editorKey={`${editingId ?? "new"}-${editorRetryKey}`}
+                  editorKey={`${editingId ?? "new"}-${editorRetryKey}-${canUpload ? "upload" : "no-upload"}`}
                   onRetry={handleEditorRetry}
                 />
               )}
@@ -1450,6 +1526,8 @@ export default function AdminBlog({
         </div>
       ) : null}
 
+      {!isFormOpen && (
+      <>
       {/* Filter bar za listu blogova */}
       <div className="mb-4 flex flex-wrap items-end gap-4 rounded-lg border border-zinc-800 bg-zinc-900/50 p-4">
         <div className="w-36">
@@ -1543,6 +1621,12 @@ export default function AdminBlog({
               ? da.localeCompare(db)
               : db.localeCompare(da);
           });
+          const totalPages = Math.max(1, Math.ceil(sorted.length / ADMIN_POSTS_PER_PAGE));
+          const safePage = Math.min(Math.max(1, listPage), totalPages);
+          const paginated = sorted.slice(
+            (safePage - 1) * ADMIN_POSTS_PER_PAGE,
+            safePage * ADMIN_POSTS_PER_PAGE
+          );
           return sorted.length === 0 ? (
           <p className="rounded-lg bg-zinc-800/50 py-8 text-center text-sm text-zinc-500">
             {contentHealthFilter || listStatusFilter || listCategoryFilter.length > 0 || listMonthFilter
@@ -1550,7 +1634,8 @@ export default function AdminBlog({
               : ADMIN_UI.blog.noPostsYet}
           </p>
         ) : (
-          sorted
+          <>
+          {paginated
             .map((post) => (
             <div
               key={post.id}
@@ -1605,6 +1690,18 @@ export default function AdminBlog({
                 >
                   {post.status === "draft" ? "Draft" : "Published"}
                 </span>
+                {getDisplayCategories(post).length > 0 && (
+                  <span className="flex flex-wrap items-center gap-1 rounded px-2 py-1 text-xs text-zinc-400">
+                    {getDisplayCategories(post).map((slug) => (
+                      <span
+                        key={slug}
+                        className="rounded bg-zinc-700/80 px-1.5 py-0.5"
+                      >
+                        {getShortCategoryLabel(slug)}
+                      </span>
+                    ))}
+                  </span>
+                )}
                 <span className="flex items-center gap-1 rounded px-2 py-1.5 text-xs text-zinc-500">
                   SEO
                   {post.seo?.metaDescription?.trim() ? (
@@ -1666,9 +1763,76 @@ export default function AdminBlog({
                 </button>
               </div>
             </div>
-            )));
+            ))}
+          {totalPages > 1 && (
+            <nav
+              className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-zinc-800 pt-6"
+              aria-label="Blog list pagination"
+            >
+              <span className="text-sm text-zinc-500">
+                Stranica {safePage} od {totalPages} · {sorted.length} postova
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setListPage((p) => Math.max(1, p - 1))}
+                  disabled={safePage <= 1}
+                  className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Prethodna stranica"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Prethodna
+                </button>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter((p) => p === 1 || p === totalPages || Math.abs(p - safePage) <= 1)
+                    .reduce<(number | "ellipsis")[]>((acc, p, i, arr) => {
+                      if (i > 0 && p - (arr[i - 1] as number) > 1) acc.push("ellipsis");
+                      acc.push(p);
+                      return acc;
+                    }, [])
+                    .map((p, i) =>
+                      p === "ellipsis" ? (
+                        <span key={`e-${i}`} className="px-2 text-zinc-500">…</span>
+                      ) : p === safePage ? (
+                        <span
+                          key={p}
+                          className="inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-md bg-zinc-700 px-2 text-sm font-medium text-white"
+                          aria-current="page"
+                        >
+                          {p}
+                        </span>
+                      ) : (
+                        <button
+                          key={p}
+                          type="button"
+                          onClick={() => setListPage(p as number)}
+                          className="inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-md px-2 text-sm font-medium text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
+                        >
+                          {p}
+                        </button>
+                      )
+                    )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setListPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={safePage >= totalPages}
+                  className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Sljedeća stranica"
+                >
+                  Sljedeća
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </nav>
+          )}
+          </>
+        );
         })()}
       </div>
+      </>
+      )}
 
       {duplicateModal && (
         <div

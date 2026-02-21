@@ -1,0 +1,70 @@
+Kad se spominju programi za pregledavanje, katalogizaciju, punjenje meta podataka i sl. obično se spominje Adobe Bridge, Lightroom, eventualno Aperture, ali se često neopravdano preskače ovaj biser nazvan <a href="http://www.camerabits.com/products/" target="_blank" rel="noopener">Photo Mechanic</a>.
+
+Otkrio mi ga je kolega koji često snima sport i koji baš kao i ja i svi ostali fotići (pogotovo oni koji fotke odmah šalju u redakciju) želi čim brže upisati EXIF podatke i izgubiti što manje vremena na taj inače mučan postupak.
+
+Photo Mechanic ima taj proces maksimalno pojednostavljen, ali sam ga ja s vremenom počeo koristiti za sve korake do same obrade fotke pa ću krenuti korak po korak objašnjavati workflow koji ja koristim uz ovaj program. Za primjer ću uzeti zadnju utakmicu između Dinama i Hajduka.
+<h2>Kreiranje liste</h2>
+Ovo se odnosi na običan tekst file u kojem se definira popis igrača koja će nam pomoći da imena igrača na fotografiji upišemo sa zadanim skraćenicama koje ćemo zadati u ovom fileu. Listu možete napraviti i kasnije, ali ako ju imate unaprijed pripremljenu ubrzat ćete si postupak slanja na samoj utakmici ili ispunjavanje podataka nakon nje.
+
+Npr. golman dinama Zelenika ima broj 12 pa ćemo u jednom redu napisati slijedeće:
+
+ D12         (12) Oliver Zelenika
+
+<address> Vrlo je važno da je D12 odmaknut jednim tabom od ostatka teksta. Znači napišete D12, jednom stisnete Tab pa ime i prezime i ostale podatke.</address>Lista koju sam napravio za nedjeljnu utakmicu možete pogledati ovdje:
+
+<address><a href="/uploads/wordpress/2013/12/Dinamo-Hajduk_PhotoMechanic.txt" target="_blank" rel="noopener">Dinamo-Hajduk_PhotoMechanic</a></address>O njenom korištenju nešto kasnije.
+<h2>Ispunjavanje IPTC-a</h2>
+Još jedan korak koji možemo napraviti prije tekme je ispunjavanje IPTC-a (International Press Telecommunications Council) odnosno generalije o fotografiji. Tu ćemo fino ispuniti naslov, ključne riječi, autora fotografija, grad i mjesto zbivanja i još dosta podataka. Vi sami odlučite koliko detaljno želite opise i ostale generalije. Nakon ispunjavanja sve to fino zapišete kako bi mogli kasnije na brzinu učitati i primijeniti na fotke. Zapisujete tako da kliknete na onu munjinu (Save Settings Snapshot) u donjem lijevom kutu i nekako nazovete te postavke.
+
+<a href="/uploads/wordpress/2013/01/iptc.jpg"><img src="/uploads/wordpress/2013/01/iptc.jpg" alt="iptc" width="951" height="549" /></a>
+<h2>Importanje / Ingest</h2>
+Možete koristiti i klasično kopiranje pa naknadno otvaranje foldera sa fotkama, ali korištenje Ingesta ima još neke prednosti. Dakle ubacimo karticu, kliknemo na <em>Ingest</em> iz izbornika <em>File</em> (Cmd+G) i otvori nam se slijedeći prozor.
+
+<a href="/uploads/wordpress/2013/01/ingest.jpg"><img class="aligncenter size-full wp-image-11786" src="/uploads/wordpress/2013/01/ingest.jpg" alt="ingest" width="730" height="615" /></a>
+
+Kao što vidite ovdje se mogu podesiti razne stvari. Meni je npr. uključeno da mi se kartica nakon kopiranja unmounta odnosno ejecta. Također možete uključiti da vam se kopiraju samo fotke koje ste prethodno na fotiću odabrali i zaključali pa nećete morati kopirati sve i gubiti vrijeme nego već odabrane fotke. Jedna od korisnih stvari je i <em>Apply IPTC Stationery Pad to Photos.</em> Kada kliknete na to, možete učitati Snapshot IPTC-a ako ste ga prethodno kreirali i on će se automatski primijeniti na sve fotke. Ima tu još dosta opcija koje možete aktivirati, ali to sve ovisi o vašem načinu rada i navikama.
+<h2>Pregled / brisanje / označavanje</h2>
+Nakon što sam sve iskopirao imam običaj proći kroz sve te fotke pa izbrisati škart, a u tom prolazu također i označim fotke koje mi se sviđaju i koje mislim iskoristiti. Obično označavam samo jednu kategoriju, ali vam je na raspolaganju više boja odnosno kategorija i ocjena. Dakle listam pa listam pa nekaj zbrišem pa nabasam na OK fotku i stisnem Cmd+1, odnosno Ctrl +1 na PC-u i fotka mi dobije zeleni tag. I tako do kraja foldera. Sada mi ostanu iskoristive fotke, one loše su zbrisane, a one bolje označene.
+<h2>Preimenovanje</h2>
+Kako ne bi imao one glupe nazive fotki sve ih imenujem na slijedeći način:
+
+YYMMDD-Naziv_001
+
+U ovom slučaju to izgleda ovako 131201_Dinamo-Hajduk_001
+
+A to sve napravimo tako da selektiramo sve fotke (Cmd+A) pa iz izbornika <em>File</em> odaberemo <em>Rename Photos</em> (Cmd+M) i podesimo postavke kako je prikazano na slici. Izbor varijabli je velik pa si imenovanje fotki prilagodite kako vam paše.
+
+<a href="/uploads/wordpress/2013/01/rename.jpg"><img class="aligncenter" src="/uploads/wordpress/2013/01/rename.jpg" alt="rename" width="501" height="463" /></a>
+
+Treba obratiti pažnju i na <em>Set Seqn Variable</em>, odnosno numeraciju na kraju koju treba okrenuti na nulu odnosno staviti da prva fotke počinje sa 001.
+<h2>Primjenjivanje IPTC-a</h2>
+Sad nam ostaje još ispuniti fotke sa opisima (ako to već nismo napravili kod Ingesta) pa ćemo ih opet sve obilježiti kliknuti izbornik <em>Image</em> pa <em>IPTC Stationery Pad</em>. Sada kliknemo na onu munjinu dole lijevo i učitamo Snapshot koji smo prije napravili ili jednostavno upišemo sve željene podatke ako nemamo Snapshot. Kad je sve nafilano samo kliknemo <em>Apply Stationery to selected</em> i to je to.
+
+Nakon toga slijedi još malo pimplanja odnosno upisivanje imena igrača sa one liste koju smo definirali na početku.
+
+Listu prvo moramo učitati, a to radimo kako slijedi. Izbornik <em>Edit-Settings-Set Code Replacement</em>. Sa gumbom <em>Add</em> dodamo listu koju smo prethodno kreirali. Nemojte još klikati OK.
+
+<a href="/uploads/wordpress/2013/01/code_replacement.jpg"><img class="aligncenter size-full wp-image-11788" src="/uploads/wordpress/2013/01/code_replacement.jpg" alt="code_replacement" width="680" height="295" /></a>
+
+Važan detalj se nalazi u dnu prozora na lijevoj strani pod kućicom <em>Delimiter Character. </em>To je oznaka ili slovo kojom ćemo pozivati i zatvarati ovu listu pa preporučam da to bude neka lako dostupna tipka. Kod mene je upisan znak "&lt;". E sad možete kliknuti OK.
+
+Lista je učitana pa možemo kliknuti na fotografiju na kojoj želimo upisati ime igrača pa na <em>Image-IPTC Stationery Pad</em> i u okviru headline upišemo određeni znak, oznaku iz liste i opet znak i to je to. Tako nam je za upisivanja punog imena i podataka za Zeleniku bilo dovoljno upisati samo  &lt;D12&lt; ,a rezultat koji samo dobili je  (12) Oliver Zelenika
+<h2>GPS</h2>
+Ako vam nije dovoljno podataka u fotki možete joj dodati i GPS koordinate. Očito je da će novi fotići imati tu opciju pod normalno, ali ako ju još nemate i želite šparati bateriju možete to napraviti i naknadno tako da označite željene fotke, kliknete <em>Image-Set GPS Coordinates</em> i upišete koordinate. Za Maksimirski stadion su one 45° 49.123', 16° 1.079'.  Te koordinate upišete iznad mape pa ispod mape kliknete na <em>Accept Location</em> gumb i onda na lijevoj strani <em>Apply to all</em>.
+
+<a href="/uploads/wordpress/2013/01/gps.jpg"><img class="aligncenter size-full wp-image-11790" src="/uploads/wordpress/2013/01/gps.jpg" alt="gps" width="977" height="612" /></a>
+<h2>Obrada</h2>
+<p style="text-align: center;"><img class="size-full wp-image-11798 aligncenter" src="/uploads/wordpress/2013/01/filter.jpg" alt="filter" width="337" height="20" /></p>
+Moj workflow se nastavlja sa paljenjem filtera odabranih fotki (klik na zadnju ikonu tamno sive boje u donjem desnom dijelu ekranu <em>Hide color class</em>)  pa desni gumb na fotku ili selekciju fotki i na <em>Edit (selected) photo(s)</em>.
+<h2>Upload</h2>
+Na kraju vam ostaje i slanje tih fotki. To je također riješeno u Photo Mechanicu preko ikone <em>Upload selected photos</em> koja se nalazi u gornjem dijelu ekrana ili preko izbornika <em>File-Upload</em>
+
+Tamo si unaprijed definirate FTP server, Flickr ili neki drugi način podizanja fotki pa i ta radnja postaje trivijalna.
+
+<a href="/uploads/wordpress/2013/01/upload.jpg"><img class="aligncenter size-full wp-image-11801" src="/uploads/wordpress/2013/01/upload.jpg" alt="upload" width="915" height="753" /></a>
+<h2>Ukratko</h2>
+Možda se kroz ovu količinu teksta i ilustracija ovo čini komplicirano, ali je u biti vrlo jednostavno i brzo i špara puno vremena.
+
+Ako stisnemo fast forward to izgleda ovako: doma si pripremiš listu igrača, ispuniš IPTC, odeš na tekmu, fotkaš , kad stigneš si prolistaš fotke na displayu i lockaš nekoliko boljih, u poluvremenu upališ laptop, pokreneš Photomechanic, klikneš Ingest, definiraš da ti povuče IPTC i da prebaci samo lockane fotke. Kad je to gotovo učitaš listu, dodatno ukucaš imena igrača u IPTC i klikneš upload. I fotke su u redakciji, na stocku ili gdje već trebaju biti.
+
+Napominjem da je ovo mali dio mogućnosti ovog programa koje ja koristim. Ima tu još puno toga za otkriti.
