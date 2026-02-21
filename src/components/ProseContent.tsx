@@ -1,11 +1,64 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useMemo, useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const QUOTE_CHAR = "\u201C"; // Lijevi tipografski navodnik (zaobljen)
 const SWIPE_THRESHOLD = 50;
+
+function processProseHtml(html: string): { processedHtml: string; imageUrls: string[] } {
+  const doc =
+    typeof document !== "undefined"
+      ? new DOMParser().parseFromString(html, "text/html")
+      : (() => {
+          const { parseHTML } = require("linkedom");
+          const { document } = parseHTML(`<!DOCTYPE html><html><body>${html}</body></html>`);
+          return document;
+        })();
+  const imageUrls: string[] = [];
+
+  // Blockquote dekoracija
+  doc.querySelectorAll("blockquote").forEach((bq) => {
+    if (bq.querySelector(".quote-decor")) return;
+    const span = doc.createElement("span");
+    span.className = "quote-decor";
+    span.setAttribute("aria-hidden", "true");
+    span.textContent = QUOTE_CHAR;
+    bq.insertBefore(span, bq.firstChild);
+  });
+
+  // Wrap slike – isto kao BlogGallery/Gallery: data-cursor-hover, data-cursor-aperture
+  const imgs = Array.from(doc.querySelectorAll("img"));
+  imgs.forEach((img) => {
+    if (img.closest(".prose-img-wrapper")) return;
+    const src = img.getAttribute("src");
+    if (src) imageUrls.push(src);
+
+    const parent = img.parentNode;
+    if (!parent) return;
+
+    const wrapper = doc.createElement("button");
+    wrapper.type = "button";
+    wrapper.className =
+      "prose-img-wrapper cursor-pointer group relative block w-full overflow-hidden rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-white";
+    wrapper.setAttribute("data-cursor-hover", "");
+    wrapper.setAttribute("data-cursor-aperture", "");
+    if (src) wrapper.setAttribute("data-index", String(imageUrls.length - 1));
+    const alignment = img.getAttribute("data-text-alignment");
+    wrapper.setAttribute("data-text-alignment", alignment || "center");
+
+    const insertParent = parent.nodeName === "P" ? parent.parentNode : parent;
+    if (!insertParent) return;
+    const insertBefore = parent.nodeName === "P" ? parent : img;
+    insertParent.insertBefore(wrapper, insertBefore);
+    wrapper.appendChild(img);
+    img.setAttribute("data-cursor-aperture", "");
+  });
+
+  const bodyHtml = doc.body?.innerHTML ?? html;
+  return { processedHtml: bodyHtml, imageUrls };
+}
 
 export default function ProseContent({
   html,
@@ -17,11 +70,14 @@ export default function ProseContent({
   id?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const imageUrlsRef = useRef<string[]>([]);
   const touchStartX = useRef<number>(0);
 
+  const { processedHtml, imageUrls } = useMemo(
+    () => processProseHtml(html),
+    [html]
+  );
+
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const lightboxImage =
     lightboxIndex !== null && imageUrls[lightboxIndex]
       ? imageUrls[lightboxIndex]
@@ -45,6 +101,21 @@ export default function ProseContent({
 
   const hasPrev = lightboxIndex !== null && lightboxIndex > 0;
   const hasNext = lightboxIndex !== null && lightboxIndex < imageUrls.length - 1;
+
+  const handleContainerClick = useCallback(
+    (e: React.MouseEvent) => {
+      const btn = (e.target as HTMLElement).closest(
+        ".prose-img-wrapper[data-index]"
+      );
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const idx = parseInt(btn.getAttribute("data-index") ?? "", 10);
+        if (!isNaN(idx)) openLightbox(idx);
+      }
+    },
+    [openLightbox]
+  );
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -81,59 +152,14 @@ export default function ProseContent({
     };
   }, [lightboxIndex]);
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const blockquotes = el.querySelectorAll("blockquote");
-    blockquotes.forEach((bq) => {
-      if (bq.querySelector(".quote-decor")) return;
-      const span = document.createElement("span");
-      span.className = "quote-decor";
-      span.setAttribute("aria-hidden", "true");
-      span.textContent = QUOTE_CHAR;
-      bq.insertBefore(span, bq.firstChild);
-    });
-
-    const imgs = Array.from(el.querySelectorAll("img"));
-    const urls: string[] = [];
-    imgs.forEach((img) => {
-      if (img.closest(".prose-img-wrapper")) return;
-      const src = img.getAttribute("src");
-      if (src) urls.push(src);
-
-      const parent = img.parentNode;
-      if (!parent) return;
-
-      const wrapper = document.createElement("div");
-      wrapper.className = "prose-img-wrapper cursor-pointer";
-      wrapper.setAttribute("data-cursor-hover", "");
-      wrapper.setAttribute("data-cursor-aperture", "");
-      const alignment = img.getAttribute("data-text-alignment");
-      if (alignment) {
-        wrapper.setAttribute("data-text-alignment", alignment);
-      } else {
-        wrapper.setAttribute("data-text-alignment", "center");
-      }
-      parent.insertBefore(wrapper, img);
-      wrapper.appendChild(img);
-
-      if (src) {
-        const index = urls.length - 1;
-        wrapper.addEventListener("click", () => openLightbox(index));
-      }
-    });
-    imageUrlsRef.current = urls;
-    setImageUrls(urls);
-  }, [html, openLightbox]);
-
   return (
     <>
       <div
         ref={containerRef}
         id={id}
         className={className}
-        dangerouslySetInnerHTML={{ __html: html }}
+        dangerouslySetInnerHTML={{ __html: processedHtml }}
+        onClick={handleContainerClick}
       />
 
       <AnimatePresence>

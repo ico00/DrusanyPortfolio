@@ -25,8 +25,7 @@ import {
 } from "lucide-react";
 import { CATEGORIES } from "./CategorySelect";
 import {
-  getBlogCategoryOptions,
-  postHasCategory,
+  getBlogCategoryStackedChartData,
 } from "@/data/blogCategories";
 
 function normalizeCategory(cat: string): string {
@@ -66,7 +65,11 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
     portfolioImages: 0,
     blogImages: 0,
     imagesByCategory: [] as { name: string; count: number; slug: string }[],
-    imagesByBlogCategory: [] as { name: string; count: number; slug: string }[],
+    blogChartData: {
+      data: [] as Record<string, string | number>[],
+      segmentKeys: [] as string[],
+      segmentLabels: {} as Record<string, string>,
+    },
     pagesCount: 2,
     blogPostsCount: 0,
       contentHealth: {
@@ -132,35 +135,16 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
         ...(otherCount > 0 ? [{ name: "Other", slug: "other", count: otherCount }] : []),
       ];
 
-      const blogCategoryOptions = getBlogCategoryOptions();
-      const byBlogCategory: Record<string, number> = {};
-      for (const opt of blogCategoryOptions) {
-        byBlogCategory[opt.slug] = 0;
-      }
-      for (const post of posts) {
-        const imgCount =
-          (post.thumbnail?.trim() ? 1 : 0) + (post.gallery?.length ?? 0);
-        for (const opt of blogCategoryOptions) {
-          if (postHasCategory(post, opt.slug)) {
-            byBlogCategory[opt.slug] =
-              (byBlogCategory[opt.slug] ?? 0) + imgCount;
-          }
-        }
-      }
-      const imagesByBlogCategory = blogCategoryOptions
-        .map((opt) => ({
-          name: opt.fullLabel,
-          slug: opt.slug,
-          count: byBlogCategory[opt.slug] ?? 0,
-        }))
-        .filter((d) => d.count > 0)
-        .sort((a, b) => b.count - a.count);
+      const blogChartData = getBlogCategoryStackedChartData(
+        posts,
+        (p) => (p.thumbnail?.trim() ? 1 : 0) + (p.gallery?.length ?? 0)
+      );
 
       setStats({
         portfolioImages: images.length,
         blogImages: blogImagesCount,
         imagesByCategory,
-        imagesByBlogCategory,
+        blogChartData,
         pagesCount: 2,
         blogPostsCount: posts.length,
         contentHealth,
@@ -170,7 +154,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
         portfolioImages: 0,
         blogImages: 0,
         imagesByCategory: [],
-        imagesByBlogCategory: [],
+        blogChartData: { data: [], segmentKeys: [], segmentLabels: {} },
         pagesCount: 2,
         blogPostsCount: 0,
         contentHealth: {
@@ -320,7 +304,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
             <div>
               <p className="text-sm text-zinc-500">Blog Categories</p>
               <p className="text-2xl font-semibold text-zinc-100">
-                {stats.imagesByBlogCategory.length}
+                {stats.blogChartData.data.length}
               </p>
             </div>
           </div>
@@ -397,10 +381,10 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
             Images by category in blog
           </h3>
           <div className="h-64">
-            {stats.imagesByBlogCategory.length > 0 ? (
+            {stats.blogChartData.data.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  data={stats.imagesByBlogCategory}
+                  data={stats.blogChartData.data}
                   margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
@@ -423,12 +407,21 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                     }}
                     labelStyle={{ color: "#fafafa", fontWeight: 600, fontSize: 14 }}
                     itemStyle={{ color: "#e4e4e7", fontSize: 13 }}
+                    formatter={(value: number, name: string) => [
+                      value,
+                      stats.blogChartData.segmentLabels[name] ?? name,
+                    ]}
                   />
-                  <Bar dataKey="count" radius={[4, 4, 0, 0]} background={false}>
-                    {stats.imagesByBlogCategory.map((_, index) => (
-                      <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                    ))}
-                  </Bar>
+                  {stats.blogChartData.segmentKeys.map((key, index) => (
+                    <Bar
+                      key={key}
+                      dataKey={key}
+                      stackId="blog"
+                      fill={CHART_COLORS[index % CHART_COLORS.length]}
+                      radius={index === stats.blogChartData.segmentKeys.length - 1 ? [4, 4, 0, 0] : 0}
+                      name={stats.blogChartData.segmentLabels[key] ?? key}
+                    />
+                  ))}
                 </BarChart>
               </ResponsiveContainer>
             ) : (

@@ -41,7 +41,6 @@ import DatePicker from "./DatePicker";
 import BlogCategorySelect from "./BlogCategorySelect";
 import StatusSelect from "./StatusSelect";
 import FilterSelect from "./FilterSelect";
-import FilterMultiSelect from "./FilterMultiSelect";
 import {
   getBlogCategoryLabel,
   getDisplayCategories,
@@ -1542,15 +1541,14 @@ export default function AdminBlog({
             ]}
           />
         </div>
-        <div className="w-48">
-          <FilterMultiSelect
-            label="Category"
+        <div className="min-w-[12rem] flex-1 max-w-xs">
+          <label className="mb-1.5 block text-xs text-zinc-500">Category</label>
+          <BlogCategorySelect
             value={listCategoryFilter}
-            onChange={setListCategoryFilter}
+            onChange={(v) => setListCategoryFilter(Array.isArray(v) ? v : v ? [v] : [])}
             placeholder="All categories"
-            options={getBlogCategoryOptions()
-              .sort((a, b) => a.fullLabel.localeCompare(b.fullLabel, "hr"))
-              .map((c) => ({ value: c.slug, label: c.fullLabel }))}
+            multiple
+            compact
           />
         </div>
         <div className="w-40">

@@ -20,11 +20,35 @@ html {
   --font-serif: var(--font-playfair), "Georgia", serif;
 }
 
-/* Theme customization – varijable iz theme.json (ThemeStyles) */
-.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6,
-.prose-invert h1, .prose-invert h2, .prose-invert h3, .prose-invert h4, .prose-invert h5, .prose-invert h6 {
+/* Theme customization – varijable iz theme.json (ThemeStyles) – različite veličine po razini */
+.prose h1, .prose-invert h1 {
   font-family: var(--theme-heading-font, var(--font-serif));
-  font-size: var(--theme-heading-size, 1.5rem);
+  font-size: 2.25rem;
+  color: var(--theme-heading-color, inherit);
+}
+.prose h2, .prose-invert h2 {
+  font-family: var(--theme-heading-font, var(--font-serif));
+  font-size: 1.875rem;
+  color: var(--theme-heading-color, inherit);
+}
+.prose h3, .prose-invert h3 {
+  font-family: var(--theme-heading-font, var(--font-serif));
+  font-size: 1.5rem;
+  color: var(--theme-heading-color, inherit);
+}
+.prose h4, .prose-invert h4 {
+  font-family: var(--theme-heading-font, var(--font-serif));
+  font-size: 1.25rem;
+  color: var(--theme-heading-color, inherit);
+}
+.prose h5, .prose-invert h5 {
+  font-family: var(--theme-heading-font, var(--font-serif));
+  font-size: 1.125rem;
+  color: var(--theme-heading-color, inherit);
+}
+.prose h6, .prose-invert h6 {
+  font-family: var(--theme-heading-font, var(--font-serif));
+  font-size: 1rem;
   color: var(--theme-heading-color, inherit);
 }
 
@@ -159,15 +183,42 @@ body.custom-cursor-active * {
   color: rgb(244 244 245); /* zinc-100 – svjetliji za bolju čitljivost */
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+/* BlockNote – različite veličine naslova po razini (h1–h6) */
 .blocknote-editor-wrapper .bn-editor h1,
-.blocknote-editor-wrapper .bn-editor h2,
-.blocknote-editor-wrapper .bn-editor h3,
-.blocknote-editor-wrapper .bn-editor h4,
-.blocknote-editor-wrapper .bn-editor h5,
-.blocknote-editor-wrapper .bn-editor h6,
-.blocknote-editor-wrapper .bn-block-content[data-content-type="heading"] {
+.blocknote-editor-wrapper .bn-block-content[data-content-type="heading"][data-level="1"] {
   color: rgb(244 244 245);
   font-family: var(--font-serif), Georgia, serif;
+  font-size: 2.25rem;
+}
+.blocknote-editor-wrapper .bn-editor h2,
+.blocknote-editor-wrapper .bn-block-content[data-content-type="heading"][data-level="2"] {
+  color: rgb(244 244 245);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.875rem;
+}
+.blocknote-editor-wrapper .bn-editor h3,
+.blocknote-editor-wrapper .bn-block-content[data-content-type="heading"][data-level="3"] {
+  color: rgb(244 244 245);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.5rem;
+}
+.blocknote-editor-wrapper .bn-editor h4,
+.blocknote-editor-wrapper .bn-block-content[data-content-type="heading"][data-level="4"] {
+  color: rgb(244 244 245);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.25rem;
+}
+.blocknote-editor-wrapper .bn-editor h5,
+.blocknote-editor-wrapper .bn-block-content[data-content-type="heading"][data-level="5"] {
+  color: rgb(244 244 245);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.125rem;
+}
+.blocknote-editor-wrapper .bn-editor h6,
+.blocknote-editor-wrapper .bn-block-content[data-content-type="heading"][data-level="6"] {
+  color: rgb(244 244 245);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1rem;
 }
 
 /* BlockNote – side menu (+ i ⋮⋮) svijetle boje na tamnoj pozadini */
@@ -359,31 +410,93 @@ body.custom-cursor-active * {
   margin-top: 1.5em;
 }
 
-/* Prose – multimedija (slike) – vizual kao BlogGallery/PressSection */
+/* Prose – figure/wp-block-image full width (WordPress struktura) */
+.prose figure,
+.prose .wp-block-image,
+.prose-invert figure,
+.prose-invert .wp-block-image {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Prose – sve slike (uključujući BlockNote /image) – fallback ako wrapper nije primijenjen */
+.prose img,
+.prose-invert img {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 10px 30px -5px rgba(0, 0, 0, 0.15),
+    0 20px 50px -12px rgba(0, 0, 0, 0.2);
+}
+.prose-invert img {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 10px 30px -5px rgba(0, 0, 0, 0.4),
+    0 20px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Prose – multimedija (slike) – full width, vizual kao BlogGallery */
 .prose .prose-img-wrapper,
 .prose-invert .prose-img-wrapper {
+  /* Reset za button element */
+  padding: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  position: relative;
   display: block;
-  width: fit-content;
-  max-width: 100%;
+  width: 100%;
   overflow: hidden;
   border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 10px 30px -5px rgba(0, 0, 0, 0.15),
+    0 20px 50px -12px rgba(0, 0, 0, 0.2);
   margin: 1.5em 0;
 }
 .prose-invert .prose-img-wrapper {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 10px 30px -5px rgba(0, 0, 0, 0.4),
+    0 20px 50px -12px rgba(0, 0, 0, 0.5);
 }
 .prose .prose-img-wrapper img,
 .prose-invert .prose-img-wrapper img {
   display: block;
-  max-width: 100%;
-  height: auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: contain;
   vertical-align: top;
   transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .prose .prose-img-wrapper:hover img,
 .prose-invert .prose-img-wrapper:hover img {
   transform: scale(1.03);
+}
+/* Overlay na hover – kao BlogGallery */
+.prose .prose-img-wrapper::after,
+.prose-invert .prose-img-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.5s ease-out;
+  pointer-events: none;
+}
+.prose .prose-img-wrapper:hover::after,
+.prose-invert .prose-img-wrapper:hover::after {
+  background: rgba(0, 0, 0, 0.15);
 }
 /* Poravnanje (BlockNote data-text-alignment) */
 .prose .prose-img-wrapper[data-text-alignment="center"],

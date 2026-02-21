@@ -1,0 +1,12 @@
+---
+description: Pročitaj tehničke paterne prije implementacije – slike, lightbox, aperture cursor
+alwaysApply: true
+---
+
+# Tehnički paterni projekta
+
+**Prije implementacije novih funkcionalnosti (slike, lightbox, aperture cursor, slično) – obavezno pročitaj:**
+
+**`docs/technical-patterns.md`**
+
+Taj dokument sadrži step-by-step upute kako implementirati uobičajene stvari, referentne komponente i česte greške. Ne izmišljaj – prati postojeće komponente (BlogGallery, Gallery, ProseContent).

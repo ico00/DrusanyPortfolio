@@ -34,14 +34,19 @@ const PROSE_ALLOWED_TAGS = [
   "tr",
   "th",
   "td",
+  "figure",
+  "figcaption",
+  "div",
 ];
 
 const PROSE_ALLOWED_ATTRIBUTES: Record<string, string[]> = {
   a: ["href", "target", "rel", "title"],
-  img: ["src", "alt", "title", "width", "height", "data-text-alignment"],
+  img: ["src", "alt", "title", "data-text-alignment"],
   span: ["class"],
   td: ["colspan", "rowspan"],
   th: ["colspan", "rowspan"],
+  figure: ["class"],
+  div: ["class", "style"],
 };
 
 /**
@@ -56,6 +61,16 @@ export function sanitizeProseHtml(html: string): string {
     allowedSchemes: ["http", "https", "mailto", "/"],
     allowedSchemesByTag: {
       img: ["http", "https", "data", "/"],
+    },
+    transformTags: {
+      img: (_tagName, attribs) => {
+        const out: Record<string, string> = { src: attribs.src ?? "" };
+        if (attribs.alt) out.alt = attribs.alt;
+        if (attribs.title) out.title = attribs.title;
+        if (attribs["data-text-alignment"])
+          out["data-text-alignment"] = attribs["data-text-alignment"];
+        return { tagName: "img", attribs: out };
+      },
     },
   });
 }

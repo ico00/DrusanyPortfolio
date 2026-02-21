@@ -54,6 +54,8 @@ interface BlogCategorySelectProps {
   className?: string;
   /** Enable multiple category selection */
   multiple?: boolean;
+  /** Kompaktan stil (min-h 38px) za filter bar – izjednačava visinu s FilterSelect */
+  compact?: boolean;
 }
 
 export default function BlogCategorySelect({
@@ -63,6 +65,7 @@ export default function BlogCategorySelect({
   id,
   className = "",
   multiple = false,
+  compact = false,
 }: BlogCategorySelectProps) {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -117,7 +120,9 @@ export default function BlogCategorySelect({
         type="button"
         id={id}
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full min-h-[42px] items-center justify-between gap-2 rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-left text-zinc-100 transition-colors hover:border-zinc-600 hover:bg-zinc-800 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+        className={`flex w-full items-center justify-between gap-2 rounded-lg border border-zinc-700 bg-zinc-800/50 text-left text-zinc-100 transition-colors hover:border-zinc-600 hover:bg-zinc-800 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 ${
+          compact ? "min-h-[38px] px-3 py-2 text-sm" : "min-h-[42px] px-4 py-2.5"
+        }`}
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-label={placeholder}

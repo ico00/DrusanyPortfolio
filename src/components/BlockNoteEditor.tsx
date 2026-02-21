@@ -5,7 +5,7 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/shadcn";
 import "@blocknote/shadcn/style.css";
 import "@blocknote/core/fonts/inter.css";
-import { StaticBlockTypeBar } from "./StaticBlockTypeBar";
+import { FloatingBlockTypeBar } from "./FloatingBlockTypeBar";
 
 interface BlockNoteEditorProps {
   content: string;
@@ -74,12 +74,8 @@ export default function BlockNoteEditor({
       style={{ minHeight }}
       data-theme="dark"
     >
-      <BlockNoteView
-        editor={editor}
-        theme="dark"
-        className="bn-editor-dark bn-has-static-toolbar"
-      >
-        <StaticBlockTypeBar />
+      <BlockNoteView editor={editor} theme="dark" className="bn-editor-dark">
+        <FloatingBlockTypeBar />
       </BlockNoteView>
     </div>
   );

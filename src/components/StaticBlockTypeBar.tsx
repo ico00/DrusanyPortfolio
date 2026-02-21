@@ -1,6 +1,6 @@
 "use client";
 
-import { BlockTypeSelect } from "@blocknote/react";
+import { BlockTypeSelectWithCursor } from "./BlockTypeSelectWithCursor";
 
 /**
  * Statična traka koja prikazuje trenutni stil bloka na temelju pozicije kursora.
@@ -13,7 +13,7 @@ export function StaticBlockTypeBar() {
       style={{ order: -1 }}
     >
       <span className="text-xs text-zinc-300">Block style:</span>
-      <BlockTypeSelect />
+      <BlockTypeSelectWithCursor />
     </div>
   );
 }

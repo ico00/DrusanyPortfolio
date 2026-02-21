@@ -10,9 +10,6 @@ import BlogListLayout from "@/components/blog/BlogListLayout";
 import type { BlogPost } from "@/lib/blog";
 import { getPages } from "@/lib/pages";
 
-/** Privremeno: prikaži samo postove s featured image (dok se ne srede importirani) */
-const HIDE_POSTS_WITHOUT_THUMBNAIL = true;
-
 /** Parse segments to page number: [] -> 1, ["page","2"] -> 2. Returns null if invalid. */
 function parsePageFromSegments(segments: string[] | undefined): number | null {
   if (!segments || segments.length === 0) return 1;
@@ -62,17 +59,9 @@ export async function generateMetadata({
   };
 }
 
-function postsForDisplay(posts: BlogPost[]): BlogPost[] {
-  if (HIDE_POSTS_WITHOUT_THUMBNAIL) {
-    return posts.filter((p) => p.thumbnail?.trim());
-  }
-  return posts;
-}
-
 export async function generateStaticParams() {
   const { posts } = await getBlogWithBodies();
-  const visible = postsForDisplay(posts as BlogPost[]);
-  const sorted = sortPostsByDate(visible);
+  const sorted = sortPostsByDate(posts as BlogPost[]);
   const totalPages = getTotalPages(sorted.length);
 
   const params: { segments: string[] }[] = [{ segments: [] }];
@@ -97,8 +86,7 @@ export default async function BlogListPage({
   if (page == null) notFound();
 
   const { posts } = await getBlogWithBodies();
-  const visible = postsForDisplay(posts as BlogPost[]);
-  const sorted = sortPostsByDate(visible);
+  const sorted = sortPostsByDate(posts as BlogPost[]);
   const totalPages = getTotalPages(sorted.length);
 
   if (page > totalPages) notFound();
