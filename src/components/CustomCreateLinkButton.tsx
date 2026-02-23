@@ -9,10 +9,8 @@ import {
 } from "@blocknote/react";
 import {
   BlockNoteEditor,
-  BlockSchema,
   formatKeyboardShortcut,
   isTableCellSelection,
-  StyleSchema,
 } from "@blocknote/core";
 import {
   FormattingToolbarExtension,
@@ -38,13 +36,7 @@ function validateUrl(url: string): string {
   return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
 }
 
-function checkLinkInSchema(
-  editor: BlockNoteEditor
-): editor is BlockNoteEditor<
-  BlockSchema,
-  { link: { type: "link"; propSchema: unknown; content: "styled" } },
-  StyleSchema
-> {
+function checkLinkInSchema(editor: BlockNoteEditor): boolean {
   return (
     "link" in editor.schema.inlineContentSchema &&
     editor.schema.inlineContentSchema["link"] === "link"
@@ -107,7 +99,7 @@ export function CustomCreateLinkButton() {
     setEditUrl(state?.url || "https://");
     if (state?.url && linkExt) {
       const anchor = linkExt.getLinkElementAtPos(state.range.from);
-      setEditOpenInNewTab(anchor?.target === "_blank" ?? true);
+      setEditOpenInNewTab(anchor ? anchor.target === "_blank" : true);
     } else {
       setEditOpenInNewTab(true);
     }
@@ -238,6 +230,7 @@ export function CustomCreateLinkButton() {
   return (
     <>
       <Components.FormattingToolbar.Button
+        label={isEditingLink ? "Uredi link" : "Dodaj link"}
         mainTooltip={isEditingLink ? "Uredi link" : "Dodaj link"}
         secondaryTooltip={formatKeyboardShortcut("Mod+K")}
         isSelected={showModal}

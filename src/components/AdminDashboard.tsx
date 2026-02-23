@@ -407,9 +407,9 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                     }}
                     labelStyle={{ color: "#fafafa", fontWeight: 600, fontSize: 14 }}
                     itemStyle={{ color: "#e4e4e7", fontSize: 13 }}
-                    formatter={(value: number, name: string) => [
-                      value,
-                      stats.blogChartData.segmentLabels[name] ?? name,
+                    formatter={(value, name) => [
+                      value ?? 0,
+                      stats.blogChartData.segmentLabels[name ?? ""] ?? name ?? "",
                     ]}
                   />
                   {stats.blogChartData.segmentKeys.map((key, index) => (

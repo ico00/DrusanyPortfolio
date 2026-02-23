@@ -88,7 +88,7 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 
 **Korak 2:** Recharts BarChart s više `<Bar>` komponenti – svaka ima `stackId="blog"`, `dataKey` = segment slug.
 
-**Korak 3:** Tooltip formatter koristi `segmentLabels` za čitljive nazive.
+**Korak 3:** Tooltip formatter koristi `segmentLabels` za čitljive nazive. Recharts formatter prima `value` i `name` kao `number | undefined` i `string | undefined` – ne tipizirati eksplicitno; koristiti `value ?? 0` i `name ?? ""` u returnu.
 
 ---
 
@@ -108,6 +108,8 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 | Blog sidebar widgeti (stilovi) | BLOG_WIDGET_UI | `src/data/blogWidgetUI.ts` |
 | Blog widget komponente | SearchWidget, CategoriesWidget, FeaturedPostsWidget, GoogleMapsWidget | `src/components/blog/` |
 | Block type select popup (dodavanje blokova) | BlockTypeSelectWithCursor | `src/components/BlockTypeSelectWithCursor.tsx` |
+| Link toolbar (FormattingToolbar) | CustomCreateLinkButton | `src/components/CustomCreateLinkButton.tsx` |
+| Custom Image block (displayWidth) | blocknoteImageSchema | `src/lib/blocknoteImageSchema.tsx` |
 | Theme grupe, accordion, elementi | ThemeAdmin | `src/components/ThemeAdmin.tsx` |
 
 ---
@@ -130,6 +132,9 @@ Kad radiš s linkovima u BlockNote editoru:
 
 - **Link se otvara pri kliku** – korisnik ne može uređivati tekst unutar linka. Rješenje: `TiptapLink.configure({ openOnClick: false })` u `_tiptapOptions` (BlockNote schema).
 - **editLoading** – pri otvaranju uređivanja prikaži loader dok se body ne učitava; sprječava popover crash (`reference.element` undefined, `isConnected`).
+- **FormattingToolbar.Button** – zahtijeva obavezan `label` prop (BlockNote 0.46+).
+- **CustomCreateLinkButton** – `checkLinkInSchema` vraća `boolean` (ne type predicate – custom shema nije kompatibilna s default tipovima); za `anchor?.target === "_blank"` koristiti `anchor ? anchor.target === "_blank" : true` (ne `?? true` – boolean nije nullish).
+- **blocknoteImageSchema** – `createImageBlockConfig({})` zahtijeva objekat (ne prazan poziv); `displayWidth` u `parseImageWithDisplayWidth` mora biti literal tip `"full" | "50" | "25"` (type assertion ako dolazi iz `getAttribute`).
 
 ### 5.1 Dodavanje blokova u popup za stil bloka (Block Type Select)
 
@@ -210,6 +215,10 @@ const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
 
 ## 7. Česte greške
 
+- **Recharts Tooltip formatter** – `value` i `name` mogu biti `undefined`; ne tipizirati eksplicitno kao `number`/`string`; koristiti `value ?? 0`, `name ?? ""` u returnu
+- **BlockNote FormattingToolbar.Button** – prop `label` je obavezan (BlockNote 0.46+)
+- **blocknoteImageSchema** – `createImageBlockConfig()` zahtijeva argument; koristiti `createImageBlockConfig({})`; `displayWidth` iz parse-a mora biti literal `"full"|"50"|"25"` (type assertion)
+- **theme.ts dinamički ključevi** – kad dodaješ `headingH1`–`headingH6` u merged, cast: `(merged as unknown as Record<string, ThemeElement>)[key] = ...`
 - **useEffect + DOM manipulacija** za wrapanje slika u ProseContent – re-render briše wrappere
 - **Zaboraviti `data-cursor-aperture` na img** – kad je miš iznad slike, `target` je img; bez atributa na img, `closest()` ne pronalazi wrapper
 - **Dodavati atribute naknadno** – struktura mora biti u HTML-u/JSX-u od početka

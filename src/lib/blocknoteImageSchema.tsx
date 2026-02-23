@@ -21,7 +21,7 @@ import {
 } from "@blocknote/react";
 import { RiImage2Fill } from "react-icons/ri";
 
-const baseConfig = createImageBlockConfig();
+const baseConfig = createImageBlockConfig({});
 const extendedImageConfig = {
   ...baseConfig,
   propSchema: {
@@ -43,9 +43,9 @@ function parseImageWithDisplayWidth(element: HTMLElement) {
     undefined;
   const name = img.alt || img.getAttribute("data-name") || undefined;
   const displayWidth = img.getAttribute("data-display-width");
-  const validDisplayWidth =
+  const validDisplayWidth: "full" | "50" | "25" =
     displayWidth && ["full", "50", "25"].includes(displayWidth)
-      ? displayWidth
+      ? (displayWidth as "full" | "50" | "25")
       : "full";
 
   return {

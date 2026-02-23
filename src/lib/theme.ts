@@ -54,7 +54,7 @@ export async function getTheme(): Promise<ThemeConfig> {
     for (let i = 1; i <= 6; i++) {
       const key = `headingH${i}` as keyof ThemeConfig;
       if (!merged[key]) {
-        (merged as Record<string, ThemeElement>)[key] = {
+        (merged as unknown as Record<string, ThemeElement>)[key] = {
           ...base,
           fontSize: HEADING_DEFAULT_SIZES[i as HeadingLevel],
         };
