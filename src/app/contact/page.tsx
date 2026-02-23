@@ -71,7 +71,7 @@ export default async function ContactPage() {
             </h1>
             <ProseContent
               html={html}
-              className="prose prose-invert prose-lg max-w-none mb-12 [&_a]:text-white/80 [&_a]:underline [&_a:hover]:text-white"
+              className="prose prose-invert prose-lg max-w-none mb-12"
             />
             <div id="contact-form">
               <ContactForm email={email} formspreeEndpoint={formspreeEndpoint} />

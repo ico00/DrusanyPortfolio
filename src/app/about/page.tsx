@@ -94,7 +94,7 @@ export default async function AboutPage() {
             <ProseContent
               id="about"
               html={html}
-              className="prose prose-invert prose-lg max-w-none [&_a]:text-white/80 [&_a]:underline [&_a:hover]:text-white"
+              className="prose prose-invert prose-lg max-w-none"
             />
             <div id="press">
               <PressSection items={press.items} />

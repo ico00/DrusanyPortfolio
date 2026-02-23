@@ -4,6 +4,22 @@ Ovaj dokument opisuje kako implementirati uobičajene funkcionalnosti u projektu
 
 ---
 
+## Kako započeti novi zadatak
+
+Na početku svakog zadatka koristi ovaj checklist:
+
+1. **Pročitaj** `technical-patterns.md` – posebno odjeljak vezan uz zadatak (slike, BlockNote, chart, itd.)
+2. **Pronađi** referentnu komponentu u tablici (sekcija 3) – koristi je kao model
+3. **Ne koristi** `useEffect` + DOM manipulaciju za slike – struktura mora biti u renderu od početka
+4. **Ne mijenjaj** više od traženog – ako korisnik traži promjenu boje, ne diraj okvir bloka niti dropdown pozadinu
+5. **Provjeri** sanitizer whitelist kad dodaješ nove atribute na slike (npr. `data-display-width`)
+6. **Koristi centralizirane funkcije** – za upload/sanitizaciju koristi `utils.ts` (sanitizeFilename, sanitizeFolderName) i `fileUtils.ts` (fileExists); za slug koristi `slug.ts`
+
+**Kratka fraza za početak zadatka (možeš kopirati):**
+> „Prije implementacije pročitaj `docs/technical-patterns.md` i `docs/architecture.md`. Prati postojeće komponente – ne izmišljaj nove pristupe.“
+
+---
+
 ## 1. Slike s lightboxom i aperture cursorom
 
 Kada dodaješ slike koje trebaju lightbox i aperture cursor (ikonu objektiva na hover), **prati pattern iz BlogGallery i Gallery**. Struktura mora biti u renderu od početka – ne dodavati naknadno u `useEffect`.
@@ -42,7 +58,7 @@ const { processedHtml, imageUrls } = useMemo(
 ```
 
 **Korak 2:** U `processProseHtml`:
-- Parsiraj HTML (DOMParser u browseru, linkedom na serveru)
+- Parsiraj HTML s **linkedom** (i na serveru i na klijentu – isti parser = nema hydration mismatch)
 - Za svaku sliku: stvori `<button>` wrapper, dodaj `data-cursor-hover`, `data-cursor-aperture`, `data-index`
 - Dodaj `data-cursor-aperture` i na samu `<img>` (da `target.closest()` uvijek pronađe element)
 - Vrati `doc.body.innerHTML` kao processed HTML
@@ -58,7 +74,9 @@ const { processedHtml, imageUrls } = useMemo(
 
 **Korak 4:** Event delegation za klik – `handleContainerClick` provjerava `e.target.closest(".prose-img-wrapper[data-index]")` i otvara lightbox po `data-index`.
 
-**Korak 5:** SSR – na serveru koristi `linkedom` za parsiranje (DOMParser nije dostupan u Node.js).
+**Korak 5:** Koristi `linkedom` uvijek – radi i na serveru i u browseru, a isti parser osigurava identičan output i izbjegava hydration mismatch.
+
+**Korak 6:** Širina slike – ProseContent čita `data-display-width` (full|50|25) ili `data-preview-width`/`width` za ručni resize. Wrapper dobiva odgovarajuće CSS (50%, 25% ili max-width u px). Blog editor koristi custom schema (`blogBlockNoteSchema`) s Image blockom koji ima `displayWidth` prop – ImageSizeSelect floating toolbar omogućuje odabir Full/50%/25%.
 
 ---
 
@@ -84,17 +102,123 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 | Custom cursor | CustomCursor | `src/components/CustomCursor.tsx` |
 | Stacked chart (blog kategorije) | AdminDashboard | `src/components/AdminDashboard.tsx` |
 | Chart podaci | getBlogCategoryStackedChartData | `src/data/blogCategories.ts` |
+| Sanitizer (whitelist atributa) | sanitizeProseHtml | `src/lib/sanitize.ts` |
+| Centralizirane util funkcije | transliterateCroatian, sanitizeFilename, sanitizeFolderName | `src/lib/utils.ts` |
+| Provjera postojanja datoteke | fileExists | `src/lib/fileUtils.ts` (samo server) |
+| Blog sidebar widgeti (stilovi) | BLOG_WIDGET_UI | `src/data/blogWidgetUI.ts` |
+| Blog widget komponente | SearchWidget, CategoriesWidget, FeaturedPostsWidget, GoogleMapsWidget | `src/components/blog/` |
+| Block type select popup (dodavanje blokova) | BlockTypeSelectWithCursor | `src/components/BlockTypeSelectWithCursor.tsx` |
+| Theme grupe, accordion, elementi | ThemeAdmin | `src/components/ThemeAdmin.tsx` |
 
 ---
 
-## 4. Česte greške
+## 4. Blog sidebar widgeti
+
+Dizajn: **jedinstveni panel** – bijela pozadina (`bg-white`), tamna slova (`text-zinc-900`), svi widgeti u jednom `rounded-2xl` bloku, odvojeni `border-t border-zinc-200`.
+
+**Korak 1:** Koristi `BLOG_WIDGET_UI` iz `src/data/blogWidgetUI.ts` – svi stilovi su centralizirani kao u `ADMIN_UI`.
+
+**Korak 2:** Widget komponente ne koriste vlastite kartice – renderiraju samo sadržaj; `BlogSidebar` ih wrappa u sekcije unutar panela.
+
+**Korak 3:** Referentne komponente: BlogSidebar, SearchWidget, CategoriesWidget, FeaturedPostsWidget, GoogleMapsWidget.
+
+---
+
+## 5. BlockNote / TipTap
+
+Kad radiš s linkovima u BlockNote editoru:
+
+- **Link se otvara pri kliku** – korisnik ne može uređivati tekst unutar linka. Rješenje: `TiptapLink.configure({ openOnClick: false })` u `_tiptapOptions` (BlockNote schema).
+- **editLoading** – pri otvaranju uređivanja prikaži loader dok se body ne učitava; sprječava popover crash (`reference.element` undefined, `isConnected`).
+
+### 5.1 Dodavanje blokova u popup za stil bloka (Block Type Select)
+
+BlockNote `blockTypeSelectItems` ne uključuje sve blokove (npr. codeBlock). Popup koji se pojavljuje kad klikneš na tekst koristi `BlockTypeSelectWithCursor` i proširenu listu u `blockTypeSelectItemsWithCodeBlock`.
+
+**Kako brzo dodati novi blok:**
+
+1. U `src/components/BlockTypeSelectWithCursor.tsx` – u funkciji `blockTypeSelectItemsWithCodeBlock` dodaj novu stavku u niz:
+
+```ts
+const newBlockItem: BlockTypeSelectItem = {
+  name: dict?.slash_menu?.ime_bloka?.title ?? "Fallback naslov",
+  type: "imeTipaBloka",  // npr. "table", "image", "divider"
+  props: { /* potrebni props ako ima */ },
+  icon: RiNekaIkona,
+};
+```
+
+2. **Pozicija** – umetni gdje želiš (npr. nakon quote: `insertAt = quoteIdx + 1`) ili pushaj na kraj: `[...base, newBlockItem]`.
+
+3. **Dictionary** – BlockNote ima prijevode u `slash_menu` (vidi `@blocknote/core` locales); ako postoji, koristi `dict.slash_menu.ime_bloka.title`.
+
+4. **Ikona** – iz `react-icons/ri` (npr. `RiCodeBlock`, `RiTable`, `RiImage2Fill`, `RiSeparator`).
+
+5. **Schema** – blok mora postojati u shemi editora (`defaultBlockSpecs` ili custom schema); inače ga `editorHasBlockWithType` filtrira i neće se prikazati.
+
+**Referentna komponenta:** `BlockTypeSelectWithCursor.tsx` – primjer: codeBlock stavka.
+
+---
+
+## 6. Theme
+
+### 6.1 Dodavanje novog fonta
+
+Kad želiš dodati novi font u Theme izbornik (Admin → Theme):
+
+**Korak 1:** U `src/app/layout.tsx` – import iz `next/font/google` i registracija CSS varijable:
+
+```tsx
+import { Lora } from "next/font/google";
+
+const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
+
+// U body className dodaj: ${lora.variable}
+```
+
+**Korak 2:** U `src/data/themeFonts.ts` – dodaj novi zapis u `THEME_FONTS`:
+
+```ts
+{
+  id: "lora",
+  label: "Lora",
+  cssVar: "var(--font-lora), serif",
+  previewFamily: "var(--font-lora), serif",
+},
+```
+
+**Korak 3:** `theme.json` – postojeći elementi mogu ostati; novi font će biti dostupan u dropdownu.
+
+**Referentne datoteke:** `src/data/themeFonts.ts`, `src/app/layout.tsx`
+
+### 6.2 Grupne kontrole i accordion
+
+- **ThemeAdmin** ima grupne kontrole – Blog Headings (headingH1–6, blogPostTitle, blogListCardTitle, widgetTitle) i Blog Body (body, quote, code, caption). Promjena grupe mijenja sve povezane elemente odjednom.
+- **Accordion** – sve sekcije (Blog Headings, Blog Body, Hero & Navigation, Headings individual, Body & Text, Other) su u accordionu, zatvorene po defaultu.
+- **widgetTitle** – koristi `!important` u globals.css jer button/h3 mogu imati reset stilova; klasa `.theme-widget-title`.
+
+### 6.3 Theme elementi (blog)
+
+| Element | CSS klasa | Komponenta |
+|---------|-----------|------------|
+| blogPostTitle | `.theme-blog-post-title` | `blog/[slug]/page.tsx` |
+| blogListCardTitle | `.theme-blog-list-card-title` | BlogList |
+| blogListCardMetadata | `.theme-blog-list-card-metadata` | BlogList |
+| widgetTitle | `.theme-widget-title` | blogWidgetUI.ts (Search, Categories, Featured, Maps) |
+
+---
+
+## 7. Česte greške
 
 - **useEffect + DOM manipulacija** za wrapanje slika u ProseContent – re-render briše wrappere
 - **Zaboraviti `data-cursor-aperture` na img** – kad je miš iznad slike, `target` je img; bez atributa na img, `closest()` ne pronalazi wrapper
 - **Dodavati atribute naknadno** – struktura mora biti u HTML-u/JSX-u od početka
+- **createPortal + MutationObserver** u Reactu – rizik beskonačne petlje i blokade aplikacije; koristi sigurniji pristup (npr. `position: fixed` + `getBoundingClientRect`)
+- **Mijenjanje više od traženog** – ako korisnik traži npr. promjenu boje slova, ne diraj okvir bloka, dropdown pozadinu niti formatting toolbar
+- **Zaboraviti whitelist u sanitizeru** – kad dodaješ nove atribute na slike (npr. `data-display-width`), odmah ih dodaj u `PROSE_ALLOWED_ATTRIBUTES` i `transformTags` u `src/lib/sanitize.ts`
 
 ---
 
-## 5. Arhitektura
+## 8. Arhitektura
 
-Detaljniji opis projekta: **`architecture.md`** u rootu.
+Detaljniji opis projekta: **`docs/architecture.md`**.

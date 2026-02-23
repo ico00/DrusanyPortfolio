@@ -93,6 +93,7 @@ export default async function BlogPostPage({
 
   const focusPoint = post.thumbnailFocus || "50% 50%";
   const { posts } = await getBlog();
+  const publishedPosts = getPublishedPosts(posts);
 
   return (
     <div className="min-h-screen bg-white pt-16">
@@ -104,7 +105,7 @@ export default async function BlogPostPage({
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           <article className="min-w-0 flex-1">
             <header className="pt-12 md:pt-16">
-              <h1 className="font-serif text-3xl font-normal tracking-tight text-zinc-900 md:text-4xl lg:text-5xl">
+              <h1 className="theme-blog-post-title font-normal tracking-tight">
                 {post.title}
               </h1>
               <p className="mt-3 flex flex-wrap items-center gap-y-2 text-sm text-zinc-500">
@@ -156,7 +157,7 @@ export default async function BlogPostPage({
             <div className="py-12 md:py-16">
               <ProseContent
                 html={post.body || ""}
-                className="prose prose-lg prose-zinc max-w-none prose-headings:font-serif prose-a:text-zinc-600 prose-a:underline prose-a:hover:text-zinc-900"
+                className="prose prose-lg prose-zinc max-w-none prose-headings:font-serif"
               />
               {post.galleryImages && post.galleryImages.length > 0 && (
                 <BlogGallery images={post.galleryImages} />
@@ -166,7 +167,7 @@ export default async function BlogPostPage({
 
           <aside className="w-full shrink-0 lg:w-80">
             <div className="sticky top-24">
-              <BlogSidebar posts={posts} />
+              <BlogSidebar posts={publishedPosts} />
             </div>
           </aside>
         </div>

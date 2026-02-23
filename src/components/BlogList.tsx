@@ -123,10 +123,10 @@ export default function BlogList({
                     {post.thumbnail && <ViewfinderOverlay />}
                   </div>
                   <div className="bg-zinc-950 p-6">
-                    <h2 className="font-serif text-2xl font-normal tracking-tight text-white md:text-3xl">
+                    <h2 className="theme-blog-list-card-title font-normal tracking-tight">
                       {post.title}
                     </h2>
-                    <p className="mt-3 flex flex-wrap items-center gap-y-2 text-sm text-zinc-300">
+                    <p className="theme-blog-list-card-metadata mt-3 flex flex-wrap items-center gap-y-2">
                       <span className="inline-flex items-center gap-1.5" style={{ marginRight: "3rem" }}>
                         <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
                         <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
@@ -150,7 +150,7 @@ export default function BlogList({
                               e.stopPropagation();
                               router.push(`/blog?kategorija=${encodeURIComponent(slug)}`, { scroll: false });
                             }}
-                            className="inline-block border-b border-transparent pb-0.5 text-zinc-300 transition-[color,border-color] duration-200 hover:border-white hover:text-white"
+                            className="inline-block border-b border-transparent pb-0.5 text-inherit transition-[color,border-color] duration-200 hover:border-white hover:text-white"
                           >
                             {getShortCategoryLabel(slug)}
                           </button>

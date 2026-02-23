@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, JetBrains_Mono, Playfair_Display } from "next/font/google";
+import { Geist, Geist_Mono, JetBrains_Mono, Playfair_Display, Red_Hat_Display, Shantell_Sans } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import Footer from "@/components/Footer";
@@ -24,6 +24,16 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
+});
+
+const shantellSans = Shantell_Sans({
+  variable: "--font-shantell-sans",
+  subsets: ["latin"],
+});
+
+const redHatDisplay = Red_Hat_Display({
+  variable: "--font-red-hat-display",
+  subsets: ["latin"],
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://drusany.com";
@@ -59,7 +69,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} ${playfair.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} ${playfair.variable} ${shantellSans.variable} ${redHatDisplay.variable} antialiased`}
       >
         <ThemeStyles />
         <CustomCursor />

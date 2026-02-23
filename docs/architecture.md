@@ -203,18 +203,26 @@ Konfiguracija tipografije i boja za elemente stranice. Struktura:
 {
   "title": { "fontFamily": "serif", "fontSize": "clamp(2rem, 5vw, 4rem)", "color": "#ffffff" },
   "heading": { "fontFamily": "serif", "fontSize": "1.5rem", "color": "#18181b" },
+  "headingH1" … "headingH6": { "fontFamily", "fontSize", "color" } (pojedinačno),
   "headingOnDark": { "fontFamily": "serif", "fontSize": "clamp(1.75rem, 4vw, 3rem)", "color": "#ffffff" },
+  "blogPostTitle": { "fontFamily", "fontSize", "color" },
+  "blogListCardTitle": { "fontFamily", "fontSize", "color": "#ffffff" },
+  "blogListCardMetadata": { "fontFamily", "fontSize", "color": "#d4d4d8" },
+  "widgetTitle": { "fontFamily", "fontSize", "color" },
   "body": { "fontFamily": "sans", "fontSize": "1rem", "color": "#3f3f46" },
   "quote": { "fontFamily": "serif", "fontSize": "1.125rem", "color": "#e4e4e7" },
+  "code": { "fontFamily": "mono", "fontSize": "0.875rem", "color": "#18181b" },
   "nav": { "fontFamily": "sans", "fontSize": "0.875rem", "color": "rgba(255,255,255,0.9)" },
   "caption": { "fontFamily": "sans", "fontSize": "0.75rem", "color": "#71717a" }
 }
 ```
 
-- **fontFamily:** sans (Geist), serif (Playfair), mono (JetBrains) – definirani u `src/data/themeFonts.ts`
+- **fontFamily:** sans (Geist), serif (Playfair), mono (JetBrains), shantell (Shantell Sans), redHatDisplay (Red Hat Display) – definirani u `src/data/themeFonts.ts`
 - **fontSize:** CSS vrijednost (npr. `1rem`, `clamp(2rem, 5vw, 4rem)`)
 - **color:** Hex ili rgba
-- **ThemeStyles** (layout) injektira CSS varijable u `:root`; prose i utility klase (`.theme-title`, `.theme-heading`, `.theme-nav`, `.theme-caption`) koriste te varijable
+- **ThemeStyles** (layout) injektira CSS varijable u `body`; prose i utility klase (`.theme-title`, `.theme-heading`, `.theme-blog-post-title`, `.theme-blog-list-card-title`, `.theme-blog-list-card-metadata`, `.theme-widget-title`, `.theme-nav`, `.theme-caption`) koriste te varijable
+- **Grupne kontrole:** ThemeAdmin ima Blog Headings (group) – mijenja odjednom headingH1–6, blogPostTitle, blogListCardTitle, widgetTitle; Blog Body (group) – body, quote, code, caption
+- **Accordion:** Sve sekcije u accordionu, zatvorene po defaultu
 - **Dodavanje novih fontova:** 1) `layout.tsx` – import iz `next/font/google`, dodaj `.variable` u body; 2) `themeFonts.ts` – dodaj zapis u `THEME_FONTS`
 
 ### 3.8 Original Images: `public/uploads/`
@@ -255,13 +263,18 @@ process.env.NODE_ENV !== 'production'
 
 U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 
+### 4.1.1 Unsaved changes (admin)
+
+- **UnsavedChangesContext** – upozorenje pri napuštanju stranice s nespremljenim promjenama
+- **Editor baseline sync** – BlockNote normalizira HTML pri učitavanju; nakon 700ms `initialFormRef` se usklađuje s normaliziranim sadržajem da se ne prikaže lažno "unsaved" kad korisnik nije ništa mijenjao
+
 ### 4.2 Admin Route: `/admin`
 
 **Lokacija:** `src/app/admin/layout.tsx`, `src/app/admin/page.tsx` + `src/components/AdminClient.tsx`; Blog: `src/app/admin/blog/` (page, edit/[id], new) + AdminBlogPageClient, AdminBlogEditClient, AdminBlogNewClient
 
 **Funkcionalnost:**
 - **Sidebar accordion:** Samo jedan podmeni (Gallery ili Pages) može biti otvoren; animacija otvaranja/zatvaranja (grid-template-rows)
-- **Theme tab:** Ispod Blog – Customize Theme (font, veličina, boja za title, heading, **headingOnDark** – naslov na tamnoj pozadini za About/Contact, body, quote, nav, caption); custom dropdown (kao CategorySelect); live preview s adaptivnom pozadinom (svijetla/tamna prema boji teksta); spremanje putem `/api/theme`; za statički export: uređivanje samo u dev modu, zatim `npm run build`
+- **Theme tab:** Ispod Blog – Customize Theme; **grupne kontrole** (Blog Headings, Blog Body) – mijenjaju više elemenata odjednom; **accordion** – sve sekcije zatvorene po defaultu; elementi: title, headingOnDark, blogPostTitle, blogListCardTitle, blogListCardMetadata, widgetTitle, body, quote, code, nav, caption, headingH1–h6; custom dropdown; live preview; spremanje putem `/api/theme`; za statički export: uređivanje samo u dev modu (`npm run dev`), zatim `npm run build`
 - **Category-first flow:** Korisnik prvo odabere kategoriju; bez odabira upload je onemogućen
 - **Galerija filtrirana po kategoriji:** Prikazuje se samo galerija odabrane kategorije (ne opća galerija sa svim slikama)
 - Upload novih slika (file input) – slike idu u odabranu kategoriju
@@ -315,7 +328,7 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 
 **BlockNote editor (BlockNoteEditor.tsx):**
 - **BlockNote** (@blocknote/shadcn) – block-based WYSIWYG, sprema HTML
-- **Statična traka stila bloka (StaticBlockTypeBar):** Label "Block style:"; prikazuje trenutni stil bloka na temelju pozicije kursora (bez označavanja teksta); dropdown za promjenu tipa (Paragraph, Heading 1–6, Quote, itd.)
+- **Statična traka stila bloka (FloatingBlockTypeBar):** Label "Block style:"; prikazuje trenutni stil bloka na temelju pozicije kursora (bez označavanja teksta); dropdown za promjenu tipa (Paragraph, Heading 1–6, Quote, **Code block**, itd.) – `blockTypeSelectItemsWithCodeBlock` proširuje default listu
 - **Tamna tema:** `data-theme="dark"` na html kad je admin otvoren; zinc/amber paleta; **jedinstvena pozadina** (zinc-800) – traka i sadržaj isti ton; **svjetliji tekst** (zinc-100) za bolju čitljivost
 - **Fontovi u editoru = fontovi na stranici:** font-sans (body), font-serif (naslovi) – WYSIWYG
 - **Formatting Toolbar:** Neprozirna pozadina (zinc-800), svijetli tekst; dropdowni (Block style, izbornici) također neprozirni
@@ -486,6 +499,7 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 
 - **GET:** Vraća theme konfiguraciju iz `theme.json` (font, fontSize, color po elementu)
 - **PUT:** **Rate limit** provjera; prima `ThemeConfig`, sprema u `theme.json`; dostupno samo u development modu
+- **force-static** – obavezno za kompatibilnost s `output: export`; bez toga Next.js baca grešku
 
 ---
 
@@ -546,11 +560,13 @@ fontSize: {
 
 ### 6.4 Theme Customization
 
-- **theme.json:** Font, fontSize i color za svaki element (title, heading, **headingOnDark**, body, quote, nav, caption)
+- **theme.json:** Font, fontSize i color za svaki element (title, heading, headingH1–h6, headingOnDark, blogPostTitle, blogListCardTitle, blogListCardMetadata, widgetTitle, body, quote, code, nav, caption)
 - **headingOnDark:** Naslov na tamnoj pozadini – za About i Contact stranice (h1); prilagodljiv font, veličina i boja; `.theme-heading-on-dark` u globals.css
-- **themeFonts.ts:** Centralna konfiguracija fontova – `THEME_FONTS` (id, label, cssVar, previewFamily); `FONT_MAP` za CSS; `FONT_OPTIONS` za admin dropdown
-- **ThemeStyles:** Async server komponenta u layoutu – učitava theme, injektira `body { --theme-*-font, --theme-*-size, --theme-*-color }` (body selector za ispravno nasljeđivanje font varijabli)
-- **globals.css:** Prose h1–h6, p, li, blockquote koriste `var(--theme-heading-font)`, `var(--theme-body-font)` itd.; utility klase `.theme-title`, `.theme-heading`, `.theme-heading-on-dark`, `.theme-nav`, `.theme-caption` za elemente izvan prose
+- **blogPostTitle, blogListCardTitle, blogListCardMetadata, widgetTitle:** Blog naslovi i metadata – `.theme-blog-post-title`, `.theme-blog-list-card-title`, `.theme-blog-list-card-metadata`, `.theme-widget-title`; widget title koristi `!important` jer button/h3 mogu imati reset
+- **themeFonts.ts:** Centralna konfiguracija fontova – `THEME_FONTS` (sans, serif, mono, shantell, redHatDisplay); `FONT_MAP` za CSS; `FONT_OPTIONS` za admin dropdown
+- **ThemeStyles:** Async server komponenta u layoutu – učitava theme, injektira `body { --theme-*-font, --theme-*-size, --theme-*-color }`
+- **ThemeAdmin:** Grupne kontrole (Blog Headings – headingH1–6, blogPostTitle, blogListCardTitle, widgetTitle; Blog Body – body, quote, code, caption); accordion sekcije zatvorene po defaultu; svi tekstovi na engleskom (ELEMENT_LABELS, PREVIEW_TEXT)
+- **BlockNote popup:** `.bn-formatting-toolbar` i `[data-slot="select-content"]` koriste `border-color: rgb(251 191 36)` (amber-400) u globals.css
 - **Dodavanje fonta:** 1) `layout.tsx` – import iz `next/font/google`, dodaj variable u body; 2) `themeFonts.ts` – novi zapis u `THEME_FONTS`
 
 ### 6.5 Prose Content (About, Contact, Blog)
@@ -733,9 +749,11 @@ DrusanyPortfolio/
 │   │   ├── press.ts        # getPress – čitanje press.json
 │   │   ├── blog.ts         # getBlog, getBlogPost – čitanje blog.json, sanitizeProseHtml za body, enrichBlogGallery (Sharp)
 │   │   ├── rateLimit.ts    # Rate limiting (200 req/min po IP) za admin API
-│   │   ├── sanitize.ts     # sanitizeProseHtml – HTML sanitizacija (sanitize-html)
-│   │   ├── slug.ts         # slugify, generateSlug (title+venue+year), generateBlogSlug, isValidBlogSlug, normalizeBlogSlug (yymmdd-naslov)
-│   │   └── theme.ts        # getTheme, saveTheme, themeToCssVariables – čitanje/spremanje theme.json
+│   │   ├── sanitize.ts     # sanitizeProseHtml – HTML sanitizacija (sanitize-html); rel="noopener noreferrer" na vanjskim linkovima
+│   │   ├── slug.ts         # slugify, generateSlug (title+venue+year), generateBlogSlug, isValidBlogSlug, normalizeBlogSlug (yymmdd-naslov); koristi transliterateCroatian iz utils
+│   │   ├── theme.ts        # getTheme, saveTheme, themeToCssVariables – čitanje/spremanje theme.json
+│   │   ├── utils.ts        # transliterateCroatian, sanitizeFilename, sanitizeFolderName – centralizirane funkcije za upload API
+│   │   └── fileUtils.ts    # fileExists – provjera postojanja datoteke (samo server, fs/promises)
 │   ├── contexts/
 │   │   └── UnsavedChangesContext.tsx  # Upozorenje pri napuštanju stranice s nespremljenim promjenama (admin)
 │   └── data/
@@ -798,6 +816,7 @@ DrusanyPortfolio/
 ### Custom Cursor (desktop only)
 
 - **CustomCursor.tsx** u layoutu; aktivno samo kad `(hover: hover)` (touch uređaji isključeni)
+- **z-index:** `z-[999999]` – kursor uvijek na vrhu (iznad BlockNote popupova 99999); `pointer-events: none` da klikovi prolaze
 - **Dot:** Bijela točka (10px), `mix-blend-mode: difference`; **trenutni odziv** – `useMotionValue` za x/y, ažurira se direktno u `mousemove` bez React re-rendera; `setIsVisible` samo pri prvom pomicanju (ref), ne na svaki move
 - **Aperture ikona:** Prikazuje se samo preko fotografija (`data-cursor-aperture` na galeriji, hero slideru, lightboxu, **blog galeriji**); scale 1.5 na hover nad klikabilnim elementima; **spring animacija** (stiffness 500, damping 28) – namjerno kašnjenje, glatko prati miš
 - **globals.css:** `body.custom-cursor-active * { cursor: none }`
@@ -835,7 +854,7 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 - **Path traversal zaštita** – `blog-delete-file` provjerava da rezolvirana putanja ostane unutar `public/uploads/blog/`; `media-delete` unutar `public/uploads/`
 - **Ograničenje uploada** – 20 MB po datoteci (upload, blog-upload, exif-preview)
 - **Magic bytes provjera** – `imageValidation.ts` provjerava file signature (JPEG/PNG/GIF/WebP) prije obrade
-- **HTML sanitizacija** – `sanitizeProseHtml` (sanitize-html) pri čitanju u `getPages`, `getBlogPost`
+- **HTML sanitizacija** – `sanitizeProseHtml` (sanitize-html) pri čitanju u `getPages`, `getBlogPost`; automatski dodaje `rel="noopener noreferrer"` na vanjske linkove (tabnabbing zaštita)
 - **Rate limiting** – `src/lib/rateLimit.ts`: in-memory limiter (200 req/min po IP, `RATE_LIMIT_MAX_REQUESTS`, `RATE_LIMIT_WINDOW_MS`); primijenjen na sve admin API rute; povećan s 60 na 200 radi bulk uploada. Za produkciju s više instanci zamijeniti s Redis (npr. @upstash/ratelimit)
 - **File locking** – `jsonLock.ts` (proper-lockfile) za `gallery.json`, `blog.json`, `pages.json` – sprječava race condition
 - Ako se ikad doda server-side admin u produkciji, obavezno: autentikacija

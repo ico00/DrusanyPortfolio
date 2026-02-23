@@ -20,43 +20,43 @@ html {
   --font-serif: var(--font-playfair), "Georgia", serif;
 }
 
-/* Theme customization – varijable iz theme.json (ThemeStyles) – različite veličine po razini */
+/* Theme customization – varijable iz theme.json – pojedinačno h1–h6 */
 .prose h1, .prose-invert h1 {
-  font-family: var(--theme-heading-font, var(--font-serif));
-  font-size: 2.25rem;
-  color: var(--theme-heading-color, inherit);
+  font-family: var(--theme-headingH1-font, var(--theme-heading-font, var(--font-serif)));
+  font-size: var(--theme-headingH1-size, 2.25rem);
+  color: var(--theme-headingH1-color, var(--theme-heading-color, inherit));
 }
 .prose h2, .prose-invert h2 {
-  font-family: var(--theme-heading-font, var(--font-serif));
-  font-size: 1.875rem;
-  color: var(--theme-heading-color, inherit);
+  font-family: var(--theme-headingH2-font, var(--theme-heading-font, var(--font-serif)));
+  font-size: var(--theme-headingH2-size, 1.875rem);
+  color: var(--theme-headingH2-color, var(--theme-heading-color, inherit));
 }
 .prose h3, .prose-invert h3 {
-  font-family: var(--theme-heading-font, var(--font-serif));
-  font-size: 1.5rem;
-  color: var(--theme-heading-color, inherit);
+  font-family: var(--theme-headingH3-font, var(--theme-heading-font, var(--font-serif)));
+  font-size: var(--theme-headingH3-size, 1.5rem);
+  color: var(--theme-headingH3-color, var(--theme-heading-color, inherit));
 }
 .prose h4, .prose-invert h4 {
-  font-family: var(--theme-heading-font, var(--font-serif));
-  font-size: 1.25rem;
-  color: var(--theme-heading-color, inherit);
+  font-family: var(--theme-headingH4-font, var(--theme-heading-font, var(--font-serif)));
+  font-size: var(--theme-headingH4-size, 1.25rem);
+  color: var(--theme-headingH4-color, var(--theme-heading-color, inherit));
 }
 .prose h5, .prose-invert h5 {
-  font-family: var(--theme-heading-font, var(--font-serif));
-  font-size: 1.125rem;
-  color: var(--theme-heading-color, inherit);
+  font-family: var(--theme-headingH5-font, var(--theme-heading-font, var(--font-serif)));
+  font-size: var(--theme-headingH5-size, 1.125rem);
+  color: var(--theme-headingH5-color, var(--theme-heading-color, inherit));
 }
 .prose h6, .prose-invert h6 {
-  font-family: var(--theme-heading-font, var(--font-serif));
-  font-size: 1rem;
-  color: var(--theme-heading-color, inherit);
+  font-family: var(--theme-headingH6-font, var(--theme-heading-font, var(--font-serif)));
+  font-size: var(--theme-headingH6-size, 1rem);
+  color: var(--theme-headingH6-color, var(--theme-heading-color, inherit));
 }
 
-/* Standalone heading (izvan prose) – font, veličina, boja */
+/* Standalone heading (izvan prose) – koristi h1 stil */
 .theme-heading {
-  font-family: var(--theme-heading-font, var(--font-serif));
-  font-size: var(--theme-heading-size, clamp(1.75rem, 4vw, 3rem));
-  color: var(--theme-heading-color, #18181b);
+  font-family: var(--theme-headingH1-font, var(--theme-heading-font, var(--font-serif)));
+  font-size: var(--theme-headingH1-size, clamp(1.75rem, 4vw, 3rem));
+  color: var(--theme-headingH1-color, var(--theme-heading-color, #18181b));
 }
 /* Naslov na tamnoj pozadini (About, Contact) – specifičnost da nadjača Tailwind reset */
 h1.theme-heading-on-dark,
@@ -64,6 +64,29 @@ h2.theme-heading-on-dark {
   font-family: var(--theme-headingOnDark-font, var(--font-serif));
   font-size: var(--theme-headingOnDark-size, clamp(1.75rem, 4vw, 3rem));
   color: var(--theme-headingOnDark-color, #ffffff);
+}
+/* Blog post naslov (svijetla pozadina) */
+.theme-blog-post-title {
+  font-family: var(--theme-blogPostTitle-font, var(--font-serif));
+  font-size: var(--theme-blogPostTitle-size, clamp(1.875rem, 4vw, 3rem));
+  color: var(--theme-blogPostTitle-color, #18181b);
+}
+/* Blog list card – naslov i metadata ispod featured image */
+.theme-blog-list-card-title {
+  font-family: var(--theme-blogListCardTitle-font, var(--font-serif));
+  font-size: var(--theme-blogListCardTitle-size, clamp(1.5rem, 3vw, 1.875rem));
+  color: var(--theme-blogListCardTitle-color, #ffffff);
+}
+.theme-blog-list-card-metadata {
+  font-family: var(--theme-blogListCardMetadata-font, var(--font-sans));
+  font-size: var(--theme-blogListCardMetadata-size, 0.875rem);
+  color: var(--theme-blogListCardMetadata-color, #d4d4d8);
+}
+/* Blog sidebar widget naslov – !important jer button/h3 mogu imati reset */
+.theme-widget-title {
+  font-family: var(--theme-widgetTitle-font, var(--font-serif)) !important;
+  font-size: var(--theme-widgetTitle-size, 1.125rem) !important;
+  color: var(--theme-widgetTitle-color, #18181b) !important;
 }
 .prose p, .prose li, .prose-invert p, .prose-invert li {
   font-family: var(--theme-body-font, var(--font-sans));
@@ -74,6 +97,40 @@ h2.theme-heading-on-dark {
   font-family: var(--theme-quote-font, var(--font-serif));
   font-size: var(--theme-quote-size, 1.125rem);
   color: var(--theme-quote-color, inherit);
+}
+
+/* Prose – linkovi: samo underline, bez plave/ljubičaste; hover efekt */
+.prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: text-decoration-thickness 0.2s, color 0.2s;
+}
+.prose a:hover {
+  text-decoration-thickness: 2px;
+  color: rgb(24 24 27); /* zinc-900 – tamniji na hover (svijetla tema) */
+}
+.prose-invert a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: text-decoration-thickness 0.2s, color 0.2s;
+}
+.prose-invert a:hover {
+  text-decoration-thickness: 2px;
+  color: rgb(255 255 255);
+}
+
+/* BlockNote editor – linkovi: ista boja kao tekst, underline, hover amber */
+.blocknote-editor-wrapper a[href] {
+  color: inherit !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s, text-decoration-thickness 0.2s;
+}
+.blocknote-editor-wrapper a[href]:hover {
+  color: rgb(251 191 36) !important; /* amber-400 */
+  text-decoration-thickness: 2px;
 }
 
 /* Theme – hero naslov, navigacija, caption */
@@ -253,7 +310,7 @@ body.custom-cursor-active * {
   z-index: 99999 !important;
   background-color: rgb(39 39 42) !important;
   color: rgb(244 244 245) !important;
-  border-color: rgb(63 63 70) !important;
+  border-color: rgb(251 191 36) !important; /* amber-400, kao + i točkice */
   opacity: 1 !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
 }
@@ -335,13 +392,13 @@ body.custom-cursor-active * {
   z-index: 99999 !important;
 }
 
-/* BlockNote – Formatting Toolbar i Link Toolbar: neprozirna pozadina, dobra vidljivost */
+/* BlockNote – Formatting Toolbar i Link Toolbar: neprozirna pozadina, amber okvir kao + i točkice */
 [data-theme="dark"] .bn-toolbar,
 [data-theme="dark"] .bn-formatting-toolbar,
 [data-theme="dark"] .bn-link-toolbar {
   background-color: rgb(39 39 42) !important;
   color: rgb(244 244 245) !important;
-  border: 1px solid rgb(63 63 70) !important;
+  border: 1px solid rgb(251 191 36) !important; /* amber-400, kao + i točkice kad je blok odabran */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
   opacity: 1 !important;
 }
@@ -515,21 +572,42 @@ body.custom-cursor-active * {
   margin-right: auto;
 }
 
+/* Prose – širina slike: Full (100%), 50%, 25% ili ručni resize (inline max-width u px) */
+.prose .prose-img-wrapper[data-display-width="50"],
+.prose-invert .prose-img-wrapper[data-display-width="50"] {
+  width: 50% !important;
+  max-width: 50% !important;
+  min-width: 0;
+}
+.prose .prose-img-wrapper[data-display-width="25"],
+.prose-invert .prose-img-wrapper[data-display-width="25"] {
+  width: 25% !important;
+  max-width: 25% !important;
+  min-width: 0;
+}
+/* Ručni resize – max-width postavljen inline u ProseContent */
+.prose .prose-img-wrapper[style*="max-width"],
+.prose-invert .prose-img-wrapper[style*="max-width"] {
+  width: auto;
+}
+
 /* Prose – svi paragrafi ista boja (BlockNote postavlja inline boju samo kad je odabrana) */
 .prose-invert p {
   color: rgb(94 100 106); /* zinc-600 – isti ton kao ostali paragrafi s color pickerom */
 }
 
-/* Prose – code blokovi (pre/code) – font za kodiranje + pozadina za lakše čitanje */
+/* Prose – code blokovi (pre/code) – theme varijable */
 .prose pre,
 .prose code,
 .prose-invert pre,
 .prose-invert code,
 .blocknote-editor-wrapper pre,
 .blocknote-editor-wrapper code {
-  font-family: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+  font-family: var(--theme-code-font, var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace);
+  font-size: var(--theme-code-size, 0.875rem);
+  color: var(--theme-code-color, inherit);
 }
-/* Code block (pre) – pozadina, padding, zaobljeni uglovi, manji font */
+/* Code block (pre) – pozadina, padding, zaobljeni uglovi */
 .prose pre,
 .prose-invert pre,
 .blocknote-editor-wrapper pre {
@@ -538,7 +616,6 @@ body.custom-cursor-active * {
   border-radius: 0.5rem;
   overflow-x: auto;
   margin: 1.5em 0;
-  font-size: 0.75rem; /* 12px */
 }
 .prose pre {
   background-color: rgb(244 244 245); /* zinc-100 */

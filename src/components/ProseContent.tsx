@@ -3,19 +3,14 @@
 import { useMemo, useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { parseHTML } from "linkedom";
 
 const QUOTE_CHAR = "\u201C"; // Lijevi tipografski navodnik (zaobljen)
 const SWIPE_THRESHOLD = 50;
 
 function processProseHtml(html: string): { processedHtml: string; imageUrls: string[] } {
-  const doc =
-    typeof document !== "undefined"
-      ? new DOMParser().parseFromString(html, "text/html")
-      : (() => {
-          const { parseHTML } = require("linkedom");
-          const { document } = parseHTML(`<!DOCTYPE html><html><body>${html}</body></html>`);
-          return document;
-        })();
+  // linkedom na serveru i klijentu – isti parser = identičan output = nema hydration mismatch
+  const { document: doc } = parseHTML(`<!DOCTYPE html><html><body>${html}</body></html>`);
   const imageUrls: string[] = [];
 
   // Blockquote dekoracija
@@ -38,15 +33,33 @@ function processProseHtml(html: string): { processedHtml: string; imageUrls: str
     const parent = img.parentNode;
     if (!parent) return;
 
+    // Širina: data-display-width (full|50|25) ili data-preview-width/width za ručni resize
+    const displayWidth = img.getAttribute("data-display-width");
+    const previewWidth =
+      img.getAttribute("data-preview-width") || img.getAttribute("width");
+    const hasCustomWidth =
+      (displayWidth && displayWidth !== "full") || (previewWidth && parseInt(previewWidth, 10) > 0);
+
     const wrapper = doc.createElement("button");
     wrapper.type = "button";
-    wrapper.className =
-      "prose-img-wrapper cursor-pointer group relative block w-full overflow-hidden rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-white";
+    wrapper.className = hasCustomWidth
+      ? "prose-img-wrapper cursor-pointer group relative block overflow-hidden rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-white"
+      : "prose-img-wrapper cursor-pointer group relative block w-full overflow-hidden rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-white";
     wrapper.setAttribute("data-cursor-hover", "");
     wrapper.setAttribute("data-cursor-aperture", "");
     if (src) wrapper.setAttribute("data-index", String(imageUrls.length - 1));
     const alignment = img.getAttribute("data-text-alignment");
     wrapper.setAttribute("data-text-alignment", alignment || "center");
+
+    if (displayWidth && displayWidth !== "full") {
+      wrapper.setAttribute("data-display-width", displayWidth);
+      wrapper.setAttribute("style", `width: ${displayWidth}%; max-width: ${displayWidth}%`);
+    } else if (previewWidth) {
+      const px = parseInt(previewWidth, 10);
+      if (!isNaN(px) && px > 0) {
+        wrapper.setAttribute("style", `max-width: ${px}px`);
+      }
+    }
 
     const insertParent = parent.nodeName === "P" ? parent.parentNode : parent;
     if (!insertParent) return;

@@ -41,7 +41,7 @@ const PROSE_ALLOWED_TAGS = [
 
 const PROSE_ALLOWED_ATTRIBUTES: Record<string, string[]> = {
   a: ["href", "target", "rel", "title"],
-  img: ["src", "alt", "title", "data-text-alignment"],
+  img: ["src", "alt", "title", "width", "data-text-alignment", "data-display-width", "data-preview-width", "data-name", "data-url"],
   span: ["class"],
   td: ["colspan", "rowspan"],
   th: ["colspan", "rowspan"],
@@ -63,12 +63,36 @@ export function sanitizeProseHtml(html: string): string {
       img: ["http", "https", "data", "/"],
     },
     transformTags: {
+      a: (_tagName, attribs) => {
+        const href = attribs.href ?? "";
+        const isExternal =
+          href.startsWith("http://") || href.startsWith("https://");
+        const out: Record<string, string> = {
+          href,
+          ...(attribs.target && { target: attribs.target }),
+          ...(attribs.rel && { rel: attribs.rel }),
+          ...(attribs.title && { title: attribs.title }),
+        };
+        if (isExternal && !out.rel) {
+          out.rel = "noopener noreferrer";
+        }
+        return { tagName: "a", attribs: out };
+      },
       img: (_tagName, attribs) => {
         const out: Record<string, string> = { src: attribs.src ?? "" };
         if (attribs.alt) out.alt = attribs.alt;
         if (attribs.title) out.title = attribs.title;
+        if (attribs.width) out.width = attribs.width;
         if (attribs["data-text-alignment"])
           out["data-text-alignment"] = attribs["data-text-alignment"];
+        if (attribs["data-display-width"])
+          out["data-display-width"] = attribs["data-display-width"];
+        if (attribs["data-preview-width"])
+          out["data-preview-width"] = attribs["data-preview-width"];
+        if (attribs["data-name"])
+          out["data-name"] = attribs["data-name"];
+        if (attribs["data-url"])
+          out["data-url"] = attribs["data-url"];
         return { tagName: "img", attribs: out };
       },
     },

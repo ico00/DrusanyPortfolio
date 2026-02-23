@@ -5,8 +5,13 @@ alwaysApply: true
 
 # Tehnički paterni projekta
 
-**Prije implementacije novih funkcionalnosti (slike, lightbox, aperture cursor, slično) – obavezno pročitaj:**
+**Prije implementacije novih funkcionalnosti – obavezno:**
 
-**`docs/technical-patterns.md`**
+1. **Pročitaj** `docs/technical-patterns.md` – posebno odjeljak vezan uz zadatak
+2. **Pronađi** referentnu komponentu u tablici (sekcija 3)
+3. **Prati** postojeće komponente – ne izmišljaj nove pristupe
+4. **Ne mijenjaj** više od traženog – ako korisnik traži X, ne diraj Y i Z
 
-Taj dokument sadrži step-by-step upute kako implementirati uobičajene stvari, referentne komponente i česte greške. Ne izmišljaj – prati postojeće komponente (BlogGallery, Gallery, ProseContent).
+**Dokumentacija:**
+- `docs/technical-patterns.md` – step-by-step upute, referentne komponente, česte greške
+- `docs/architecture.md` – arhitektura projekta

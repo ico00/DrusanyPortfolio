@@ -1,4 +1,4 @@
-import { writeFile, readFile, mkdir, access, stat } from "fs/promises";
+import { writeFile, readFile, mkdir, stat } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
 import sharp from "sharp";
@@ -12,81 +12,12 @@ import {
   getExifDescription,
   getKeywords,
 } from "@/lib/exif";
+import { generateSlug, slugify } from "@/lib/slug";
+import { fileExists } from "@/lib/fileUtils";
+import { sanitizeFilename, sanitizeFolderName } from "@/lib/utils";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
-
-/** Transliterate Croatian diacritics to ASCII (č→c, ć→c, š→s, ž→z, đ→dj, dž→dz) */
-function transliterateCroatian(str: string): string {
-  return str
-    .replace(/dž/gi, "dz")
-    .replace(/đ/gi, "dj")
-    .replace(/[čćČĆ]/g, "c")
-    .replace(/[šŠ]/g, "s")
-    .replace(/[žŽ]/g, "z");
-}
-
-/** Sanitize for slug: lowercase, spaces to hyphens, remove special chars */
-function slugify(str: string): string {
-  return transliterateCroatian(str)
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-/** Generate slug from title, venue, year */
-function generateSlug(
-  title: string,
-  venue: string | undefined,
-  capturedAt: string
-): string {
-  const parts: string[] = [];
-  if (title?.trim()) parts.push(slugify(title));
-  if (venue?.trim()) {
-    const v = slugify(venue);
-    if (v && !parts.some((p) => p.includes(v))) parts.push(v);
-  }
-  const year = capturedAt ? new Date(capturedAt).getFullYear() : null;
-  if (year && !isNaN(year)) parts.push(String(year));
-  return parts.filter(Boolean).join("-") || `image-${Date.now()}`;
-}
-
-/** Sanitize folder name: lowercase, spaces to hyphens, remove special chars */
-function sanitizeFolderName(name: string): string {
-  const s = transliterateCroatian(name)
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-_]/g, "");
-  return s || "uncategorized";
-}
-
-/** Sanitize filename: lowercase, spaces to hyphens, remove special chars, keep extension */
-function sanitizeFilename(originalName: string): string {
-  const name = originalName || "image";
-  const ext = path.extname(name).toLowerCase() || ".webp";
-  const base = path.basename(name, path.extname(name)) || "image";
-  const sanitized = transliterateCroatian(base)
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-_]/g, "")
-    .slice(0, 100);
-  return (sanitized || "image") + ext;
-}
-
-/** Check if file exists (for duplicate detection) */
-async function fileExists(filePath: string): Promise<boolean> {
-  try {
-    await access(filePath);
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 export interface GalleryImage {
   id: string;
@@ -181,8 +112,7 @@ export async function POST(request: Request) {
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
-    const originalBase = sanitizeFilename(file.name);
-    let baseFilename = path.basename(originalBase, path.extname(originalBase)) + ".webp";
+    let baseFilename = sanitizeFilename(file.name);
     const fullPathCheck = path.join(fullDir, baseFilename);
 
     if (await fileExists(fullPathCheck) && !overwrite) {

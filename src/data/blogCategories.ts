@@ -15,6 +15,7 @@ export const BLOG_CATEGORIES: BlogCategoryItem[] = [
       { slug: "rukomet", label: "Rukomet" },
       { slug: "kosarka", label: "Košarka" },
       { slug: "atletika", label: "Atletika" },
+      { slug: "jahanje", label: "Jahanje" },
       { slug: "automobilizam", label: "Automobilizam" },
     ],
   },

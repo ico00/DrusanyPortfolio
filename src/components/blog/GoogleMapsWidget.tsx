@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BLOG_WIDGET_UI } from "@/data/blogWidgetUI";
 
 interface MapLocation {
   id: string;
@@ -28,8 +29,8 @@ export default function GoogleMapsWidget({
   const activeLocation = locations.find((l) => l.id === activeId) ?? locations[0];
 
   return (
-    <aside className="rounded-lg bg-white p-5 shadow-sm">
-      <h3 className="font-serif text-lg font-normal tracking-tight text-zinc-900">{title}</h3>
+    <>
+      <h3 className={BLOG_WIDGET_UI.title}>{title}</h3>
 
       {locations.length > 1 && (
         <div className="mt-4 flex flex-wrap gap-2">
@@ -38,10 +39,8 @@ export default function GoogleMapsWidget({
               key={loc.id}
               type="button"
               onClick={() => setActiveId(loc.id)}
-              className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
-                activeId === loc.id
-                  ? "bg-zinc-900 font-medium text-white"
-                  : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900"
+              className={`px-3 py-1.5 text-sm ${
+                activeId === loc.id ? BLOG_WIDGET_UI.tabActive : BLOG_WIDGET_UI.tabInactive
               }`}
             >
               {loc.name}
@@ -50,7 +49,7 @@ export default function GoogleMapsWidget({
         </div>
       )}
 
-      <div className="mt-4 overflow-hidden rounded-lg border border-zinc-200/60">
+      <div className={`mt-4 ${BLOG_WIDGET_UI.iframeWrapper}`}>
         <div className="aspect-[4/3] w-full">
           <iframe
             src={activeLocation.embedUrl}
@@ -65,6 +64,6 @@ export default function GoogleMapsWidget({
           />
         </div>
       </div>
-    </aside>
+    </>
   );
 }

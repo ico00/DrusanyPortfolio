@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Search } from "lucide-react";
+import { BLOG_WIDGET_UI } from "@/data/blogWidgetUI";
 
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -45,18 +46,16 @@ export default function SearchWidget() {
   };
 
   return (
-    <aside className="rounded-lg bg-white p-5 shadow-sm">
-      <div className="flex items-center gap-2 rounded-md border border-zinc-200/60 bg-zinc-50/50 focus-within:border-zinc-300 focus-within:bg-white focus-within:ring-1 focus-within:ring-zinc-300">
-        <Search className="ml-3 h-4 w-4 shrink-0 text-zinc-400" strokeWidth={2} />
-        <input
-          type="search"
-          value={localQuery}
-          onChange={(e) => handleChange(e.target.value)}
-          placeholder="Pretraži članke..."
-          className="w-full min-w-0 bg-transparent py-2.5 pr-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
-          aria-label="Pretraži blog"
-        />
-      </div>
-    </aside>
+    <div className={BLOG_WIDGET_UI.inputWrapper}>
+      <Search className="ml-3 h-4 w-4 shrink-0 text-zinc-400" strokeWidth={2} />
+      <input
+        type="search"
+        value={localQuery}
+        onChange={(e) => handleChange(e.target.value)}
+        placeholder="Pretraži članke..."
+        className="w-full min-w-0 bg-transparent py-2.5 pr-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
+        aria-label="Pretraži blog"
+      />
+    </div>
   );
 }

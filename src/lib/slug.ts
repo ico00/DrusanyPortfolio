@@ -1,12 +1,4 @@
-/** Transliterate Croatian diacritics to ASCII (č→c, ć→c, š→s, ž→z, đ→dj, dž→dz) */
-function transliterateCroatian(str: string): string {
-  return str
-    .replace(/dž/gi, "dz")
-    .replace(/đ/gi, "dj")
-    .replace(/[čćČĆ]/g, "c")
-    .replace(/[šŠ]/g, "s")
-    .replace(/[žŽ]/g, "z");
-}
+import { transliterateCroatian } from "./utils";
 
 export function slugify(str: string): string {
   return transliterateCroatian(str)

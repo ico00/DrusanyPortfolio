@@ -50,7 +50,7 @@ export function FloatingBlockTypeBar() {
       elementProps: {
         style: { zIndex: 99999 },
         className:
-          "bn-formatting-toolbar flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 shadow-lg",
+          "bn-formatting-toolbar flex items-center gap-2 rounded-lg border border-amber-400 bg-zinc-800 px-3 py-2 shadow-lg",
       },
     }),
     [position],

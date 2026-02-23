@@ -109,7 +109,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
       const posts = blogData.posts ?? [];
 
       const blogImagesCount = posts.reduce(
-        (sum, p) =>
+        (sum: number, p: { thumbnail?: string | null; gallery?: unknown[] }) =>
           sum + (p.thumbnail?.trim() ? 1 : 0) + (p.gallery?.length ?? 0),
         0
       );
@@ -186,10 +186,10 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
   return (
     <div className="space-y-8">
       {/* Content health */}
-      <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
-        <h3 className="mb-4 flex items-center gap-2 text-sm font-medium text-amber-400">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20">
-            <Activity className="h-4 w-4 text-amber-400" strokeWidth={2.5} />
+      <div className="rounded-xl border border-zinc-700 bg-zinc-800/50 p-4">
+        <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-zinc-200">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-700">
+            <Activity className="h-4 w-4 text-zinc-300" strokeWidth={2.5} />
           </span>
           Content health
         </h3>
@@ -204,7 +204,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
             }
             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:underline ${
               stats.contentHealth.imagesWithoutExif > 0
-                ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
+                ? "bg-zinc-700/50 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
                 : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
             title={stats.contentHealth.imagesWithoutExif > 0 ? "Show in gallery" : undefined}
@@ -222,7 +222,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
             }
             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:underline ${
               stats.contentHealth.imagesWithoutSlug > 0
-                ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
+                ? "bg-zinc-700/50 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
                 : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
             title={stats.contentHealth.imagesWithoutSlug > 0 ? "Show in gallery" : undefined}
@@ -235,7 +235,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
             onClick={() => onContentHealthClick?.("no-featured")}
             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:underline ${
               stats.contentHealth.blogPostsWithoutFeaturedImage > 0
-                ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
+                ? "bg-zinc-700/50 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
                 : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
             title={stats.contentHealth.blogPostsWithoutFeaturedImage > 0 ? "Show in blog" : undefined}
@@ -248,7 +248,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
             onClick={() => onContentHealthClick?.("no-seo")}
             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:underline ${
               stats.contentHealth.blogPostsWithoutSeo > 0
-                ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/15 hover:text-amber-300"
+                ? "bg-zinc-700/50 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
                 : "bg-zinc-800/50 text-zinc-500 cursor-default hover:no-underline"
             }`}
             title={stats.contentHealth.blogPostsWithoutSeo > 0 ? "Show in blog" : undefined}
@@ -267,19 +267,8 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
               <ImageIcon className={`h-6 w-6 ${CARD_ACCENTS[0].icon}`} />
             </div>
             <div>
-              <p className="text-sm text-zinc-500">Portfolio</p>
+              <p className="text-sm text-zinc-500">Images in Galleries</p>
               <p className="text-2xl font-semibold text-zinc-100">{stats.portfolioImages}</p>
-            </div>
-          </div>
-        </div>
-        <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[1].border}`}>
-          <div className="flex items-center gap-3">
-            <div className={`rounded-lg p-3 ${CARD_ACCENTS[1].bg}`}>
-              <BookOpen className={`h-6 w-6 ${CARD_ACCENTS[1].icon}`} />
-            </div>
-            <div>
-              <p className="text-sm text-zinc-500">Blog</p>
-              <p className="text-2xl font-semibold text-zinc-100">{stats.blogImages}</p>
             </div>
           </div>
         </div>
@@ -289,17 +278,28 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
               <Layout className={`h-6 w-6 ${CARD_ACCENTS[2].icon}`} />
             </div>
             <div>
-              <p className="text-sm text-zinc-500">Portfolio Categories</p>
+              <p className="text-sm text-zinc-500">Gallery Categories</p>
               <p className="text-2xl font-semibold text-zinc-100">
                 {stats.imagesByCategory.filter((c) => c.count > 0).length}
               </p>
             </div>
           </div>
         </div>
+        <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[1].border}`}>
+          <div className="flex items-center gap-3">
+            <div className={`rounded-lg p-3 ${CARD_ACCENTS[1].bg}`}>
+              <ImageIcon className={`h-6 w-6 ${CARD_ACCENTS[1].icon}`} />
+            </div>
+            <div>
+              <p className="text-sm text-zinc-500">Images in Blog</p>
+              <p className="text-2xl font-semibold text-zinc-100">{stats.blogImages}</p>
+            </div>
+          </div>
+        </div>
         <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[2].border}`}>
           <div className="flex items-center gap-3">
             <div className={`rounded-lg p-3 ${CARD_ACCENTS[2].bg}`}>
-              <BookOpen className={`h-6 w-6 ${CARD_ACCENTS[2].icon}`} />
+              <Layout className={`h-6 w-6 ${CARD_ACCENTS[2].icon}`} />
             </div>
             <div>
               <p className="text-sm text-zinc-500">Blog Categories</p>
@@ -312,22 +312,22 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
         <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[3].border}`}>
           <div className="flex items-center gap-3">
             <div className={`rounded-lg p-3 ${CARD_ACCENTS[3].bg}`}>
-              <FileText className={`h-6 w-6 ${CARD_ACCENTS[3].icon}`} />
+              <BookOpen className={`h-6 w-6 ${CARD_ACCENTS[3].icon}`} />
             </div>
             <div>
-              <p className="text-sm text-zinc-500">Static pages</p>
-              <p className="text-2xl font-semibold text-zinc-100">{stats.pagesCount}</p>
+              <p className="text-sm text-zinc-500">Blog posts</p>
+              <p className="text-2xl font-semibold text-zinc-100">{stats.blogPostsCount}</p>
             </div>
           </div>
         </div>
         <div className={`rounded-xl border bg-zinc-900/50 p-6 ${CARD_ACCENTS[3].border}`}>
           <div className="flex items-center gap-3">
             <div className={`rounded-lg p-3 ${CARD_ACCENTS[3].bg}`}>
-              <BookOpen className={`h-6 w-6 ${CARD_ACCENTS[3].icon}`} />
+              <FileText className={`h-6 w-6 ${CARD_ACCENTS[3].icon}`} />
             </div>
             <div>
-              <p className="text-sm text-zinc-500">Blog posts</p>
-              <p className="text-2xl font-semibold text-zinc-100">{stats.blogPostsCount}</p>
+              <p className="text-sm text-zinc-500">Static pages</p>
+              <p className="text-2xl font-semibold text-zinc-100">{stats.pagesCount}</p>
             </div>
           </div>
         </div>

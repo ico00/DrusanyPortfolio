@@ -22,7 +22,25 @@ import {
   useEditorState,
 } from "@blocknote/react";
 import type { BlockTypeSelectItem } from "@blocknote/react";
+import { RiCodeBlock } from "react-icons/ri";
 import { useMemo } from "react";
+
+/** Default items + Code block (BlockNote blockTypeSelectItems ne uključuje codeBlock) */
+function blockTypeSelectItemsWithCodeBlock(
+  dict: { slash_menu?: { code_block?: { title?: string } } }
+): BlockTypeSelectItem[] {
+  const base = blockTypeSelectItems(dict as any);
+  const codeBlockItem: BlockTypeSelectItem = {
+    name: dict?.slash_menu?.code_block?.title ?? "Code block",
+    type: "codeBlock",
+    props: { language: "text" },
+    icon: RiCodeBlock,
+  };
+  // Umetni nakon quote, prije toggle_list
+  const quoteIdx = base.findIndex((i) => i.type === "quote");
+  const insertAt = quoteIdx >= 0 ? quoteIdx + 1 : base.length;
+  return [...base.slice(0, insertAt), codeBlockItem, ...base.slice(insertAt)];
+}
 
 export function BlockTypeSelectWithCursor(props: {
   items?: BlockTypeSelectItem[];
@@ -54,7 +72,7 @@ export function BlockTypeSelectWithCursor(props: {
 
   const filteredItems = useMemo(
     () =>
-      (props.items || blockTypeSelectItems(editor.dictionary)).filter(
+      (props.items || blockTypeSelectItemsWithCodeBlock(editor.dictionary)).filter(
         (item) =>
           editorHasBlockWithType(
             editor,

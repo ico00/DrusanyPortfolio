@@ -275,6 +275,9 @@ export default function AdminBlog({
   const applyToAllRef = useRef<"overwrite" | "add" | "cancel" | null>(null);
   const [selectedGalleryUrls, setSelectedGalleryUrls] = useState<Set<string>>(new Set());
   const initialFormRef = useRef<string | null>(null);
+  const editorBaselineSyncTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const formRef = useRef(form);
+  formRef.current = form;
   const unsavedCtx = useUnsavedChanges();
 
   const getFormSnapshot = useCallback((f: typeof form) => {
@@ -452,10 +455,19 @@ export default function AdminBlog({
           Object.entries(formData.galleryMetadata ?? {}).sort(([a], [b]) => a.localeCompare(b))
         ),
       });
+      // BlockNote editor normalizira HTML pri učitavanju – nakon ~700ms uskladimo baseline
+      // da ne prikazujemo "unsaved" kad korisnik nije ništa mijenjao
+      if (editorBaselineSyncTimerRef.current) clearTimeout(editorBaselineSyncTimerRef.current);
+      editorBaselineSyncTimerRef.current = setTimeout(() => {
+        editorBaselineSyncTimerRef.current = null;
+        if (initialFormRef.current !== null) {
+          initialFormRef.current = getFormSnapshot(formRef.current);
+        }
+      }, 700);
     } finally {
       setEditLoading(false);
     }
-  }, [fetchPostWithBody]);
+  }, [fetchPostWithBody, getFormSnapshot]);
 
   const handleEditClick = useCallback(
     (post: BlogPost) => {
@@ -501,6 +513,10 @@ export default function AdminBlog({
     if (bodyDebounceRef.current) {
       clearTimeout(bodyDebounceRef.current);
       bodyDebounceRef.current = null;
+    }
+    if (editorBaselineSyncTimerRef.current) {
+      clearTimeout(editorBaselineSyncTimerRef.current);
+      editorBaselineSyncTimerRef.current = null;
     }
     bodyRef.current = null;
     setEditingId(null);
@@ -1660,22 +1676,9 @@ export default function AdminBlog({
                 <h4 className="font-medium text-zinc-200">{post.title || "Bez naslova"}</h4>
                 <p className="text-sm text-zinc-500">
                   /blog/{post.slug}
-                  {getDisplayCategories(post).length > 0 && (
-                    <>
-                      {" · "}
-                      {getDisplayCategories(post).map((slug) => (
-                        <span
-                          key={slug}
-                          className="mr-1 rounded bg-zinc-700/80 px-1.5 py-0.5 text-xs"
-                        >
-                          {getShortCategoryLabel(slug)}
-                        </span>
-                      ))}
-                    </>
-                  )}
                   {" · "}
                   {formatBlogDate(post.date)}
-                  {post.time ? ` · ${post.time}` : " · —"}
+                  {post.time ? ` · ${post.time}` : ""}
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-2">

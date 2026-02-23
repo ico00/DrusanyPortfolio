@@ -32,6 +32,18 @@ export const THEME_FONTS = [
     cssVar: "var(--font-jetbrains-mono), ui-monospace, monospace",
     previewFamily: "var(--font-jetbrains-mono), monospace",
   },
+  {
+    id: "shantell",
+    label: "Shantell Sans",
+    cssVar: "var(--font-shantell-sans), sans-serif",
+    previewFamily: "var(--font-shantell-sans), sans-serif",
+  },
+  {
+    id: "redHatDisplay",
+    label: "Red Hat Display",
+    cssVar: "var(--font-red-hat-display), sans-serif",
+    previewFamily: "var(--font-red-hat-display), sans-serif",
+  },
 ] as const;
 
 export type ThemeFontId = (typeof THEME_FONTS)[number]["id"];

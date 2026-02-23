@@ -1,4 +1,4 @@
-import { mkdir, access, stat, readFile, writeFile } from "fs/promises";
+import { mkdir, stat, readFile, writeFile } from "fs/promises";
 import path from "path";
 import sharp from "sharp";
 import exifr from "exifr";
@@ -6,6 +6,9 @@ import { getBlogUploadDir } from "@/lib/blog";
 import { hasValidImageSignature } from "@/lib/imageValidation";
 import { getExifExtras } from "@/lib/exif";
 import { checkRateLimit } from "@/lib/rateLimit";
+import { slugify } from "@/lib/slug";
+import { fileExists } from "@/lib/fileUtils";
+import { sanitizeFilename } from "@/lib/utils";
 
 const BLOG_EXIF_PATH = path.join(process.cwd(), "src", "data", "blogExif.json");
 
@@ -29,64 +32,6 @@ async function saveBlogExif(url: string, exif: { camera?: string; lens?: string;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
 
-function sanitizeSlug(str: string): string {
-  return str
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-/** Transliterate Croatian diacritics to ASCII */
-function transliterateCroatian(str: string): string {
-  return str
-    .replace(/dž/gi, "dz")
-    .replace(/đ/gi, "dj")
-    .replace(/[čćČĆ]/g, "c")
-    .replace(/[šŠ]/g, "s")
-    .replace(/[žŽ]/g, "z");
-}
-
-const GENERIC_NAMES = ["", "image", "blob", "untitled"];
-
-/** Sanitize filename: lowercase, spaces to hyphens, remove special chars, keep extension as .webp */
-function sanitizeFilename(
-  originalName: string,
-  slug?: string,
-  index?: number
-): string {
-  const name = (originalName || "").trim();
-  const base = name ? path.basename(name, path.extname(name)) : "";
-  let sanitized = transliterateCroatian(base)
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-_]/g, "")
-    .slice(0, 100);
-  if (!sanitized || GENERIC_NAMES.includes(sanitized)) {
-    sanitized =
-      slug && index != null
-        ? `${slug}-${index}`
-        : slug
-          ? `${slug}-${Date.now()}`
-          : `image-${Date.now()}`;
-  } else if (/^\d+$/.test(sanitized) && slug) {
-    sanitized = `${slug}-${sanitized}`;
-  }
-  return sanitized + ".webp";
-}
-
-async function fileExists(filePath: string): Promise<boolean> {
-  try {
-    await access(filePath);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 export async function POST(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
@@ -100,7 +45,7 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
-    const slug = sanitizeSlug((formData.get("slug") as string) || "");
+    const slug = slugify((formData.get("slug") as string) || "");
     const date = (formData.get("date") as string) || "";
     const type = formData.get("type") as "featured" | "gallery" | "content" | null;
     const overwrite = formData.get("overwrite") === "true";
@@ -178,7 +123,7 @@ export async function POST(request: Request) {
       const galleryDir = path.join(baseDir, "gallery");
       await mkdir(galleryDir, { recursive: true });
       const nameToUse = (file.name || originalFilename).trim();
-      let filename = sanitizeFilename(nameToUse || "image", slug, index);
+      let filename = sanitizeFilename(nameToUse || "image", { slug, index });
       const outPath = path.join(galleryDir, filename);
 
       if (await fileExists(outPath) && !overwrite) {
@@ -255,7 +200,7 @@ export async function POST(request: Request) {
       const contentDir = path.join(baseDir, "content");
       await mkdir(contentDir, { recursive: true });
       const nameToUse = (file.name || originalFilename).trim();
-      const filename = sanitizeFilename(nameToUse || "image", slug);
+      const filename = sanitizeFilename(nameToUse || "image", { slug });
       const outPath = path.join(contentDir, filename);
       await sharp(buffer)
         .rotate()

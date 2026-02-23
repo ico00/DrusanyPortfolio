@@ -10,8 +10,6 @@ function useAdminDarkTheme() {
     return () => document.documentElement.removeAttribute("data-theme");
   }, []);
 }
-import Link from "next/link";
-import { DrusanyLogo } from "./Header";
 import {
   Upload,
   Image as ImageIcon,
@@ -20,19 +18,12 @@ import {
   Check,
   AlertCircle,
   Loader2,
-  ArrowLeft,
   Star,
   Pencil,
   X,
   Square,
   CheckSquare,
   GripVertical,
-  FileText,
-  BookOpen,
-  ChevronDown,
-  ChevronRight,
-  LayoutDashboard,
-  Palette,
 } from "lucide-react";
 import AdminPages from "./AdminPages";
 import AdminBlog from "./AdminBlog";
@@ -308,33 +299,46 @@ export default function AdminClient() {
   const editFormRef = useRef<HTMLFormElement | null>(null);
   const searchParams = useSearchParams();
   const tabFromUrl = searchParams.get("tab");
+  const categoryFromUrl = searchParams.get("category");
+  const filterFromUrl = searchParams.get("filter");
   const [adminTab, setAdminTab] = useState<"dashboard" | "gallery" | "about" | "contact" | "blogPage" | "homePage" | "media" | "blog" | "theme">("dashboard");
-  const [pagesExpanded, setPagesExpanded] = useState(false);
 
   useEffect(() => {
     const valid = ["dashboard", "gallery", "about", "contact", "blogPage", "homePage", "media", "blog", "theme"];
     if (tabFromUrl && valid.includes(tabFromUrl)) {
       setAdminTab(tabFromUrl as typeof adminTab);
+    } else if (!tabFromUrl) {
+      setAdminTab("dashboard");
     }
   }, [tabFromUrl]);
-  const [galleryExpanded, setGalleryExpanded] = useState(false);
+
+  useEffect(() => {
+    if (categoryFromUrl) {
+      setCategory(categoryFromUrl);
+    }
+  }, [categoryFromUrl]);
+
+  useEffect(() => {
+    if (filterFromUrl === "no-slug" || filterFromUrl === "no-exif") {
+      setGalleryFilter(filterFromUrl);
+      try {
+        const stored = sessionStorage.getItem("adminGalleryFilterIds");
+        if (stored) {
+          const ids = JSON.parse(stored) as string[];
+          setGalleryFilterIds(ids);
+          sessionStorage.removeItem("adminGalleryFilterIds");
+        }
+      } catch {
+        setGalleryFilterIds([]);
+      }
+    } else {
+      setGalleryFilter("");
+      setGalleryFilterIds([]);
+    }
+  }, [filterFromUrl]);
   const [galleryFilter, setGalleryFilter] = useState<"" | "no-slug" | "no-exif">("");
   const [galleryFilterIds, setGalleryFilterIds] = useState<string[]>([]);
   const [blogFilter, setBlogFilter] = useState<"" | "no-seo" | "no-featured">("");
-
-  useEffect(() => {
-    if (adminTab === "about" || adminTab === "contact" || adminTab === "blogPage" || adminTab === "homePage") {
-      setPagesExpanded(true);
-      setGalleryExpanded(false);
-    }
-  }, [adminTab]);
-
-  useEffect(() => {
-    if (adminTab === "gallery" && (category || galleryFilter)) {
-      setGalleryExpanded(true);
-      setPagesExpanded(false);
-    }
-  }, [adminTab, category, galleryFilter]);
 
   const fetchGallery = useCallback(async () => {
     try {
@@ -790,223 +794,7 @@ export default function AdminClient() {
   };
 
   return (
-    <div className="flex min-h-screen bg-zinc-950">
-      {/* Sidebar - WordPress style */}
-      <aside className="fixed left-0 top-0 z-40 flex h-screen w-56 flex-col border-r border-zinc-800 bg-zinc-900">
-        <div className="flex flex-col gap-4 border-b border-zinc-800 px-4 py-4">
-          <Link href="/" className="flex items-center" aria-label="Drusany">
-            <DrusanyLogo className="h-8 w-auto" fill="#e4e4e7" />
-          </Link>
-          <div className="flex flex-col gap-1">
-            <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">Admin</p>
-            <Link href="/" className="flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-zinc-100">
-              <ArrowLeft className="h-4 w-4" />
-              Back to site
-            </Link>
-          </div>
-        </div>
-        <div className="flex-1 overflow-y-auto py-4">
-          <nav className="space-y-0.5 px-3">
-            <button
-              type="button"
-              onClick={() => setAdminTab("dashboard")}
-              className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                adminTab === "dashboard"
-                  ? "border-l-2 border-amber-500/80 bg-zinc-800 text-white"
-                  : "border-l-2 border-transparent text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-200"
-              }`}
-            >
-              <LayoutDashboard className={`h-5 w-5 shrink-0 ${adminTab === "dashboard" ? "text-amber-400" : ""}`} />
-              Dashboard
-            </button>
-            <div>
-              <button
-                type="button"
-                onClick={() => {
-                  setGalleryExpanded((e) => {
-                    if (e) return false;
-                    setPagesExpanded(false);
-                    return true;
-                  });
-                  setAdminTab("gallery");
-                }}
-                className={`flex w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                  adminTab === "gallery"
-                    ? "border-l-2 border-emerald-500/80 bg-zinc-800 text-white"
-                    : "border-l-2 border-transparent text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-200"
-                }`}
-              >
-                <span className="flex items-center gap-3">
-                  <ImageIcon className={`h-5 w-5 shrink-0 ${adminTab === "gallery" ? "text-emerald-400" : ""}`} />
-                  Gallery
-                </span>
-                {galleryExpanded ? (
-                  <ChevronDown className="h-4 w-4 shrink-0" />
-                ) : (
-                  <ChevronRight className="h-4 w-4 shrink-0" />
-                )}
-              </button>
-              <div
-                className={`grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out ${
-                  galleryExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                }`}
-              >
-                <div className="min-h-0">
-                  <div className="ml-6 mt-0.5 space-y-0.5 border-l border-zinc-700 pl-2">
-                    {CATEGORIES.map((cat) => {
-                      const Icon = cat.icon;
-                      const isActive = adminTab === "gallery" && normalizeCategory(category) === cat.slug;
-                      return (
-                        <button
-                          key={cat.slug}
-                          type="button"
-                          onClick={() => {
-                            setCategory(cat.slug);
-                            setGalleryFilter("");
-                            setGalleryFilterIds([]);
-                            setAdminTab("gallery");
-                          }}
-                          className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
-                            isActive
-                              ? "text-white"
-                              : "text-zinc-400 hover:text-zinc-200"
-                          }`}
-                        >
-                          <Icon className="h-4 w-4 shrink-0" />
-                          {cat.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <button
-                type="button"
-                onClick={() => {
-                  setPagesExpanded((e) => {
-                    if (e) return false;
-                    setGalleryExpanded(false);
-                    return true;
-                  });
-                }}
-                className={`flex w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                  adminTab === "about" || adminTab === "contact" || adminTab === "blogPage" || adminTab === "homePage"
-                    ? "border-l-2 border-blue-500/80 bg-zinc-800 text-white"
-                    : "border-l-2 border-transparent text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-200"
-                }`}
-              >
-                <span className="flex items-center gap-3">
-                  <FileText className={`h-5 w-5 shrink-0 ${adminTab === "about" || adminTab === "contact" ? "text-blue-400" : ""}`} />
-                  Pages
-                </span>
-                {pagesExpanded ? (
-                  <ChevronDown className="h-4 w-4 shrink-0" />
-                ) : (
-                  <ChevronRight className="h-4 w-4 shrink-0" />
-                )}
-              </button>
-              <div
-                className={`grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out ${
-                  pagesExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                }`}
-              >
-                <div className="min-h-0">
-                  <div className="ml-6 mt-0.5 space-y-0.5 border-l border-zinc-700 pl-2">
-                    <button
-                      type="button"
-                      onClick={() => setAdminTab("homePage")}
-                      className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
-                        adminTab === "homePage"
-                          ? "text-white"
-                          : "text-zinc-400 hover:text-zinc-200"
-                      }`}
-                    >
-                      Home
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAdminTab("about")}
-                      className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
-                        adminTab === "about"
-                          ? "text-white"
-                          : "text-zinc-400 hover:text-zinc-200"
-                      }`}
-                    >
-                      About
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAdminTab("contact")}
-                      className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
-                        adminTab === "contact"
-                          ? "text-white"
-                          : "text-zinc-400 hover:text-zinc-200"
-                      }`}
-                    >
-                      Contact
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAdminTab("blogPage")}
-                      className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors ${
-                        adminTab === "blogPage"
-                          ? "text-white"
-                          : "text-zinc-400 hover:text-zinc-200"
-                      }`}
-                    >
-                      Blog page
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setAdminTab("media")}
-              className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                adminTab === "media"
-                  ? "border-l-2 border-cyan-500/80 bg-zinc-800 text-white"
-                  : "border-l-2 border-transparent text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-200"
-              }`}
-            >
-              <Images className={`h-5 w-5 shrink-0 ${adminTab === "media" ? "text-cyan-400" : ""}`} />
-              Media
-            </button>
-            <Link
-              href="/admin/blog"
-              className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                adminTab === "blog"
-                  ? "border-l-2 border-violet-500/80 bg-zinc-800 text-white"
-                  : "border-l-2 border-transparent text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-200"
-              }`}
-            >
-              <BookOpen className={`h-5 w-5 shrink-0 ${adminTab === "blog" ? "text-violet-400" : ""}`} />
-              Blog
-            </Link>
-            <button
-              type="button"
-              onClick={() => setAdminTab("theme")}
-              className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                adminTab === "theme"
-                  ? "border-l-2 border-amber-500/80 bg-zinc-800 text-white"
-                  : "border-l-2 border-transparent text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-200"
-              }`}
-            >
-              <Palette className={`h-5 w-5 shrink-0 ${adminTab === "theme" ? "text-amber-400" : ""}`} />
-              Theme
-            </button>
-          </nav>
-        </div>
-        <div className="border-t border-zinc-800 px-4 py-3">
-          <p className="text-xs text-zinc-500">Local dev only</p>
-        </div>
-      </aside>
-
-      {/* Main content - full width */}
-      <main className="ml-56 min-h-screen flex-1">
-        <div className="px-8 py-8 lg:px-12 lg:py-10">
+    <div className="px-8 py-8 lg:px-12 lg:py-10">
           <div className="mb-8">
             <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">
               {adminTab === "dashboard" && "Dashboard"}
@@ -1057,10 +845,8 @@ export default function AdminClient() {
             <AdminDashboard
               onContentHealthClick={(filter, imageIds) => {
                 if (filter === "no-slug" || filter === "no-exif") {
-                  setGalleryFilter(filter);
-                  setGalleryFilterIds(imageIds ?? []);
-                  setCategory("");
-                  setAdminTab("gallery");
+                  sessionStorage.setItem("adminGalleryFilterIds", JSON.stringify(imageIds ?? []));
+                  router.push(`/admin?tab=gallery&filter=${filter}`);
                 } else if (filter === "no-featured" || filter === "no-seo") {
                   router.push(`/admin/blog?filter=${filter}`);
                 }
@@ -1377,6 +1163,7 @@ export default function AdminClient() {
                         onClick={() => {
                           setGalleryFilter("");
                           setGalleryFilterIds([]);
+                          router.replace("/admin?tab=gallery");
                         }}
                         className="ml-3 text-sm font-normal text-zinc-500 hover:text-zinc-300"
                       >
@@ -1938,8 +1725,6 @@ export default function AdminClient() {
             <span className={ADMIN_UI.toast.text}>{toast.message}</span>
           </div>
         )}
-        </div>
-      </main>
     </div>
   );
 }

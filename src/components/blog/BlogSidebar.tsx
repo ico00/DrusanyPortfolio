@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import SearchWidget from "./SearchWidget";
 import CategoriesWidget from "./CategoriesWidget";
 import GoogleMapsWidget from "./GoogleMapsWidget";
@@ -11,6 +11,7 @@ import {
   type MapsWidgetConfig,
   type FeaturedPostsWidgetConfig,
 } from "@/lib/blogWidgets";
+import { BLOG_WIDGET_UI } from "@/data/blogWidgetUI";
 import type { BlogPost } from "@/lib/blog";
 
 interface BlogSidebarProps {
@@ -25,15 +26,26 @@ export default async function BlogSidebar({ posts }: BlogSidebarProps) {
     return null;
   }
 
-  return (
-    <div className="space-y-6">
-      {await Promise.all(
-        enabled.map(async (widget) => (
-          <WidgetRenderer key={widget.id} widget={widget} posts={posts} />
-        ))
-      )}
-    </div>
-  );
+  const sections: React.ReactNode[] = [];
+  for (const widget of enabled) {
+    const content = await WidgetRenderer({ widget, posts });
+    if (content !== null) {
+      sections.push(
+        <section
+          key={widget.id}
+          className="border-t border-zinc-200 p-5 first:border-t-0"
+        >
+          {content}
+        </section>
+      );
+    }
+  }
+
+  if (sections.length === 0) {
+    return null;
+  }
+
+  return <div className={BLOG_WIDGET_UI.panel}>{sections}</div>;
 }
 
 async function WidgetRenderer({
@@ -42,17 +54,17 @@ async function WidgetRenderer({
 }: {
   widget: BlogWidgetConfig;
   posts: BlogPost[];
-}) {
+}): Promise<React.ReactNode> {
   switch (widget.type) {
     case "search":
       return (
-        <Suspense fallback={<div className="h-20 animate-pulse rounded-lg bg-zinc-100" />}>
+        <Suspense fallback={<div className="h-12 animate-pulse rounded-lg bg-zinc-100" />}>
           <SearchWidget />
         </Suspense>
       );
     case "categories":
       return (
-        <Suspense fallback={<div className="h-32 animate-pulse rounded-lg bg-zinc-100" />}>
+        <Suspense fallback={<div className="h-24 animate-pulse rounded-lg bg-zinc-100" />}>
           <CategoriesWidget
             title={(widget as CategoriesWidgetConfig).title}
             posts={posts}

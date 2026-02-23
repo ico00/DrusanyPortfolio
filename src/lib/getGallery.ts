@@ -1,5 +1,6 @@
 import { readFile } from "fs/promises";
 import path from "path";
+import { generateSlug } from "./slug";
 
 export interface GalleryImage {
   id: string;
@@ -43,32 +44,12 @@ export interface GalleryData {
   images: GalleryImage[];
 }
 
-function slugify(str: string): string {
-  return str
-    .replace(/dž/gi, "dz")
-    .replace(/đ/gi, "dj")
-    .replace(/[čćČĆ]/g, "c")
-    .replace(/[šŠ]/g, "s")
-    .replace(/[žŽ]/g, "z")
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
 export function ensureSlug(img: GalleryImage, existingSlugs: Set<string>): string {
   if (img.slug?.trim()) return img.slug;
-  const parts: string[] = [];
-  if (img.title?.trim()) parts.push(slugify(img.title));
-  if (img.venue?.trim()) {
-    const v = slugify(img.venue);
-    if (v && !parts.some((p) => p.includes(v))) parts.push(v);
+  let slug = generateSlug(img.title, img.venue, img.capturedAt);
+  if (/^image-\d+$/.test(slug)) {
+    slug = `image-${img.id.slice(0, 8)}`;
   }
-  const year = img.capturedAt ? new Date(img.capturedAt).getFullYear() : null;
-  if (year && !isNaN(year)) parts.push(String(year));
-  let slug = parts.filter(Boolean).join("-") || `image-${img.id.slice(0, 8)}`;
   let base = slug;
   let n = 2;
   while (existingSlugs.has(slug)) {

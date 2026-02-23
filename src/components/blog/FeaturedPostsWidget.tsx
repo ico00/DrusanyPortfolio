@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { formatBlogDate } from "@/data/blogCategories";
+import { BLOG_WIDGET_UI } from "@/data/blogWidgetUI";
 import type { BlogPost } from "@/lib/blog";
 
 interface FeaturedPostsWidgetProps {
@@ -27,20 +28,18 @@ export default function FeaturedPostsWidget({
   }
 
   return (
-    <aside className="rounded-lg bg-white p-5 shadow-sm">
-      <h3 className="font-serif text-lg font-normal tracking-tight text-zinc-900">
-        {title}
-      </h3>
+    <>
+      <h3 className={BLOG_WIDGET_UI.title}>{title}</h3>
       <ul className="mt-4 space-y-3">
         {featured.map((post) => (
           <li key={post.id}>
             <Link
               href={`/blog/${post.slug}`}
-              className="group block overflow-hidden rounded-md transition-colors hover:bg-zinc-50"
+              className="group block overflow-hidden rounded-lg transition-colors duration-150 hover:bg-zinc-50"
             >
               <div className="flex gap-3">
                 {post.thumbnail ? (
-                  <div className="h-14 w-20 shrink-0 overflow-hidden rounded-md bg-zinc-100">
+                  <div className={BLOG_WIDGET_UI.thumbnailImage}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={post.thumbnail}
@@ -52,7 +51,7 @@ export default function FeaturedPostsWidget({
                     />
                   </div>
                 ) : (
-                  <div className="flex h-14 w-20 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-zinc-400">
+                  <div className={BLOG_WIDGET_UI.thumbnailPlaceholder}>
                     <span className="text-2xl">·</span>
                   </div>
                 )}
@@ -69,6 +68,6 @@ export default function FeaturedPostsWidget({
           </li>
         ))}
       </ul>
-    </aside>
+    </>
   );
 }

@@ -80,7 +80,7 @@ export default function CustomCursor() {
     <>
       {/* Dot - instant tracking, no React re-renders on move */}
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full bg-white mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[999999] rounded-full bg-white mix-blend-difference"
         style={{
           width: DOT_SIZE,
           height: DOT_SIZE,
@@ -96,7 +96,7 @@ export default function CustomCursor() {
 
       {/* Aperture icon - only over photos, snappier spring */}
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[9999] flex items-center justify-center mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[999999] flex items-center justify-center mix-blend-difference"
         style={{
           width: APERTURE_SIZE,
           height: APERTURE_SIZE,

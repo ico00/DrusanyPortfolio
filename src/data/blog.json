@@ -1,6 +1,51 @@
 {
   "posts": [
     {
+      "id": "d8cfb918-047e-46e0-876e-1cc3486dae82",
+      "title": "Izabela",
+      "slug": "250905-izabela",
+      "date": "2025-09-05",
+      "categories": [
+        "kucnecarolije"
+      ],
+      "thumbnail": "/uploads/blog/2025-09-05-250905-izabela/gallery/_mg_4964.webp",
+      "thumbnailFocus": "51% 55%",
+      "gallery": [
+        "/uploads/blog/2025-09-05-250905-izabela/gallery/_mg_4945.webp",
+        "/uploads/blog/2025-09-05-250905-izabela/gallery/_mg_4954.webp",
+        "/uploads/blog/2025-09-05-250905-izabela/gallery/_mg_4963.webp",
+        "/uploads/blog/2025-09-05-250905-izabela/gallery/_mg_4964.webp"
+      ],
+      "galleryMetadata": {},
+      "featured": false,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "Macro fotografije grozdova izabele",
+        "keywords": "izabela, grozd, grožđe, kapljice vode, macro, canon, fotografije,"
+      }
+    },
+    {
+      "id": "aed6f85e-64b7-4f41-8372-7b3694bb049a",
+      "title": "Sport Metadata Generator",
+      "slug": "260110-sport-metadata-generator",
+      "date": "2026-01-10",
+      "categories": [
+        "info"
+      ],
+      "thumbnail": "/uploads/blog/2026-01-10-260110-sport-metadata-generator/featured.webp",
+      "thumbnailFocus": "10% 25%",
+      "gallery": [],
+      "galleryMetadata": {},
+      "featured": true,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "Web aplikacija za pomoć reportažnim fotografima u izradi popisa igrača za Photo Mechanic, Sport Metadata Generator",
+        "keywords": "metadata generator, exif, popis igrača, photo mechanic,"
+      }
+    },
+    {
       "id": "a6fbcfc6-8fab-4829-8bd3-c9076be67258",
       "title": "Zagrebancije: Advent 2025.",
       "slug": "251228-advent-2025",
@@ -1499,7 +1544,7 @@
         "/uploads/blog/2025-03-23-250323-zagrebancije-festival-svjetla-2025/gallery/250323-festival_svjetla_236.webp",
         "/uploads/blog/2025-03-23-250323-zagrebancije-festival-svjetla-2025/gallery/250323-festival_svjetla_248.webp"
       ],
-      "featured": true,
+      "featured": false,
       "seo": {
         "metaTitle": "",
         "metaDescription": "Fotografije Festivala svjetla 2025 sa zagrebačkih ulica",
@@ -2022,7 +2067,7 @@
       "thumbnailFocus": "50% 50%",
       "gallery": [],
       "galleryMetadata": {},
-      "featured": false,
+      "featured": true,
       "status": "published",
       "seo": {
         "metaTitle": "",
@@ -2038,16 +2083,16 @@
       "categories": [
         "info"
       ],
-      "thumbnail": "",
+      "thumbnail": "/uploads/blog/2024-12-09-241209-canon-r6-mk-ii-nesto-kasnije/featured.webp",
       "thumbnailFocus": "50% 50%",
       "gallery": [],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Iskustvo sa Canon R6 MK II nakon 6 mjeseci",
+        "keywords": "Canon R6 MK II, iskustva, info, recenzija,"
       }
     },
     {
@@ -2140,16 +2185,16 @@
       "categories": [
         "info"
       ],
-      "thumbnail": "",
+      "thumbnail": "/uploads/blog/2024-11-22-241122-macbook-pro-m4-prvi-dojmovi/featured.webp",
       "thumbnailFocus": "50% 50%",
       "gallery": [],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Kupovina i prvi dojmovi Apple MacBook Pro M4",
+        "keywords": "apple, macbook pro, m4, laptopn, kompjuter, gadget,"
       }
     },
     {
@@ -2266,12 +2311,128 @@
       "categories": [
         "auti"
       ],
-      "thumbnail": "",
-      "thumbnailFocus": "50% 50%",
-      "gallery": [],
+      "thumbnail": "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/featured.webp",
+      "thumbnailFocus": "43% 45%",
+      "gallery": [
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_002.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_004.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_010.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_013.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_014.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_015.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_016.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_017.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_018.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_020.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_021.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_022.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_024.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_025.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_029.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_030.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_032.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_033.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_039.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_041.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_044.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_046.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_050.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_051.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_053.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_056.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_058.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_059.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_063.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_065.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_069.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_072.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_077.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_088.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_093.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-triumph_095.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_002.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_005.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_009.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_011.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_015.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_017.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_020.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_024.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_025.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_026.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_028.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_032.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_040.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_042.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_044.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_046.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_048.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_050.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_052.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_058.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_060.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_062.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_064.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_066.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_067.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_075.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_076.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_083.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_084.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_085.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_088.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_091.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_093.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_094.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_095.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_098.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_099.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_100.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_104.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_110.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_112.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_114.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_116.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_117.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_124.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_126.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_130.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_132.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_140.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_141.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_143.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_144.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_145.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_147.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_151.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_155.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_157.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_164.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_174.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_183.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_184.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_185.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_189.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_194.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_196.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_201.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_209.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_219.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_220.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_231.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_236.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_238.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_256.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_259.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_260.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_261.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_265.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_267.webp",
+        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_268.webp"
+      ],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
         "metaDescription": "",
@@ -2286,12 +2447,418 @@
       "categories": [
         "koncerti"
       ],
-      "thumbnail": "",
-      "thumbnailFocus": "50% 50%",
-      "gallery": [],
-      "galleryMetadata": {},
+      "thumbnail": "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_031.webp",
+      "thumbnailFocus": "56% 53%",
+      "gallery": [
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_001.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_012.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_019.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_025.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_028.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_031.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_039.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_043.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_044.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_046.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_050.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_053.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_054.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_055.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_063.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_065.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_067.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_070.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_074.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_076.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_078.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_080.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_082.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_083.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_089.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_097.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_099.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_100.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_102.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_103.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_105.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_107.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_109.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_110.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_111.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_113.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_115.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_117.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_118.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_122.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_123.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_125.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_127.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_131.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_133.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_134.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_138.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_142.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_145.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_148.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_151.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_154.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_162.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_188.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_190.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_193.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_200.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_204.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_207.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_209.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_211.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_213.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_219.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_221.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_226.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_228.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_230.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_231.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_235.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_237.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_242.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_248.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_259.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_260.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_262.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_266.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_270.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_277.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_281.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_284.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_289.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_290.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_293.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_304.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_308.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_311.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_317.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_334.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_356.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_365.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_372.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_376.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_377.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_381.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_385.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_389.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_392.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_396.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_398.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_400.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_407.webp"
+      ],
+      "galleryMetadata": {
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_001.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_012.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_019.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_025.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_028.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_031.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_039.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_043.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_044.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_046.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_050.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_053.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_054.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_055.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_063.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_065.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_067.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_070.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_074.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_076.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_078.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_080.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_082.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_083.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_089.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_097.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_099.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_100.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_102.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_103.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_105.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_107.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_109.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_110.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_111.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_113.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_115.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_117.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_118.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_122.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_123.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_125.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_127.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_131.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_133.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_134.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_138.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_142.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_145.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_148.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_151.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_154.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_162.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_188.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_190.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_193.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_200.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_204.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_207.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_209.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_211.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_213.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_219.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_221.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_226.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_228.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_230.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_231.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_235.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_237.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_242.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_248.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_259.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_260.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_262.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_266.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_270.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_277.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_281.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_284.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_289.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_290.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_293.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_304.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_308.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_311.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_317.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_334.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_356.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_365.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_372.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_376.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_377.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_381.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_385.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_389.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_392.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_396.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_398.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_400.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        },
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_407.webp": {
+          "title": "Bajaga i instruktori - 40 godina"
+        }
+      },
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
         "metaDescription": "",
