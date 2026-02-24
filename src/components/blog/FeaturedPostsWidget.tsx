@@ -34,7 +34,7 @@ export default function FeaturedPostsWidget({
         {featured.map((post) => (
           <li key={post.id}>
             <Link
-              href={`/blog/${post.slug}`}
+              href={`/blog/${post.slug}.html`}
               className="group block overflow-hidden rounded-lg transition-colors duration-150 hover:bg-zinc-50"
             >
               <div className="flex gap-3">

@@ -231,3 +231,36 @@ const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
 ## 8. Arhitektura
 
 Detaljniji opis projekta: **`docs/architecture.md`**.
+
+---
+
+## 9. Statčki export na shared hostingu (Apache)
+
+Kad se projekt deploya na klasični shared hosting (Apache + cPanel/FTP) s `output: "export"`:
+
+- **.htaccess** – koristi se `.htaccess` iz `public/.htaccess` koji se pri buildu kopira u root `out/`:
+
+```apache
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Izričita pravila: ruta bez .html -> odgovarajući .html (radi refresha)
+# Samo glavne stranice; blog postovi (/blog/slug) koriste eksplicitne .html linkove u kodu
+RewriteRule ^about/?$ about.html [L]
+RewriteRule ^blog/?$ blog.html [L]
+RewriteRule ^contact/?$ contact.html [L]
+RewriteRule ^admin/?$ admin.html [L]
+</IfModule>
+```
+
+- **Blog post URL‑ovi** – zbog ograničenja hostinga pojedinačni postovi koriste eksplicitne `.html` linkove:
+  - lista: `/blog`
+  - post: `/blog/${post.slug}.html`
+  - referentne komponente: `BlogList` i `FeaturedPostsWidget`.
+- **Mobile blog layout (full‑bleed)** – na mobilnom:
+  - featured slike i tamni blok ispod njih (naslov + datum) na listi bloga idu **od ruba do ruba** (`-mx-6 w-[calc(100%+3rem)]`, unutarnji sadržaj ima `px-6`);
+  - isto za featured sliku i tekstualni dio posta na stranici `blog/[slug]/page.tsx`.
+  - referentne komponente: `BlogList` i `blog/[slug]/page.tsx`.

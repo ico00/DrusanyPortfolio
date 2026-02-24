@@ -559,7 +559,7 @@
       "isHero": true,
       "slug": "depeche-mode-arena-zagreb-2013-2",
       "keywords": "concert, depeche mode, zagreb, dave gahan, singer, ",
-      "thumbnailFocus": "50% 50%"
+      "thumbnailFocus": "58% 46%"
     },
     {
       "id": "8ed00d6a-d840-45fd-966d-15518271c2e2",
@@ -807,7 +807,7 @@
       "id": "1f4df1e7-8951-4147-8ace-1b192dd4ba52",
       "title": "",
       "category": "animals",
-      "alt": "Gallery image",
+      "alt": "",
       "src": "/uploads/full/animals/_j4a6981.webp",
       "thumb": "/uploads/thumbs/animals/_j4a6981.webp",
       "width": 2048,
@@ -821,7 +821,8 @@
       "aperture": "f/2.8",
       "iso": 125,
       "order": 19,
-      "slug": "2018"
+      "slug": "2018-7",
+      "thumbnailFocus": "46% 40%"
     },
     {
       "id": "51f9a7ac-d63f-4963-a87f-f0710411ceed",
@@ -840,8 +841,9 @@
       "exposure": "1/2500",
       "aperture": "f/1.4",
       "iso": 800,
-      "order": 32,
-      "slug": "zagrebancija-lxiii-2018"
+      "order": 2,
+      "slug": "zagrebancija-lxiii-2018",
+      "thumbnailFocus": "47% 49%"
     },
     {
       "id": "c470b772-cac8-4ed3-8ed7-622a4f8c8e1b",
@@ -862,7 +864,8 @@
       "iso": 3200,
       "keywords": "sport, football, soccer, uefa, nations league, croatia, zagreb, maksimir stadium, denmark",
       "slug": "croatia-v-denmark-uefa-nations-league-league-a-group-1-2022",
-      "sport": "football"
+      "sport": "football",
+      "thumbnailFocus": "47% 47%"
     },
     {
       "id": "f3cdafe5-01c9-4fcc-a326-407cc57e9e5a",
@@ -3310,7 +3313,7 @@
       "aperture": "f/2.8",
       "iso": 4000,
       "slug": "2018-2",
-      "order": 31
+      "order": 32
     },
     {
       "id": "a250ad51-6d30-40ea-b2c9-d0a30379608f",
@@ -3329,7 +3332,7 @@
       "aperture": "f/4",
       "iso": 100,
       "slug": "2018-3",
-      "order": 30
+      "order": 31
     },
     {
       "id": "c6db24f3-c383-45ee-9088-93217acd540d",
@@ -3348,7 +3351,7 @@
       "aperture": "f/22",
       "iso": 100,
       "slug": "2018-4",
-      "order": 29
+      "order": 30
     },
     {
       "id": "03c9e473-985b-4335-9542-8942b8039604",
@@ -3367,7 +3370,7 @@
       "aperture": "f/2",
       "iso": 100,
       "slug": "2018-5",
-      "order": 28
+      "order": 29
     },
     {
       "id": "3b359480-8fdf-4741-bb1e-5ea04867d659",
@@ -3386,7 +3389,7 @@
       "aperture": "f/5",
       "iso": 100,
       "slug": "2018-6",
-      "order": 27
+      "order": 28
     },
     {
       "id": "c6299db3-b0ed-42f0-bb37-7f3ea69900a9",
@@ -3405,7 +3408,7 @@
       "aperture": "f/5",
       "iso": 100,
       "slug": "2018-7",
-      "order": 26
+      "order": 27
     },
     {
       "id": "b657fbff-f8ca-45ca-8c7e-2264bb894f69",
@@ -3424,7 +3427,7 @@
       "aperture": "f/1.8",
       "iso": 1250,
       "slug": "2019",
-      "order": 25
+      "order": 26
     },
     {
       "id": "81f62e6d-a021-4a74-85b6-988b148a0ffb",
@@ -3443,7 +3446,7 @@
       "aperture": "f/1.4",
       "iso": 800,
       "slug": "2019-2",
-      "order": 24
+      "order": 25
     },
     {
       "id": "bcb7015d-0f11-4c8a-86df-9497839fc515",
@@ -3462,7 +3465,7 @@
       "aperture": "f/1.4",
       "iso": 1600,
       "slug": "2019-3",
-      "order": 23
+      "order": 24
     },
     {
       "id": "7aec1ac2-ff27-4863-b01e-a7134e22f7df",
@@ -3481,7 +3484,7 @@
       "aperture": "f/4",
       "iso": 1600,
       "slug": "2019-4",
-      "order": 22
+      "order": 23
     },
     {
       "id": "af0c3b37-a0ab-48b3-bd75-229aae382c9c",
@@ -3500,7 +3503,7 @@
       "aperture": "f/3.2",
       "iso": 1250,
       "slug": "advent-u-zagrebu-2019",
-      "order": 21
+      "order": 22
     },
     {
       "id": "9eec2578-6aae-4b5a-9f3f-27b1be9562d2",
@@ -3519,7 +3522,7 @@
       "aperture": "f/1.6",
       "iso": 400,
       "slug": "muzej-cokolade-2020",
-      "order": 20
+      "order": 21
     },
     {
       "id": "5880d47a-e524-4907-b36a-2de4a97b0246",
@@ -3538,7 +3541,7 @@
       "aperture": "f/1.4",
       "iso": 800,
       "slug": "2020",
-      "order": 19
+      "order": 20
     },
     {
       "id": "f88da159-b796-4cce-a501-81f52d8b503b",
@@ -3557,7 +3560,7 @@
       "aperture": "f/1.4",
       "iso": 100,
       "slug": "2021",
-      "order": 18
+      "order": 19
     },
     {
       "id": "8ef1aba0-86b2-49df-ada8-4a5ab6891ba6",
@@ -3576,7 +3579,7 @@
       "aperture": "f/6.3",
       "iso": 320,
       "slug": "2021-2",
-      "order": 17
+      "order": 18
     },
     {
       "id": "6b78daea-91a1-4809-9af7-2481094a62ad",
@@ -3595,7 +3598,7 @@
       "aperture": "f/6.3",
       "iso": 320,
       "slug": "2021-3",
-      "order": 16
+      "order": 17
     },
     {
       "id": "2e0670e9-12c9-4966-bb3e-763aa851c120",
@@ -3614,7 +3617,7 @@
       "aperture": "f/6.3",
       "iso": 500,
       "slug": "2021-4",
-      "order": 15
+      "order": 16
     },
     {
       "id": "025d0add-af9a-4103-824f-047a10e209ba",
@@ -3633,7 +3636,7 @@
       "aperture": "f/8",
       "iso": 200,
       "slug": "2021-5",
-      "order": 14
+      "order": 15
     },
     {
       "id": "73fadc85-eea6-469e-bc7e-a367eac6ad0f",
@@ -3652,7 +3655,7 @@
       "aperture": "f/4.5",
       "iso": 160,
       "slug": "2021-6",
-      "order": 13
+      "order": 14
     },
     {
       "id": "58ccddca-ab83-41e5-ae8b-166223e7e2ac",
@@ -3671,7 +3674,7 @@
       "aperture": "f/5.6",
       "iso": 160,
       "slug": "2021-7",
-      "order": 12
+      "order": 13
     },
     {
       "id": "b164617c-08ef-43d9-8e2f-54a0f2551eef",
@@ -3690,7 +3693,7 @@
       "aperture": "f/6.3",
       "iso": 100,
       "slug": "2021-8",
-      "order": 11
+      "order": 12
     },
     {
       "id": "629030d9-e41c-40d0-a04a-3be16cdb9b83",
@@ -3709,7 +3712,7 @@
       "aperture": "f/4",
       "iso": 200,
       "slug": "2021-9",
-      "order": 10
+      "order": 11
     },
     {
       "id": "f600d501-2942-4bfb-8029-3bd1616cf84c",
@@ -3728,7 +3731,7 @@
       "aperture": "f/4",
       "iso": 100,
       "slug": "2021-10",
-      "order": 9
+      "order": 10
     },
     {
       "id": "9715c80e-7df7-4cf2-95cd-4eb3c052afd9",
@@ -3747,7 +3750,7 @@
       "aperture": "f/10",
       "iso": 100,
       "slug": "2021-11",
-      "order": 8
+      "order": 9
     },
     {
       "id": "aa22d236-20b6-490d-b36f-b3b14d4aabe3",
@@ -3766,7 +3769,7 @@
       "aperture": "f/10",
       "iso": 100,
       "slug": "2021-12",
-      "order": 7
+      "order": 8
     },
     {
       "id": "b4461788-aa1e-4a33-ac6a-52454322a653",
@@ -3785,7 +3788,7 @@
       "aperture": "f/5",
       "iso": 100,
       "slug": "2021-13",
-      "order": 6
+      "order": 7
     },
     {
       "id": "468866ed-87cf-4e81-a10e-c0a237a4de6a",
@@ -3824,7 +3827,7 @@
       "iso": 3200,
       "keywords": "festival svjetla, zagreb, hrvatska",
       "slug": "festival-svjetla-zagreb-19032022-2022",
-      "order": 5
+      "order": 6
     },
     {
       "id": "a00ed0f3-eca6-4f74-a461-3395640e45db",
@@ -3843,7 +3846,7 @@
       "aperture": "f/1.4",
       "iso": 100,
       "slug": "2022",
-      "order": 4
+      "order": 5
     },
     {
       "id": "df857f4d-594a-4aed-8ed9-6a329f9a2c45",
@@ -3862,7 +3865,7 @@
       "aperture": "f/6.3",
       "iso": 100,
       "slug": "2022-2",
-      "order": 3
+      "order": 4
     },
     {
       "id": "88c82ec3-262a-4121-b902-bbbd662a12bd",
@@ -3914,7 +3917,7 @@
       "capturedAt": "2026-02-14T18:56:14.831Z",
       "createdAt": "2026-02-14T18:56:14.995Z",
       "slug": "2026",
-      "order": 2
+      "order": 3
     },
     {
       "id": "b7988950-657e-48d9-b042-b978875e53f7",

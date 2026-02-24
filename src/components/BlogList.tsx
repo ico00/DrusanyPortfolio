@@ -104,9 +104,9 @@ export default function BlogList({
           <ul className="mt-12 space-y-8">
           {displayPosts.map((post) => (
             <li key={post.id}>
-              <article className="group overflow-hidden rounded-lg border border-zinc-200/60 transition-colors hover:border-zinc-300">
-                <Link href={`/blog/${post.slug}`} className="block">
-                  <div className="relative aspect-video overflow-hidden bg-zinc-100">
+              <article className="group overflow-visible rounded-lg border border-zinc-200/60 transition-colors hover:border-zinc-300 sm:overflow-hidden">
+                <Link href={`/blog/${post.slug}.html`} className="block">
+                  <div className="relative aspect-video overflow-hidden bg-zinc-100 -mx-6 w-[calc(100%+3rem)] sm:mx-0 sm:w-full">
                     {post.thumbnail ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
@@ -122,42 +122,62 @@ export default function BlogList({
                     )}
                     {post.thumbnail && <ViewfinderOverlay />}
                   </div>
-                  <div className="bg-zinc-950 p-6">
+                  <div className="bg-zinc-950 -mx-6 w-[calc(100%+3rem)] p-6 sm:mx-0 sm:w-full">
                     <h2 className="theme-blog-list-card-title font-normal tracking-tight">
                       {post.title}
                     </h2>
                     <p className="theme-blog-list-card-metadata mt-3 flex flex-wrap items-center gap-y-2">
-                      <span className="inline-flex items-center gap-1.5" style={{ marginRight: "3rem" }}>
+                      <span
+                        className="hidden sm:inline-flex items-center gap-1.5"
+                        style={{ marginRight: "3rem" }}
+                      >
                         <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
                         <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
                         Tekst i fotografije: Ivica Drusany
                       </span>
-                      <span className="inline-flex items-center gap-1.5" style={{ marginRight: "3rem" }}>
+                      <span
+                        className="inline-flex items-center gap-1.5"
+                        style={{ marginRight: "3rem" }}
+                      >
                         <Calendar className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                        Datum objave:{" "}
-                        <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
+                        <span className="sm:hidden">
+                          <time dateTime={post.date}>
+                            {formatBlogDate(post.date)}
+                          </time>
+                        </span>
+                        <span className="hidden sm:inline">
+                          Datum objave:{" "}
+                          <time dateTime={post.date}>
+                            {formatBlogDate(post.date)}
+                          </time>
+                        </span>
                       </span>
-                      <span className="inline-flex items-center gap-1.5">
+                      <span className="hidden sm:inline-flex items-center gap-1.5">
                         <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
                         Kategorija:{" "}
-                      {getDisplayCategories(post).length > 0 ? (
-                        getDisplayCategories(post).map((slug) => (
-                          <button
-                            key={slug}
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              router.push(`/blog?kategorija=${encodeURIComponent(slug)}`, { scroll: false });
-                            }}
-                            className="inline-block border-b border-transparent pb-0.5 text-inherit transition-[color,border-color] duration-200 hover:border-white hover:text-white"
-                          >
-                            {getShortCategoryLabel(slug)}
-                          </button>
-                        ))
-                      ) : (
-                        "—"
-                      )}
+                        {getDisplayCategories(post).length > 0 ? (
+                          getDisplayCategories(post).map((slug) => (
+                            <button
+                              key={slug}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                router.push(
+                                  `/blog?kategorija=${encodeURIComponent(
+                                    slug,
+                                  )}`,
+                                  { scroll: false },
+                                );
+                              }}
+                              className="inline-block border-b border-transparent pb-0.5 text-inherit transition-[color,border-color] duration-200 hover:border-white hover:text-white"
+                            >
+                              {getShortCategoryLabel(slug)}
+                            </button>
+                          ))
+                        ) : (
+                          "—"
+                        )}
                       </span>
                     </p>
                   </div>

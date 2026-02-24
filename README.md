@@ -147,6 +147,32 @@ Projekt se builda u čisto statični output (`out/`). Može se deployati na:
 - **GitHub Pages** – GitHub Action koji pokreće build i pusha `out/` u `gh-pages`
 - **Vlastiti server** – upload sadržaja iz `out/` na web server
 
+### Legacy shared hosting (Apache + FTP/cPanel)
+
+- `next.config.ts` koristi `output: "export"` → cijeli site je čisti statični HTML u `out/`.
+- Na klasičnom Apache hostingu (`public_html`) koristi se `.htaccess` u rootu (dolazi iz `public/.htaccess`):
+
+```apache
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Izričita pravila: ruta bez .html -> odgovarajući .html (radi refresha)
+# Samo glavne stranice; blog postovi (/blog/slug) koriste eksplicitne .html linkove u kodu
+RewriteRule ^about/?$ about.html [L]
+RewriteRule ^blog/?$ blog.html [L]
+RewriteRule ^contact/?$ contact.html [L]
+RewriteRule ^admin/?$ admin.html [L]
+</IfModule>
+```
+
+- Pojedinačni blog postovi se na takvom hostingu otvaraju preko URL‑ova s ekstenzijom, npr.
+  - lista: `/blog`
+  - post: `/blog/260110-sport-metadata-generator.html`
+  - ovo izbjegava ovisnost o naprednijim rewrite pravilima i osigurava da **refresh radi ispravno** i na ograničenim konfiguracijama.
+
 ## 📖 Dokumentacija
 
 Detaljna arhitektura, API rute, design sustav i konvencije su opisani u **[architecture.md](./architecture.md)**.
