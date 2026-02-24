@@ -16,6 +16,8 @@ import {
   formatBlogDate,
 } from "@/data/blogCategories";
 
+export const dynamicParams = false;
+
 export async function generateMetadata({
   params,
 }: {
@@ -57,7 +59,13 @@ export async function generateMetadata({
 export async function generateStaticParams() {
   const { posts } = await getBlog();
   const published = getPublishedPosts(posts);
-  return published.length > 0 ? published.map((p) => ({ slug: p.slug })) : [{ slug: "_" }];
+  if (published.length === 0) {
+    return [{ slug: "_" }];
+  }
+
+  // Kod exporta se blog postovi koriste kao /blog/${slug}.html,
+  // pa slug param ovdje uključuje .html ekstenziju.
+  return published.map((p) => ({ slug: `${p.slug}.html` }));
 }
 
 export default async function BlogPostPage({
@@ -92,6 +100,7 @@ export default async function BlogPostPage({
   }
 
   const focusPoint = post.thumbnailFocus || "50% 50%";
+  const categories = getDisplayCategories(post);
   const { posts } = await getBlog();
   const publishedPosts = getPublishedPosts(posts);
 
@@ -110,14 +119,6 @@ export default async function BlogPostPage({
               </h1>
               <p className="mt-3 flex flex-wrap items-center gap-y-2 text-sm text-zinc-500">
                 <span
-                  className="hidden sm:inline-flex items-center gap-1.5"
-                  style={{ marginRight: "3rem" }}
-                >
-                  <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                  <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                  Tekst i fotografije: Ivica Drusany
-                </span>
-                <span
                   className="inline-flex items-center gap-1.5"
                   style={{ marginRight: "3rem" }}
                 >
@@ -130,11 +131,45 @@ export default async function BlogPostPage({
                     <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
                   </span>
                 </span>
+                {/* Kategorija: prikaz pored datuma na mobilu i u zasebnom segmentu na desktopu */}
+                <span
+                  className="inline-flex items-center gap-1.5 sm:hidden"
+                  style={{ marginRight: "3rem" }}
+                >
+                  <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                  {categories.length > 0 ? (
+                    categories.map((catSlug, index) => (
+                      <span key={catSlug}>
+                        {index > 0 ? ", " : ""}
+                        {getShortCategoryLabel(catSlug)}
+                      </span>
+                    ))
+                  ) : (
+                    "—"
+                  )}
+                </span>
+                {/* Autor: zaseban red na mobilu, prvi segment na desktopu */}
+                <span
+                  className="inline-flex w-full items-center gap-1.5 sm:hidden"
+                  style={{ marginTop: "0.25rem" }}
+                >
+                  <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                  <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                  Tekst i fotografije: Ivica Drusany
+                </span>
+                <span
+                  className="hidden sm:inline-flex items-center gap-1.5"
+                  style={{ marginRight: "3rem" }}
+                >
+                  <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                  <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                  Tekst i fotografije: Ivica Drusany
+                </span>
                 <span className="hidden sm:inline-flex items-center gap-1.5">
                   <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
                   Kategorija:{" "}
-                  {getDisplayCategories(post).length > 0 ? (
-                    getDisplayCategories(post).map((catSlug) => (
+                  {categories.length > 0 ? (
+                    categories.map((catSlug) => (
                       <Link
                         key={catSlug}
                         href={`/blog?kategorija=${encodeURIComponent(
@@ -154,7 +189,7 @@ export default async function BlogPostPage({
 
             {post.thumbnail && (
               <div className="relative mt-6 overflow-hidden bg-zinc-100 -mx-6 w-[calc(100%+3rem)] md:mx-0 md:mt-8 md:w-full">
-                <div className="relative aspect-video w-full">
+                <div className="relative aspect-[3/2] w-full md:aspect-video">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={post.thumbnail}
@@ -167,7 +202,7 @@ export default async function BlogPostPage({
               </div>
             )}
 
-            <div className="py-12 md:py-16 -mx-6 w-[calc(100%+3rem)] px-6 md:mx-0 md:w-full">
+            <div className="bg-white py-12 md:py-16 -mx-6 w-[calc(100%+3rem)] px-6 md:mx-0 md:w-full">
               <ProseContent
                 html={post.body || ""}
                 className="prose prose-lg prose-zinc max-w-none prose-headings:font-serif"

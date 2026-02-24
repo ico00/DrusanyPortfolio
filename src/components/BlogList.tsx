@@ -101,11 +101,11 @@ export default function BlogList({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
         >
-          <ul className="mt-12 space-y-8">
-          {displayPosts.map((post) => (
-            <li key={post.id}>
-              <article className="group overflow-visible rounded-lg border border-zinc-200/60 transition-colors hover:border-zinc-300 sm:overflow-hidden">
-                <Link href={`/blog/${post.slug}.html`} className="block">
+          <ul className="mt-12 space-y-12">
+            {displayPosts.map((post) => (
+              <li key={post.id}>
+                <article className="group overflow-visible rounded-lg sm:overflow-hidden">
+                  <Link href={`/blog/${post.slug}.html`} className="block">
                   <div className="relative aspect-video overflow-hidden bg-zinc-100 -mx-6 w-[calc(100%+3rem)] sm:mx-0 sm:w-full">
                     {post.thumbnail ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
@@ -122,24 +122,24 @@ export default function BlogList({
                     )}
                     {post.thumbnail && <ViewfinderOverlay />}
                   </div>
-                  <div className="bg-zinc-950 -mx-6 w-[calc(100%+3rem)] p-6 sm:mx-0 sm:w-full">
-                    <h2 className="theme-blog-list-card-title font-normal tracking-tight">
+                  <div className="bg-white -mx-6 w-[calc(100%+3rem)] border-b-2 border-zinc-200 p-6 text-zinc-900 transition-colors group-hover:border-zinc-300 sm:mx-0 sm:w-full">
+                    <h2 className="theme-blog-list-card-title font-normal tracking-tight text-zinc-900">
                       {post.title}
                     </h2>
-                    <p className="theme-blog-list-card-metadata mt-3 flex flex-wrap items-center gap-y-2">
+                    <p className="theme-blog-list-card-metadata mt-3 flex flex-wrap items-center gap-y-2 text-zinc-600">
                       <span
                         className="hidden sm:inline-flex items-center gap-1.5"
                         style={{ marginRight: "3rem" }}
                       >
-                        <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                        <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                        <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
+                        <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
                         Tekst i fotografije: Ivica Drusany
                       </span>
                       <span
                         className="inline-flex items-center gap-1.5"
                         style={{ marginRight: "3rem" }}
                       >
-                        <Calendar className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                        <Calendar className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
                         <span className="sm:hidden">
                           <time dateTime={post.date}>
                             {formatBlogDate(post.date)}
@@ -153,7 +153,7 @@ export default function BlogList({
                         </span>
                       </span>
                       <span className="hidden sm:inline-flex items-center gap-1.5">
-                        <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                        <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
                         Kategorija:{" "}
                         {getDisplayCategories(post).length > 0 ? (
                           getDisplayCategories(post).map((slug) => (
@@ -170,7 +170,7 @@ export default function BlogList({
                                   { scroll: false },
                                 );
                               }}
-                              className="inline-block border-b border-transparent pb-0.5 text-inherit transition-[color,border-color] duration-200 hover:border-white hover:text-white"
+                              className="inline-block border-b border-transparent pb-0.5 text-inherit transition-[color,border-color] duration-200 hover:border-zinc-900 hover:text-zinc-900"
                             >
                               {getShortCategoryLabel(slug)}
                             </button>
@@ -184,11 +184,11 @@ export default function BlogList({
                 </Link>
               </article>
             </li>
-          ))}
-        </ul>
-        {showPagination && (
-          <Pagination currentPage={currentPage} totalPages={totalPages} />
-        )}
+            ))}
+          </ul>
+          {showPagination && (
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
+          )}
         </motion.div>
       )}
     </AnimatePresence>

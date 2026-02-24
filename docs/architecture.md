@@ -639,13 +639,13 @@ npm run build
 
 - Generira statični output u `out/`
 - Struktura: `out/index.html`, `out/uploads/`, `out/_next/`, itd.
-- Cijeli `out/` folder se može deployati na bilo koji statični hosting
+- Cijeli `out/` folder se deploya na statični hosting; v. `docs/technical-patterns.md` §9.1 za deploy rutinu (rsync over SSH)
 
 ### 7.4 Deployment
 
+- **Shared hosting (cPanel):** `scripts/deploy-static.sh` – build, push na `drusany-static` repo, rsync over SSH na `public_html`. Samo promijenjene datoteke. V. `docs/technical-patterns.md` §9.1.
 - **Vercel / Netlify:** Povezivanje repozitorija, build command: `npm run build`, output directory: `out`
 - **GitHub Pages:** GitHub Action koji pokreće `npm run build` i pusha `out/` u `gh-pages` branch
-- **Vlastiti server:** Upload `out/` na web server (nginx, Apache) kao statični sadržaj
 
 ---
 
@@ -769,9 +769,11 @@ DrusanyPortfolio/
 │       ├── theme.json     # Theme konfiguracija (font, fontSize, color po elementu)
 │       └── themeFonts.ts  # Konfiguracija fontova za Theme (dodavanje novih fontova)
 ├── scripts/
+│   ├── deploy-static.sh            # Build, kopira out/ u drusany-static, push, rsync na server (samo promijenjene datoteke)
+│   ├── deploy-ftp.mjs              # FTP deploy (alternativa ako nemaš SSH)
 │   ├── populate-blog-exif.mjs      # Popunjava blogExif.json iz postojećih slika (exifr)
 │   ├── import-wordpress-blog.mjs   # Import starih postova iz WordPress SQL dumpa
-│   └── cleanup-blog-categories.mjs # Uklanja kategorije koje više ne postoje u blogCategories
+│   └── cleanup-blog-categories.mjs  # Uklanja kategorije koje više ne postoje u blogCategories
 ├── out/                   # Generirano pri build (gitignore)
 ├── next.config.ts
 ├── package.json

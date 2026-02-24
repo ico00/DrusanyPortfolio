@@ -131,7 +131,7 @@ export default function HeroSlider({ images }: HeroSliderProps) {
 
       <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-between p-8 md:p-12 lg:p-16">
         <div className="flex flex-1 flex-col justify-center">
-          <h2 className="font-serif text-5xl font-bold tracking-tight text-white md:text-7xl lg:text-8xl">
+          <h2 className="theme-title text-5xl font-bold tracking-tight md:text-7xl lg:text-8xl">
             {slide.label.toUpperCase()}
           </h2>
           {(heroImg?.title || heroImg?.venue) && (

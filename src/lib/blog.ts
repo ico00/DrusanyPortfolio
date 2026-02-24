@@ -197,8 +197,9 @@ export async function getBlogPostById(id: string): Promise<BlogPost | null> {
 }
 
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
+  const normalizedSlug = slug.endsWith(".html") ? slug.slice(0, -5) : slug;
   const { posts } = await getBlog();
-  const post = posts.find((p) => p.slug === slug) ?? null;
+  const post = posts.find((p) => p.slug === normalizedSlug) ?? null;
   if (!post || post.status === "draft") return null;
 
   const galleryImages =
@@ -208,7 +209,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 
   // Read body from file (src/data/blog/[slug].html)
   try {
-    const contentPath = getBlogContentPath(slug);
+    const contentPath = getBlogContentPath(normalizedSlug);
     const body = await readFile(contentPath, "utf-8");
     return { ...post, body: sanitizeProseHtml(body), galleryImages };
   } catch {

@@ -265,7 +265,9 @@ RewriteRule ^admin/?$ admin.html [L]
   - isto za featured sliku i tekstualni dio posta na stranici `blog/[slug]/page.tsx`.
   - referentne komponente: `BlogList` i `blog/[slug]/page.tsx`.
 
-### 9.1 Git deploy (drusany-static + cPanel)
+### 9.1 Deploy (rsync over SSH)
+
+**Trenutno stanje (veljača 2026):** rsync over SSH – jedan korak, samo promijenjene datoteke. Workflow: uređuješ u adminu → spremiš → `./scripts/deploy-static.sh` → gotovo.
 
 - **Repozitoriji:**
   - `DrusanyPortfolio` – izvorni kod (ovaj projekt).
@@ -274,21 +276,35 @@ RewriteRule ^admin/?$ admin.html [L]
   - iz root projekta poziv: `./scripts/deploy-static.sh`
   - radi:
     - `npm run build`
-    - kopira `out/` u `../drusany-static`
+    - kopira `out/` u `../drusany-static` (uključujući `.htaccess`)
     - briše `uploads` iz `drusany-static`
-    - kopira `.htaccess`
+    - generira `.cpanel.yml`
     - `git add`, `git commit`, `git push` na `drusany-static`
+    - **rsync over SSH** (ako su `SSH_HOST`, `SSH_USER` u `.env`) – prenosi samo promijenjene datoteke direktno u `public_html`
 - **cPanel Git™ Version Control:**
-  - klonirani repo `drusany-static` koristi `.cpanel.yml`:
+  - klonirani repo `drusany-static` koristi `.cpanel.yml` (skripta ga generira pri svakom deployu)
+  - **Važno:** `cp -R *` ne kopira dotfileove – `.htaccess` mora biti eksplicitno u tasku
+  - Skripta piše čisti YAML (ne RTF – TextEdit u Rich Text modu kvari datoteku)
 
 ```yaml
 deployment:
   tasks:
     - export DEPLOYPATH=/home/<USER>/public_html
+    - /bin/cp -f .htaccess $DEPLOYPATH/ 2>/dev/null || true
     - /bin/cp -R * $DEPLOYPATH
 ```
 
-- **Deploy rutina:**
-  1. Lokalno u `DrusanyPortfolio`: `./scripts/deploy-static.sh`
-  2. cPanel → Git Version Control → `drusany-static` → **Deploy HEAD Commit**
-  3. `uploads/` (fotografije) ostaje samo na serveru – nove foldere s fotkama uploadaš ručno (FTP/File Manager) kada dodaješ nove blog postove ili galerije.
+- **Postavka rsync (jednokratno):**
+  1. U cPanelu: Security → SSH Access – omogući SSH, zapiši port (često nije 22, npr. 21098).
+  2. Na serveru: instaliraj rsync ako nije (`yum install rsync` ili slično – hosting obično ima).
+  3. U `.env` dodaj:
+     ```
+     SSH_HOST=drusany.com
+     SSH_USER=drusanyc
+     SSH_PATH=/home/drusanyc/public_html
+     SSH_PORT=21098
+     ```
+  4. Testiraj: `ssh -p 21098 drusanyc@drusany.com` (ili lozinka ili SSH ključ).
+- **Deploy rutina:** Uređuješ u adminu → Save → `./scripts/deploy-static.sh` → gotovo. Skripta radi build, push i rsync.
+- **Alternativa (ako nemaš SSH):** FTP deploy (`FTP_HOST`, `FTP_USER`, `FTP_PASS`) ili cPanel Deploy HEAD Commit (može biti nestabilan).
+- **uploads/** (fotografije) ostaje na serveru – nove foldere uploadaš ručno (FTP/File Manager).

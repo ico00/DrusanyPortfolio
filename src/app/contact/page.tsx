@@ -53,7 +53,7 @@ export default async function ContactPage() {
         </aside>
         {/* Mobil: slika na vrhu */}
         <div className="relative aspect-[4/5] w-full bg-zinc-900 lg:hidden">
-          <AboutImage src="/about-photo.jpg" alt="Contact" />
+          <AboutImage src="/contact.jpg" alt="Contact" />
         </div>
 
         {/* Desno – scrollabilni sadržaj */}

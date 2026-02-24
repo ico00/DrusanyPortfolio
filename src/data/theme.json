@@ -1,92 +1,128 @@
 {
   "title": {
     "fontFamily": "redHatDisplay",
-    "fontSize": "clamp(2rem, 5vw, 4rem)",
-    "color": "#ffffff"
+    "fontSize": "clamp(4rem, 7vw, 8rem)",
+    "color": "#ffffff",
+    "fontWeight": "100",
+    "fontStyle": "normal"
   },
   "heading": {
     "fontFamily": "serif",
     "fontSize": "clamp(1.75rem, 4vw, 3rem)",
-    "color": "#18181b"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "headingH1": {
     "fontFamily": "redHatDisplay",
     "fontSize": "2.25rem",
-    "color": "#18181b"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "headingH2": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1.875rem",
-    "color": "#18181b"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "headingH3": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1.5rem",
-    "color": "#18181b"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "headingH4": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1.25rem",
-    "color": "#18181b"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "headingH5": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1.125rem",
-    "color": "#18181b"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "headingH6": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1rem",
-    "color": "#18181b"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "headingOnDark": {
     "fontFamily": "redHatDisplay",
     "fontSize": "clamp(1.75rem, 4vw, 3rem)",
-    "color": "#ffffff"
+    "color": "#ffffff",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "blogPostTitle": {
     "fontFamily": "redHatDisplay",
     "fontSize": "clamp(1.875rem, 4vw, 3rem)",
-    "color": "#18181b"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "blogListCardTitle": {
     "fontFamily": "redHatDisplay",
     "fontSize": "clamp(1.5rem, 3vw, 1.875rem)",
-    "color": "#ffffff"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "blogListCardMetadata": {
     "fontFamily": "sans",
     "fontSize": "0.875rem",
-    "color": "#d4d4d8"
+    "color": "lab(47.8878% 1.65477 -5.77283)",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "widgetTitle": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1.125rem",
-    "color": "#18181b"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "body": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1.2rem",
-    "color": "#3f3f46"
+    "color": "#3f3f46",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "quote": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1.2rem",
-    "color": "#e4e4e7"
+    "color": "#e4e4e7",
+    "fontWeight": "400",
+    "fontStyle": "italic"
   },
   "code": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1.2rem",
-    "color": "#18181b"
+    "color": "#18181b",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "nav": {
     "fontFamily": "redHatDisplay",
     "fontSize": "0.875rem",
-    "color": "rgba(255,255,255,0.9)"
+    "color": "rgba(255,255,255,0.9)",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   },
   "caption": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1.2rem",
-    "color": "#71717a"
+    "color": "#71717a",
+    "fontWeight": "400",
+    "fontStyle": "normal"
   }
 }

@@ -173,27 +173,19 @@ RewriteRule ^admin/?$ admin.html [L]
   - post: `/blog/260110-sport-metadata-generator.html`
   - ovo izbjegava ovisnost o naprednijim rewrite pravilima i osigurava da **refresh radi ispravno** i na ograničenim konfiguracijama.
 
-#### Git deploy na cPanelu (bez slika)
+#### Deploy na shared hostingu (rsync over SSH)
 
-- Za statički deploy na shared hostingu koristi se dodatni repo npr. `drusany-static` koji sadrži **samo sadržaj `out/` bez `uploads`**.
-- Lokalno postoji skripta `scripts/deploy-static.sh` koja:
-  - pokreće `npm run build`,
-  - prebriše sadržaj `../drusany-static`,
-  - kopira `out/` u `../drusany-static` (briše `uploads`), kopira `.htaccess`,
-  - radi `git add`, `git commit` i `git push` na `drusany-static`.
-- Na cPanelu je `drusany-static` kloniran kroz **Git™ Version Control** i koristi `.cpanel.yml`:
-
-```yaml
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/<USER>/public_html
-    - /bin/cp -R * $DEPLOYPATH
-```
-
-- Deploy koraci:
-  1. Lokalno: `./scripts/deploy-static.sh`
-  2. cPanel → Git Version Control → `drusany-static` → **Deploy HEAD Commit**
-  3. Slike (folder `uploads/`) ostaju **isključivo na serveru** i uploadaju se ručno (FTP/File Manager) samo kad se dodaju nove.
+- **Workflow:** Uređuješ u adminu → Save → `./scripts/deploy-static.sh` → gotovo.
+- Skripta `scripts/deploy-static.sh`: build, kopira u `drusany-static`, push na GitHub, **rsync** na server (samo promijenjene datoteke).
+- **Postavka (jednokratno):** U cPanelu omogući SSH (Security → SSH Access), zapiši port. U `.env` dodaj:
+  ```
+  SSH_HOST=drusany.com
+  SSH_USER=drusanyc
+  SSH_PATH=/home/drusanyc/public_html
+  SSH_PORT=21098
+  ```
+- Alternativa: FTP deploy (`FTP_HOST`, `FTP_USER`, `FTP_PASS`) ili cPanel Deploy HEAD Commit.
+- Slike (`uploads/`) ostaju na serveru – nove foldere uploadaš ručno (FTP/File Manager).
 
 ## 📖 Dokumentacija
 

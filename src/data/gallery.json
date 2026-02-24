@@ -5488,7 +5488,7 @@
       "thumb": "/uploads/thumbs/concerts/200208-editors_190.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2020-02-08T20:06:59.000Z",
+      "capturedAt": "2020-02-08T20:06:00.000Z",
       "createdAt": "2026-02-16T14:07:31.194Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "35mm",
@@ -5496,7 +5496,9 @@
       "aperture": "f/1.4",
       "iso": 800,
       "keywords": "editors, zagreb, hrvatska, dom sportova, koncert, fotografije, fotke, slike, reportaža, galerija, izvještaj, ivica drusany",
-      "slug": "dom-sportova-822020-2020"
+      "slug": "dom-sportova-822020-domsportova-2020",
+      "venue": "domsportova",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "bc7d7102-161e-4534-8a99-e664293f09da",

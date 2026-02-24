@@ -41,10 +41,10 @@ export default function Pagination({
         <Link
           href={prevHref}
           className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
-          aria-label="Previous page"
+          aria-label="Prethodna stranica"
         >
           <ChevronLeft className="h-4 w-4" />
-          Previous
+          Prethodna
         </Link>
       ) : (
         <span
@@ -52,7 +52,7 @@ export default function Pagination({
           aria-hidden
         >
           <ChevronLeft className="h-4 w-4" />
-          Previous
+          Prethodna
         </span>
       )}
 
@@ -86,9 +86,9 @@ export default function Pagination({
         <Link
           href={nextHref}
           className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
-          aria-label="Next page"
+          aria-label="Sljedeća stranica"
         >
-          Next
+          Sljedeća
           <ChevronRight className="h-4 w-4" />
         </Link>
       ) : (
@@ -96,7 +96,7 @@ export default function Pagination({
           className="inline-flex cursor-default items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-400"
           aria-hidden
         >
-          Next
+          Sljedeća
           <ChevronRight className="h-4 w-4" />
         </span>
       )}

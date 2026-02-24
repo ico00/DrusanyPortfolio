@@ -53,6 +53,23 @@ const PREVIEW_TEXT: Record<string, string> = {
 const HEADING_LEVELS = [1, 2, 3, 4, 5, 6] as const;
 type HeadingLevelKey = `headingH${typeof HEADING_LEVELS[number]}`;
 
+const FONT_WEIGHT_OPTIONS = [
+  { value: "100", label: "100 (Thin)" },
+  { value: "200", label: "200 (Extra Light)" },
+  { value: "300", label: "300 (Light)" },
+  { value: "400", label: "400 (Normal)" },
+  { value: "500", label: "500 (Medium)" },
+  { value: "600", label: "600 (Semi Bold)" },
+  { value: "700", label: "700 (Bold)" },
+  { value: "800", label: "800 (Extra Bold)" },
+  { value: "900", label: "900 (Black)" },
+] as const;
+
+const FONT_STYLE_OPTIONS = [
+  { value: "normal", label: "Normal" },
+  { value: "italic", label: "Italic" },
+] as const;
+
 function ThemeFontSelect({
   value,
   onChange,
@@ -176,6 +193,8 @@ function ElementCard({
             FONT_PREVIEW_MAP[element.fontFamily] ??
             "var(--font-geist-sans), sans-serif",
           fontSize: element.fontSize,
+          fontWeight: element.fontWeight ?? "400",
+          fontStyle: element.fontStyle ?? "normal",
           color: element.color,
           backgroundColor: isLightColor(element.color)
             ? "#27272a"
@@ -201,6 +220,36 @@ function ElementCard({
             placeholder="e.g. 1rem, clamp(2rem, 5vw, 4rem)"
             className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
           />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="mb-1.5 block text-xs text-zinc-500">Weight</label>
+            <select
+              value={element.fontWeight ?? "400"}
+              onChange={(e) => onUpdate({ fontWeight: e.target.value })}
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+            >
+              {FONT_WEIGHT_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs text-zinc-500">Style</label>
+            <select
+              value={element.fontStyle ?? "normal"}
+              onChange={(e) => onUpdate({ fontStyle: e.target.value })}
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+            >
+              {FONT_STYLE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div>
           <label className="mb-1.5 block text-xs text-zinc-500">Color</label>

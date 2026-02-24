@@ -24,31 +24,43 @@ html {
 .prose h1, .prose-invert h1 {
   font-family: var(--theme-headingH1-font, var(--theme-heading-font, var(--font-serif)));
   font-size: var(--theme-headingH1-size, 2.25rem);
+  font-weight: var(--theme-headingH1-weight, 400);
+  font-style: var(--theme-headingH1-style, normal);
   color: var(--theme-headingH1-color, var(--theme-heading-color, inherit));
 }
 .prose h2, .prose-invert h2 {
   font-family: var(--theme-headingH2-font, var(--theme-heading-font, var(--font-serif)));
   font-size: var(--theme-headingH2-size, 1.875rem);
+  font-weight: var(--theme-headingH2-weight, 400);
+  font-style: var(--theme-headingH2-style, normal);
   color: var(--theme-headingH2-color, var(--theme-heading-color, inherit));
 }
 .prose h3, .prose-invert h3 {
   font-family: var(--theme-headingH3-font, var(--theme-heading-font, var(--font-serif)));
   font-size: var(--theme-headingH3-size, 1.5rem);
+  font-weight: var(--theme-headingH3-weight, 400);
+  font-style: var(--theme-headingH3-style, normal);
   color: var(--theme-headingH3-color, var(--theme-heading-color, inherit));
 }
 .prose h4, .prose-invert h4 {
   font-family: var(--theme-headingH4-font, var(--theme-heading-font, var(--font-serif)));
   font-size: var(--theme-headingH4-size, 1.25rem);
+  font-weight: var(--theme-headingH4-weight, 400);
+  font-style: var(--theme-headingH4-style, normal);
   color: var(--theme-headingH4-color, var(--theme-heading-color, inherit));
 }
 .prose h5, .prose-invert h5 {
   font-family: var(--theme-headingH5-font, var(--theme-heading-font, var(--font-serif)));
   font-size: var(--theme-headingH5-size, 1.125rem);
+  font-weight: var(--theme-headingH5-weight, 400);
+  font-style: var(--theme-headingH5-style, normal);
   color: var(--theme-headingH5-color, var(--theme-heading-color, inherit));
 }
 .prose h6, .prose-invert h6 {
   font-family: var(--theme-headingH6-font, var(--theme-heading-font, var(--font-serif)));
   font-size: var(--theme-headingH6-size, 1rem);
+  font-weight: var(--theme-headingH6-weight, 400);
+  font-style: var(--theme-headingH6-style, normal);
   color: var(--theme-headingH6-color, var(--theme-heading-color, inherit));
 }
 
@@ -56,6 +68,8 @@ html {
 .theme-heading {
   font-family: var(--theme-headingH1-font, var(--theme-heading-font, var(--font-serif)));
   font-size: var(--theme-headingH1-size, clamp(1.75rem, 4vw, 3rem));
+  font-weight: var(--theme-headingH1-weight, 400);
+  font-style: var(--theme-headingH1-style, normal);
   color: var(--theme-headingH1-color, var(--theme-heading-color, #18181b));
 }
 /* Naslov na tamnoj pozadini (About, Contact) – specifičnost da nadjača Tailwind reset */
@@ -63,38 +77,55 @@ h1.theme-heading-on-dark,
 h2.theme-heading-on-dark {
   font-family: var(--theme-headingOnDark-font, var(--font-serif));
   font-size: var(--theme-headingOnDark-size, clamp(1.75rem, 4vw, 3rem));
+  font-weight: var(--theme-headingOnDark-weight, 400);
+  font-style: var(--theme-headingOnDark-style, normal);
   color: var(--theme-headingOnDark-color, #ffffff);
 }
 /* Blog post naslov (svijetla pozadina) */
 .theme-blog-post-title {
   font-family: var(--theme-blogPostTitle-font, var(--font-serif));
   font-size: var(--theme-blogPostTitle-size, clamp(1.875rem, 4vw, 3rem));
+  font-weight: var(--theme-blogPostTitle-weight, 400);
+  font-style: var(--theme-blogPostTitle-style, normal);
   color: var(--theme-blogPostTitle-color, #18181b);
 }
 /* Blog list card – naslov i metadata ispod featured image */
 .theme-blog-list-card-title {
   font-family: var(--theme-blogListCardTitle-font, var(--font-serif));
   font-size: var(--theme-blogListCardTitle-size, clamp(1.5rem, 3vw, 1.875rem));
-  color: var(--theme-blogListCardTitle-color, #ffffff);
+  font-weight: var(--theme-blogListCardTitle-weight, 400);
+  font-style: var(--theme-blogListCardTitle-style, normal);
+  color: var(--theme-blogListCardTitle-color, #18181b);
+}
+.theme-blog-list-card-title.text-zinc-900 {
+  color: #18181b !important;
 }
 .theme-blog-list-card-metadata {
   font-family: var(--theme-blogListCardMetadata-font, var(--font-sans));
   font-size: var(--theme-blogListCardMetadata-size, 0.875rem);
+  font-weight: var(--theme-blogListCardMetadata-weight, 400);
+  font-style: var(--theme-blogListCardMetadata-style, normal);
   color: var(--theme-blogListCardMetadata-color, #d4d4d8);
 }
 /* Blog sidebar widget naslov – !important jer button/h3 mogu imati reset */
 .theme-widget-title {
   font-family: var(--theme-widgetTitle-font, var(--font-serif)) !important;
   font-size: var(--theme-widgetTitle-size, 1.125rem) !important;
+  font-weight: var(--theme-widgetTitle-weight, 400) !important;
+  font-style: var(--theme-widgetTitle-style, normal) !important;
   color: var(--theme-widgetTitle-color, #18181b) !important;
 }
 .prose p, .prose li, .prose-invert p, .prose-invert li {
   font-family: var(--theme-body-font, var(--font-sans));
   font-size: var(--theme-body-size, 1rem);
+  font-weight: var(--theme-body-weight, 400);
+  font-style: var(--theme-body-style, normal);
   color: var(--theme-body-color, inherit);
 }
 .prose blockquote, .prose-invert blockquote {
   font-family: var(--theme-quote-font, var(--font-serif));
+  font-weight: var(--theme-quote-weight, 400);
+  font-style: var(--theme-quote-style, italic);
   font-size: var(--theme-quote-size, 1.125rem);
   color: var(--theme-quote-color, inherit);
 }
@@ -137,16 +168,22 @@ h2.theme-heading-on-dark {
 .theme-title {
   font-family: var(--theme-title-font, var(--font-serif));
   font-size: var(--theme-title-size, clamp(2rem, 5vw, 4rem));
+  font-weight: var(--theme-title-weight, 400);
+  font-style: var(--theme-title-style, normal);
   color: var(--theme-title-color, #ffffff);
 }
 .theme-nav {
   font-family: var(--theme-nav-font, var(--font-sans));
   font-size: var(--theme-nav-size, 0.875rem);
+  font-weight: var(--theme-nav-weight, 400);
+  font-style: var(--theme-nav-style, normal);
   /* Boja ostaje na komponenti (hero vs non-hero) */
 }
 .theme-caption {
   font-family: var(--theme-caption-font, var(--font-sans));
   font-size: var(--theme-caption-size, 0.75rem);
+  font-weight: var(--theme-caption-weight, 400);
+  font-style: var(--theme-caption-style, normal);
   color: var(--theme-caption-color, #71717a);
 }
 
@@ -605,6 +642,8 @@ body.custom-cursor-active * {
 .blocknote-editor-wrapper code {
   font-family: var(--theme-code-font, var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace);
   font-size: var(--theme-code-size, 0.875rem);
+  font-weight: var(--theme-code-weight, 400);
+  font-style: var(--theme-code-style, normal);
   color: var(--theme-code-color, inherit);
 }
 /* Code block (pre) – pozadina, padding, zaobljeni uglovi */

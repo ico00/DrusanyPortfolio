@@ -8,6 +8,10 @@ export interface ThemeElement {
   fontFamily: ThemeFontFamily;
   fontSize: string;
   color: string;
+  /** CSS font-weight: 100–900, default 400 */
+  fontWeight?: string;
+  /** CSS font-style: "normal" | "italic", default "normal" */
+  fontStyle?: string;
 }
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -49,7 +53,14 @@ export async function getTheme(): Promise<ThemeConfig> {
   try {
     const raw = await readFile(THEME_PATH, "utf-8");
     const data = JSON.parse(raw) as Partial<ThemeConfig>;
-    const merged = { ...defaults, ...data } as ThemeConfig;
+    const merged = { ...defaults } as ThemeConfig;
+    for (const key of Object.keys(merged) as (keyof ThemeConfig)[]) {
+      const def = defaults[key];
+      const fromFile = data[key];
+      if (def && fromFile && typeof def === "object" && typeof fromFile === "object" && "fontFamily" in def) {
+        (merged as unknown as Record<string, ThemeElement>)[key] = { ...def, ...fromFile } as ThemeElement;
+      }
+    }
     const base = merged.heading;
     for (let i = 1; i <= 6; i++) {
       const key = `headingH${i}` as keyof ThemeConfig;
@@ -66,17 +77,24 @@ export async function getTheme(): Promise<ThemeConfig> {
   }
 }
 
+const DEFAULT_WEIGHT = "400";
+const DEFAULT_STYLE = "normal";
+
 export function getDefaultTheme(): ThemeConfig {
   const baseHeading: ThemeElement = {
     fontFamily: "serif",
     fontSize: "1.5rem",
     color: "#18181b",
+    fontWeight: DEFAULT_WEIGHT,
+    fontStyle: DEFAULT_STYLE,
   };
   return {
     title: {
       fontFamily: "serif",
       fontSize: "clamp(2rem, 5vw, 4rem)",
       color: "#ffffff",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
     },
     heading: baseHeading,
     headingH1: { ...baseHeading, fontSize: "2.25rem" },
@@ -89,51 +107,71 @@ export function getDefaultTheme(): ThemeConfig {
       fontFamily: "serif",
       fontSize: "clamp(1.75rem, 4vw, 3rem)",
       color: "#ffffff",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
     },
     blogPostTitle: {
       fontFamily: "serif",
       fontSize: "clamp(1.875rem, 4vw, 3rem)",
       color: "#18181b",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
     },
     blogListCardTitle: {
       fontFamily: "serif",
       fontSize: "clamp(1.5rem, 3vw, 1.875rem)",
       color: "#ffffff",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
     },
     blogListCardMetadata: {
       fontFamily: "sans",
       fontSize: "0.875rem",
       color: "#d4d4d8",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
     },
     widgetTitle: {
       fontFamily: "serif",
       fontSize: "1.125rem",
       color: "#18181b",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
     },
     body: {
       fontFamily: "sans",
       fontSize: "1rem",
       color: "#3f3f46",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
     },
     quote: {
       fontFamily: "serif",
       fontSize: "1.125rem",
       color: "#e4e4e7",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: "italic",
     },
     code: {
       fontFamily: "mono",
       fontSize: "0.875rem",
       color: "#18181b",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
     },
     nav: {
       fontFamily: "sans",
       fontSize: "0.875rem",
       color: "rgba(255,255,255,0.9)",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
     },
     caption: {
       fontFamily: "sans",
       fontSize: "0.75rem",
       color: "#71717a",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
     },
   };
 }
@@ -147,6 +185,8 @@ export function themeToCssVariables(theme: ThemeConfig): string {
       vars.push(`${prefix}-font: ${FONT_MAP[el.fontFamily]};`);
       vars.push(`${prefix}-size: ${el.fontSize};`);
       vars.push(`${prefix}-color: ${el.color};`);
+      if (el.fontWeight != null) vars.push(`${prefix}-weight: ${el.fontWeight};`);
+      if (el.fontStyle != null) vars.push(`${prefix}-style: ${el.fontStyle};`);
     }
   }
   return `body { ${vars.join(" ")} }`;

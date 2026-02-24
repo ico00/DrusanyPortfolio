@@ -31,10 +31,16 @@ export default function FeaturedPostsWidget({
     <>
       <h3 className={BLOG_WIDGET_UI.title}>{title}</h3>
       <ul className="mt-4 space-y-3">
-        {featured.map((post) => (
+        {featured.map((post) => {
+          const href =
+            process.env.NODE_ENV === "production"
+              ? `/blog/${post.slug}.html`
+              : `/blog/${post.slug}`;
+
+          return (
           <li key={post.id}>
             <Link
-              href={`/blog/${post.slug}.html`}
+              href={href}
               className="group block overflow-hidden rounded-lg transition-colors duration-150 hover:bg-zinc-50"
             >
               <div className="flex gap-3">
@@ -66,7 +72,7 @@ export default function FeaturedPostsWidget({
               </div>
             </Link>
           </li>
-        ))}
+        )})}
       </ul>
     </>
   );
