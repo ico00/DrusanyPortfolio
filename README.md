@@ -173,6 +173,28 @@ RewriteRule ^admin/?$ admin.html [L]
   - post: `/blog/260110-sport-metadata-generator.html`
   - ovo izbjegava ovisnost o naprednijim rewrite pravilima i osigurava da **refresh radi ispravno** i na ograničenim konfiguracijama.
 
+#### Git deploy na cPanelu (bez slika)
+
+- Za statički deploy na shared hostingu koristi se dodatni repo npr. `drusany-static` koji sadrži **samo sadržaj `out/` bez `uploads`**.
+- Lokalno postoji skripta `scripts/deploy-static.sh` koja:
+  - pokreće `npm run build`,
+  - prebriše sadržaj `../drusany-static`,
+  - kopira `out/` u `../drusany-static` (briše `uploads`), kopira `.htaccess`,
+  - radi `git add`, `git commit` i `git push` na `drusany-static`.
+- Na cPanelu je `drusany-static` kloniran kroz **Git™ Version Control** i koristi `.cpanel.yml`:
+
+```yaml
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/<USER>/public_html
+    - /bin/cp -R * $DEPLOYPATH
+```
+
+- Deploy koraci:
+  1. Lokalno: `./scripts/deploy-static.sh`
+  2. cPanel → Git Version Control → `drusany-static` → **Deploy HEAD Commit**
+  3. Slike (folder `uploads/`) ostaju **isključivo na serveru** i uploadaju se ručno (FTP/File Manager) samo kad se dodaju nove.
+
 ## 📖 Dokumentacija
 
 Detaljna arhitektura, API rute, design sustav i konvencije su opisani u **[architecture.md](./architecture.md)**.

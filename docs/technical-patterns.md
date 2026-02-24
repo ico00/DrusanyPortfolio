@@ -264,3 +264,31 @@ RewriteRule ^admin/?$ admin.html [L]
   - featured slike i tamni blok ispod njih (naslov + datum) na listi bloga idu **od ruba do ruba** (`-mx-6 w-[calc(100%+3rem)]`, unutarnji sadržaj ima `px-6`);
   - isto za featured sliku i tekstualni dio posta na stranici `blog/[slug]/page.tsx`.
   - referentne komponente: `BlogList` i `blog/[slug]/page.tsx`.
+
+### 9.1 Git deploy (drusany-static + cPanel)
+
+- **Repozitoriji:**
+  - `DrusanyPortfolio` – izvorni kod (ovaj projekt).
+  - `drusany-static` – odvojeni repo koji sadrži **samo statički output** (`out/` bez `uploads`).
+- **Skripta za deploy:** `scripts/deploy-static.sh`
+  - iz root projekta poziv: `./scripts/deploy-static.sh`
+  - radi:
+    - `npm run build`
+    - kopira `out/` u `../drusany-static`
+    - briše `uploads` iz `drusany-static`
+    - kopira `.htaccess`
+    - `git add`, `git commit`, `git push` na `drusany-static`
+- **cPanel Git™ Version Control:**
+  - klonirani repo `drusany-static` koristi `.cpanel.yml`:
+
+```yaml
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/<USER>/public_html
+    - /bin/cp -R * $DEPLOYPATH
+```
+
+- **Deploy rutina:**
+  1. Lokalno u `DrusanyPortfolio`: `./scripts/deploy-static.sh`
+  2. cPanel → Git Version Control → `drusany-static` → **Deploy HEAD Commit**
+  3. `uploads/` (fotografije) ostaje samo na serveru – nove foldere s fotkama uploadaš ručno (FTP/File Manager) kada dodaješ nove blog postove ili galerije.
