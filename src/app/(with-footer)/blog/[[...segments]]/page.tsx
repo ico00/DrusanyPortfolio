@@ -91,11 +91,15 @@ export default async function BlogListPage({
 
   if (page > totalPages) notFound();
 
+  const pages = await getPages();
+  const blogTitle = pages.blog?.title?.trim() || "Blog";
+
   return (
     <BlogListLayout
       posts={sorted}
       currentPage={page}
       totalPages={totalPages}
+      title={blogTitle}
     />
   );
 }

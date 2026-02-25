@@ -205,12 +205,12 @@ export default function Header() {
             )}
           </div>
 
-          <Link href="/about" className={navLinkClass(isAbout)}>
-            About
-          </Link>
-
           <Link href="/blog" className={navLinkClass(isBlog)}>
             Blog
+          </Link>
+
+          <Link href="/about" className={navLinkClass(isAbout)}>
+            About
           </Link>
 
           <Link href="/contact" className={navLinkClass(isContact)}>
@@ -298,15 +298,6 @@ export default function Header() {
               })}
             </div>
             <Link
-              href="/about"
-              onClick={() => setMobileOpen(false)}
-              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
-                isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
-              } ${isAbout ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
-            >
-              About
-            </Link>
-            <Link
               href="/blog"
               onClick={() => setMobileOpen(false)}
               className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
@@ -314,6 +305,15 @@ export default function Header() {
               } ${isBlog ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
             >
               Blog
+            </Link>
+            <Link
+              href="/about"
+              onClick={() => setMobileOpen(false)}
+              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
+                isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
+              } ${isAbout ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
+            >
+              About
             </Link>
             <Link
               href="/contact"

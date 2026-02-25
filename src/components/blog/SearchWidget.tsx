@@ -7,7 +7,12 @@ import { BLOG_WIDGET_UI } from "@/data/blogWidgetUI";
 
 const SEARCH_DEBOUNCE_MS = 300;
 
-export default function SearchWidget() {
+interface SearchWidgetProps {
+  /** Minimal: samo donja crta kao na gallery, bez okvira */
+  variant?: "default" | "minimal";
+}
+
+export default function SearchWidget({ variant = "default" }: SearchWidgetProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -45,15 +50,26 @@ export default function SearchWidget() {
     }, SEARCH_DEBOUNCE_MS);
   };
 
+  const wrapperClass =
+    variant === "minimal"
+      ? "flex items-center gap-2 border-b border-zinc-300 pb-3"
+      : BLOG_WIDGET_UI.inputWrapper;
+
+  const iconClass = variant === "minimal" ? "h-4 w-4 shrink-0 text-zinc-500" : "ml-3 h-4 w-4 shrink-0 text-zinc-400";
+  const inputClass =
+    variant === "minimal"
+      ? "flex-1 min-w-0 bg-transparent py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
+      : "w-full min-w-0 bg-transparent py-2.5 pr-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-400";
+
   return (
-    <div className={BLOG_WIDGET_UI.inputWrapper}>
-      <Search className="ml-3 h-4 w-4 shrink-0 text-zinc-400" strokeWidth={2} />
+    <div className={wrapperClass}>
+      <Search className={iconClass} strokeWidth={2} />
       <input
         type="search"
         value={localQuery}
         onChange={(e) => handleChange(e.target.value)}
         placeholder="Pretraži članke..."
-        className="w-full min-w-0 bg-transparent py-2.5 pr-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
+        className={inputClass}
         aria-label="Pretraži blog"
       />
     </div>

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono, Playfair_Display, Red_Hat_Display, Shantell_Sans } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
-import Footer from "@/components/Footer";
 import ThemeStyles from "@/components/ThemeStyles";
 
 const geistSans = Geist({
@@ -73,10 +72,7 @@ export default function RootLayout({
       >
         <ThemeStyles />
         <CustomCursor />
-        <div className="flex min-h-screen flex-col">
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
+        {children}
       </body>
     </html>
   );

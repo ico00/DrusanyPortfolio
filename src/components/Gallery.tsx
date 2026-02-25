@@ -373,15 +373,15 @@ export default function Gallery({ images }: GalleryProps) {
   return (
     <div id="gallery">
       {categorySlug && (
-        <div className="mb-8 flex flex-wrap items-center gap-8">
+        <div className="mb-8 flex flex-nowrap items-center gap-8 overflow-x-auto overflow-y-hidden pb-1 md:flex-wrap md:overflow-visible md:pb-0">
           {isConcerts && (
             <>
-              <span className="text-xs font-extralight tracking-widest text-zinc-500">
+              <span className="shrink-0 text-xs font-extralight tracking-widest text-zinc-500">
                 Venue:
               </span>
               <Link
                 href={`/?category=concerts#gallery`}
-                className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
+                className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                   !venueSlug
                     ? "border-b border-zinc-900 text-zinc-900"
                     : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
@@ -393,7 +393,7 @@ export default function Gallery({ images }: GalleryProps) {
                 <Link
                   key={v.slug}
                   href={`/?category=concerts&venue=${v.slug}#gallery`}
-                  className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
+                  className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                     venueSlug === v.slug
                       ? "border-b border-zinc-900 text-zinc-900"
                       : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
@@ -406,12 +406,12 @@ export default function Gallery({ images }: GalleryProps) {
           )}
           {isSport && (
             <>
-              <span className="text-xs font-extralight tracking-widest text-zinc-500">
+              <span className="shrink-0 text-xs font-extralight tracking-widest text-zinc-500">
                 Sport:
               </span>
               <Link
                 href={`/?category=sport#gallery`}
-                className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
+                className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                   !sportSlug
                     ? "border-b border-zinc-900 text-zinc-900"
                     : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
@@ -423,7 +423,7 @@ export default function Gallery({ images }: GalleryProps) {
                 <Link
                   key={s.slug}
                   href={`/?category=sport&sport=${s.slug}#gallery`}
-                  className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
+                  className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                     sportSlug === s.slug
                       ? "border-b border-zinc-900 text-zinc-900"
                       : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
@@ -436,12 +436,12 @@ export default function Gallery({ images }: GalleryProps) {
           )}
           {isFoodDrink && (
             <>
-              <span className="text-xs font-extralight tracking-widest text-zinc-500">
+              <span className="shrink-0 text-xs font-extralight tracking-widest text-zinc-500">
                 Type:
               </span>
               <Link
                 href={`/?category=food-drink#gallery`}
-                className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
+                className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                   !foodDrinkSlug
                     ? "border-b border-zinc-900 text-zinc-900"
                     : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"
@@ -453,7 +453,7 @@ export default function Gallery({ images }: GalleryProps) {
                 <Link
                   key={fd.slug}
                   href={`/?category=food-drink&foodDrink=${fd.slug}#gallery`}
-                  className={`inline-block pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
+                  className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                     foodDrinkSlug === fd.slug
                       ? "border-b border-zinc-900 text-zinc-900"
                       : "border-b border-transparent text-zinc-600 hover:border-zinc-900 hover:text-zinc-900"

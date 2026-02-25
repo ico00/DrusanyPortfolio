@@ -111,6 +111,18 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 | Link toolbar (FormattingToolbar) | CustomCreateLinkButton | `src/components/CustomCreateLinkButton.tsx` |
 | Custom Image block (displayWidth) | blocknoteImageSchema | `src/lib/blocknoteImageSchema.tsx` |
 | Theme grupe, accordion, elementi | ThemeAdmin | `src/components/ThemeAdmin.tsx` |
+| Prose linkovi (hover) | globals.css | `.prose a`, `.prose-invert a` |
+
+---
+
+## 3.1 Prose linkovi – hover (postovi, stranice)
+
+Linkovi unutar `.prose` i `.prose-invert` (blog postovi, About, Contact) imaju hover efekt u `globals.css`:
+
+- **Deblja donja linija:** `text-decoration-thickness: 3px`
+- **Svjetlo plava boja:** `sky-400` (svijetla tema), `sky-300` (tamna tema)
+
+**Lokacija:** `src/app/globals.css` – sekcija "Prose – linkovi".
 
 ---
 
@@ -206,6 +218,7 @@ const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
 
 | Element | CSS klasa | Komponenta |
 |---------|-----------|------------|
+| pageTitle | `.theme-page-title` | BlogListLayout, buduće stranice |
 | blogPostTitle | `.theme-blog-post-title` | `blog/[slug]/page.tsx` |
 | blogListCardTitle | `.theme-blog-list-card-title` | BlogList |
 | blogListCardMetadata | `.theme-blog-list-card-metadata` | BlogList |
@@ -263,7 +276,8 @@ RewriteRule ^admin/?$ admin.html [L]
 - **Mobile blog layout (full‑bleed)** – na mobilnom:
   - featured slike i tamni blok ispod njih (naslov + datum) na listi bloga idu **od ruba do ruba** (`-mx-6 w-[calc(100%+3rem)]`, unutarnji sadržaj ima `px-6`);
   - isto za featured sliku i tekstualni dio posta na stranici `blog/[slug]/page.tsx`.
-  - referentne komponente: `BlogList` i `blog/[slug]/page.tsx`.
+  - **Blog post mobilna specifika:** search widget isti razmak kao blog lista (`py-24`); autor (ikona + „Ivica Drusany“) ispod featured slike – bez teksta „Tekst i fotografije:“; kategorija kao **Link** (`/blog?kategorija=...`) – filter radi i na mobilu.
+  - referentne komponente: `BlogList`, `blog/[slug]/page.tsx`.
 
 ### 9.1 Deploy (rsync over SSH)
 

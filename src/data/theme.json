@@ -57,21 +57,28 @@
   },
   "headingOnDark": {
     "fontFamily": "redHatDisplay",
-    "fontSize": "clamp(1.75rem, 4vw, 3rem)",
+    "fontSize": "clamp(1.85rem, 4vw, 3rem)",
     "color": "#ffffff",
+    "fontWeight": "400",
+    "fontStyle": "normal"
+  },
+  "pageTitle": {
+    "fontFamily": "redHatDisplay",
+    "fontSize": "clamp(1.85rem, 4vw, 3rem)",
+    "color": "#18181b",
     "fontWeight": "400",
     "fontStyle": "normal"
   },
   "blogPostTitle": {
     "fontFamily": "redHatDisplay",
-    "fontSize": "clamp(1.875rem, 4vw, 3rem)",
+    "fontSize": "clamp(1.85rem, 4vw, 2.5rem)",
     "color": "#18181b",
     "fontWeight": "400",
     "fontStyle": "normal"
   },
   "blogListCardTitle": {
     "fontFamily": "redHatDisplay",
-    "fontSize": "clamp(1.5rem, 3vw, 1.875rem)",
+    "fontSize": "clamp(1.85rem, 4vw, 2.5rem)",
     "color": "#18181b",
     "fontWeight": "400",
     "fontStyle": "normal"

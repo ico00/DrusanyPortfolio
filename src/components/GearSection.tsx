@@ -43,7 +43,7 @@ export default function GearSection({ items }: GearSectionProps) {
 
   return (
     <section className="mt-16 border-t border-zinc-800 pt-16">
-      <h2 className="mb-2 font-serif text-2xl font-light tracking-tight text-white">
+      <h2 className="mb-2 text-2xl font-light tracking-tight text-white [font-family:var(--font-red-hat-display),sans-serif]">
         Gear
       </h2>
       <p className="mb-12 text-zinc-400">
@@ -59,7 +59,9 @@ export default function GearSection({ items }: GearSectionProps) {
           const Icon = CATEGORY_ICONS[catKey];
 
           const isCameras = catKey === "cameras";
-          const cols = isCameras ? 2 : 3;
+          const gridCols = isCameras
+            ? "grid-cols-2"
+            : "grid-cols-2 md:grid-cols-3";
 
           return (
             <motion.div
@@ -81,12 +83,7 @@ export default function GearSection({ items }: GearSectionProps) {
                 </h3>
               </div>
 
-              <div
-                className="grid gap-6"
-                style={{
-                  gridTemplateColumns: `repeat(${cols}, 1fr)`,
-                }}
-              >
+              <div className={`grid gap-6 ${gridCols}`}>
                 {catItems.map((item) => (
                   <motion.div
                     key={item.id}

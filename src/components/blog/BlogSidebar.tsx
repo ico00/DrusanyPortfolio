@@ -30,10 +30,11 @@ export default async function BlogSidebar({ posts }: BlogSidebarProps) {
   for (const widget of enabled) {
     const content = await WidgetRenderer({ widget, posts });
     if (content !== null) {
+      const isSearch = widget.type === "search";
       sections.push(
         <section
           key={widget.id}
-          className="border-t border-zinc-200 p-5 first:border-t-0"
+          className={`border-t border-zinc-200 p-5 first:border-t-0 ${isSearch ? "hidden lg:block" : ""}`}
         >
           {content}
         </section>

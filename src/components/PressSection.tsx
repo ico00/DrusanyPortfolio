@@ -100,7 +100,7 @@ export default function PressSection({ items }: PressSectionProps) {
 
   return (
     <section className="mt-16 border-t border-zinc-800 pt-16">
-      <h2 className="mb-8 font-serif text-2xl font-light tracking-tight text-white">
+      <h2 className="mb-8 text-2xl font-light tracking-tight text-white [font-family:var(--font-red-hat-display),sans-serif]">
         Press
       </h2>
       <div className="prose prose-invert prose-lg max-w-xl mb-10 [&_p]:mb-0">

@@ -26,6 +26,7 @@ export interface ThemeConfig {
   headingH5?: ThemeElement;
   headingH6?: ThemeElement;
   headingOnDark: ThemeElement;
+  pageTitle: ThemeElement;
   blogPostTitle: ThemeElement;
   blogListCardTitle: ThemeElement;
   blogListCardMetadata: ThemeElement;
@@ -60,6 +61,11 @@ export async function getTheme(): Promise<ThemeConfig> {
       if (def && fromFile && typeof def === "object" && typeof fromFile === "object" && "fontFamily" in def) {
         (merged as unknown as Record<string, ThemeElement>)[key] = { ...def, ...fromFile } as ThemeElement;
       }
+    }
+    // Migracija: blogListTitle → pageTitle
+    const legacy = data as Record<string, unknown>;
+    if (legacy.blogListTitle && typeof legacy.blogListTitle === "object" && !data.pageTitle) {
+      (merged as unknown as Record<string, ThemeElement>).pageTitle = { ...defaults.pageTitle, ...(legacy.blogListTitle as ThemeElement) } as ThemeElement;
     }
     const base = merged.heading;
     for (let i = 1; i <= 6; i++) {
@@ -107,6 +113,13 @@ export function getDefaultTheme(): ThemeConfig {
       fontFamily: "serif",
       fontSize: "clamp(1.75rem, 4vw, 3rem)",
       color: "#ffffff",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: DEFAULT_STYLE,
+    },
+    pageTitle: {
+      fontFamily: "serif",
+      fontSize: "clamp(1.75rem, 4vw, 3rem)",
+      color: "#18181b",
       fontWeight: DEFAULT_WEIGHT,
       fontStyle: DEFAULT_STYLE,
     },

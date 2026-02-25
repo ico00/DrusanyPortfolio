@@ -106,22 +106,6 @@ export default function BlogList({
               <li key={post.id}>
                 <article className="group overflow-visible rounded-lg sm:overflow-hidden">
                   <Link href={`/blog/${post.slug}.html`} className="block">
-                  <div className="relative aspect-video overflow-hidden bg-zinc-100 -mx-6 w-[calc(100%+3rem)] sm:mx-0 sm:w-full">
-                    {post.thumbnail ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={post.thumbnail}
-                        alt=""
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                        style={{
-                          objectPosition: post.thumbnailFocus || "50% 50%",
-                        }}
-                      />
-                    ) : (
-                      <div className="h-full w-full bg-zinc-800" />
-                    )}
-                    {post.thumbnail && <ViewfinderOverlay />}
-                  </div>
                   <div className="bg-white -mx-6 w-[calc(100%+3rem)] border-b-2 border-zinc-200 p-6 text-zinc-900 transition-colors group-hover:border-zinc-300 sm:mx-0 sm:w-full">
                     <h2 className="theme-blog-list-card-title font-normal tracking-tight text-zinc-900">
                       {post.title}
@@ -180,6 +164,22 @@ export default function BlogList({
                         )}
                       </span>
                     </p>
+                  </div>
+                  <div className="relative aspect-video overflow-hidden bg-zinc-100 -mx-6 w-[calc(100%+3rem)] sm:mx-0 sm:w-full">
+                    {post.thumbnail ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
+                        src={post.thumbnail}
+                        alt=""
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                        style={{
+                          objectPosition: post.thumbnailFocus || "50% 50%",
+                        }}
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-zinc-800" />
+                    )}
+                    {post.thumbnail && <ViewfinderOverlay />}
                   </div>
                 </Link>
               </article>

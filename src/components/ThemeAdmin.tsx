@@ -24,6 +24,7 @@ const ELEMENT_LABELS: Record<string, string> = {
   title: "Hero title",
   heading: "Headings (h1–h6)",
   headingOnDark: "Heading on dark background (About, Contact)",
+  pageTitle: "Page title (light background)",
   blogPostTitle: "Blog post title",
   blogListCardTitle: "Blog list card title (below featured image)",
   blogListCardMetadata: "Blog list card metadata (author, date, category)",
@@ -39,6 +40,7 @@ const PREVIEW_TEXT: Record<string, string> = {
   title: "Hero title",
   heading: "Page title",
   headingOnDark: "Page title",
+  pageTitle: "Blog",
   blogPostTitle: "Blog post title",
   blogListCardTitle: "Sport Metadata Generator",
   blogListCardMetadata: "Text and photos: Ivica Drusany · Published: 10.01.2026 · Category: Info",
@@ -486,9 +488,33 @@ export default function ThemeAdmin() {
           )}
         </AccordionSection>
 
+        <AccordionSection title="Page titles" defaultOpen={false}>
+          <p className="mb-4 text-xs text-zinc-500">
+            Glavni naslov stranice – Page title za svijetlu pozadinu (Blog), Heading on dark za tamnu (About, Contact).
+          </p>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {(["pageTitle", "headingOnDark"] as const)
+              .filter(
+                (k) =>
+                  theme[k] &&
+                  typeof theme[k] === "object" &&
+                  "fontFamily" in (theme[k] as object)
+              )
+              .map((key) => (
+                <ElementCard
+                  key={key}
+                  label={ELEMENT_LABELS[key]}
+                  previewText={PREVIEW_TEXT[key]}
+                  element={theme[key] as ThemeElement}
+                  onUpdate={(u) => updateElement(key, u)}
+                />
+              ))}
+          </div>
+        </AccordionSection>
+
         <AccordionSection title="Hero & Navigation" defaultOpen={false}>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {(["title", "headingOnDark", "nav", "caption"] as const)
+            {(["title", "nav", "caption"] as const)
               .filter(
                 (k) =>
                   theme[k] &&

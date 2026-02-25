@@ -81,6 +81,14 @@ h2.theme-heading-on-dark {
   font-style: var(--theme-headingOnDark-style, normal);
   color: var(--theme-headingOnDark-color, #ffffff);
 }
+/* Page title – glavni naslov stranice (svijetla pozadina: Blog, buduće stranice) – h1 za specifičnost kao theme-heading-on-dark */
+h1.theme-page-title {
+  font-family: var(--theme-pageTitle-font, var(--font-serif));
+  font-size: var(--theme-pageTitle-size, clamp(1.75rem, 4vw, 3rem));
+  font-weight: var(--theme-pageTitle-weight, 400);
+  font-style: var(--theme-pageTitle-style, normal);
+  color: var(--theme-pageTitle-color, #18181b);
+}
 /* Blog post naslov (svijetla pozadina) */
 .theme-blog-post-title {
   font-family: var(--theme-blogPostTitle-font, var(--font-serif));
@@ -130,7 +138,7 @@ h2.theme-heading-on-dark {
   color: var(--theme-quote-color, inherit);
 }
 
-/* Prose – linkovi: samo underline, bez plave/ljubičaste; hover efekt */
+/* Prose – linkovi: samo underline, bez plave/ljubičaste; hover: deblja linija + svjetlo plava */
 .prose a {
   color: inherit;
   text-decoration: underline;
@@ -138,8 +146,8 @@ h2.theme-heading-on-dark {
   transition: text-decoration-thickness 0.2s, color 0.2s;
 }
 .prose a:hover {
-  text-decoration-thickness: 2px;
-  color: rgb(24 24 27); /* zinc-900 – tamniji na hover (svijetla tema) */
+  text-decoration-thickness: 3px;
+  color: rgb(56 189 248); /* sky-400 – svjetlo plava */
 }
 .prose-invert a {
   color: inherit;
@@ -148,8 +156,8 @@ h2.theme-heading-on-dark {
   transition: text-decoration-thickness 0.2s, color 0.2s;
 }
 .prose-invert a:hover {
-  text-decoration-thickness: 2px;
-  color: rgb(255 255 255);
+  text-decoration-thickness: 3px;
+  color: rgb(125 211 252); /* sky-300 – svjetlo plava na tamnoj pozadini */
 }
 
 /* BlockNote editor – linkovi: ista boja kao tekst, underline, hover amber */

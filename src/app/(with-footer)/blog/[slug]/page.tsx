@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import ProseContent from "@/components/ProseContent";
 import BlogGallery from "@/components/BlogGallery";
 import BlogSidebar from "@/components/blog/BlogSidebar";
+import SearchWidget from "@/components/blog/SearchWidget";
 import ScrollToTop from "@/components/blog/ScrollToTop";
 import ViewfinderOverlay from "@/components/ViewfinderOverlay";
 import { getBlog, getBlogPost, getPublishedPosts } from "@/lib/blog";
@@ -105,12 +106,18 @@ export default async function BlogPostPage({
   const publishedPosts = getPublishedPosts(posts);
 
   return (
-    <div className="min-h-screen bg-white pt-16">
+    <div className="min-h-screen bg-white">
       <Suspense fallback={<div className="h-16" />}>
         <Header />
       </Suspense>
 
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-6 py-24">
+        {/* Mobile: search na vrhu – vizual kao na gallery (donja crta, bez okvira) */}
+        <div className="mb-6 lg:hidden">
+          <Suspense fallback={<div className="h-12 animate-pulse rounded border-b border-zinc-200" />}>
+            <SearchWidget variant="minimal" />
+          </Suspense>
+        </div>
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           <article className="min-w-0 flex-1">
             <header className="pt-12 md:pt-16">
@@ -131,7 +138,7 @@ export default async function BlogPostPage({
                     <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
                   </span>
                 </span>
-                {/* Kategorija: prikaz pored datuma na mobilu i u zasebnom segmentu na desktopu */}
+                {/* Kategorija: link/filter pored datuma na mobilu i u zasebnom segmentu na desktopu */}
                 <span
                   className="inline-flex items-center gap-1.5 sm:hidden"
                   style={{ marginRight: "3rem" }}
@@ -141,21 +148,19 @@ export default async function BlogPostPage({
                     categories.map((catSlug, index) => (
                       <span key={catSlug}>
                         {index > 0 ? ", " : ""}
-                        {getShortCategoryLabel(catSlug)}
+                        <Link
+                          href={`/blog?kategorija=${encodeURIComponent(
+                            catSlug,
+                          )}`}
+                          className="inline-block border-b border-transparent pb-0.5 text-zinc-600 transition-[color,border-color] duration-200 hover:border-zinc-900 hover:text-zinc-900"
+                        >
+                          {getShortCategoryLabel(catSlug)}
+                        </Link>
                       </span>
                     ))
                   ) : (
                     "—"
                   )}
-                </span>
-                {/* Autor: zaseban red na mobilu, prvi segment na desktopu */}
-                <span
-                  className="inline-flex w-full items-center gap-1.5 sm:hidden"
-                  style={{ marginTop: "0.25rem" }}
-                >
-                  <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                  <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                  Tekst i fotografije: Ivica Drusany
                 </span>
                 <span
                   className="hidden sm:inline-flex items-center gap-1.5"
@@ -201,6 +206,13 @@ export default async function BlogPostPage({
                 </div>
               </div>
             )}
+
+            {/* Autor – ikona + naziv ispod featured slike na mobilu */}
+            <p className="mt-3 flex items-center gap-1.5 text-sm text-zinc-500 sm:hidden">
+              <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+              <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+              Ivica Drusany
+            </p>
 
             <div className="bg-white py-12 md:py-16 -mx-6 w-[calc(100%+3rem)] px-6 md:mx-0 md:w-full">
               <ProseContent
