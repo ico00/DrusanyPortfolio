@@ -34,7 +34,7 @@ export default async function BlogSidebar({ posts }: BlogSidebarProps) {
       sections.push(
         <section
           key={widget.id}
-          className={`border-t border-zinc-200 p-5 first:border-t-0 ${isSearch ? "hidden lg:block" : ""}`}
+          className={`border-t border-zinc-200 first:border-t-0 ${isSearch ? "hidden lg:block px-0 py-5" : "p-5"}`}
         >
           {content}
         </section>
@@ -59,8 +59,8 @@ async function WidgetRenderer({
   switch (widget.type) {
     case "search":
       return (
-        <Suspense fallback={<div className="h-12 animate-pulse rounded-lg bg-zinc-100" />}>
-          <SearchWidget />
+        <Suspense fallback={<div className="h-12 animate-pulse rounded border-b border-zinc-200" />}>
+          <SearchWidget variant="minimal" />
         </Suspense>
       );
     case "categories":

@@ -76,7 +76,7 @@ const { processedHtml, imageUrls } = useMemo(
 
 **Korak 5:** Koristi `linkedom` uvijek – radi i na serveru i u browseru, a isti parser osigurava identičan output i izbjegava hydration mismatch.
 
-**Korak 6:** Širina slike – ProseContent čita `data-display-width` (full|50|25) ili `data-preview-width`/`width` za ručni resize. Wrapper dobiva odgovarajuće CSS (50%, 25% ili max-width u px). Blog editor koristi custom schema (`blogBlockNoteSchema`) s Image blockom koji ima `displayWidth` prop – ImageSizeSelect floating toolbar omogućuje odabir Full/50%/25%.
+**Korak 6:** Širina slike – ProseContent čita `data-display-width` (full|50|25|split) ili `data-preview-width`/`width` za ručni resize. Wrapper dobiva odgovarajuće CSS (50%, 25% ili max-width u px). **Split** – slika + sljedeći blok (paragraf) u flex layoutu: pola slika, pola tekst (puna širina na mobilu). Blog editor koristi custom schema (`blogBlockNoteSchema`) s Image blockom koji ima `displayWidth` prop – ImageSizeSelect i hover toolbar omogućuju odabir Full/Split/50%/25%.
 
 ---
 
@@ -108,14 +108,42 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 | Blog sidebar widgeti (stilovi) | BLOG_WIDGET_UI | `src/data/blogWidgetUI.ts` |
 | Blog widget komponente | SearchWidget, CategoriesWidget, FeaturedPostsWidget, GoogleMapsWidget | `src/components/blog/` |
 | Block type select popup (dodavanje blokova) | BlockTypeSelectWithCursor | `src/components/BlockTypeSelectWithCursor.tsx` |
+| Block style bar na vrhu bloka | FloatingBlockTypeBar | `src/components/FloatingBlockTypeBar.tsx` |
+| Formatting toolbar na vrhu bloka | BlockTopFormattingToolbarController | `src/components/BlockTopFormattingToolbarController.tsx` |
 | Link toolbar (FormattingToolbar) | CustomCreateLinkButton | `src/components/CustomCreateLinkButton.tsx` |
 | Custom Image block (displayWidth) | blocknoteImageSchema | `src/lib/blocknoteImageSchema.tsx` |
+| Media + Content blok (pola slika, pola tekst) | blocknoteMediaContentSchema | `src/lib/blocknoteMediaContentSchema.tsx` |
+| File Panel (Upload + Media + Embed) | BlogFilePanel | `src/components/blocknote/BlogFilePanel.tsx` |
+| Media tab (odabir postojeće slike) | MediaLibraryTab | `src/components/blocknote/MediaLibraryTab.tsx` |
 | Theme grupe, accordion, elementi | ThemeAdmin | `src/components/ThemeAdmin.tsx` |
 | Prose linkovi (hover) | globals.css | `.prose a`, `.prose-invert a` |
+| LCP optimizacija (blog thumbnail) | blog/[slug]/page.tsx | `src/app/(with-footer)/blog/[slug]/page.tsx` |
 
 ---
 
-## 3.1 Prose linkovi – hover (postovi, stranice)
+## 3.1 LCP optimizacija (blog post thumbnail)
+
+Kad radiš s glavnom slikom (LCP element) na blog post stranici:
+
+**Korak 1:** Glavna slika (thumbnail) – `loading="eager"`, `fetchPriority="high"`, `sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"`.
+
+**Korak 2:** Preload – `preload()` iz `react-dom` pozovi prije returna (server komponenta); dodaje `<link rel="preload" as="image" fetchpriority="high">` u head.
+
+**Korak 3:** Galerijske slike (ispod sadržaja) – `loading="lazy"` (BlogGallery već ima).
+
+**Referentna komponenta:** `src/app/(with-footer)/blog/[slug]/page.tsx`
+
+---
+
+## 3.2 Favicon
+
+- **Lokacija:** `public/favicon.ico` – pri buildu se kopira u root `out/`
+- **Metadata:** `layout.tsx` – `icons: { icon: "/favicon.ico?v=2" }`; query parametar `?v=N` za cache busting kad mijenjaš favicon
+- **Promjena:** Zamijeni `public/favicon.ico`, povećaj verziju u layout.tsx (npr. `?v=3`), rebuild
+
+---
+
+## 3.3 Prose linkovi – hover (postovi, stranice)
 
 Linkovi unutar `.prose` i `.prose-invert` (blog postovi, About, Contact) imaju hover efekt u `globals.css`:
 
@@ -174,6 +202,58 @@ const newBlockItem: BlockTypeSelectItem = {
 5. **Schema** – blok mora postojati u shemi editora (`defaultBlockSpecs` ili custom schema); inače ga `editorHasBlockWithType` filtrira i neće se prikazati.
 
 **Referentna komponenta:** `BlockTypeSelectWithCursor.tsx` – primjer: codeBlock stavka.
+
+### 5.2 Slash menu (`/`) – Media + Content
+
+Blok "Media + Content" dostupan je na dva načina:
+
+1. **Block style dropdown** – klik na paragraf → dropdown "T Paragraph" → odaberi "Media + Content"
+2. **Slash menu** – upiši `/` pa `media`, `content`, `slika` ili `tekst` → odaberi "Media + Content"
+
+Implementacija u `BlockNoteEditor.tsx`: kad je `uploadFile` proslijeđen (blog schema), `slashMenu={false}` isključuje default slash menu, a custom `SuggestionMenuController` s `getItems` vraća default stavke + Media+Content. Stavka se umetne nakon Image po title-u.
+
+**Referentna datoteka:** `src/components/BlockNoteEditor.tsx` – `getCustomSlashMenuItems`, `SuggestionMenuController`
+
+### 5.3 File Panel – tab "Media" (odabir postojeće slike)
+
+U blog editoru, kad odabereš sliku (Image ili Media+Content), File Panel ima tri taba: **Upload**, **Media**, **Embed**.
+
+- **Upload** – upload nove datoteke (ako je `uploadFile` proslijeđen)
+- **Media** – odabir postojeće slike iz biblioteke (`/api/media` – portfolio, blog, stranice)
+- **Embed** – unos URL-a
+
+Implementacija: `BlogFilePanel` (Upload + Media + Embed) koristi se umjesto default FilePanel kad je blog schema. `MediaLibraryTab` dohvaća `/api/media`, prikazuje grid s pretragom, klik ažurira blok.
+
+**Referentne datoteke:** `src/components/blocknote/BlogFilePanel.tsx`, `src/components/blocknote/MediaLibraryTab.tsx`
+
+### 5.4 Toolbar na vrhu bloka (Block style + Formatting)
+
+Block style i Formatting toolbar pojavljuju se **na vrhu bloka** (ne kod kursora). Koristi se block start pozicija (`$from.start()`) umjesto pozicije kursora.
+
+**Komponente:**
+- **FloatingBlockTypeBar** – Block style dropdown; koristi `useEditorState` s block start pozicijom; `placement: "top-start"` za poravnanje lijevo
+- **BlockTopFormattingToolbarController** – Custom FormattingToolbarController; koristi block start za pozicioniranje; koristi se u `CustomFormattingToolbar` umjesto default `FormattingToolbarController`
+
+**Referentne datoteke:** `src/components/FloatingBlockTypeBar.tsx`, `src/components/BlockTopFormattingToolbarController.tsx`, `src/components/CustomFormattingToolbar.tsx`
+
+### 5.5 Okvir blokova u editoru
+
+Svaki blok u BlockNote editoru ima lagani tanki okvir. Stilovi u `globals.css`:
+
+```css
+.blocknote-editor-wrapper .bn-block-group > .bn-block-outer {
+  margin-bottom: 1.5rem;
+  border: 1px solid rgb(63 63 70); /* zinc-600 */
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+}
+```
+
+**Lokacija:** `src/app/globals.css` – sekcija "BlockNote – razmak između blokova, lagani tanki okvir"
+
+### 5.6 Trailing blok (zadnji prazan blok)
+
+Zadnji prazan blok u editoru **nije moguće obrisati** – namjerno ponašanje (ProseMirror TrailingNode). Služi kao entry point za dodavanje novog sadržaja. Pri spremanju prazni blokovi se obično ne šalju u HTML.
 
 ---
 

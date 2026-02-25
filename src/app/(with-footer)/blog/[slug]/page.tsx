@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { preload } from "react-dom";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -29,30 +30,55 @@ export async function generateMetadata({
   if (!post || slug === "_") {
     return { title: "Blog" };
   }
+
+  // Base URL bez trailing slasha (izbjegava dupli slash)
+  const baseUrl = (
+    process.env.NEXT_PUBLIC_SITE_URL || "https://drusany.com"
+  ).replace(/\/+$/, "");
+
   const title = post.seo?.metaTitle?.trim() || post.title;
   const description = post.seo?.metaDescription?.trim() || undefined;
   const keywords = post.seo?.keywords?.trim()
     ? post.seo.keywords.split(",").map((k) => k.trim()).filter(Boolean)
     : undefined;
-  const ogImage = post.thumbnail
-    ? { url: post.thumbnail, width: 1200, height: 630, alt: post.title }
+
+  // Slika: prvo thumbnail, fallback prva iz galerije; apsolutni URL bez duplih slasheva
+  const imagePath =
+    post.thumbnail ||
+    (post.gallery && post.gallery.length > 0 ? post.gallery[0] : undefined);
+  const imageUrl = imagePath
+    ? `${baseUrl}${imagePath.startsWith("/") ? imagePath : `/${imagePath}`}`
     : undefined;
+
+  // Puni URL – og:url i canonical NIKAD ne smije završavati s /, samo na .html
+  const pageUrl = `${baseUrl}/blog/${slug}`.replace(/\/+$/, "");
+
   return {
     title,
     description,
     keywords: keywords?.length ? keywords.join(", ") : undefined,
-    alternates: { canonical: `/blog/${slug}` },
+    alternates: { canonical: pageUrl },
     openGraph: {
+      type: "article",
+      url: pageUrl,
       title,
       description,
-      type: "article",
-      images: ogImage ? [ogImage] : undefined,
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ]
+        : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: post.thumbnail ? [post.thumbnail] : undefined,
+      images: imageUrl ? [imageUrl] : undefined,
     },
   };
 }
@@ -102,6 +128,12 @@ export default async function BlogPostPage({
 
   const focusPoint = post.thumbnailFocus || "50% 50%";
   const categories = getDisplayCategories(post);
+
+  // Preload LCP slike za brži Largest Contentful Paint
+  if (post.thumbnail) {
+    const href = post.thumbnail.startsWith("/") ? post.thumbnail : `/${post.thumbnail}`;
+    preload(href, { as: "image", fetchPriority: "high" });
+  }
   const { posts } = await getBlog();
   const publishedPosts = getPublishedPosts(posts);
 
@@ -120,7 +152,7 @@ export default async function BlogPostPage({
         </div>
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           <article className="min-w-0 flex-1">
-            <header className="pt-12 md:pt-16">
+            <header className="pt-5">
               <h1 className="theme-blog-post-title font-normal tracking-tight">
                 {post.title}
               </h1>
@@ -199,6 +231,9 @@ export default async function BlogPostPage({
                   <img
                     src={post.thumbnail}
                     alt=""
+                    loading="eager"
+                    fetchPriority="high"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="h-full w-full object-cover"
                     style={{ objectPosition: focusPoint }}
                   />

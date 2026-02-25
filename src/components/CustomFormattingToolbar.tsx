@@ -3,11 +3,11 @@
 import {
   FormattingToolbar,
   getFormattingToolbarItems,
-  FormattingToolbarController,
 } from "@blocknote/react";
 import { CustomCreateLinkButton } from "./CustomCreateLinkButton";
+import { BlockTopFormattingToolbarController } from "./BlockTopFormattingToolbarController";
 
-/** Formatting Toolbar s custom CreateLinkButton koji otvara naš modal s predlošcima i "Otvori u novom tabu". */
+/** Formatting Toolbar s custom CreateLinkButton i pozicioniranjem na vrh bloka. */
 export function CustomFormattingToolbar() {
   const items = getFormattingToolbarItems().map((item) =>
     item.key === "createLinkButton" ? (
@@ -18,7 +18,7 @@ export function CustomFormattingToolbar() {
   );
 
   return (
-    <FormattingToolbarController
+    <BlockTopFormattingToolbarController
       formattingToolbar={() => <FormattingToolbar>{items}</FormattingToolbar>}
     />
   );

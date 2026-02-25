@@ -138,6 +138,9 @@ Per-Page SEO modul upravljan iz Admin panela. Svaki post i stranica imaju `seo` 
 - metaDescription: brojač znakova; upozorenje ako pređe 160 (preporučeno za Google rezultate); placeholder: **Fotografije + event + lokacija + godina + što se vidi**
 - metaTitle: ako ostane prazno, koristi se naslov posta/stranice
 
+**Favicon:**
+- `metadata.icons` u `layout.tsx` – `icon: "/favicon.ico?v=2"` (query parametar za cache busting); `public/favicon.ico` se pri buildu kopira u root `out/`; za promjenu favicona zamijeni datoteku u `public/` i povećaj verziju (npr. `?v=3`)
+
 **Next.js Metadata:**
 - `generateMetadata({ params })` u `src/app/blog/[slug]/page.tsx` – čita blog.json, pronalazi post po slug-u, vraća title i description za `<head>`
 - `generateMetadata()` u `src/app/about/page.tsx` i `src/app/contact/page.tsx` – čita pages.json, vraća title i description
@@ -238,6 +241,7 @@ Konfiguracija tipografije i boja za elemente stranice. Struktura:
 
 ```
 public/
+├── favicon.ico           # Favicon (metadata.icons u layout.tsx)
 └── uploads/
     ├── full/              # 2048px max, WebP
     │   ├── concerts/
@@ -328,11 +332,14 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 
 **BlockNote editor (BlockNoteEditor.tsx):**
 - **BlockNote** (@blocknote/shadcn) – block-based WYSIWYG, sprema HTML
-- **Statična traka stila bloka (FloatingBlockTypeBar):** Label "Block style:"; prikazuje trenutni stil bloka na temelju pozicije kursora (bez označavanja teksta); dropdown za promjenu tipa (Paragraph, Heading 1–6, Quote, **Code block**, itd.) – `blockTypeSelectItemsWithCodeBlock` proširuje default listu
+- **Toolbar na vrhu bloka:** Block style i Formatting toolbar pojavljuju se **na vrhu bloka** (ne kod kursora) – `FloatingBlockTypeBar` i `BlockTopFormattingToolbarController` koriste block start poziciju (`$from.start()`); placement `top-start` za poravnanje lijevo
+- **FloatingBlockTypeBar:** Label "Block style:"; prikazuje trenutni stil bloka kad je kursor u bloku (bez označavanja teksta); dropdown za promjenu tipa (Paragraph, Heading 1–6, Quote, **Code block**, **Media + Content**, itd.) – `blockTypeSelectItemsWithCodeBlock` proširuje default listu
+- **BlockTopFormattingToolbarController:** Custom FormattingToolbarController koji pozicionira Bold/Italic/link toolbar na vrh bloka; koristi se umjesto default FormattingToolbarController
 - **Tamna tema:** `data-theme="dark"` na html kad je admin otvoren; zinc/amber paleta; **jedinstvena pozadina** (zinc-800) – traka i sadržaj isti ton; **svjetliji tekst** (zinc-100) za bolju čitljivost
+- **Okvir blokova:** Svaki blok ima lagani tanki okvir (`border: 1px solid zinc-600`), zaobljene uglove (`border-radius: 0.375rem`) i padding (`0.5rem 0.75rem`) – globals.css `.bn-block-outer`
 - **Fontovi u editoru = fontovi na stranici:** font-sans (body), font-serif (naslovi) – WYSIWYG
 - **Formatting Toolbar:** Neprozirna pozadina (zinc-800), svijetli tekst; dropdowni (Block style, izbornici) također neprozirni
-- **File/Image panel (`/image`):** Neprozirna pozadina (`.bn-panel`, `.bn-panel-popover`) – kao ostali izbornici; **Upload tab** – ako se proslijedi `uploadFile` prop (AdminBlog kada ima slug i datum), slike se uploadaju u `content/` putem `/api/blog-upload` type `content`; **Embed tab** – unos URL-a
+- **File/Image panel (`/image`):** Neprozirna pozadina (`.bn-panel`, `.bn-panel-popover`); **modal** – centriran kad je otvoren, scroll stranice zaključan (`FilePanelScrollLock`); **Upload tab** – ako se proslijedi `uploadFile` prop (AdminBlog kada ima slug i datum), slike se uploadaju u `content/` putem `/api/blog-upload` type `content`; **Media tab** – odabir postojeće slike iz biblioteke (`/api/media`); **Embed tab** – unos URL-a
 - **Resize ručice:** Slike imaju drag-handles (lijevo/desno) za promjenu širine; vidljive u dark modu (svijetla pozadina); default širina uploadanih slika: 512px (`previewWidth`)
 
 ### 4.5 API Routes (dev only)
@@ -583,7 +590,7 @@ Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
 - **About / Contact:** `ProseContent` s `prose prose-invert prose-lg`, naslov (h1) odvojen, svijetli tekst na tamnoj pozadini; About i Contact imaju split layout (left image + right content)
 - **Blog:** `ProseContent` s `prose prose-zinc prose-headings:font-serif`, bijela pozadina; **formatBlogDate** – datum u formatu `dd. mm. yyyy.`; **Footer** – copyright (© year, All rights reserved / Sva prava pridržana ovisno o stranici)
 
-**BlockNote editor (admin):** Razmak između blokova – `.blocknote-editor-wrapper .bn-block-group > .bn-block-outer { margin-bottom: 1.5rem }` u globals.css; quote blok s dekorativnim navodnikom (CSS ::before)
+**BlockNote editor (admin):** Razmak između blokova – `.blocknote-editor-wrapper .bn-block-group > .bn-block-outer { margin-bottom: 1.5rem }`; **okvir blokova** – border (zinc-600), border-radius, padding (0.5rem 0.75rem); quote blok s dekorativnim navodnikom (CSS ::before); **trailing blok** – zadnji prazan blok nije moguće obrisati (namjerno – entry point za novi sadržaj)
 
 ### 6.6 Animations (Framer Motion)
 
@@ -655,6 +662,7 @@ npm run build
 ```
 DrusanyPortfolio/
 ├── public/
+│   ├── favicon.ico        # Favicon (metadata.icons u layout.tsx)
 │   ├── drusany-logo.svg   # Logo (inline u Header.tsx)
 │   └── uploads/
 │       ├── full/          # 2048px WebP, podfolderi po kategoriji
@@ -719,9 +727,15 @@ DrusanyPortfolio/
 │   │   ├── AdminBlog.tsx         # Blog post editor (BlockNote, galerija, bulk delete)
 │   │   ├── BlogGallery.tsx       # Blog galerija (masonry, lightbox, aperture cursor)
 │   │   ├── BlogList.tsx          # Lista blog postova (metapodaci, filtriranje)
+│   │   ├── blocknote/
+│   │   │   ├── BlogFilePanel.tsx       # Upload + Media + Embed tabovi
+│   │   │   ├── FilePanelScrollLock.tsx # Scroll lock + modal kad je File Panel otvoren
+│   │   │   └── MediaLibraryTab.tsx     # Odabir postojeće slike iz /api/media
 │   │   ├── BlockNoteEditor.tsx   # BlockNote WYSIWYG (HTML)
 │   │   ├── BlockNoteEditorDynamic.tsx  # Dynamic import, ssr: false
 │   │   ├── BlockNoteErrorBoundary.tsx  # Error boundary za BlockNote editor
+│   │   ├── BlockTopFormattingToolbarController.tsx  # Formatting toolbar na vrhu bloka
+│   │   ├── FloatingBlockTypeBar.tsx    # Block style bar na vrhu bloka (block start pozicija)
 │   │   ├── StaticBlockTypeBar.tsx # Traka stila bloka (cursor position)
 │   │   ├── DateTimePicker.tsx    # Datum + vrijeme (react-day-picker, tamna tema)
 │   │   ├── DatePicker.tsx        # Samo datum (Blog)
@@ -749,6 +763,8 @@ DrusanyPortfolio/
 │   │   ├── pages.ts        # getPages, savePages – About/Contact; sanitizeProseHtml pri čitanju
 │   │   ├── press.ts        # getPress – čitanje press.json
 │   │   ├── blog.ts         # getBlog, getBlogPost – čitanje blog.json, sanitizeProseHtml za body, enrichBlogGallery (Sharp)
+│   │   ├── blocknoteImageSchema.tsx    # Custom Image block (displayWidth), blogBlockNoteSchema
+│   │   ├── blocknoteMediaContentSchema.tsx  # Media + Content blok (pola slika, pola tekst)
 │   │   ├── rateLimit.ts    # Rate limiting (200 req/min po IP) za admin API
 │   │   ├── sanitize.ts     # sanitizeProseHtml – HTML sanitizacija (sanitize-html); rel="noopener noreferrer" na vanjskim linkovima
 │   │   ├── slug.ts         # slugify, generateSlug (title+venue+year), generateBlogSlug, isValidBlogSlug, normalizeBlogSlug (yymmdd-naslov); koristi transliterateCroatian iz utils
@@ -831,6 +847,7 @@ DrusanyPortfolio/
 - **Blog (`/blog`):** Lista postova – kartice s naslovom, metapodacima (Tekst i fotografije: Ivica Drusany, Datum objave, Kategorija) i slikom ispod; bez overlayja na slikama; **BlogSidebar** s desne strane – **SearchWidget** (debounced 300ms – lokalni state za trenutni odziv, URL nakon pauze; pretraga po naslovu, slug-u, kategorijama, sadržaju), **CategoriesWidget** (kategorije **abecedno sortirane** po labelu), **FeaturedPostsWidget** (istaknuti članci, do 3), GoogleMapsWidget (embed iz Google My Maps); **pretraga** po `q` parametru; sortiranje od najnovijeg; **filtiranje kategorija** – glatka fade animacija (AnimatePresence) pri promjeni filtera; `scroll={false}` na linkovima da stranica ne skrola na vrh; `/blog/[slug]` – pojedinačni post: naslov i metapodaci na vrhu, featured slika ispod, prose body (slike s poravnanjem, vizual kao galerija), galerija na dnu (EXIF iz blogExif.json); bijela pozadina; **Footer** na dnu stranice; **ScrollToTop** gumb – pozicioniran desno od ruba sadržaja članka (`lg:right-[max(27rem,calc(50vw-14.5rem))]`)
 - **Blog metapodaci:** Ikone (PenLine, Camera, Calendar, Tag); redak „Tekst i fotografije: Ivica Drusany“, „Datum objave: dd. mm. yyyy.“, „Kategorija:“ s linkovima (donja crta, border-b); razmak između blokova: inline `marginRight: "3rem"` (Safari kompatibilnost). **Mobilna verzija:** autor (ikona + „Ivica Drusany“) ispod featured slike; kategorija također link/filter (`/blog?kategorija=...`); search widget isti razmak kao na blog listi (`py-24`)
 - **Blog galerija:** Ista logika kao portfolio – masonry (shortest column), dimenzije iz Sharp metadata; lightbox (prev/next, swipe, Escape); aperture cursor na thumbovima i lightboxu; brisanje slika iz admina briše i fizičke datoteke; **progresivno učitavanje** – galerije s više od 24 slike prikazuju prvu grupu, zatim učitavaju sljedeće pri skrolanju (Intersection Observer); indikator napretka (npr. 24/100); lightbox i dalje radi s cijelom listom
+- **LCP optimizacija (blog post):** Glavna slika (thumbnail) je LCP element – `loading="eager"`, `fetchPriority="high"`, `sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"`; `preload()` iz `react-dom` dodaje `<link rel="preload" as="image">` u head; galerijske slike (BlogGallery) imaju `loading="lazy"` – slike se učitavaju tek pri skrolanju
 
 ### Kategorije
 

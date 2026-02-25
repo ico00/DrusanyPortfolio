@@ -22,12 +22,12 @@ import {
   useEditorState,
 } from "@blocknote/react";
 import type { BlockTypeSelectItem } from "@blocknote/react";
-import { RiCodeBlock } from "react-icons/ri";
+import { RiCodeBlock, RiLayoutGrid2Fill } from "react-icons/ri";
 import { useMemo } from "react";
 
-/** Default items + Code block (BlockNote blockTypeSelectItems ne uključuje codeBlock) */
+/** Default items + Code block + Media+Content (BlockNote blockTypeSelectItems ne uključuje sve) */
 function blockTypeSelectItemsWithCodeBlock(
-  dict: { slash_menu?: { code_block?: { title?: string } } }
+  dict: { slash_menu?: { code_block?: { title?: string }; image?: { title?: string } } }
 ): BlockTypeSelectItem[] {
   const base = blockTypeSelectItems(dict as any);
   const codeBlockItem: BlockTypeSelectItem = {
@@ -36,10 +36,20 @@ function blockTypeSelectItemsWithCodeBlock(
     props: { language: "text" },
     icon: RiCodeBlock,
   };
+  const mediaContentItem: BlockTypeSelectItem = {
+    name: "Media + Content",
+    type: "mediaContent",
+    props: {},
+    icon: RiLayoutGrid2Fill,
+  };
   // Umetni nakon quote, prije toggle_list
   const quoteIdx = base.findIndex((i) => i.type === "quote");
   const insertAt = quoteIdx >= 0 ? quoteIdx + 1 : base.length;
-  return [...base.slice(0, insertAt), codeBlockItem, ...base.slice(insertAt)];
+  const withCode = [...base.slice(0, insertAt), codeBlockItem, ...base.slice(insertAt)];
+  // Umetni Media+Content nakon image
+  const imageIdx = withCode.findIndex((i) => i.type === "image");
+  const mediaInsertAt = imageIdx >= 0 ? imageIdx + 1 : withCode.length;
+  return [...withCode.slice(0, mediaInsertAt), mediaContentItem, ...withCode.slice(mediaInsertAt)];
 }
 
 export function BlockTypeSelectWithCursor(props: {

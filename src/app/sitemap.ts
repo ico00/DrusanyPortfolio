@@ -1,12 +1,20 @@
 import type { MetadataRoute } from "next";
 import { getBlog, getPublishedPosts } from "@/lib/blog";
 import { getTotalPages, sortPostsByDate } from "@/lib/pagination";
+import { PORTFOLIO_CATEGORIES } from "@/data/portfolioCategories";
 
 export const dynamic = "force-static";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://drusany.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const categoryPages: MetadataRoute.Sitemap = PORTFOLIO_CATEGORIES.map((cat) => ({
+    url: `${siteUrl}/${cat.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.85,
+  }));
+
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: siteUrl,
@@ -56,5 +64,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...blogListPages, ...blogPostPages];
+  return [...staticPages, ...categoryPages, ...blogListPages, ...blogPostPages];
 }

@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 
 const WIDTH_OPTIONS = [
   { value: "full", label: "Full" },
+  { value: "split", label: "Split" },
   { value: "50", label: "50%" },
   { value: "25", label: "25%" },
 ] as const;
@@ -58,7 +59,7 @@ export default function ImageSizeSelect() {
   }, [block, editor]);
 
   const setWidth = useCallback(
-    (value: "full" | "50" | "25") => {
+    (value: "full" | "split" | "50" | "25") => {
       if (!block || !editor) return;
       editor.updateBlock(block.id, { props: { displayWidth: value } });
     },
@@ -84,7 +85,7 @@ export default function ImageSizeSelect() {
           <button
             key={opt.value}
             type="button"
-            onClick={() => setWidth(opt.value as "full" | "50" | "25")}
+            onClick={() => setWidth(opt.value as "full" | "split" | "50" | "25")}
             className={`px-2 py-1 text-xs transition-colors ${
               currentWidth === opt.value
                 ? "bg-amber-600 text-white"

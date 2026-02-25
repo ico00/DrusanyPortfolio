@@ -13,6 +13,31 @@ function processProseHtml(html: string): { processedHtml: string; imageUrls: str
   const { document: doc } = parseHTML(`<!DOCTYPE html><html><body>${html}</body></html>`);
   const imageUrls: string[] = [];
 
+  // Split layout: slika s data-display-width="split" + sljedeći blok → flex container (pola slika, pola tekst)
+  // Preskoči slike unutar .prose-media-content-split (Media+Content blok već ima layout)
+  const splitImgs = Array.from(doc.querySelectorAll("img[data-display-width='split']")).filter(
+    (img) => !img.closest(".prose-media-content-split")
+  );
+  for (const img of splitImgs) {
+    let block: Element | null = img.parentElement;
+    while (block && !block.nextElementSibling && block !== doc.body) {
+      block = block.parentElement;
+    }
+    if (!block?.nextElementSibling) continue;
+    const nextBlock = block.nextElementSibling;
+    const wrapper = doc.createElement("div");
+    wrapper.className = "prose-image-text-split flex flex-col gap-4 md:flex-row md:gap-6 md:items-start";
+    block.parentNode?.insertBefore(wrapper, block);
+    const imgCol = doc.createElement("div");
+    imgCol.className = "w-full md:w-1/2 shrink-0";
+    imgCol.appendChild(block);
+    const textCol = doc.createElement("div");
+    textCol.className = "w-full md:w-1/2 min-w-0";
+    textCol.appendChild(nextBlock);
+    wrapper.appendChild(imgCol);
+    wrapper.appendChild(textCol);
+  }
+
   // Blockquote dekoracija
   doc.querySelectorAll("blockquote").forEach((bq) => {
     if (bq.querySelector(".quote-decor")) return;
@@ -38,7 +63,8 @@ function processProseHtml(html: string): { processedHtml: string; imageUrls: str
     const previewWidth =
       img.getAttribute("data-preview-width") || img.getAttribute("width");
     const hasCustomWidth =
-      (displayWidth && displayWidth !== "full") || (previewWidth && parseInt(previewWidth, 10) > 0);
+      (displayWidth && displayWidth !== "full" && displayWidth !== "split") ||
+      (previewWidth && parseInt(previewWidth, 10) > 0);
 
     const wrapper = doc.createElement("button");
     wrapper.type = "button";
@@ -51,9 +77,12 @@ function processProseHtml(html: string): { processedHtml: string; imageUrls: str
     const alignment = img.getAttribute("data-text-alignment");
     wrapper.setAttribute("data-text-alignment", alignment || "center");
 
-    if (displayWidth && displayWidth !== "full") {
+    if (displayWidth && displayWidth !== "full" && displayWidth !== "split") {
       wrapper.setAttribute("data-display-width", displayWidth);
       wrapper.setAttribute("style", `width: ${displayWidth}%; max-width: ${displayWidth}%`);
+    } else if (displayWidth === "split") {
+      wrapper.setAttribute("data-display-width", displayWidth);
+      // Split: slika je u 50% koloni, puna širina unutar nje
     } else if (previewWidth) {
       const px = parseInt(previewWidth, 10);
       if (!isNaN(px) && px > 0) {

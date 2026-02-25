@@ -48,13 +48,14 @@ export default function Header() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const category = searchParams.get("category");
+  const categoryFromPath = PORTFOLIO_CATEGORIES.find((c) => pathname === `/${c.slug}`)?.slug;
   const isBlogPage = pathname === "/blog" || pathname.startsWith("/blog/");
-  const isHeroMode = !category && !isBlogPage;
-
+  const isHeroMode = !category && !categoryFromPath && !isBlogPage;
+  const effectiveCategory = categoryFromPath ?? category?.toLowerCase();
   const isHome = pathname === "/" && !category;
-  const isPortfolio = pathname === "/" && !!category;
+  const isPortfolio = (pathname === "/" && !!category) || !!categoryFromPath;
   const isAbout = pathname === "/about";
-  const isBlog = pathname === "/blog";
+  const isBlog = pathname === "/blog" || pathname.startsWith("/blog/");
   const isContact = pathname === "/contact";
 
   const [scrolled, setScrolled] = useState(false);
@@ -81,7 +82,8 @@ export default function Header() {
     if (q.trim()) params.set("q", q);
     else params.delete("q");
     const query = params.toString();
-    router.replace(query ? `${pathname}?${query}#gallery` : pathname, { scroll: false });
+    const hash = pathname === "/" ? "#gallery" : "";
+    router.replace(query ? `${pathname}?${query}${hash}` : pathname, { scroll: false });
   };
 
   const handlePortfolioSearchChange = (q: string) => {
@@ -180,11 +182,11 @@ export default function Header() {
               <div className="absolute left-0 top-full pt-2">
                 <div className={`min-w-[180px] rounded-lg border py-2 shadow-lg backdrop-blur-xl ${dropdownBg}`}>
                   {PORTFOLIO_CATEGORIES.map((cat) => {
-                    const isActive = isPortfolio && category?.toLowerCase() === cat.slug;
+                    const isActive = isPortfolio && effectiveCategory === cat.slug;
                     return (
                       <Link
                         key={cat.slug}
-                        href={`/?category=${cat.slug}#gallery`}
+                        href={`/${cat.slug}`}
                         className={`block border-l-2 px-4 py-2 text-sm font-normal tracking-wider transition-colors ${dropdownItemClass} ${
                           isActive
                             ? isHeroMode
@@ -282,11 +284,11 @@ export default function Header() {
             <div className="flex flex-col gap-2">
               <span className={`text-sm font-normal tracking-widest ${isHeroMode ? "text-white/60" : "text-zinc-400"}`}>Portfolio</span>
               {PORTFOLIO_CATEGORIES.map((cat) => {
-                const isActive = isPortfolio && category?.toLowerCase() === cat.slug;
+                const isActive = isPortfolio && effectiveCategory === cat.slug;
                 return (
                   <Link
                     key={cat.slug}
-                    href={`/?category=${cat.slug}#gallery`}
+                    href={`/${cat.slug}`}
                     onClick={() => setMobileOpen(false)}
                     className={`block py-1 pl-6 text-sm font-normal tracking-wider transition-colors border-l-2 ${
                       isHeroMode ? "hover:text-white" : "hover:text-zinc-900"

@@ -270,9 +270,17 @@ body.custom-cursor-active * {
   background-color: rgb(39 39 42) !important; /* zinc-800 */
 }
 
-/* BlockNote – razmak između blokova (paragrafi, naslovi, itd.) */
+/* BlockNote – razmak između blokova, lagani tanki okvir */
 .blocknote-editor-wrapper .bn-block-group > .bn-block-outer {
   margin-bottom: 1.5rem;
+  border: 1px solid rgb(63 63 70); /* zinc-600 – lagan okvir */
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+}
+/* BlockNote – Media+Content blok: puna širina, pola-pola layout odmah */
+.blocknote-editor-wrapper .bn-media-content-block {
+  width: 100% !important;
+  max-width: 100% !important;
 }
 .blocknote-editor-wrapper .bn-block-group > .bn-block-outer:last-child {
   margin-bottom: 0;
@@ -448,7 +456,7 @@ body.custom-cursor-active * {
   opacity: 1 !important;
 }
 
-/* BlockNote – File/Image panel (Embed, Upload): neprozirna pozadina kao ostali izbornici */
+/* BlockNote – File/Image panel (Embed, Upload, Media): neprozirna pozadina, modal centriran */
 [data-theme="dark"] .bn-panel,
 [data-theme="dark"] .bn-panel-popover {
   background-color: rgb(39 39 42) !important;
@@ -456,6 +464,17 @@ body.custom-cursor-active * {
   border: 1px solid rgb(63 63 70) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
   opacity: 1 !important;
+  max-width: min(95vw, 1200px) !important;
+  overflow: hidden !important;
+}
+/* File Panel kao modal – centriran kad je otvoren */
+body[data-file-panel-open] [data-file-panel="true"] {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  max-height: 90vh !important;
 }
 [data-theme="dark"] .bn-toolbar *,
 [data-theme="dark"] .bn-formatting-toolbar *,

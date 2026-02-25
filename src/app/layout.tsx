@@ -40,6 +40,9 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://drusany.com";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   alternates: { canonical: "/" },
+  icons: {
+    icon: "/favicon.ico?v=2",
+  },
   title: {
     default: "Drusany | Photography",
     template: "%s | Drusany",

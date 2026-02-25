@@ -66,6 +66,8 @@ function useColumnCount(): number {
 
 interface GalleryProps {
   images: GalleryImage[];
+  /** Kada je proslijeđen (čiste rute /interiors, /concerts), koristi se umjesto searchParams */
+  categorySlug?: string;
 }
 
 function normalizeVenue(v: string): string {
@@ -76,11 +78,11 @@ function normalizeSport(s: string): string {
   return s.toLowerCase().replace(/\s+/g, "-").replace(/[čć]/g, "c").replace(/[š]/g, "s").replace(/[ž]/g, "z");
 }
 
-export default function Gallery({ images }: GalleryProps) {
+export default function Gallery({ images, categorySlug: categorySlugProp }: GalleryProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const categorySlug = searchParams.get("category");
+  const categorySlug = categorySlugProp ?? searchParams.get("category");
   const venueSlug = searchParams.get("venue");
   const sportSlug = searchParams.get("sport");
   const foodDrinkSlug = searchParams.get("foodDrink");
@@ -164,6 +166,23 @@ export default function Gallery({ images }: GalleryProps) {
   const isConcerts = categorySlug?.toLowerCase() === "concerts";
   const isSport = categorySlug?.toLowerCase() === "sport";
   const isFoodDrink = categorySlug?.toLowerCase() === "food-drink";
+  const isCleanRoute = !!categorySlugProp;
+
+  const getFilterHref = (cat: string, extra?: { venue?: string; sport?: string; foodDrink?: string }) => {
+    if (isCleanRoute && pathname) {
+      const params = new URLSearchParams();
+      if (extra?.venue) params.set("venue", extra.venue);
+      if (extra?.sport) params.set("sport", extra.sport);
+      if (extra?.foodDrink) params.set("foodDrink", extra.foodDrink);
+      const q = params.toString();
+      return `${pathname}${q ? `?${q}` : ""}`;
+    }
+    const params = new URLSearchParams({ category: cat });
+    if (extra?.venue) params.set("venue", extra.venue);
+    if (extra?.sport) params.set("sport", extra.sport);
+    if (extra?.foodDrink) params.set("foodDrink", extra.foodDrink);
+    return `/?${params.toString()}#gallery`;
+  };
 
   const imagesBeforeSearch = useMemo(() => {
     if (!categorySlug) return images;
@@ -252,7 +271,8 @@ export default function Gallery({ images }: GalleryProps) {
         params.delete("image");
       }
       const q = params.toString();
-      router.replace(q ? `${pathname}?${q}#gallery` : `${pathname}#gallery`, { scroll: false });
+      const hash = pathname === "/" ? "#gallery" : "";
+      router.replace(q ? `${pathname}?${q}${hash}` : `${pathname}${hash}`, { scroll: false });
     },
     [searchParams, router, pathname]
   );
@@ -318,7 +338,8 @@ export default function Gallery({ images }: GalleryProps) {
     if (slug) params.set("image", slug);
     else params.delete("image");
     const q = params.toString();
-    router.replace(q ? `${pathname}?${q}#gallery` : `${pathname}#gallery`, { scroll: false });
+    const hash = pathname === "/" ? "#gallery" : "";
+    router.replace(q ? `${pathname}?${q}${hash}` : `${pathname}${hash}`, { scroll: false });
   }, [lightboxIndex, filteredImages, imageSlug, searchParams, pathname, router]);
 
   useEffect(() => {
@@ -353,7 +374,7 @@ export default function Gallery({ images }: GalleryProps) {
         </p>
         <p className="mt-2 text-sm text-zinc-400">
           {categorySlug ? (
-            <a href="/#gallery" className="underline hover:text-zinc-600">
+            <a href="/" className="underline hover:text-zinc-600">
               View all images
             </a>
           ) : (
@@ -380,7 +401,7 @@ export default function Gallery({ images }: GalleryProps) {
                 Venue:
               </span>
               <Link
-                href={`/?category=concerts#gallery`}
+                href={getFilterHref("concerts")}
                 className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                   !venueSlug
                     ? "border-b border-zinc-900 text-zinc-900"
@@ -392,7 +413,7 @@ export default function Gallery({ images }: GalleryProps) {
               {venuesWithImages.map((v) => (
                 <Link
                   key={v.slug}
-                  href={`/?category=concerts&venue=${v.slug}#gallery`}
+                  href={getFilterHref("concerts", { venue: v.slug })}
                   className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                     venueSlug === v.slug
                       ? "border-b border-zinc-900 text-zinc-900"
@@ -410,7 +431,7 @@ export default function Gallery({ images }: GalleryProps) {
                 Sport:
               </span>
               <Link
-                href={`/?category=sport#gallery`}
+                href={getFilterHref("sport")}
                 className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                   !sportSlug
                     ? "border-b border-zinc-900 text-zinc-900"
@@ -422,7 +443,7 @@ export default function Gallery({ images }: GalleryProps) {
               {sportsWithImages.map((s) => (
                 <Link
                   key={s.slug}
-                  href={`/?category=sport&sport=${s.slug}#gallery`}
+                  href={getFilterHref("sport", { sport: s.slug })}
                   className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                     sportSlug === s.slug
                       ? "border-b border-zinc-900 text-zinc-900"
@@ -440,7 +461,7 @@ export default function Gallery({ images }: GalleryProps) {
                 Type:
               </span>
               <Link
-                href={`/?category=food-drink#gallery`}
+                href={getFilterHref("food-drink")}
                 className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                   !foodDrinkSlug
                     ? "border-b border-zinc-900 text-zinc-900"
@@ -452,7 +473,7 @@ export default function Gallery({ images }: GalleryProps) {
               {foodDrinkWithImages.map((fd) => (
                 <Link
                   key={fd.slug}
-                  href={`/?category=food-drink&foodDrink=${fd.slug}#gallery`}
+                  href={getFilterHref("food-drink", { foodDrink: fd.slug })}
                   className={`shrink-0 inline-block whitespace-nowrap pb-1 text-xs font-extralight tracking-widest transition-[color,border-color] duration-200 ${
                     foodDrinkSlug === fd.slug
                       ? "border-b border-zinc-900 text-zinc-900"

@@ -1,13 +1,25 @@
+# Isključi automatsko dodavanje slasha koji uzrokuje 403 na mapama
+DirectorySlash Off
+Options -Indexes -MultiViews
+
 DirectoryIndex index.html
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
 
-# Izričita pravila: ruta bez .html -> odgovarajući .html (radi refresha)
-# Samo glavne stranice; blog postovi (/blog/slug) nisu uključeni zbog 500 na ovom hostingu
-RewriteRule ^about/?$ about.html [L]
-RewriteRule ^blog/?$ blog.html [L]
-RewriteRule ^contact/?$ contact.html [L]
-RewriteRule ^admin/?$ admin.html [L]
+# 1. Ako je zahtjev točno za mapu /blog ili /blog/, silom pošalji na blog.html
+RewriteRule ^blog/?$ /blog.html [L,R=301]
+
+# 2. Blog post – provjeri postoji li .html datoteka, serviraj je (sprječava gledanje u /blog mapu)
+RewriteCond %{DOCUMENT_ROOT}/blog/$1.html -f
+RewriteRule ^blog/(.+)\.html$ blog/$1.html [L]
+
+# 3. Portfolio kategorije (čiste rute: /interiors, /concerts, itd.)
+RewriteRule ^(concerts|sport|animals|interiors|zagreb|food-drink)/?$ $1.html [L]
+
+# 4. Fallback za sve ostalo (index, about, contact...)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
 </IfModule>

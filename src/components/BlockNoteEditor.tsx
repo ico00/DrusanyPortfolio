@@ -1,13 +1,27 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useCreateBlockNote } from "@blocknote/react";
+import React, { useCallback, useEffect, useRef } from "react";
+import {
+  filterSuggestionItems,
+  insertOrUpdateBlockForSlashMenu,
+} from "@blocknote/core/extensions";
+import { FilePanelExtension } from "@blocknote/core/extensions";
+import { editorHasBlockWithType } from "@blocknote/core";
+import {
+  FilePanelController,
+  getDefaultReactSlashMenuItems,
+  SuggestionMenuController,
+  useCreateBlockNote,
+} from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/shadcn";
 import TiptapLink from "@tiptap/extension-link";
+import { RiLayoutGrid2Fill } from "react-icons/ri";
 import "@blocknote/shadcn/style.css";
 import "@blocknote/core/fonts/inter.css";
 import { FloatingBlockTypeBar } from "./FloatingBlockTypeBar";
 import { CustomFormattingToolbar } from "./CustomFormattingToolbar";
+import { BlogFilePanel } from "./blocknote/BlogFilePanel";
+import { FilePanelScrollLock } from "./blocknote/FilePanelScrollLock";
 import { blogBlockNoteSchema } from "@/lib/blocknoteImageSchema";
 
 interface BlockNoteEditorProps {
@@ -110,6 +124,43 @@ export default function BlockNoteEditor({
     };
   }, []);
 
+  // Custom slash menu items – default + Media+Content (samo kad je blog schema)
+  const getCustomSlashMenuItems = useCallback(() => {
+    const defaultItems = getDefaultReactSlashMenuItems(editor);
+    if (!editorHasBlockWithType(editor, "mediaContent")) {
+      return defaultItems;
+    }
+    const mediaContentItem = {
+      title: "Media + Content",
+      subtext: "Half image, half text",
+      aliases: ["media", "content", "slika", "tekst", "image", "text"],
+      group: "Media" as const,
+      icon: <RiLayoutGrid2Fill size={18} />,
+      onItemClick: () => {
+        const insertedBlock = insertOrUpdateBlockForSlashMenu(editor, {
+          type: "mediaContent",
+        });
+        editor.getExtension(FilePanelExtension)?.showMenu(insertedBlock.id);
+      },
+    };
+    // Umetni nakon Image (traži po title)
+    const imageIdx = defaultItems.findIndex(
+      (i) => i.title?.toLowerCase().includes("image") || i.title === "Slika"
+    );
+    const insertAt = imageIdx >= 0 ? imageIdx + 1 : defaultItems.length;
+    return [
+      ...defaultItems.slice(0, insertAt),
+      mediaContentItem,
+      ...defaultItems.slice(insertAt),
+    ];
+  }, [editor]);
+
+  const getSlashMenuItems = useCallback(
+    async (query: string) =>
+      filterSuggestionItems(getCustomSlashMenuItems(), query),
+    [getCustomSlashMenuItems]
+  );
+
   if (!editor) return null;
 
   return (
@@ -125,7 +176,26 @@ export default function BlockNoteEditor({
         className="bn-editor-dark"
         linkToolbar={false}
         formattingToolbar={false}
+        slashMenu={!useBlogSchema}
+        filePanel={!useBlogSchema}
       >
+        {useBlogSchema && (
+          <>
+            <FilePanelScrollLock />
+            <FilePanelController
+              filePanel={BlogFilePanel}
+              floatingUIOptions={{
+                elementProps: {
+                  "data-file-panel": "true",
+                } as React.HTMLAttributes<HTMLDivElement>,
+              }}
+            />
+            <SuggestionMenuController
+              triggerCharacter="/"
+              getItems={getSlashMenuItems}
+            />
+          </>
+        )}
         <FloatingBlockTypeBar />
         <CustomFormattingToolbar />
       </BlockNoteView>

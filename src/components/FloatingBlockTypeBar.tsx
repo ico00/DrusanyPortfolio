@@ -18,14 +18,20 @@ export function FloatingBlockTypeBar() {
 
   // Pozicija kursora – prikaži samo kad je collapsed selection (samo kursor, bez označenog teksta)
   // Kad je selekcija, FormattingToolbar se već prikazuje
+  // Koristimo block start za pozicioniranje na vrhu bloka umjesto kod kursora
   const rawPosition = useEditorState({
     editor,
     selector: ({ editor }) => {
       try {
         const sel = editor.prosemirrorState.selection;
         const { from, to } = sel;
-        if (from === to) return { from, to };
-        return undefined;
+        if (from !== to) return undefined; // FormattingToolbar se prikazuje za selekciju
+        const $from = (sel as { $from?: { start: () => number } }).$from;
+        const blockStart = typeof $from?.start === "function" ? $from.start() : undefined;
+        if (typeof blockStart === "number") {
+          return { from: blockStart, to: blockStart };
+        }
+        return { from, to };
       } catch {
         return undefined;
       }
@@ -44,7 +50,7 @@ export function FloatingBlockTypeBar() {
     () => ({
       useFloatingOptions: {
         open: position !== undefined,
-        placement: "top" as const,
+        placement: "top-start" as const,
         middleware: [offset(10), shift(), flip()],
       },
       elementProps: {

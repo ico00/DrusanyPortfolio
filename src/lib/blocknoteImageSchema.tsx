@@ -28,7 +28,7 @@ const extendedImageConfig = {
     ...baseConfig.propSchema,
     displayWidth: {
       default: "full" as const,
-      values: ["full", "50", "25"] as const,
+      values: ["full", "50", "25", "split"] as const,
     },
   },
 } as const;
@@ -43,9 +43,9 @@ function parseImageWithDisplayWidth(element: HTMLElement) {
     undefined;
   const name = img.alt || img.getAttribute("data-name") || undefined;
   const displayWidth = img.getAttribute("data-display-width");
-  const validDisplayWidth: "full" | "50" | "25" =
-    displayWidth && ["full", "50", "25"].includes(displayWidth)
-      ? (displayWidth as "full" | "50" | "25")
+  const validDisplayWidth: "full" | "50" | "25" | "split" =
+    displayWidth && ["full", "50", "25", "split"].includes(displayWidth)
+      ? (displayWidth as "full" | "50" | "25" | "split")
       : "full";
 
   return {
@@ -128,6 +128,9 @@ const ImageToExternalHTML = (
   if (displayWidth !== "full") {
     (imageProps as Record<string, string>)["data-display-width"] =
       displayWidth;
+    if (displayWidth === "split") {
+      (imageProps as Record<string, string>)["data-prose-split"] = "true";
+    }
   }
 
   const image = props.block.props.showPreview ? (
@@ -155,11 +158,12 @@ const ImageToExternalHTML = (
 
 const WIDTH_OPTIONS = [
   { value: "full", label: "Full" },
+  { value: "split", label: "Split" },
   { value: "50", label: "50%" },
   { value: "25", label: "25%" },
 ] as const;
 
-const DISPLAY_WIDTH_MAP: Record<string, string> = { "50": "50%", "25": "25%" };
+const DISPLAY_WIDTH_MAP: Record<string, string> = { "50": "50%", "25": "25%", "split": "50%" };
 
 const ImageBlock = (
   props: ReactCustomBlockRenderProps<
@@ -251,10 +255,13 @@ export const CustomImageBlock = createReactBlockSpec(extendedImageConfig, () => 
   },
 }));
 
+import { MediaContentBlockSpec } from "./blocknoteMediaContentSchema";
+
 export const blogBlockNoteSchema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
     image: CustomImageBlock(),
+    mediaContent: MediaContentBlockSpec(),
   },
   inlineContentSpecs: defaultInlineContentSpecs,
   styleSpecs: defaultStyleSpecs,

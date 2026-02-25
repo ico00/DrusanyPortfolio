@@ -160,7 +160,7 @@ export default function HeroSlider({ images }: HeroSliderProps) {
             )}
 
           <Link
-            href={`/?category=${slide.slug}#gallery`}
+            href={`/${slide.slug}`}
             className="pointer-events-auto mt-10 inline-flex w-fit items-center gap-2 text-white transition-opacity hover:opacity-80"
           >
             <span className="text-sm font-medium tracking-widest">
@@ -202,7 +202,7 @@ export default function HeroSlider({ images }: HeroSliderProps) {
       </div>
 
       <Link
-        href={`/?category=${slide.slug}#gallery`}
+        href={`/${slide.slug}`}
         className="absolute inset-0 z-10"
         aria-label={`View ${slide.label} gallery`}
       />

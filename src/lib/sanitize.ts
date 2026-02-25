@@ -41,7 +41,7 @@ const PROSE_ALLOWED_TAGS = [
 
 const PROSE_ALLOWED_ATTRIBUTES: Record<string, string[]> = {
   a: ["href", "target", "rel", "title"],
-  img: ["src", "alt", "title", "width", "data-text-alignment", "data-display-width", "data-preview-width", "data-name", "data-url"],
+  img: ["src", "alt", "title", "width", "data-text-alignment", "data-display-width", "data-preview-width", "data-prose-split", "data-name", "data-url"],
   span: ["class"],
   td: ["colspan", "rowspan"],
   th: ["colspan", "rowspan"],
