@@ -530,6 +530,15 @@ body[data-file-panel-open] [data-file-panel="true"] {
 .prose > * + * {
   margin-top: 1.5em;
 }
+/* blocksToFullHTML – bn-block struktura: razmak između blokova */
+.prose .bn-block-group > .bn-block-outer,
+.prose-invert .bn-block-group > .bn-block-outer {
+  margin-bottom: 1.5em;
+}
+.prose .bn-block-group > .bn-block-outer:last-child,
+.prose-invert .bn-block-group > .bn-block-outer:last-child {
+  margin-bottom: 0;
+}
 
 /* Prose – figure/wp-block-image full width (WordPress struktura) */
 .prose figure,

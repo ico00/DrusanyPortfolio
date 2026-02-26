@@ -175,7 +175,7 @@ Kad radiš s linkovima u BlockNote editoru:
 - **FormattingToolbar.Button** – zahtijeva obavezan `label` prop (BlockNote 0.46+).
 - **CustomCreateLinkButton** – `checkLinkInSchema` vraća `boolean` (ne type predicate – custom shema nije kompatibilna s default tipovima); za `anchor?.target === "_blank"` koristiti `anchor ? anchor.target === "_blank" : true` (ne `?? true` – boolean nije nullish).
 - **blocknoteImageSchema** – `createImageBlockConfig({})` zahtijeva objekat (ne prazan poziv); `displayWidth` u `parseImageWithDisplayWidth` mora biti literal tip `"full" | "50" | "25"` (type assertion ako dolazi iz `getAttribute`).
-- **blocksToFullHTML** – koristiti umjesto `blocksToHTMLLossy` za spremanje sadržaja. Lossy može gubiti slike pri konverziji u standardni HTML. Full je lossless.
+- **blocksToFullHTML** – koristiti umjesto `blocksToHTMLLossy` za spremanje sadržaja. Lossy može gubiti slike pri konverziji u standardni HTML. Full je lossless. **Prored u prose:** Full HTML proizvodi `bn-block-group` / `bn-block-outer` strukturu – `.prose > * + *` ne primjenjuje se jer je jedini direktni child `bn-block-group`. U `globals.css` treba pravilo `.prose .bn-block-group > .bn-block-outer { margin-bottom: 1.5em }` za razmak između blokova pri renderiranju.
 
 ### 5.1 Dodavanje blokova u popup za stil bloka (Block Type Select)
 

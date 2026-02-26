@@ -581,7 +581,7 @@ fontSize: {
 
 Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
 
-- **Razmak između blokova:** `margin-top: 1.5em` za sve susjedne blokove (paragrafi, citati, naslovi) – lakše čitanje
+- **Razmak između blokova:** `margin-top: 1.5em` za susjedne blokove (`.prose > * + *`); **blocksToFullHTML** proizvodi `bn-block-group` / `bn-block-outer` strukturu – za nju treba posebno pravilo: `.prose .bn-block-group > .bn-block-outer { margin-bottom: 1.5em }` (globals.css sekcija "blocksToFullHTML – bn-block struktura")
 - **Linkovi:** underline, `text-underline-offset: 2px`; **hover** – deblja linija (3px), svjetlo plava boja (`sky-400` svijetla tema, `sky-300` tamna); `globals.css` sekcija "Prose – linkovi"
 - **Blockquote (citat):** Lijevi border 4px, padding, italic; **dekorativni zaobljeni navodnik** (U+201C) u pozadini – stvarni HTML element (`.quote-decor`) injektiran putem **ProseContent** komponente (radi u Safariju); tamna varijanta za prose-invert
 - **Tablica:** Granice, padding, header pozadina; tamna varijanta za prose-invert
