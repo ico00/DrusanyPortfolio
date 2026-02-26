@@ -41,6 +41,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Blog body backup (saveBlogBody stvara [slug].html.backup prije overwrite)
+src/data/blog/*.html.backup
+
 # Fotografije (lokalna pohrana)
 public/uploads/full/
 public/uploads/thumbs/

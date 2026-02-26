@@ -111,7 +111,7 @@ Sadržaj About i Contact stranica. Struktura:
 
 ### 3.3 Blog: `src/data/blog.json`
 
-Blog postovi. Struktura: `{ "posts": [ { "id", "slug", "title", "date", "time", "categories", "thumbnail", "thumbnailFocus", "gallery", "status" } ] }`. **Migracija:** Stari postovi uvezeni iz WordPressa putem `npm run blog:import:all` (skripta `import-wordpress-blog.mjs` parsira SQL dump, generira `blog.json` i HTML datoteke). **Status:** `"draft" | "published"` – draft postovi se ne prikazuju javno; `getPublishedPosts()` filtrira; postovi bez `status` tretiraju se kao objavljeni. **Slug format:** `yymmdd-naslov` (npr. `251228-advent-2025`) – generira se putem `generateBlogSlug` iz `@/lib/slug`. Sadržaj (`body`) je u `src/data/blog/[slug].html`. Galerija: niz URL-ova (`/uploads/blog/[datum]-[slug]/gallery/...`). **Slike u sadržaju:** `/uploads/blog/[datum]-[slug]/content/*.webp` – uploadane iz BlockNote editora. Pri čitanju posta (`getBlogPost`) galerija se obogaćuje dimenzijama (Sharp metadata) za masonry layout – `galleryImages: { src, width, height }[]`. **Pretraga:** `getBlogWithBodies()` učitava body i generira `bodySearchText` (plain text bez HTML-a) za pretragu po sadržaju članka; koristi samo published postove.
+Blog postovi. Struktura: `{ "posts": [ { "id", "slug", "title", "date", "time", "categories", "thumbnail", "thumbnailFocus", "gallery", "status" } ] }`. **Migracija:** Stari postovi uvezeni iz WordPressa putem `npm run blog:import:all` (skripta `import-wordpress-blog.mjs` parsira SQL dump, generira `blog.json` i HTML datoteke). **Status:** `"draft" | "published"` – draft postovi se ne prikazuju javno; `getPublishedPosts()` filtrira; postovi bez `status` tretiraju se kao objavljeni. **Slug format:** `yymmdd-naslov` (npr. `251228-advent-2025`) – generira se putem `generateBlogSlug` iz `@/lib/slug`. Sadržaj (`body`) je u `src/data/blog/[slug].html`. **Backup:** `saveBlogBody` stvara `[slug].html.backup` prije overwrite-a – omogućuje oporavak ako nešto pođe po zlu. Galerija: niz URL-ova (`/uploads/blog/[datum]-[slug]/gallery/...`). **Slike u sadržaju:** `/uploads/blog/[datum]-[slug]/content/*.webp` – uploadane iz BlockNote editora. **Zaštita od gubitka slika:** BlockNote koristi `blocksToFullHTML` (lossless) umjesto `blocksToHTMLLossy`; PUT API validira prije save – ako bi nestale slike, vraća 409 s upozorenjem; korisnik može potvrditi i spremiti s `forceSave`. Pri čitanju posta (`getBlogPost`) galerija se obogaćuje dimenzijama (Sharp metadata) za masonry layout – `galleryImages: { src, width, height }[]`. **Pretraga:** `getBlogWithBodies()` učitava body i generira `bodySearchText` (plain text bez HTML-a) za pretragu po sadržaju članka; koristi samo published postove.
 
 ### 3.3.1 Blog kategorije: `src/data/blogCategories.ts`
 
@@ -325,6 +325,7 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 - Polja: **status** (Draft / Published, custom `StatusSelect`; default za novi: Published), title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, **Category** (višestruki odabir, abecedno sortirane), thumbnail (opcionalno), **sadržaj (BlockNote)** – iznad galerije, galerija (drag-and-drop, bulk delete, select all)
 - **editLoading:** Pri otvaranju uređivanja prikazuje se loader dok se body ne učitava – sprječava BlockNote popover crash (`reference.element` undefined)
 - **formOnly mode** (`/admin/blog/edit/[id]`, `/admin/blog/new`): Učitava samo jedan post putem `GET /api/blog?id=xxx` – bez učitavanja cijele liste (~770 postova); brže učitavanje i manje memorije
+- **Search u filter baru** – pretraga po naslovu, slug-u, kategorijama; URL param `?q=...`; debounce 300ms; isti stil kao AdminMedia
 - Upload galerije: originalni nazivi datoteka; duplicate modal (Prepiši, Dodaj kao _2, Odustani); brisanje slika iz galerije briše i fizičke datoteke s diska (`/api/blog-delete-file`)
 - Spremanje putem `/api/blog`
 
@@ -427,7 +428,7 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 - **GET:** Vraća blog postove iz `blog.json`; `?id=xxx` – vraća samo jedan post po ID-u (za admin edit stranicu, manje opterećenje); `?slug=xxx` – pojedinačni post po slug-u; inače cijeli blog; `getBlogPost`, `getBlogPostById` koriste `sanitizeProseHtml` pri čitanju body-a
 - **POST/PUT/DELETE:** **Rate limit** provjera; **file locking** (`withLock`) za `blog.json`
 - **POST:** Prima novi post; slug se generira putem `normalizeBlogSlug` (format `yymmdd-naslov`)
-- **PUT:** Ažuriranje posta; pri promjeni slug-a/datuma – `blogCleanup` premješta uploads folder, briše orphan datoteke
+- **PUT:** Ažuriranje posta; pri promjeni slug-a/datuma – `blogCleanup` premješta uploads folder, briše orphan datoteke; **validacija slika** – ako novi body ima manje slika nego stari, vraća **409** (`error: "images_removed"`, `removedCount`, `removedUrls`); klijent prikazuje confirm; retry s `forceSave: true` za namjerno spremanje
 - **DELETE:** Briše post; `deleteBlogPostFiles` briše `[slug].html` i `public/uploads/blog/[date]-[slug]/`
 
 #### `/api/blog-upload` (POST)
@@ -586,7 +587,7 @@ Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
 - **Tablica:** Granice, padding, header pozadina; tamna varijanta za prose-invert
 
 **Stranice:**
-- **ProseContent:** Client komponenta koja renderira HTML (dangerouslySetInnerHTML); injektira `.quote-decor` span u svaki blockquote – Safari kompatibilno; **wrapa slike** u `div.prose-img-wrapper` – vizual kao BlogGallery/PressSection (zaobljeni uglovi, sjena, hover scale 1.03); **poravnanje** – `data-text-alignment` (BlockNote) za center/left/right
+- **ProseContent:** Client komponenta koja renderira HTML (dangerouslySetInnerHTML); injektira `.quote-decor` span u svaki blockquote – Safari kompatibilno; **wrapa slike** u `div.prose-img-wrapper` – vizual kao BlogGallery/PressSection (zaobljeni uglovi, sjena, hover scale 1.03); **poravnanje** – `data-text-alignment` (BlockNote) za center/left/right; **full-width slike** – breakout od ruba do ruba (margin -1.5rem, width calc(100% + 3rem)) – smanjuje bijeli okvir
 - **About / Contact:** `ProseContent` s `prose prose-invert prose-lg`, naslov (h1) odvojen, svijetli tekst na tamnoj pozadini; About i Contact imaju split layout (left image + right content)
 - **Blog:** `ProseContent` s `prose prose-zinc prose-headings:font-serif`, bijela pozadina; **formatBlogDate** – datum u formatu `dd. mm. yyyy.`; **Footer** – copyright (© year, All rights reserved / Sva prava pridržana ovisno o stranici)
 

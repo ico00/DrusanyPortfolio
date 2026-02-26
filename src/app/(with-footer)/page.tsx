@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     ? homePage.seo.keywords.split(",").map((k) => k.trim()).filter(Boolean)
     : undefined;
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords: keywords?.length ? keywords.join(", ") : undefined,
     openGraph: {

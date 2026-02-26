@@ -95,7 +95,9 @@ export default function BlockNoteEditor({
   useEffect(() => {
     if (!editor) return;
     const unsub = editor.onChange(() => {
-      const html = editor.blocksToHTMLLossy(editor.document);
+      // blocksToFullHTML – lossless, čuva sve blokove (uključujući slike)
+      // blocksToHTMLLossy može gubiti blokove pri konverziji u standardni HTML
+      const html = editor.blocksToFullHTML(editor.document);
       onChangeRef.current?.(html);
     });
     return unsub;

@@ -636,6 +636,16 @@ body[data-file-panel-open] [data-file-panel="true"] {
   margin-right: auto;
 }
 
+/* Prose – full-width slike: breakout od ruba do ruba (bez bijelog okvira) */
+/* Uključuje i slike s data-preview-width – BlockNote ne sprema data-display-width kad je "full" */
+.prose .prose-img-wrapper:not([data-display-width="50"]):not([data-display-width="25"]):not([data-display-width="split"]),
+.prose-invert .prose-img-wrapper:not([data-display-width="50"]):not([data-display-width="25"]):not([data-display-width="split"]) {
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  width: calc(100% + 3rem) !important;
+  max-width: calc(100% + 3rem) !important;
+}
+
 /* Prose – širina slike: Full (100%), 50%, 25% ili ručni resize (inline max-width u px) */
 .prose .prose-img-wrapper[data-display-width="50"],
 .prose-invert .prose-img-wrapper[data-display-width="50"] {

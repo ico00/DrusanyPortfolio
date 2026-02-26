@@ -76,7 +76,7 @@ const { processedHtml, imageUrls } = useMemo(
 
 **Korak 5:** Koristi `linkedom` uvijek – radi i na serveru i u browseru, a isti parser osigurava identičan output i izbjegava hydration mismatch.
 
-**Korak 6:** Širina slike – ProseContent čita `data-display-width` (full|50|25|split) ili `data-preview-width`/`width` za ručni resize. Wrapper dobiva odgovarajuće CSS (50%, 25% ili max-width u px). **Split** – slika + sljedeći blok (paragraf) u flex layoutu: pola slika, pola tekst (puna širina na mobilu). Blog editor koristi custom schema (`blogBlockNoteSchema`) s Image blockom koji ima `displayWidth` prop – ImageSizeSelect i hover toolbar omogućuju odabir Full/Split/50%/25%.
+**Korak 6:** Širina slike – ProseContent čita `data-display-width` (full|50|25|split) ili `data-preview-width`/`width` za ručni resize. Wrapper dobiva odgovarajuće CSS (50%, 25% ili max-width u px). **Split** – slika + sljedeći blok (paragraf) u flex layoutu: pola slika, pola tekst (puna širina na mobilu). Blog editor koristi custom schema (`blogBlockNoteSchema`) s Image blockom koji ima `displayWidth` prop – ImageSizeSelect i hover toolbar omogućuju odabir Full/Split/50%/25%. **Full-width breakout** – slike bez displayWidth 50/25/split idu od ruba do ruba (`margin: -1.5rem`, `width: calc(100% + 3rem)`); u `globals.css` sekcija "Prose – full-width slike".
 
 ---
 
@@ -175,6 +175,7 @@ Kad radiš s linkovima u BlockNote editoru:
 - **FormattingToolbar.Button** – zahtijeva obavezan `label` prop (BlockNote 0.46+).
 - **CustomCreateLinkButton** – `checkLinkInSchema` vraća `boolean` (ne type predicate – custom shema nije kompatibilna s default tipovima); za `anchor?.target === "_blank"` koristiti `anchor ? anchor.target === "_blank" : true` (ne `?? true` – boolean nije nullish).
 - **blocknoteImageSchema** – `createImageBlockConfig({})` zahtijeva objekat (ne prazan poziv); `displayWidth` u `parseImageWithDisplayWidth` mora biti literal tip `"full" | "50" | "25"` (type assertion ako dolazi iz `getAttribute`).
+- **blocksToFullHTML** – koristiti umjesto `blocksToHTMLLossy` za spremanje sadržaja. Lossy može gubiti slike pri konverziji u standardni HTML. Full je lossless.
 
 ### 5.1 Dodavanje blokova u popup za stil bloka (Block Type Select)
 
@@ -254,6 +255,12 @@ Svaki blok u BlockNote editoru ima lagani tanki okvir. Stilovi u `globals.css`:
 ### 5.6 Trailing blok (zadnji prazan blok)
 
 Zadnji prazan blok u editoru **nije moguće obrisati** – namjerno ponašanje (ProseMirror TrailingNode). Služi kao entry point za dodavanje novog sadržaja. Pri spremanju prazni blokovi se obično ne šalju u HTML.
+
+### 5.7 Zaštita od gubitka slika pri spremanju
+
+- **blocksToFullHTML** – BlockNoteEditor koristi lossless konverziju (već u 5).
+- **Backup** – `saveBlogBody` stvara `[slug].html.backup` prije overwrite-a; `.backup` u `.gitignore`.
+- **Validacija** – PUT `/api/blog` uspoređuje broj slika u starom vs novom body-ju; ako novi ima manje, vraća **409** (`images_removed`, `removedCount`, `removedUrls`); AdminBlog prikazuje confirm, retry s `forceSave: true`.
 
 ---
 

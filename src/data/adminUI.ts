@@ -92,6 +92,8 @@ export const ADMIN_UI = {
     blogDeleteSuccess: "Post deleted.",
     blogDeleteError: "Delete failed.",
     blogDeleteConfirm: "Delete this post?",
+    imagesRemovedWarning: (n: number) =>
+      `${n} slika bi nestalo pri spremanju. Spremiti svejedno?`,
     featuredUploadSuccess: "Featured image uploaded. Click Save to persist.",
     uploadError: "Upload failed.",
     slugDateRequired: "Enter title and save the post before uploading.",
@@ -160,6 +162,7 @@ export const ADMIN_UI = {
     descriptionPlaceholder: "e.g. Main square, December 2025",
     allDates: "All dates",
     blogPosts: "Blog posts",
+    searchPlaceholder: "Pretraži članke...",
     content: "Content",
     category: "Category",
     date: "Date",

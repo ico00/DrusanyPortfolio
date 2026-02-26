@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, useMemo, memo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Loader2,
   Plus,
@@ -219,6 +219,8 @@ interface AdminBlogProps {
   createMode?: boolean;
 }
 
+const SEARCH_DEBOUNCE_MS = 300;
+
 export default function AdminBlog({
   contentHealthFilter = "",
   onClearContentHealthFilter,
@@ -228,6 +230,7 @@ export default function AdminBlog({
   createMode = false,
 }: AdminBlogProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -300,11 +303,47 @@ export default function AdminBlog({
     const isDirty = initialFormRef.current !== null && getFormSnapshot(form) !== initialFormRef.current;
     unsavedCtx.setUnsavedChanges(isDirty);
   }, [form, editingId, creating, editLoading, getFormSnapshot, unsavedCtx]);
+  const urlSearchQuery = searchParams.get("q") ?? "";
+  const [listSearchQuery, setListSearchQuery] = useState(urlSearchQuery);
+  const listSearchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [listStatusFilter, setListStatusFilter] = useState<string>("");
   const [listCategoryFilter, setListCategoryFilter] = useState<string[]>([]);
   const [listMonthFilter, setListMonthFilter] = useState<string>("");
   const [listDateSort, setListDateSort] = useState<"newest" | "oldest">("newest");
   const [listPage, setListPage] = useState(1);
+
+  useEffect(() => {
+    setListSearchQuery(urlSearchQuery);
+  }, [urlSearchQuery]);
+
+  useEffect(() => {
+    return () => {
+      if (listSearchDebounceRef.current) clearTimeout(listSearchDebounceRef.current);
+    };
+  }, []);
+
+  const applyListSearch = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value.trim()) params.set("q", value);
+      else params.delete("q");
+      const query = params.toString();
+      router.replace(query ? `/admin/blog?${query}` : "/admin/blog", { scroll: false });
+    },
+    [searchParams, router]
+  );
+
+  const handleListSearchChange = useCallback(
+    (value: string) => {
+      setListSearchQuery(value);
+      if (listSearchDebounceRef.current) clearTimeout(listSearchDebounceRef.current);
+      listSearchDebounceRef.current = setTimeout(() => {
+        listSearchDebounceRef.current = null;
+        applyListSearch(value);
+      }, SEARCH_DEBOUNCE_MS);
+    },
+    [applyListSearch]
+  );
 
   const ADMIN_POSTS_PER_PAGE = 20;
   const featuredInputRef = useRef<HTMLInputElement>(null);
@@ -326,7 +365,7 @@ export default function AdminBlog({
 
   useEffect(() => {
     setListPage(1);
-  }, [listStatusFilter, listCategoryFilter, listMonthFilter, listDateSort, contentHealthFilter]);
+  }, [listStatusFilter, listCategoryFilter, listMonthFilter, listDateSort, contentHealthFilter, urlSearchQuery]);
 
   const filteredCount = useMemo(() => {
     let f = posts;
@@ -335,8 +374,19 @@ export default function AdminBlog({
     if (listStatusFilter) f = f.filter((p) => (p.status ?? "published") === listStatusFilter);
     if (listCategoryFilter.length > 0) f = f.filter((p) => listCategoryFilter.some((s) => postHasCategory(p, s)));
     if (listMonthFilter) f = f.filter((p) => p.date?.slice(0, 7) === listMonthFilter);
+    if (urlSearchQuery.trim()) {
+      const q = urlSearchQuery.trim().toLowerCase();
+      f = f.filter((p) => {
+        const title = (p.title || "").toLowerCase();
+        const slug = (p.slug || "").toLowerCase();
+        const categoryLabels = getDisplayCategories(p)
+          .map((s) => getShortCategoryLabel(s).toLowerCase())
+          .join(" ");
+        return title.includes(q) || slug.includes(q) || categoryLabels.includes(q);
+      });
+    }
     return f.length;
-  }, [posts, contentHealthFilter, listStatusFilter, listCategoryFilter, listMonthFilter]);
+  }, [posts, contentHealthFilter, listStatusFilter, listCategoryFilter, listMonthFilter, urlSearchQuery]);
 
   useEffect(() => {
     const maxPage = Math.max(1, Math.ceil(filteredCount / ADMIN_POSTS_PER_PAGE));
@@ -843,7 +893,7 @@ export default function AdminBlog({
     showToast("success", ADMIN_UI.blog.appliedTo(selectedGalleryUrls.size));
   };
 
-  const handleSaveEdit = async () => {
+  const handleSaveEdit = async (forceSave = false) => {
     if (!editingId) return;
     if (bodyDebounceRef.current) {
       clearTimeout(bodyDebounceRef.current);
@@ -860,8 +910,17 @@ export default function AdminBlog({
           id: editingId,
           ...form,
           body: bodyToSave,
+          forceSave,
         }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 409 && data.error === "images_removed") {
+        const n = data.removedCount ?? 0;
+        if (confirm(ADMIN_UI.messages.imagesRemovedWarning(n))) {
+          await handleSaveEdit(true);
+        }
+        return;
+      }
       if (!res.ok) throw new Error("Failed to update");
       showToast("success", ADMIN_UI.messages.blogSaveSuccess);
       const savedId = editingId;
@@ -1545,6 +1604,17 @@ export default function AdminBlog({
       <>
       {/* Filter bar za listu blogova */}
       <div className="mb-4 flex flex-wrap items-end gap-4 rounded-lg border border-zinc-800 bg-zinc-900/50 p-4">
+        <div className="flex w-64 min-w-0 flex-1 items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800/50 focus-within:border-zinc-600 focus-within:ring-1 focus-within:ring-zinc-500 sm:max-w-xs">
+          <Search className="ml-3 h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2} />
+          <input
+            type="search"
+            value={listSearchQuery}
+            onChange={(e) => handleListSearchChange(e.target.value)}
+            placeholder={ADMIN_UI.blog.searchPlaceholder}
+            className="w-full min-w-0 bg-transparent py-2 pr-3 text-sm text-zinc-200 outline-none placeholder:text-zinc-500"
+            aria-label="Pretraži blog"
+          />
+        </div>
         <div className="w-36">
           <FilterSelect
             label="Status"
@@ -1628,6 +1698,17 @@ export default function AdminBlog({
               (p) => p.date?.slice(0, 7) === listMonthFilter
             );
           }
+          if (urlSearchQuery.trim()) {
+            const q = urlSearchQuery.trim().toLowerCase();
+            filtered = filtered.filter((p) => {
+              const title = (p.title || "").toLowerCase();
+              const slug = (p.slug || "").toLowerCase();
+              const categoryLabels = getDisplayCategories(p)
+                .map((s) => getShortCategoryLabel(s).toLowerCase())
+                .join(" ");
+              return title.includes(q) || slug.includes(q) || categoryLabels.includes(q);
+            });
+          }
           const sorted = [...filtered].sort((a, b) => {
             const da = a.date + (a.time || "00:00");
             const db = b.date + (b.time || "00:00");
@@ -1643,8 +1724,10 @@ export default function AdminBlog({
           );
           return sorted.length === 0 ? (
           <p className="rounded-lg bg-zinc-800/50 py-8 text-center text-sm text-zinc-500">
-            {contentHealthFilter || listStatusFilter || listCategoryFilter.length > 0 || listMonthFilter
-              ? ADMIN_UI.blog.noPostsFilter
+            {contentHealthFilter || listStatusFilter || listCategoryFilter.length > 0 || listMonthFilter || urlSearchQuery.trim()
+              ? urlSearchQuery.trim()
+                ? `Nema rezultata za „${urlSearchQuery.trim()}“.`
+                : ADMIN_UI.blog.noPostsFilter
               : ADMIN_UI.blog.noPostsYet}
           </p>
         ) : (

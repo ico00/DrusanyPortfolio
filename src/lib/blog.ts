@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir } from "fs/promises";
+import { readFile, writeFile, mkdir, copyFile } from "fs/promises";
 import path from "path";
 import sharp from "sharp";
 import { sanitizeProseHtml } from "./sanitize";
@@ -82,6 +82,13 @@ export function getBlogUploadDir(slug: string, date: string): string {
 /** Get content file path for a post: src/data/blog/[slug].html */
 export function getBlogContentPath(slug: string): string {
   return path.join(BLOG_CONTENT_DIR, `${slug}.html`);
+}
+
+/** Extract image URLs from HTML body (za validaciju pri save) */
+export function extractImageUrlsFromHtml(html: string): string[] {
+  if (!html?.trim()) return [];
+  const matches = html.matchAll(/<img[^>]+src=["']([^"']+)["']/gi);
+  return [...matches].map((m) => m[1].trim()).filter(Boolean);
 }
 
 export async function getBlog(): Promise<BlogData> {
@@ -221,9 +228,14 @@ export async function saveBlog(data: BlogData): Promise<void> {
   await writeFile(BLOG_JSON_PATH, JSON.stringify(data, null, 2), "utf-8");
 }
 
-/** Save post body to HTML file */
+/** Save post body to HTML file. Creates backup of previous version before overwrite. */
 export async function saveBlogBody(slug: string, html: string): Promise<void> {
   await mkdir(BLOG_CONTENT_DIR, { recursive: true });
   const contentPath = getBlogContentPath(slug);
+  try {
+    await copyFile(contentPath, `${contentPath}.backup`);
+  } catch {
+    // Datoteka ne postoji (novi post) – nema backupa
+  }
   await writeFile(contentPath, html, "utf-8");
 }

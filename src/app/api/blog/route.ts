@@ -1,6 +1,6 @@
 import path from "path";
-import { rename } from "fs/promises";
-import { getBlog, getBlogPost, saveBlog, saveBlogBody } from "@/lib/blog";
+import { readFile, rename } from "fs/promises";
+import { getBlog, getBlogPost, saveBlog, saveBlogBody, getBlogContentPath, extractImageUrlsFromHtml } from "@/lib/blog";
 import type { BlogGalleryMetadata, BlogSeo } from "@/lib/blog";
 import { withLock } from "@/lib/jsonLock";
 import { checkRateLimit } from "@/lib/rateLimit";
@@ -146,6 +146,8 @@ export async function PUT(request: Request) {
       status?: "draft" | "published";
       body?: string;
       seo?: BlogSeo;
+      /** Force save even if images would be removed (korisnik potvrdio upozorenje) */
+      forceSave?: boolean;
     };
     const result = await withLock(BLOG_JSON_PATH, async () => {
       const blog = await getBlog();
@@ -203,17 +205,46 @@ export async function PUT(request: Request) {
       };
     }
       if (body.body !== undefined) {
-        await saveBlogBody(blog.posts[idx].slug, body.body);
+        const slug = blog.posts[idx].slug;
+        let oldBody = "";
+        try {
+          oldBody = await readFile(getBlogContentPath(slug), "utf-8");
+        } catch {
+          /* novi post – nema starog sadržaja */
+        }
+        const oldUrls = extractImageUrlsFromHtml(oldBody);
+        const newUrls = extractImageUrlsFromHtml(body.body);
+        const removed = oldUrls.filter((u) => !newUrls.includes(u));
+        if (removed.length > 0 && !body.forceSave) {
+          return {
+            error: "images_removed" as const,
+            removedCount: removed.length,
+            removedUrls: removed,
+          };
+        }
+        await saveBlogBody(slug, body.body);
       }
       await saveBlog(blog);
       return { post: blog.posts[idx], oldSlug, oldDate, slugChanged: body.slug !== undefined && body.slug !== oldSlug, dateChanged: body.date !== undefined && body.date !== oldDate };
     });
 
-    if (result && "error" in result && result.error === "not_found") {
-      return Response.json(
-        { error: "Post not found" },
-        { status: 404, headers: { "Content-Type": "application/json" } }
-      );
+    if (result && "error" in result) {
+      if (result.error === "not_found") {
+        return Response.json(
+          { error: "Post not found" },
+          { status: 404, headers: { "Content-Type": "application/json" } }
+        );
+      }
+      if (result.error === "images_removed") {
+        return Response.json(
+          {
+            error: "images_removed",
+            removedCount: result.removedCount,
+            removedUrls: result.removedUrls,
+          },
+          { status: 409, headers: { "Content-Type": "application/json" } }
+        );
+      }
     }
 
     const { post, oldSlug, oldDate, slugChanged, dateChanged } = result!;
