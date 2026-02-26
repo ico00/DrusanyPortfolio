@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getBlog } from "@/lib/blog";
 import AdminBlogEditClient from "./AdminBlogEditClient";
 
@@ -18,7 +19,9 @@ export default async function AdminBlogEditPage({
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">Edit post</h1>
         <p className="mt-1 text-sm text-zinc-400">Edit blog post</p>
       </div>
-      <AdminBlogEditClient id={id} />
+      <Suspense fallback={<div className="flex min-h-[200px] items-center justify-center text-zinc-500">Loading…</div>}>
+        <AdminBlogEditClient id={id} />
+      </Suspense>
     </div>
   );
 }

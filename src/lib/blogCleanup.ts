@@ -93,11 +93,26 @@ export async function cleanupBlogOrphanFiles(
   }
   await writeFile(BLOG_EXIF_PATH, JSON.stringify(newBlogExif, null, 2), "utf-8");
 
-  const oldContentPath = getBlogContentPath(oldSlug);
+  // Ažuriraj putanje u HTML sadržaju (img src, data-url, itd.)
+  const contentPath = getBlogContentPath(newSlug);
   try {
-    await unlink(oldContentPath);
+    let html = await readFile(contentPath, "utf-8");
+    if (html.includes(oldPrefix)) {
+      html = html.split(oldPrefix).join(newPrefix);
+      await writeFile(contentPath, html, "utf-8");
+    }
   } catch {
-    // old file may not exist
+    // datoteka možda ne postoji (novi post)
+  }
+
+  // Briši stari HTML samo kad se slug mijenja (novi je već spremljen)
+  if (oldSlug !== newSlug) {
+    const oldContentPath = getBlogContentPath(oldSlug);
+    try {
+      await unlink(oldContentPath);
+    } catch {
+      // old file may not exist
+    }
   }
 }
 

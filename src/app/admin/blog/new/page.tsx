@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import AdminBlogNewClient from "./AdminBlogNewClient";
 
 export default function AdminBlogNewPage() {
@@ -7,7 +8,9 @@ export default function AdminBlogNewPage() {
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">New post</h1>
         <p className="mt-1 text-sm text-zinc-400">Create new blog post</p>
       </div>
-      <AdminBlogNewClient />
+      <Suspense fallback={<div className="flex min-h-[200px] items-center justify-center text-zinc-500">Loading…</div>}>
+        <AdminBlogNewClient />
+      </Suspense>
     </div>
   );
 }

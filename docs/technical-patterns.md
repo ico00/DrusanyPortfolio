@@ -262,6 +262,20 @@ Zadnji prazan blok u editoru **nije moguće obrisati** – namjerno ponašanje (
 - **Backup** – `saveBlogBody` stvara `[slug].html.backup` prije overwrite-a; `.backup` u `.gitignore`.
 - **Validacija** – PUT `/api/blog` uspoređuje broj slika u starom vs novom body-ju; ako novi ima manje, vraća **409** (`images_removed`, `removedCount`, `removedUrls`); AdminBlog prikazuje confirm, retry s `forceSave: true`.
 
+### 5.8 Promjena datuma ili slug-a – automatsko usklađivanje
+
+Kad u adminu promijeniš datum ili slug posta i spremiš, `blogCleanup` automatski:
+
+1. **Preimenuje folder** – `public/uploads/blog/[stari-datum]-[stari-slug]/` → `[novi-datum]-[novi-slug]/`
+2. **Ažurira blog.json** – thumbnail, gallery, galleryMetadata
+3. **Ažurira blogExif.json** – putanje za EXIF
+4. **Ažurira HTML sadržaj** – zamjena starih putanja u `img src`, `data-url` itd.
+5. **Briše stari HTML** – samo kad se slug mijenja (stari `[slug].html`)
+
+**Admin:** DatePicker – promjena datuma automatski ažurira slug (format yymmdd-naslov). Slug se šalje na API s novim datumom, pa cleanup radi s ispravnim vrijednostima.
+
+**Referentna datoteka:** `src/lib/blogCleanup.ts` – `cleanupBlogOrphanFiles`
+
 ---
 
 ## 6. Theme

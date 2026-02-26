@@ -1064,7 +1064,7 @@ export default function AdminBlog({
                     setForm((f) => ({
                       ...f,
                       date: v,
-                      ...(creating ? { slug: generateBlogSlug(f.title, v) } : {}),
+                      slug: generateBlogSlug(f.title, v) || f.slug,
                     }))
                   }
                 />
@@ -1583,7 +1583,7 @@ export default function AdminBlog({
             )}
             <button
               type="button"
-              onClick={creating ? handleCreate : handleSaveEdit}
+              onClick={() => (creating ? handleCreate() : handleSaveEdit())}
               disabled={saving}
               className="flex items-center gap-2 rounded-lg bg-zinc-700 px-4 py-2 text-sm font-medium text-zinc-100 transition-colors hover:bg-zinc-600 disabled:opacity-50"
             >
