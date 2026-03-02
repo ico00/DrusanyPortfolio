@@ -15,7 +15,7 @@ import {
 } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/shadcn";
 import TiptapLink from "@tiptap/extension-link";
-import { RiLayoutGrid2Fill, RiYoutubeFill } from "react-icons/ri";
+import { RiYoutubeFill } from "react-icons/ri";
 import "@blocknote/shadcn/style.css";
 import "@blocknote/core/fonts/inter.css";
 import { FloatingBlockTypeBar } from "./FloatingBlockTypeBar";
@@ -126,25 +126,12 @@ export default function BlockNoteEditor({
     };
   }, []);
 
-  // Custom slash menu items – default + Media+Content (samo kad je blog schema)
+  // Custom slash menu items – default + YouTube (samo kad je blog schema)
   const getCustomSlashMenuItems = useCallback(() => {
     const defaultItems = getDefaultReactSlashMenuItems(editor);
-    if (!editorHasBlockWithType(editor, "mediaContent")) {
+    if (!editorHasBlockWithType(editor, "youtubeEmbed")) {
       return defaultItems;
     }
-    const mediaContentItem = {
-      title: "Media + Content",
-      subtext: "Half image, half text",
-      aliases: ["media", "content", "slika", "tekst", "image", "text"],
-      group: "Media" as const,
-      icon: <RiLayoutGrid2Fill size={18} />,
-      onItemClick: () => {
-        const insertedBlock = insertOrUpdateBlockForSlashMenu(editor, {
-          type: "mediaContent",
-        });
-        editor.getExtension(FilePanelExtension)?.showMenu(insertedBlock.id);
-      },
-    };
     const youtubeEmbedItem = {
       title: "YouTube video",
       subtext: "Ubaci YouTube link",
@@ -162,7 +149,6 @@ export default function BlockNoteEditor({
     const insertAt = imageIdx >= 0 ? imageIdx + 1 : defaultItems.length;
     return [
       ...defaultItems.slice(0, insertAt),
-      mediaContentItem,
       youtubeEmbedItem,
       ...defaultItems.slice(insertAt),
     ];

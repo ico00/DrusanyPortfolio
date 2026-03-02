@@ -152,7 +152,7 @@ export default async function BlogPostPage({
         </div>
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           <article className="min-w-0 flex-1">
-            <header className="pt-5">
+            <header>
               <h1 className="theme-blog-post-title font-normal tracking-tight">
                 {post.title}
               </h1>

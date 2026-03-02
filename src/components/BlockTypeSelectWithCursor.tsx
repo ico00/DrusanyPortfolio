@@ -22,10 +22,10 @@ import {
   useEditorState,
 } from "@blocknote/react";
 import type { BlockTypeSelectItem } from "@blocknote/react";
-import { RiCodeBlock, RiLayoutGrid2Fill, RiYoutubeFill } from "react-icons/ri";
+import { RiCodeBlock, RiYoutubeFill } from "react-icons/ri";
 import { useMemo } from "react";
 
-/** Default items + Code block + Media+Content (BlockNote blockTypeSelectItems ne uključuje sve) */
+/** Default items + Code block + YouTube (BlockNote blockTypeSelectItems ne uključuje sve) */
 function blockTypeSelectItemsWithCodeBlock(
   dict: { slash_menu?: { code_block?: { title?: string }; image?: { title?: string } } }
 ): BlockTypeSelectItem[] {
@@ -35,12 +35,6 @@ function blockTypeSelectItemsWithCodeBlock(
     type: "codeBlock",
     props: { language: "text" },
     icon: RiCodeBlock,
-  };
-  const mediaContentItem: BlockTypeSelectItem = {
-    name: "Media + Content",
-    type: "mediaContent",
-    props: {},
-    icon: RiLayoutGrid2Fill,
   };
   const youtubeEmbedItem: BlockTypeSelectItem = {
     name: "YouTube video",
@@ -52,12 +46,10 @@ function blockTypeSelectItemsWithCodeBlock(
   const quoteIdx = base.findIndex((i) => i.type === "quote");
   const insertAt = quoteIdx >= 0 ? quoteIdx + 1 : base.length;
   const withCode = [...base.slice(0, insertAt), codeBlockItem, ...base.slice(insertAt)];
-  // Umetni Media+Content i YouTube nakon image
+  // Umetni YouTube nakon image
   const imageIdx = withCode.findIndex((i) => i.type === "image");
-  const mediaInsertAt = imageIdx >= 0 ? imageIdx + 1 : withCode.length;
-  const withMedia = [...withCode.slice(0, mediaInsertAt), mediaContentItem, ...withCode.slice(mediaInsertAt)];
-  const youtubeInsertAt = mediaInsertAt + 1;
-  return [...withMedia.slice(0, youtubeInsertAt), youtubeEmbedItem, ...withMedia.slice(youtubeInsertAt)];
+  const youtubeInsertAt = imageIdx >= 0 ? imageIdx + 1 : withCode.length;
+  return [...withCode.slice(0, youtubeInsertAt), youtubeEmbedItem, ...withCode.slice(youtubeInsertAt)];
 }
 
 export function BlockTypeSelectWithCursor(props: {

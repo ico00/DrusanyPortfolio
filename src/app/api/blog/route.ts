@@ -104,13 +104,25 @@ export async function POST(request: Request) {
       seo: body.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
     };
     await withLock(BLOG_JSON_PATH, async () => {
-      await saveBlogBody(slug, body.body || "");
       const blog = await getBlog();
+      if (body.featured) {
+        const featuredCount = blog.posts.filter((p) => p.featured).length;
+        if (featuredCount >= 3) {
+          throw { status: 409, error: "max_featured" };
+        }
+      }
+      await saveBlogBody(slug, body.body || "");
       blog.posts.unshift(post);
       await saveBlog(blog);
     });
     return Response.json({ ...post, body: body.body || "" });
   } catch (error) {
+    if (error && typeof error === "object" && "error" in error && (error as { error: string }).error === "max_featured") {
+      return Response.json(
+        { error: "max_featured" },
+        { status: 409, headers: { "Content-Type": "application/json" } }
+      );
+    }
     console.error("Blog create error:", error);
     return Response.json(
       { error: "Failed to create post" },
@@ -195,7 +207,15 @@ export async function PUT(request: Request) {
     if (body.thumbnailFocus !== undefined) blog.posts[idx].thumbnailFocus = body.thumbnailFocus;
     if (body.gallery !== undefined) blog.posts[idx].gallery = body.gallery;
     if (body.galleryMetadata !== undefined) blog.posts[idx].galleryMetadata = body.galleryMetadata;
-    if (body.featured !== undefined) blog.posts[idx].featured = !!body.featured;
+    if (body.featured !== undefined) {
+      if (body.featured) {
+        const featuredCount = blog.posts.filter((p) => p.featured && p.id !== body.id).length;
+        if (featuredCount >= 3) {
+          return { error: "max_featured" as const };
+        }
+      }
+      blog.posts[idx].featured = !!body.featured;
+    }
     if (body.status !== undefined) blog.posts[idx].status = body.status === "draft" ? "draft" : "published";
     if (body.seo !== undefined) {
       blog.posts[idx].seo = {
@@ -243,6 +263,12 @@ export async function PUT(request: Request) {
             removedCount: result.removedCount,
             removedUrls: result.removedUrls,
           },
+          { status: 409, headers: { "Content-Type": "application/json" } }
+        );
+      }
+      if (result.error === "max_featured") {
+        return Response.json(
+          { error: "max_featured" },
           { status: 409, headers: { "Content-Type": "application/json" } }
         );
       }

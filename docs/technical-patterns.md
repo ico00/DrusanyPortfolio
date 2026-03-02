@@ -113,7 +113,6 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 | Formatting toolbar na vrhu bloka | BlockTopFormattingToolbarController | `src/components/BlockTopFormattingToolbarController.tsx` |
 | Link toolbar (FormattingToolbar) | CustomCreateLinkButton | `src/components/CustomCreateLinkButton.tsx` |
 | Custom Image block (displayWidth) | blocknoteImageSchema | `src/lib/blocknoteImageSchema.tsx` |
-| Media + Content blok (pola slika, pola tekst) | blocknoteMediaContentSchema | `src/lib/blocknoteMediaContentSchema.tsx` |
 | YouTube video blok (embed po širini stranice) | blocknoteYouTubeSchema | `src/lib/blocknoteYouTubeSchema.tsx` |
 | File Panel (Upload + Media + Embed) | BlogFilePanel | `src/components/blocknote/BlogFilePanel.tsx` |
 | Media tab (odabir postojeće slike) | MediaLibraryTab | `src/components/blocknote/MediaLibraryTab.tsx` |
@@ -176,6 +175,31 @@ Kategorije koje imaju podkategorije (Sport, Gradovi – iz `BLOG_CATEGORIES` u `
 
 Widget "Planovi" prikazuje listu snimanja koja se planiraju. Podaci u `src/data/plans.json`: `{ "plans": [ { "date": "YYYY-MM-DD", "name": "Naziv snimanja" } ] }`. `getPlans()` iz `@/lib/plans` učitava i sortira po datumu (ascending). Prikaz: datum (formatBlogDate) pa naziv. Redoslijed u sidebaru: u `blogWidgets.json` stavka `type: "plans"` ispod `featured-posts`.
 
+### 4.3 FeaturedPostsWidget – istaknuti članci (max 3)
+
+Istaknuti članci su ograničeni na **maksimalno 3**. Validacija na više mjesta: AdminBlog (forma – checkbox disabled kad je 3, lista – gumb za dodavanje 4. skriven, save/create – provjera prije slanja), API (`PUT` i `POST` – vraća 400 ako prekorači). Pri pokušaju dodavanja 4. prikazuje se toast s porukom `ADMIN_UI.blog.maxFeaturedReached`. **Linkovi** – uvijek `/blog/${post.slug}.html` (i u dev i u prod), jer `generateStaticParams` vraća slugove s ekstenzijom.
+
+**Referentne datoteke:** `src/components/blog/FeaturedPostsWidget.tsx`, `src/components/AdminBlog.tsx`, `src/app/api/blog/route.ts`, `src/data/adminUI.ts`
+
+### 4.4 SearchWidget – iOS Safari zoom
+
+iOS Safari automatski zumira input kad je font manji od 16px. Search input mora imati `text-base` (16px), ne `text-sm`. Bez toga korisnik na mobilu dobiva nepoželjni zoom pri fokusu.
+
+**Referentna komponenta:** `src/components/blog/SearchWidget.tsx`
+
+### 4.5 Blog layout – naslov i poravnanje
+
+- **Blog lista** – bez naslova (h1) na vrhu stranice – previše praznog prostora na mobilu; `BlogListLayout` ne prima `title` prop.
+- **Blog post** – naslov članka poravnat s sidebarom; uklonjen `pt-5` s headera u `blog/[slug]/page.tsx`.
+
+**Referentne komponente:** `src/components/blog/BlogListLayout.tsx`, `src/app/(with-footer)/blog/[slug]/page.tsx`
+
+### 4.6 Blog galerija – potvrda pri brisanju slike
+
+Pri brisanju slike iz blog galerije preko delete ikone (SortableGalleryItem) prikazuje se `confirm(ADMIN_UI.blog.deleteImageConfirm(1))` prije poziva `removeGalleryImage`. Poruke u `adminUI.ts`: `deleteImageConfirm` (jednina), `deleteImagesConfirm` (množina).
+
+**Referentna komponenta:** `src/components/AdminBlog.tsx`
+
 ---
 
 ## 5. BlockNote / TipTap
@@ -216,20 +240,9 @@ const newBlockItem: BlockTypeSelectItem = {
 
 **Referentna komponenta:** `BlockTypeSelectWithCursor.tsx` – primjer: codeBlock stavka.
 
-### 5.2 Slash menu (`/`) – Media + Content
+### 5.2 Slash menu (`/`) – YouTube video
 
-Blok "Media + Content" dostupan je na dva načina:
-
-1. **Block style dropdown** – klik na paragraf → dropdown "T Paragraph" → odaberi "Media + Content"
-2. **Slash menu** – upiši `/` pa `media`, `content`, `slika` ili `tekst` → odaberi "Media + Content"
-
-Implementacija u `BlockNoteEditor.tsx`: kad je `uploadFile` proslijeđen (blog schema), `slashMenu={false}` isključuje default slash menu, a custom `SuggestionMenuController` s `getItems` vraća default stavke + Media+Content. Stavka se umetne nakon Image po title-u.
-
-**Referentna datoteka:** `src/components/BlockNoteEditor.tsx` – `getCustomSlashMenuItems`, `SuggestionMenuController`
-
-### 5.2a YouTube video blok
-
-Blok "YouTube video" omogućuje ubacivanje YouTube videa po punoj širini stranice. Dostupan je na isti način kao Media + Content (Block style dropdown, slash menu `/youtube`, `/video`, `/embed`).
+Blok "YouTube video" omogućuje ubacivanje YouTube videa po punoj širini stranice. Dostupan je na dva načina: Block style dropdown i slash menu (`/youtube`, `/video`, `/embed`).
 
 **Dodavanje u Block Type Select:** U `BlockTypeSelectWithCursor.tsx` – `blockTypeSelectItemsWithCodeBlock` – dodaj stavku `type: "youtubeEmbed"` s ikonom `RiYoutubeFill`. U `BlockNoteEditor.tsx` – `getCustomSlashMenuItems` – dodaj stavku za slash menu.
 
@@ -242,7 +255,7 @@ Blok "YouTube video" omogućuje ubacivanje YouTube videa po punoj širini strani
 
 ### 5.3 File Panel – tab "Media" (odabir postojeće slike)
 
-U blog editoru, kad odabereš sliku (Image ili Media+Content), File Panel ima tri taba: **Upload**, **Media**, **Embed**.
+U blog editoru, kad odabereš sliku (Image), File Panel ima tri taba: **Upload**, **Media**, **Embed**.
 
 - **Upload** – upload nove datoteke (ako je `uploadFile` proslijeđen)
 - **Media** – odabir postojeće slike iz biblioteke (`/api/media` – portfolio, blog, stranice)

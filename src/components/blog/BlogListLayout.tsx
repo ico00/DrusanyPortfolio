@@ -9,12 +9,10 @@ export default function BlogListLayout({
   posts,
   currentPage,
   totalPages,
-  title = "Blog",
 }: {
   posts: BlogPost[];
   currentPage: number;
   totalPages: number;
-  title?: string;
 }) {
   return (
     <div className="min-h-screen bg-white">
@@ -30,9 +28,6 @@ export default function BlogListLayout({
         </div>
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           <main className="min-w-0 flex-1">
-            <h1 className="theme-page-title font-normal tracking-tight">
-              {title}
-            </h1>
             <Suspense fallback={<p className="mt-8 text-zinc-500">Učitavanje…</p>}>
               <BlogList
                 posts={posts}

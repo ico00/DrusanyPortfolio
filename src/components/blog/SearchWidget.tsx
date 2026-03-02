@@ -56,10 +56,11 @@ export default function SearchWidget({ variant = "default" }: SearchWidgetProps)
       : BLOG_WIDGET_UI.inputWrapper;
 
   const iconClass = variant === "minimal" ? "h-4 w-4 shrink-0 text-zinc-500" : "ml-3 h-4 w-4 shrink-0 text-zinc-400";
+  // text-base (16px) sprječava iOS Safari auto-zoom pri fokusu (inputi <16px triggeraju zoom)
   const inputClass =
     variant === "minimal"
-      ? "flex-1 min-w-0 bg-transparent py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
-      : "w-full min-w-0 bg-transparent py-2.5 pr-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-400";
+      ? "flex-1 min-w-0 bg-transparent py-2 text-base text-zinc-900 outline-none placeholder:text-zinc-400"
+      : "w-full min-w-0 bg-transparent py-2.5 pr-3 text-base text-zinc-900 outline-none placeholder:text-zinc-400";
 
   return (
     <div className={wrapperClass}>

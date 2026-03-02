@@ -921,6 +921,10 @@ export default function AdminBlog({
         }
         return;
       }
+      if (res.status === 409 && data.error === "max_featured") {
+        showToast("error", ADMIN_UI.blog.maxFeaturedReached);
+        return;
+      }
       if (!res.ok) throw new Error("Failed to update");
       showToast("success", ADMIN_UI.messages.blogSaveSuccess);
       const savedId = editingId;
@@ -955,8 +959,13 @@ export default function AdminBlog({
           slug: slug || crypto.randomUUID().slice(0, 8),
         }),
       });
+      const createData = await res.json().catch(() => ({}));
+      if (res.status === 409 && createData.error === "max_featured") {
+        showToast("error", ADMIN_UI.blog.maxFeaturedReached);
+        return;
+      }
       if (!res.ok) throw new Error("Failed to create");
-      const created = await res.json();
+      const created = createData;
       showToast("success", ADMIN_UI.messages.blogCreateSuccess);
       unsavedCtx?.setUnsavedChanges(false);
       closeForm({ skipUnsavedCheck: true });
@@ -1098,7 +1107,16 @@ export default function AdminBlog({
                 <label className="text-sm text-zinc-400">{ADMIN_UI.blog.featuredPost}</label>
               <button
                 type="button"
-                onClick={() => setForm((f) => ({ ...f, featured: !f.featured }))}
+                onClick={() => {
+                  if (!form.featured) {
+                    const featuredCount = posts.filter((p) => p.featured && p.id !== form.id).length;
+                    if (featuredCount >= 3) {
+                      showToast("error", ADMIN_UI.blog.maxFeaturedReached);
+                      return;
+                    }
+                  }
+                  setForm((f) => ({ ...f, featured: !f.featured }));
+                }}
                 className={`rounded p-2 transition-colors ${
                   form.featured
                     ? "text-amber-400 hover:text-amber-300"
@@ -1467,7 +1485,10 @@ export default function AdminBlog({
                             }));
                             setThumbnailCacheBust(`${Date.now()}-${Math.random().toString(36).slice(2)}`);
                           }}
-                          onRemove={() => removeGalleryImage(url)}
+                          onRemove={() => {
+                            if (!confirm(ADMIN_UI.blog.deleteImagesConfirm(1))) return;
+                            removeGalleryImage(url);
+                          }}
                         />
                       ))}
                     </div>
@@ -1803,6 +1824,13 @@ export default function AdminBlog({
                   type="button"
                   onClick={async () => {
                     const next = !post.featured;
+                    if (next) {
+                      const featuredCount = posts.filter((p) => p.featured).length;
+                      if (featuredCount >= 3) {
+                        showToast("error", ADMIN_UI.blog.maxFeaturedReached);
+                        return;
+                      }
+                    }
                     try {
                       const res = await fetch("/api/blog", {
                         method: "PUT",
@@ -1816,6 +1844,11 @@ export default function AdminBlog({
                           )
                         );
                         showToast("success", next ? "Dodano u istaknute" : "Uklonjeno iz istaknutih");
+                      } else if (res.status === 409) {
+                        const data = await res.json();
+                        if (data.error === "max_featured") {
+                          showToast("error", ADMIN_UI.blog.maxFeaturedReached);
+                        }
                       }
                     } catch {
                       showToast("error", "Change failed.");

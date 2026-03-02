@@ -122,6 +122,7 @@ export const ADMIN_UI = {
     removeFromFeatured: "Remove from featured",
     addToFeatured: "Add to featured",
     showsInWidget: "Shows in featured widget",
+    maxFeaturedReached: "Maksimalno 3 istaknuta članka. Ukloni jedan da dodaš ovaj.",
     selectCategories: "Select categories",
     enterDateTitle: "Enter date and title before upload. Images go to",
     clickForFocus: "Click on image to set focus point",
@@ -169,7 +170,8 @@ export const ADMIN_UI = {
     time: "Time",
     draftHint: "Not shown publicly",
     publishedHint: "Visible on blog",
-    deleteImagesConfirm: (n: number) => `Delete ${n} image(s)?`,
+    deleteImageConfirm: "Obriši ovu sliku iz galerije?",
+    deleteImagesConfirm: (n: number) => (n === 1 ? "Obriši ovu sliku iz galerije?" : `Obriši ${n} slika?`),
   },
 
   // ─── Media (admin media list) ───
