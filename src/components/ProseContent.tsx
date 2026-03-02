@@ -13,30 +13,19 @@ function processProseHtml(html: string): { processedHtml: string; imageUrls: str
   const { document: doc } = parseHTML(`<!DOCTYPE html><html><body>${html}</body></html>`);
   const imageUrls: string[] = [];
 
-  // Split layout: slika s data-display-width="split" + sljedeći blok → flex container (pola slika, pola tekst)
-  // Preskoči slike unutar .prose-media-content-split (Media+Content blok već ima layout)
-  const splitImgs = Array.from(doc.querySelectorAll("img[data-display-width='split']")).filter(
-    (img) => !img.closest(".prose-media-content-split")
-  );
-  for (const img of splitImgs) {
-    let block: Element | null = img.parentElement;
-    while (block && !block.nextElementSibling && block !== doc.body) {
-      block = block.parentElement;
-    }
-    if (!block?.nextElementSibling) continue;
-    const nextBlock = block.nextElementSibling;
-    const wrapper = doc.createElement("div");
-    wrapper.className = "prose-image-text-split flex flex-col gap-4 md:flex-row md:gap-6 md:items-start";
-    block.parentNode?.insertBefore(wrapper, block);
-    const imgCol = doc.createElement("div");
-    imgCol.className = "w-full md:w-1/2 shrink-0";
-    imgCol.appendChild(block);
-    const textCol = doc.createElement("div");
-    textCol.className = "w-full md:w-1/2 min-w-0";
-    textCol.appendChild(nextBlock);
-    wrapper.appendChild(imgCol);
-    wrapper.appendChild(textCol);
-  }
+  // YouTube iframe – wrap u prose-youtube-wrapper za full-width prikaz
+  doc.querySelectorAll("iframe[src*='youtube.com/embed']").forEach((iframe) => {
+    if (iframe.closest(".prose-youtube-wrapper")) return;
+    const wrapper = doc.createElement("figure");
+    wrapper.className = "prose-youtube-wrapper";
+    const inner = doc.createElement("div");
+    inner.className = "relative w-full";
+    inner.setAttribute("style", "aspect-ratio: 16/9; padding: 6xpx; box-sizing: border-box");
+    iframe.setAttribute("style", "position:absolute;inset:0;width:100%;height:100%");
+    iframe.parentNode?.insertBefore(wrapper, iframe);
+    wrapper.appendChild(inner);
+    inner.appendChild(iframe);
+  });
 
   // Blockquote dekoracija
   doc.querySelectorAll("blockquote").forEach((bq) => {
@@ -63,7 +52,7 @@ function processProseHtml(html: string): { processedHtml: string; imageUrls: str
     const previewWidth =
       img.getAttribute("data-preview-width") || img.getAttribute("width");
     const hasCustomWidth =
-      (displayWidth && displayWidth !== "full" && displayWidth !== "split") ||
+      (displayWidth && displayWidth !== "full") ||
       (previewWidth && parseInt(previewWidth, 10) > 0);
 
     const wrapper = doc.createElement("button");
@@ -77,12 +66,9 @@ function processProseHtml(html: string): { processedHtml: string; imageUrls: str
     const alignment = img.getAttribute("data-text-alignment");
     wrapper.setAttribute("data-text-alignment", alignment || "center");
 
-    if (displayWidth && displayWidth !== "full" && displayWidth !== "split") {
+    if (displayWidth && displayWidth !== "full") {
       wrapper.setAttribute("data-display-width", displayWidth);
       wrapper.setAttribute("style", `width: ${displayWidth}%; max-width: ${displayWidth}%`);
-    } else if (displayWidth === "split") {
-      wrapper.setAttribute("data-display-width", displayWidth);
-      // Split: slika je u 50% koloni, puna širina unutar nje
     } else if (previewWidth) {
       const px = parseInt(previewWidth, 10);
       if (!isNaN(px) && px > 0) {
@@ -96,6 +82,19 @@ function processProseHtml(html: string): { processedHtml: string; imageUrls: str
     insertParent.insertBefore(wrapper, insertBefore);
     wrapper.appendChild(img);
     img.setAttribute("data-cursor-aperture", "");
+
+    // BlockNote struktura: bn-file-block-content-wrapper ima inline width (npr. 512px)
+    // koji ograničava full-width slike – poništimo ga kad je slika full-width
+    // max-width: 100% sprječava prelazak širine stupca
+    if (!hasCustomWidth) {
+      const fileWrapper = wrapper.closest(".bn-file-block-content-wrapper") as
+        | (Element & { style?: CSSStyleDeclaration })
+        | null;
+      if (fileWrapper?.style) {
+        fileWrapper.style.width = "100%";
+        fileWrapper.style.maxWidth = "100%";
+      }
+    }
   });
 
   const bodyHtml = doc.body?.innerHTML ?? html;

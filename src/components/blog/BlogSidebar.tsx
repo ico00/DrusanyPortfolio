@@ -3,6 +3,7 @@ import SearchWidget from "./SearchWidget";
 import CategoriesWidget from "./CategoriesWidget";
 import GoogleMapsWidget from "./GoogleMapsWidget";
 import FeaturedPostsWidget from "./FeaturedPostsWidget";
+import PlansWidget from "./PlansWidget";
 import {
   getBlogWidgets,
   type BlogWidgetConfig,
@@ -10,7 +11,9 @@ import {
   type CategoriesWidgetConfig,
   type MapsWidgetConfig,
   type FeaturedPostsWidgetConfig,
+  type PlansWidgetConfig,
 } from "@/lib/blogWidgets";
+import { getPlans } from "@/lib/plans";
 import { BLOG_WIDGET_UI } from "@/data/blogWidgetUI";
 import type { BlogPost } from "@/lib/blog";
 
@@ -87,6 +90,16 @@ async function WidgetRenderer({
         <FeaturedPostsWidget
           title={fp.title}
           posts={posts}
+        />
+      );
+    }
+    case "plans": {
+      const pw = widget as PlansWidgetConfig;
+      const plans = await getPlans();
+      return (
+        <PlansWidget
+          title={pw.title}
+          plans={plans}
         />
       );
     }

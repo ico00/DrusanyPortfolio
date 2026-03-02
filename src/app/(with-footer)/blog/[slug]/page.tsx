@@ -249,7 +249,7 @@ export default async function BlogPostPage({
               Ivica Drusany
             </p>
 
-            <div className="bg-white py-12 md:py-16 -mx-6 w-[calc(100%+3rem)] px-6 md:mx-0 md:w-full">
+            <div className="overflow-x-hidden bg-white py-12 md:py-16 -mx-6 w-[calc(100%+3rem)] px-6 md:mx-0 md:w-full">
               <ProseContent
                 html={post.body || ""}
                 className="prose prose-lg prose-zinc max-w-none prose-headings:font-serif"

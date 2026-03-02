@@ -76,7 +76,7 @@ const { processedHtml, imageUrls } = useMemo(
 
 **Korak 5:** Koristi `linkedom` uvijek – radi i na serveru i u browseru, a isti parser osigurava identičan output i izbjegava hydration mismatch.
 
-**Korak 6:** Širina slike – ProseContent čita `data-display-width` (full|50|25|split) ili `data-preview-width`/`width` za ručni resize. Wrapper dobiva odgovarajuće CSS (50%, 25% ili max-width u px). **Split** – slika + sljedeći blok (paragraf) u flex layoutu: pola slika, pola tekst (puna širina na mobilu). Blog editor koristi custom schema (`blogBlockNoteSchema`) s Image blockom koji ima `displayWidth` prop – ImageSizeSelect i hover toolbar omogućuju odabir Full/Split/50%/25%. **Full-width breakout** – slike bez displayWidth 50/25/split idu od ruba do ruba (`margin: -1.5rem`, `width: calc(100% + 3rem)`); u `globals.css` sekcija "Prose – full-width slike".
+**Korak 6:** Širina slike – ProseContent čita `data-display-width` (full|50|25) ili `data-preview-width`/`width` za ručni resize. Wrapper dobiva odgovarajuće CSS (50%, 25% ili max-width u px). Blog editor koristi custom schema (`blogBlockNoteSchema`) s Image blockom koji ima `displayWidth` prop – ImageSizeSelect i hover toolbar omogućuju odabir Full/50%/25%. **Full-width slike** – slike bez displayWidth 50/25 imaju `width: 100%` i `max-width: 100%` (bez breakouta – sprječava preljev); u `globals.css` sekcija "Prose – full-width slike". **BlockNote struktura** – `bn-file-block-content-wrapper` ima inline width (npr. 512px); `processProseHtml` postavlja `width: 100%` i `max-width: 100%` na taj wrapper za full-width slike (SSR-safe: ne koristiti `instanceof HTMLElement`).
 
 ---
 
@@ -106,13 +106,15 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 | Centralizirane util funkcije | transliterateCroatian, sanitizeFilename, sanitizeFolderName | `src/lib/utils.ts` |
 | Provjera postojanja datoteke | fileExists | `src/lib/fileUtils.ts` (samo server) |
 | Blog sidebar widgeti (stilovi) | BLOG_WIDGET_UI | `src/data/blogWidgetUI.ts` |
-| Blog widget komponente | SearchWidget, CategoriesWidget, FeaturedPostsWidget, GoogleMapsWidget | `src/components/blog/` |
+| Blog widget komponente | SearchWidget, CategoriesWidget, FeaturedPostsWidget, PlansWidget, GoogleMapsWidget | `src/components/blog/` |
+| Accordion (grid-rows) | CategoriesWidget (kategorije s podkategorijama), AdminSidebar | `src/components/blog/CategoriesWidget.tsx` |
 | Block type select popup (dodavanje blokova) | BlockTypeSelectWithCursor | `src/components/BlockTypeSelectWithCursor.tsx` |
 | Block style bar na vrhu bloka | FloatingBlockTypeBar | `src/components/FloatingBlockTypeBar.tsx` |
 | Formatting toolbar na vrhu bloka | BlockTopFormattingToolbarController | `src/components/BlockTopFormattingToolbarController.tsx` |
 | Link toolbar (FormattingToolbar) | CustomCreateLinkButton | `src/components/CustomCreateLinkButton.tsx` |
 | Custom Image block (displayWidth) | blocknoteImageSchema | `src/lib/blocknoteImageSchema.tsx` |
 | Media + Content blok (pola slika, pola tekst) | blocknoteMediaContentSchema | `src/lib/blocknoteMediaContentSchema.tsx` |
+| YouTube video blok (embed po širini stranice) | blocknoteYouTubeSchema | `src/lib/blocknoteYouTubeSchema.tsx` |
 | File Panel (Upload + Media + Embed) | BlogFilePanel | `src/components/blocknote/BlogFilePanel.tsx` |
 | Media tab (odabir postojeće slike) | MediaLibraryTab | `src/components/blocknote/MediaLibraryTab.tsx` |
 | Theme grupe, accordion, elementi | ThemeAdmin | `src/components/ThemeAdmin.tsx` |
@@ -162,7 +164,17 @@ Dizajn: **jedinstveni panel** – bijela pozadina (`bg-white`), tamna slova (`te
 
 **Korak 2:** Widget komponente ne koriste vlastite kartice – renderiraju samo sadržaj; `BlogSidebar` ih wrappa u sekcije unutar panela.
 
-**Korak 3:** Referentne komponente: BlogSidebar, SearchWidget, CategoriesWidget, FeaturedPostsWidget, GoogleMapsWidget.
+**Korak 3:** Referentne komponente: BlogSidebar, SearchWidget, CategoriesWidget, FeaturedPostsWidget, PlansWidget, GoogleMapsWidget.
+
+### 4.1 CategoriesWidget – accordion za kategorije s podkategorijama
+
+Kategorije koje imaju podkategorije (Sport, Gradovi – iz `BLOG_CATEGORIES` u `blogCategories.ts`) prikazuju se kao accordion: roditelj s chevronom za expand/collapse, podkategorije uvučene ispod. Kategorije bez podkategorija ostaju obični linkovi. **Pattern:** `grid-rows-[1fr]` / `grid-rows-[0fr]` za animaciju (kao AdminSidebar). Podkategorije se sortiraju abecedno po labelu. Kad je aktivna podkategorija ili roditelj, accordion se automatski otvara.
+
+**Referentna komponenta:** `src/components/blog/CategoriesWidget.tsx`
+
+### 4.2 PlansWidget – planirani snimanja
+
+Widget "Planovi" prikazuje listu snimanja koja se planiraju. Podaci u `src/data/plans.json`: `{ "plans": [ { "date": "YYYY-MM-DD", "name": "Naziv snimanja" } ] }`. `getPlans()` iz `@/lib/plans` učitava i sortira po datumu (ascending). Prikaz: datum (formatBlogDate) pa naziv. Redoslijed u sidebaru: u `blogWidgets.json` stavka `type: "plans"` ispod `featured-posts`.
 
 ---
 
@@ -214,6 +226,19 @@ Blok "Media + Content" dostupan je na dva načina:
 Implementacija u `BlockNoteEditor.tsx`: kad je `uploadFile` proslijeđen (blog schema), `slashMenu={false}` isključuje default slash menu, a custom `SuggestionMenuController` s `getItems` vraća default stavke + Media+Content. Stavka se umetne nakon Image po title-u.
 
 **Referentna datoteka:** `src/components/BlockNoteEditor.tsx` – `getCustomSlashMenuItems`, `SuggestionMenuController`
+
+### 5.2a YouTube video blok
+
+Blok "YouTube video" omogućuje ubacivanje YouTube videa po punoj širini stranice. Dostupan je na isti način kao Media + Content (Block style dropdown, slash menu `/youtube`, `/video`, `/embed`).
+
+**Dodavanje u Block Type Select:** U `BlockTypeSelectWithCursor.tsx` – `blockTypeSelectItemsWithCodeBlock` – dodaj stavku `type: "youtubeEmbed"` s ikonom `RiYoutubeFill`. U `BlockNoteEditor.tsx` – `getCustomSlashMenuItems` – dodaj stavku za slash menu.
+
+**Implementacija:**
+- `src/lib/blocknoteYouTubeSchema.tsx` – blok s propom `url`; parsira YouTube link (watch, youtu.be, embed) u video ID; `toExternalHTML` vraća `figure.prose-youtube-wrapper` s iframe
+- Sanitizer (`src/lib/sanitize.ts`) – dozvoljava `iframe` samo za `youtube.com/embed` URL
+- ProseContent – wrapa postojeće YouTube iframe-ove u `.prose-youtube-wrapper`; CSS u `globals.css` za full-width breakout (YouTube; slike u blogu koriste 100% širine bez breakouta)
+
+**Referentne datoteke:** `blocknoteYouTubeSchema.tsx`, `sanitize.ts`, `ProseContent.tsx`, `globals.css`
 
 ### 5.3 File Panel – tab "Media" (odabir postojeće slike)
 
@@ -370,10 +395,10 @@ RewriteRule ^admin/?$ admin.html [L]
 </IfModule>
 ```
 
-- **Blog post URL‑ovi** – zbog ograničenja hostinga pojedinačni postovi koriste eksplicitne `.html` linkove:
+- **Blog post URL‑ovi** – zbog ograničenja hostinga i `generateStaticParams` (output: export) pojedinačni postovi koriste eksplicitne `.html` linkove:
   - lista: `/blog`
   - post: `/blog/${post.slug}.html`
-  - referentne komponente: `BlogList` i `FeaturedPostsWidget`.
+  - referentne komponente: `BlogList` i `FeaturedPostsWidget` – **uvijek** koriste `.html` (i u dev i u prod), jer `generateStaticParams` vraća slugove s ekstenzijom.
 - **Mobile blog layout (full‑bleed)** – na mobilnom:
   - featured slike i tamni blok ispod njih (naslov + datum) na listi bloga idu **od ruba do ruba** (`-mx-6 w-[calc(100%+3rem)]`, unutarnji sadržaj ima `px-6`);
   - isto za featured sliku i tekstualni dio posta na stranici `blog/[slug]/page.tsx`.
@@ -422,4 +447,8 @@ deployment:
   4. Testiraj: `ssh -p 21098 drusanyc@drusany.com` (ili lozinka ili SSH ključ).
 - **Deploy rutina:** Uređuješ u adminu → Save → `./scripts/deploy-static.sh` → gotovo. Skripta radi build, push i rsync.
 - **Alternativa (ako nemaš SSH):** FTP deploy (`FTP_HOST`, `FTP_USER`, `FTP_PASS`) ili cPanel Deploy HEAD Commit (može biti nestabilan).
-- **uploads/** (fotografije) ostaje na serveru – nove foldere uploadaš ručno (FTP/File Manager).
+- **uploads/** (fotografije): `./scripts/deploy-uploads.sh` ili `npm run deploy:uploads` – rsync/FTP samo `public/uploads/`, šalje samo promijenjene datoteke (provjera po veličini). Koristi iste varijable kao deploy-static (SSH_* ili FTP_*).
+
+### 9.2 Brzi start dev (dev-and-open)
+
+Skripta `./scripts/dev-and-open.sh` ili `npm run dev:open`: otvara novi Terminal prozor s `npm run dev`, čeka da server odgovori (max 30 s), zatim otvara Google Chrome s 2 taba – `http://localhost:3000` i `http://localhost:3000/admin`. Korisno za brzi pokretanje razvoja bez ručnog otvaranja preglednika.

@@ -645,14 +645,21 @@ body[data-file-panel-open] [data-file-panel="true"] {
   margin-right: auto;
 }
 
-/* Prose – full-width slike: breakout od ruba do ruba (bez bijelog okvira) */
+/* Prose – full-width slike: 100% širine stupca (bez breakouta – sprječava preljev) */
 /* Uključuje i slike s data-preview-width – BlockNote ne sprema data-display-width kad je "full" */
-.prose .prose-img-wrapper:not([data-display-width="50"]):not([data-display-width="25"]):not([data-display-width="split"]),
-.prose-invert .prose-img-wrapper:not([data-display-width="50"]):not([data-display-width="25"]):not([data-display-width="split"]) {
-  margin-left: -1.5rem;
-  margin-right: -1.5rem;
-  width: calc(100% + 3rem) !important;
-  max-width: calc(100% + 3rem) !important;
+.prose .prose-img-wrapper:not([data-display-width="50"]):not([data-display-width="25"]),
+.prose-invert .prose-img-wrapper:not([data-display-width="50"]):not([data-display-width="25"]) {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+/* BlockNote bn-block: poništi width: 512px na wrapperu kad je slika full-width (nema 50/25/split) */
+/* max-width: 100% sprječava prelazak širine stupca */
+.prose .bn-block-content[data-content-type="image"]:not(:has(.prose-img-wrapper[data-display-width="50"])):not(:has(.prose-img-wrapper[data-display-width="25"]))
+  .bn-file-block-content-wrapper,
+.prose-invert .bn-block-content[data-content-type="image"]:not(:has(.prose-img-wrapper[data-display-width="50"])):not(:has(.prose-img-wrapper[data-display-width="25"]))
+  .bn-file-block-content-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 /* Prose – širina slike: Full (100%), 50%, 25% ili ručni resize (inline max-width u px) */
@@ -672,6 +679,29 @@ body[data-file-panel-open] [data-file-panel="true"] {
 .prose .prose-img-wrapper[style*="max-width"],
 .prose-invert .prose-img-wrapper[style*="max-width"] {
   width: auto;
+}
+
+/* Prose – YouTube embed: full-width po širini stranice, aspect ratio 16:9 */
+/* Padding unutra – rub/obrub ostaje vanjski, ne prelazi preko videa */
+.prose .prose-youtube-wrapper,
+.prose-invert .prose-youtube-wrapper {
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  width: calc(100% + 3rem) !important;
+  max-width: calc(100% + 3rem) !important;
+}
+.prose .prose-youtube-wrapper > div,
+.prose-invert .prose-youtube-wrapper > div {
+  padding: 6px;
+  box-sizing: border-box;
+}
+.prose .prose-youtube-wrapper iframe,
+.prose-invert .prose-youtube-wrapper iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  box-sizing: border-box;
 }
 
 /* Prose – svi paragrafi ista boja (BlockNote postavlja inline boju samo kad je odabrana) */

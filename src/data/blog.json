@@ -1,6 +1,876 @@
 {
   "posts": [
     {
+      "id": "6ed07794-24e5-48fe-b03d-e49c986c8181",
+      "title": "Donkey Hot",
+      "slug": "231224-donkey-hot",
+      "date": "2023-12-24",
+      "categories": [
+        "koncerti"
+      ],
+      "thumbnail": "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_152.webp",
+      "thumbnailFocus": "66% 38%",
+      "gallery": [
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_008.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_013.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_014.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_016.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_017.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_022.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_023.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_027.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_032.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_036.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_039.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_041.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_048.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_049.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_056.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_066.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_077.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_081.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_104.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_119.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_122.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_124.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_136.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_137.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_147.webp",
+        "/uploads/blog/2023-12-24-231224-donkey-hot/gallery/231222-donkey_hot_152.webp"
+      ],
+      "galleryMetadata": {},
+      "featured": false,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "",
+        "keywords": ""
+      }
+    },
+    {
+      "id": "c9bfa003-25c9-4a98-84e3-f7017be5e941",
+      "title": "Grade 2",
+      "slug": "240614-grade-2",
+      "date": "2024-06-14",
+      "categories": [
+        "koncerti"
+      ],
+      "thumbnail": "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_044.webp",
+      "thumbnailFocus": "63% 56%",
+      "gallery": [
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_003.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_006.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_008.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_009.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_011.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_019.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_024.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_026.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_032.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_034.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_041.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_042.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_044.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_045.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_053.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_058.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_060.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_061.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_063.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_084.webp",
+        "/uploads/blog/2024-06-24-240624-grade-2/gallery/240612-grade_2_098.webp"
+      ],
+      "galleryMetadata": {},
+      "featured": false,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "Fotografije koncerta Grade 2 koji su bili predgrupa Dropkick Murphysima na zagebačkoj Šalati 2024.",
+        "keywords": "grade 2, punk, oi, koncert, zagreb, predgrupa, šalata, hrvatska, fotografije, "
+      }
+    },
+    {
+      "id": "9e00f18d-5c7e-47e9-b904-3cf678869a12",
+      "title": "Zagrebancije: Buđenje ranog proljeća",
+      "slug": "260301-zagrebancije-budjenje-ranog-proljeca",
+      "date": "2026-03-01",
+      "time": "20:00",
+      "categories": [
+        "gradovi",
+        "zagrebancije"
+      ],
+      "thumbnail": "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_104.webp",
+      "thumbnailFocus": "44% 60%",
+      "gallery": [
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_003.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_012.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_016.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_017.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_024.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_025.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_028.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_029.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_035.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_037.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_040.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_041.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_046.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_049.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_052.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_054.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_057.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_059.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_070.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_072.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_073.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_077.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_083.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_098.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_104.webp",
+        "/uploads/blog/2026-03-01-260301-zagrebancije/gallery/260301-zagrebancije_099.webp"
+      ],
+      "galleryMetadata": {},
+      "featured": false,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "Fotografije zagrebačkih ulica na prvi dan ožujka 2026.",
+        "keywords": "zagreb, zagrebancije, street photography, mimara, uspinjača"
+      }
+    },
+    {
+      "id": "c8574793-d60f-4dbf-873e-a30c4850d774",
+      "title": "Katar, stižemo!",
+      "slug": "221114-katar-stizemo",
+      "date": "2022-11-14",
+      "categories": [
+        "sport",
+        "nogomet"
+      ],
+      "thumbnail": "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_138.webp",
+      "thumbnailFocus": "50% 50%",
+      "gallery": [
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_001.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_007.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_008.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_009.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_011.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_013.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_016.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_018.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_019.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_020.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_024.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_030.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_032.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_033.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_035.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_040.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_045.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_048.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_052.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_055.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_069.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_071.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_073.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_077.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_094.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_101.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_103.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_105.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_108.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_112.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_115.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_117.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_122.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_123.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_124.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_129.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_131.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_134.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_136.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_138.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_140.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_142.webp",
+        "/uploads/blog/2022-11-14-221114-katar-stizemo/gallery/221114-ispracaj_reprezentacije_143.webp"
+      ],
+      "galleryMetadata": {},
+      "featured": false,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "Fotografije hrvatske nogometne reprezentacije na odlasku u Katar",
+        "keywords": "hrvatska nogometna reprezentacija, odlazak, put, katar, svjetsko nogometno prvenstvo, mzlz, zračna luka, luka modrić, kapetan, avion, croatia airlines,"
+      }
+    },
+    {
+      "id": "ce383254-bdf5-4931-bf9a-5a00a1cd6143",
+      "title": "35 godina Croatia Airlinesa",
+      "slug": "240921-35-godina-croatia-airlinesa",
+      "date": "2024-09-21",
+      "categories": [
+        "avioni"
+      ],
+      "thumbnail": "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505862792_24261389513445641_762634455668028747_n.webp",
+      "thumbnailFocus": "48% 88%",
+      "gallery": [
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/502615888_24261388023445790_7207770546176025665_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506098930_24261387823445810_6830632345804547278_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506046009_24261387790112480_5829771495650015039_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506004954_24261389673445625_4917872041971213096_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506205842_24261389836778942_3477579368315974902_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506099849_24261389486778977_1374679074681839057_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/502698272_24261387800112479_984057672867654964_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/503472605_24261387773445815_8634563560288834152_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/504009107_24261387616779164_5020559276576489876_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505115751_24261387986779127_8522380628887300900_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505862792_24261389513445641_762634455668028747_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505987507_24261389850112274_7001839753841532506_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505993644_24261387830112476_698433927148823082_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505994398_24261389466778979_2505528072586908637_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506024950_24261389510112308_2671973182153136265_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506030464_24261389660112293_3614899708610809384_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506049295_24261387583445834_4491522024087636055_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506097148_24261389476778978_1071721762298281757_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506103284_24261387590112500_7004719846766686024_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506153684_24261389473445645_9140362733049064076_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506157309_24261389846778941_135231346278974952_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506218989_24261389516778974_6831678674099454985_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506245357_24261387840112475_5306305819969589514_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506258306_24261389493445643_3302555665307124046_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506288584_24261387813445811_7706997561071009196_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506300262_24261389770112282_8561197215825493328_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506067438_24261389520112307_696998975299977983_n.webp",
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505625259_24261389500112309_5264586034821209659_n.webp"
+      ],
+      "galleryMetadata": {
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/502615888_24261388023445790_7207770546176025665_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506098930_24261387823445810_6830632345804547278_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506046009_24261387790112480_5829771495650015039_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506004954_24261389673445625_4917872041971213096_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506205842_24261389836778942_3477579368315974902_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506099849_24261389486778977_1374679074681839057_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/502698272_24261387800112479_984057672867654964_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/503472605_24261387773445815_8634563560288834152_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/504009107_24261387616779164_5020559276576489876_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505115751_24261387986779127_8522380628887300900_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505862792_24261389513445641_762634455668028747_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505987507_24261389850112274_7001839753841532506_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505993644_24261387830112476_698433927148823082_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505994398_24261389466778979_2505528072586908637_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506024950_24261389510112308_2671973182153136265_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506030464_24261389660112293_3614899708610809384_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506049295_24261387583445834_4491522024087636055_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506097148_24261389476778978_1071721762298281757_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506103284_24261387590112500_7004719846766686024_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506153684_24261389473445645_9140362733049064076_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506157309_24261389846778941_135231346278974952_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506218989_24261389516778974_6831678674099454985_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506245357_24261387840112475_5306305819969589514_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506258306_24261389493445643_3302555665307124046_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506288584_24261387813445811_7706997561071009196_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506300262_24261389770112282_8561197215825493328_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/506067438_24261389520112307_696998975299977983_n.webp": {
+          "title": "Croatia Airlines"
+        },
+        "/uploads/blog/2024-09-21-240921-35-godina-croatia-airlinesa/gallery/505625259_24261389500112309_5264586034821209659_n.webp": {
+          "title": "Croatia Airlines"
+        }
+      },
+      "featured": false,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "Arhivske fotografije aviona Croatia Airlinesa u čast proslave 35 godina postojanja",
+        "keywords": "avioni, croatia airlines, avio prijevoznik, hrvatska, "
+      }
+    },
+    {
+      "id": "18542429-55c7-4ac2-a2e0-9a2d619bac6b",
+      "title": "YU grupa",
+      "slug": "241019-yu-grupa",
+      "date": "2024-10-19",
+      "categories": [
+        "koncerti"
+      ],
+      "thumbnail": "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_144.webp",
+      "thumbnailFocus": "33% 48%",
+      "gallery": [
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_010.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_012.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_021.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_027.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_028.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_039.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_042.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_043.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_046.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_052.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_055.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_056.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_060.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_061.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_067.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_079.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_095.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_103.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_104.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_109.webp",
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_144.webp"
+      ],
+      "galleryMetadata": {
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_010.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_012.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_021.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_027.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_028.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_039.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_042.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_043.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_046.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_052.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_055.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_056.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_060.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_061.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_067.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_079.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_095.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_103.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_104.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_109.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        },
+        "/uploads/blog/2024-10-19-241019-yu-grupa/gallery/241019-yu_grupa_144.webp": {
+          "title": "YU grupa @ Arena Zagreb, 19.10.2024."
+        }
+      },
+      "featured": false,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "Fotografije koncerta YU grupe koji su nastupili kao predgrupa Bajagi u zagrebačkoj Areni 2024. ",
+        "keywords": "yu grupa, rock, predgrupa, bajaga, arena zagreb, koncert, fotograije, "
+      }
+    },
+    {
+      "id": "f862cdf9-58ca-4320-9f94-4512755911b9",
+      "title": "Proslava bronce u Dubravi",
+      "slug": "221222-proslava-bronce-u-dubravi",
+      "date": "2022-12-22",
+      "categories": [
+        "zagrebancije",
+        "gradovi"
+      ],
+      "thumbnail": "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_282.webp",
+      "thumbnailFocus": "53% 97%",
+      "gallery": [
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_004.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_012.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_018.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_020.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_022.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_024.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_028.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_030.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_031.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_033.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_035.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_037.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_040.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_043.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_045.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_047.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_052.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_056.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_061.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_063.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_067.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_069.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_072.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_073.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_083.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_084.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_088.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_089.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_090.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_091.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_097.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_100.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_101.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_102.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_108.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_118.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_121.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_125.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_140.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_143.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_147.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_150.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_153.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_157.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_162.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_165.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_175.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_177.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_178.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_181.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_190.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_197.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_200.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_205.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_209.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_211.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_219.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_222.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_225.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_227.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_232.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_234.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_237.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_239.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_241.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_244.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_249.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_254.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_255.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_256.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_259.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_263.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_268.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_269.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_270.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_272.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_273.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_276.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_282.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_287.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_299.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_302.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_304.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_306.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_309.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_318.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_319.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_322.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_324.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_328.webp",
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_330.webp"
+      ],
+      "galleryMetadata": {
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_004.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_012.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_018.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_020.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_022.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_024.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_028.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_030.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_031.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_033.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_035.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_037.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_040.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_043.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_045.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_047.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_052.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_056.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_061.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_063.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_067.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_069.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_072.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_073.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_083.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_084.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_088.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_089.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_090.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_091.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_097.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_100.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_101.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_102.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_108.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_118.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_121.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_125.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_140.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_143.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_147.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_150.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_153.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_157.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_162.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_165.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_175.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_177.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_178.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_181.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_190.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_197.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_200.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_205.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_209.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_211.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_219.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_222.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_225.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_227.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_232.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_234.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_237.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_239.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_241.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_244.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_249.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_254.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_255.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_256.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_259.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_263.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_268.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_269.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_270.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_272.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_273.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_276.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_282.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_287.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_299.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_302.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_304.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_306.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_309.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_318.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_319.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_322.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_324.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_328.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        },
+        "/uploads/blog/2022-12-22-221222-proslava-bronce-u-dubravi/gallery/221217-proslava_bronce_330.webp": {
+          "title": "Proslava bronce u Dubravi, 17.12.2022."
+        }
+      },
+      "featured": false,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "Fotografije proslave brončane medalje sa svjetskog nogometnog prvenstva u Kataru 2022. g. na ulicama zagrebačke Dubrave",
+        "keywords": "proslava, bronca, dubrava, zagreb, vatreni, slavlje, nogomet, navijači, ludilo, vatreni, "
+      }
+    },
+    {
+      "id": "b4c1cc39-1ad0-4e2e-823e-2e97ca81fac3",
+      "title": "Cahayabox is back",
+      "slug": "250428-cahayabox-is-back",
+      "date": "2025-04-28",
+      "categories": [
+        "info"
+      ],
+      "thumbnail": "/uploads/blog/2025-04-28-250428-cahayabox-is-back/featured.webp",
+      "thumbnailFocus": "50% 50%",
+      "gallery": [],
+      "galleryMetadata": {},
+      "featured": false,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "Povratak Cahayaboxa",
+        "keywords": "cahayabox, portal o fotografiji, info vijesti, novosti,"
+      }
+    },
+    {
+      "id": "acb26540-3242-4fcf-9108-19e43aaa882a",
+      "title": "Zbogom Wordpressu!",
+      "slug": "260227-zbogom-wordpressu",
+      "date": "2026-02-27",
+      "categories": [
+        "info"
+      ],
+      "thumbnail": "/uploads/blog/2026-02-27-260227-zbogom-wordpressu/featured.webp",
+      "thumbnailFocus": "50% 50%",
+      "gallery": [],
+      "galleryMetadata": {},
+      "featured": true,
+      "status": "published",
+      "seo": {
+        "metaTitle": "",
+        "metaDescription": "Oproštaj od Wordpressa i prelazak na tailor-made sustav kućne radinosti",
+        "keywords": "wordpress, cms, vibe code, cursor, blog,"
+      }
+    },
+    {
       "id": "d8cfb918-047e-46e0-876e-1cc3486dae82",
       "title": "Izabela",
       "slug": "250905-izabela",
@@ -1027,7 +1897,6 @@
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_481.webp",
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_482.webp",
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_488.webp",
-        "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_501.webp",
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_503.webp",
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_508.webp",
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_511.webp",
@@ -1051,7 +1920,7 @@
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_556.webp",
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_560.webp"
       ],
-      "featured": true,
+      "featured": false,
       "seo": {
         "metaTitle": "",
         "metaDescription": "Fotografije AirVG 2025, airshowa na zračnoj luci Zagreb",
@@ -1395,10 +2264,6 @@
           "description": "AirVG 2025."
         },
         "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_488.webp": {
-          "title": "AirVG 2025.",
-          "description": "AirVG 2025."
-        },
-        "/uploads/blog/2025-05-10-250510-airvg-2025/gallery/250510-airvg_2025_501.webp": {
           "title": "AirVG 2025.",
           "description": "AirVG 2025."
         },
@@ -2173,8 +3038,8 @@
       "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Fotografije lego Darth Vadera kako pozira s Eliscaffe kavom",
+        "keywords": "kava, eliscaffe, darth vader, lego, starwars, specialty, macro,"
       }
     },
     {
@@ -2296,8 +3161,8 @@
       ],
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Fotografije Fiata 500 sa sljemenskih cesti",
+        "keywords": "fiat 500, auti, sljeme, medvednica, dolcevita,"
       },
       "galleryMetadata": {},
       "featured": false,
@@ -2359,13 +3224,11 @@
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_020.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_024.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_025.webp",
-        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_026.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_028.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_032.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_040.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_042.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_044.webp",
-        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_046.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_048.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_050.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_052.webp",
@@ -2385,8 +3248,6 @@
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_093.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_094.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_095.webp",
-        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_098.webp",
-        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_099.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_100.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_104.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_110.webp",
@@ -2395,7 +3256,6 @@
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_116.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_117.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_124.webp",
-        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_126.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_130.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_132.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_140.webp",
@@ -2409,19 +3269,14 @@
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_157.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_164.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_174.webp",
-        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_183.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_184.webp",
-        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_185.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_189.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_194.webp",
-        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_196.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_201.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_209.webp",
-        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_219.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_220.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_231.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_236.webp",
-        "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_238.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_256.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_259.webp",
         "/uploads/blog/2024-11-04-241104-mercedes-w123-300d-turbo-diesel-feat-triumph-street-scrambler-900/gallery/241102-mercedes_w123_300d_260.webp",
@@ -2435,8 +3290,8 @@
       "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Fotografije Mercedesa W123 300D Turbo Diesel i Triumpha Street Scrambler 900 po sljemenskim cestama",
+        "keywords": "Mercedes W123 300D Turbo Diesel, Triumph Street Scrambler 900, oldtimer, motor, sljeme, fotografije, priroda, jesen,"
       }
     },
     {
@@ -2450,15 +3305,12 @@
       "thumbnail": "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_031.webp",
       "thumbnailFocus": "56% 53%",
       "gallery": [
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_001.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_012.webp",
+        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_001.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_019.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_025.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_028.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_031.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_039.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_043.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_044.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_046.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_050.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_053.webp",
@@ -2468,10 +3320,8 @@
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_065.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_067.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_070.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_074.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_076.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_078.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_080.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_082.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_083.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_089.webp",
@@ -2479,24 +3329,18 @@
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_099.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_100.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_102.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_103.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_105.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_107.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_109.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_110.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_111.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_113.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_115.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_117.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_118.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_122.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_123.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_125.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_127.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_131.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_133.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_134.webp",
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_138.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_142.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_145.webp",
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_148.webp",
@@ -2562,9 +3406,6 @@
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_019.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_025.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_028.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
@@ -2572,12 +3413,6 @@
           "title": "Bajaga i instruktori - 40 godina"
         },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_039.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_043.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_044.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_046.webp": {
@@ -2607,16 +3442,10 @@
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_070.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_074.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_076.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_078.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_080.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_082.webp": {
@@ -2640,9 +3469,6 @@
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_102.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_103.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_105.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
@@ -2658,12 +3484,6 @@
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_111.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_113.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_115.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_117.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
@@ -2676,22 +3496,13 @@
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_123.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_125.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_127.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_131.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_133.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_134.webp": {
-          "title": "Bajaga i instruktori - 40 godina"
-        },
-        "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_138.webp": {
           "title": "Bajaga i instruktori - 40 godina"
         },
         "/uploads/blog/2024-10-20-241020-bajaga-i-instruktori-40-godina/gallery/241019-bajaga_i_instruktori-40_godina_142.webp": {
@@ -2861,8 +3672,8 @@
       "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Fotografije koncerta Bajage i instruktora s njihovog slavlja 40 godina karijere u Areni Zagreb 2024.",
+        "keywords": "bajaga i instruktori, bajaga, momčilo bajagić, arena zagreb, koncert, hrvatska,"
       }
     },
     {
@@ -2873,16 +3684,16 @@
       "categories": [
         "info"
       ],
-      "thumbnail": "",
+      "thumbnail": "/uploads/blog/2024-10-18-241018-canon-rf-100mm-f28-macro-prvi-dojmovi/featured.webp",
       "thumbnailFocus": "50% 50%",
       "gallery": [],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Kupovina i unboxing objektiva RF Canon 100mm f/2.8 L Macro IS USM",
+        "keywords": "objektiv, macro, canon rf 100 macro, gear, einfinity, info,"
       }
     },
     {
@@ -4110,16 +4921,16 @@
       "categories": [
         "info"
       ],
-      "thumbnail": "",
+      "thumbnail": "/uploads/blog/2024-09-15-240915-sigma-150-600-mm-f5-63-c-x-kontakt/featured.webp",
       "thumbnailFocus": "50% 50%",
       "gallery": [],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Kupovina objektiva Sigma 15/600 f/6.3",
+        "keywords": "sigma 150-600, kupovina, gear, objektiv, teleobjektiv, telac,"
       }
     },
     {
@@ -4838,16 +5649,286 @@
       "categories": [
         "koncerti"
       ],
-      "thumbnail": "",
+      "thumbnail": "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_253.webp",
       "thumbnailFocus": "50% 50%",
-      "gallery": [],
-      "galleryMetadata": {},
+      "gallery": [
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_004.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_007.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_013.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_019.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_027.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_034.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_038.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_043.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_053.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_056.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_060.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_069.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_094.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_098.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_102.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_106.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_115.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_116.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_120.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_125.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_131.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_141.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_145.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_157.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_159.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_168.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_176.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_181.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_198.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_209.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_219.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_224.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_226.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_228.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_232.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_238.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_244.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_250.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_253.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_258.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_266.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_273.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_276.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_284.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_286.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_290.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_297.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_302.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_311.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_325.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_332.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_335.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_347.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_349.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_352.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_360.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_362.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_370.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_377.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_380.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_382.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_386.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_416.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_423.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_431.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_436.webp",
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_441.webp"
+      ],
+      "galleryMetadata": {
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_004.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_007.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_013.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_019.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_027.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_034.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_038.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_043.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_053.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_056.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_060.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_069.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_094.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_098.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_102.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_106.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_115.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_116.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_120.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_125.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_131.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_141.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_145.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_157.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_159.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_168.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_176.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_181.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_198.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_209.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_219.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_224.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_226.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_228.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_232.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_238.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_244.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_250.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_253.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_258.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_266.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_273.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_276.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_284.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_286.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_290.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_297.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_302.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_311.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_325.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_332.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_335.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_347.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_349.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_352.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_360.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_362.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_370.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_377.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_380.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_382.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_386.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_416.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_423.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_431.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_436.webp": {
+          "title": "Grace Jones"
+        },
+        "/uploads/blog/2024-07-05-240705-grace-jones/gallery/240704-grace_jones_441.webp": {
+          "title": "Grace Jones"
+        }
+      },
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Fotografije koncerta Grace Jones na zagrebačkoj Šalati 2025.",
+        "keywords": "grace jones, koncert, zagreb, šalata, fotografije,"
       }
     },
     {
@@ -4858,16 +5939,598 @@
       "categories": [
         "koncerti"
       ],
-      "thumbnail": "",
-      "thumbnailFocus": "50% 50%",
-      "gallery": [],
-      "galleryMetadata": {},
+      "thumbnail": "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_311.webp",
+      "thumbnailFocus": "57% 46%",
+      "gallery": [
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_004.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_009.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_016.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_019-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_023.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_027.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_031.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_039.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_046.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_048.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_051.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_055.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_057.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_058.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_061.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_063.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_065.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_072.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_074.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_078.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_079.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_081.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_084.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_086.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_088.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_093.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_096.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_100.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_103-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_104.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_106.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_109-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_112.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_116-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_121.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_125.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_126.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_128.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_130.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_133.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_134-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_135-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_141-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_143-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_147.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_149.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_152-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_155.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_158-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_159-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_164-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_166-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_168.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_171-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_172.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_173.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_174.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_177-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_177.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_179.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_182.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_184.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_186.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_188.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_189.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_190.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_191.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_194.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_195.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_197.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_202.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_209.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_211.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_213-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_215-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_216.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_218.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_220.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_222.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_225.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_227-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_232.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_235.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_237.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_240.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_243.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_245.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_246-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_268.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_269.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_271.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_273.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_275.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_278.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_280.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_283.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_285.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_286.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_290.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_291.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_293.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_294.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_296.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_298.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_300.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_302.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_303.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_305.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_309.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_311.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_312.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_314.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_315-enhanced-nr.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_315.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_316.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_317.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_319.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_321.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_322.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_323.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_324.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_325.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_326.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_327.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_328.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_331.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_332.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_337.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_338.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_342.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_348.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_354.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_356.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_360.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_363.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_366.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_367.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_369.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_372.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_373.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_374.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_375.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_379.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_381.webp",
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_390.webp"
+      ],
+      "galleryMetadata": {
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_004.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_009.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_016.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_019-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_023.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_027.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_031.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_039.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_046.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_048.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_051.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_055.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_057.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_058.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_061.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_063.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_065.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_072.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_074.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_078.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_079.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_081.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_084.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_086.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_088.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_093.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_096.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_100.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_103-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_104.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_106.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_109-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_112.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_116-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_121.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_125.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_126.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_128.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_130.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_133.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_134-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_135-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_141-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_143-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_147.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_149.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_152-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_155.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_158-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_159-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_164-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_166-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_168.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_171-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_172.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_173.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_174.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_177-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_177.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_179.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_182.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_184.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_186.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_188.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_189.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_190.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_191.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_194.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_195.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_197.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_202.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_209.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_211.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_213-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_215-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_216.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_218.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_220.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_222.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_225.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_227-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_232.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_235.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_237.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_240.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_243.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_245.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_246-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_268.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_269.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_271.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_273.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_275.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_278.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_280.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_283.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_285.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_286.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_290.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_291.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_293.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_294.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_296.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_298.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_300.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_302.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_303.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_305.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_309.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_311.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_312.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_314.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_315-enhanced-nr.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_315.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_316.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_317.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_319.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_321.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_322.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_323.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_324.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_325.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_326.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_327.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_328.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_331.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_332.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_337.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_338.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_342.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_348.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_354.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_356.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_360.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_363.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_366.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_367.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_369.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_372.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_373.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_374.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_375.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_379.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_381.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        },
+        "/uploads/blog/2024-06-22-240622-bad-daughter/gallery/240621-bad_daughter_390.webp": {
+          "title": "Bad Daughter @ MSU, 21.6.2024."
+        }
+      },
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Fotografije koncerta Bad Daughter u MSU 2024 u sklopu Ljeto u MSU",
+        "keywords": "bad daughter, dunja ercegović, koncert, msu, ljeto u msu, zagreb,"
       }
     },
     {
@@ -4878,16 +6541,99 @@
       "categories": [
         "koncerti"
       ],
-      "thumbnail": "",
+      "thumbnail": "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_184.webp",
       "thumbnailFocus": "50% 50%",
-      "gallery": [],
+      "gallery": [
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_006.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_011.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_025.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_027.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_034.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_038.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_042.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_052.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_054.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_058.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_060.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_063.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_067.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_071.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_074.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_076.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_081.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_083.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_089.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_091.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_094.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_100.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_108.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_114.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_118.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_128.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_132.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_137.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_142.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_144.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_148.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_155.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_164.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_168.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_176.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_178.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_184.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_191.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_193.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_198.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_203.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_208.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_210.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_214.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_221.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_222.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_229.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_232.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_235.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_236.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_239.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_240.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_247.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_251.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_267.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_270.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_275.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_277.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_280.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_282.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_284.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_287.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_292.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_294.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_296.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_300.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_303.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_306.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_309.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_317.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_323.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_332.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_338.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_348.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_353.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_356.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_360.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_363.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_367.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_371.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_374.webp",
+        "/uploads/blog/2024-06-13-240613-dropkick-murphys/gallery/240612-dropkick_murphys_389.webp"
+      ],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Fotografije koncerta Dropkick Murphys na zagrebačkoj Šalati 2024.",
+        "keywords": "dropkick murphys, koncert, zagreb, šalata, ken casey,"
       }
     },
     {
@@ -5115,18 +6861,55 @@
       "slug": "240528-blic-test-canon-r3-u-zoo-u",
       "date": "2024-05-28",
       "categories": [
-        "info"
+        "zivotinje"
       ],
-      "thumbnail": "",
-      "thumbnailFocus": "50% 50%",
-      "gallery": [],
+      "thumbnail": "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0998-enhanced-nr.webp",
+      "thumbnailFocus": "48% 29%",
+      "gallery": [
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0610.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0631.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0641.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0642.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0673-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0695.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0703.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0713.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0715.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0730.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0748.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0751.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0837.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0878.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0891-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0962.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0986-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a0998-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1064.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1078.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1098-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1156.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1175-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1195.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1230.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1259.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1265-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1308.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1319.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1327.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1346.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1380-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1392-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1409-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1459-enhanced-nr.webp",
+        "/uploads/blog/2024-05-28-240528-blic-test-canon-r3-u-zoo-u/gallery/095a1486.webp"
+      ],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Fotografije iz ZOO-a snimljene Canonom R3",
+        "keywords": "zoo, životinje, Canon R3"
       }
     },
     {
@@ -5209,16 +6992,16 @@
       "categories": [
         "info"
       ],
-      "thumbnail": "",
-      "thumbnailFocus": "50% 50%",
+      "thumbnail": "/uploads/blog/2024-05-06-240506-canon-r6-mk-ii-ili-kako-je-ivica-izgubio-spigl/featured.webp",
+      "thumbnailFocus": "50% 17%",
       "gallery": [],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Kupovina i prvi dojmovi Canon R6 MK II sa objektivom 16mm f/2.8",
+        "keywords": "canon r6 mk ii, canon rf 16mm f/2.8, nova oprema, unboxing,"
       }
     },
     {
@@ -5229,12 +7012,87 @@
       "categories": [
         "koncerti"
       ],
-      "thumbnail": "",
-      "thumbnailFocus": "50% 50%",
-      "gallery": [],
+      "thumbnail": "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_184.webp",
+      "thumbnailFocus": "51% 38%",
+      "gallery": [
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_003.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_005.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_008.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_011.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_013.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_015.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_016.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_018.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_021.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_022.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_024.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_029.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_032.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_035.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_040.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_043.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_048.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_051.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_052.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_054.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_056.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_058.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_064.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_065.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_069.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_070.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_075.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_079.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_080.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_083.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_085.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_090.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_092.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_096.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_100.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_104.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_107.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_113.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_116.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_117.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_119.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_123.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_124.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_129.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_131.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_132.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_133.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_136.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_138.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_139.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_140.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_143.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_146.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_148.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_153.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_155.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_158.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_160.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_167.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_169.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_172.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_182.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_183.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_184.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_188.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_193.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_195.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_197.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_202.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_204.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_208.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_213.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_214.webp",
+        "/uploads/blog/2023-12-23-231223-goran-bare-majke/gallery/231222-goran_bare__majke_223.webp"
+      ],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
         "metaDescription": "",
@@ -5249,12 +7107,47 @@
       "categories": [
         "koncerti"
       ],
-      "thumbnail": "",
+      "thumbnail": "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_066.webp",
       "thumbnailFocus": "50% 50%",
-      "gallery": [],
+      "gallery": [
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_001.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_003.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_006.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_010.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_012-enhanced-nr.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_015.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_017.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_019.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_021.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_023.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_024.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_026.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_028.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_032.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_034.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_036.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_038.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_040.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_041.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_044.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_047.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_049.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_052.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_068.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_055.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_057.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_062.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_064.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_066.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_071.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_072.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_078.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_083.webp",
+        "/uploads/blog/2023-11-06-231106-tv-eye/gallery/231104-tv_eye_084.webp"
+      ],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
         "metaDescription": "",
@@ -5269,16 +7162,73 @@
       "categories": [
         "koncerti"
       ],
-      "thumbnail": "",
-      "thumbnailFocus": "50% 50%",
-      "gallery": [],
+      "thumbnail": "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_110.webp",
+      "thumbnailFocus": "61% 55%",
+      "gallery": [
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_003.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_004.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_016.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_022.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_023.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_025-enhanced-nr.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_026.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_029.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_031.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_034.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_038.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_044.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_047.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_050.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_053.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_057.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_058.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_063.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_064.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_066.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_067.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_072.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_074.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_076.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_078.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_089.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_093.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_096.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_101.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_104.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_110.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_114.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_116.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_122.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_125.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_131.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_137.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_139.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_141.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_146.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_150.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_152.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_155.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_156.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_160.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_174.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_176.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_182.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_199.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_203.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_206.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_210.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_217.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_220.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_229.webp",
+        "/uploads/blog/2023-11-05-231105-elektricni-orgazam/gallery/231104-elektricni_orgazam_243.webp"
+      ],
       "galleryMetadata": {},
       "featured": false,
-      "status": "draft",
+      "status": "published",
       "seo": {
         "metaTitle": "",
-        "metaDescription": "",
-        "keywords": ""
+        "metaDescription": "Fotografije koncerta Električnog orgazma u zagrebačkoj Tvornici kulture 2023.",
+        "keywords": "električni orgazam, gile, srđan gojković, tvornica kulture, zagreb, ljubomir đukić,"
       }
     },
     {

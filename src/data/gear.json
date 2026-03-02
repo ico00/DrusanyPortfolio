@@ -35,12 +35,32 @@
       "title": "Sigma 35mm f/1.4 DG HSM Art",
       "category": "lenses"
     },
-
+    {
+      "id": "5",
+      "src": "/uploads/gear/canon-100macro.png",
+      "alt": "Canon RF 100mm f/2.8 L IS USM Macro",
+      "title": "Canon RF 100mm f/2.8 L IS USM Macro",
+      "category": "lenses"
+    },
+    {
+      "id": "10",
+      "src": "/uploads/gear/canon-135.png",
+      "alt": "Canon EF 135mm f/2L USM",
+      "title": "Canon EF 135mm f/2L USM",
+      "category": "lenses"
+    },
     {
       "id": "3",
       "src": "/uploads/gear/canon-70-200.png",
       "alt": "Canon EF 70-200mm f/2.8L IS USM MK  III",
       "title": "Canon EF 70-200mm f/2.8L IS USM MK  III",
+      "category": "lenses"
+    },
+    {
+      "id": "9",
+      "src": "/uploads/gear/sigma-150-600.png",
+      "alt": "Sigma 150-600mm f/5-6.3 DG OS HSM",
+      "title": "Sigma 150-600mm f/5-6.3 DG OS HSM",
       "category": "lenses"
     },
     {
@@ -51,28 +71,19 @@
       "category": "accessories"
     },
     {
-      "id": "5",
-      "src": "/uploads/gear/canon-100macro.png",
-      "alt": "Canon RF 100mm f/2.8 L IS USM Macro",
-      "title": "Canon RF 100mm f/2.8 L IS USM Macro",
-      "category": "lenses"
-    },
-
-
-
-    {
-      "id": "9",
-      "src": "/uploads/gear/sigma-150-600.png",
-      "alt": "Sigma 150-600mm f/5-6.3 DG OS HSM",
-      "title": "Sigma 150-600mm f/5-6.3 DG OS HSM",
-      "category": "lenses"
+      "id": "11",
+      "src": "/uploads/gear/godox-v1.png",
+      "alt": "Godox V1",
+      "title": "Godox V1",
+      "category": "accessories"
     },
     {
-      "id": "10",
-      "src": "/uploads/gear/canon-135.png",
-      "alt": "Canon EF 135mm f/2L USM",
-      "title": "Canon EF 135mm f/2L USM",
-      "category": "lenses"
+      "id": "12",
+      "src": "/uploads/gear/macbookprom4.png",
+      "alt": "MacBook Pro M4",
+      "title": "MacBook Pro M4",
+      "category": "accessories"
     }
+
   ]
 }

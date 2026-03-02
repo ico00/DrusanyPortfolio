@@ -9,9 +9,12 @@
     "blog:import:all": "node scripts/import-wordpress-blog.mjs --all",
     "blog:cleanup-categories": "node scripts/cleanup-blog-categories.mjs",
     "dev": "next dev",
+    "dev:open": "./scripts/dev-and-open.sh",
     "build": "next build",
     "start": "next start",
     "preview": "npx serve out",
+    "deploy:static": "./scripts/deploy-static.sh",
+    "deploy:uploads": "./scripts/deploy-uploads.sh",
     "lint": "eslint"
   },
   "dependencies": {

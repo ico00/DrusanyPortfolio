@@ -84,11 +84,27 @@ export function getBlogContentPath(slug: string): string {
   return path.join(BLOG_CONTENT_DIR, `${slug}.html`);
 }
 
-/** Extract image URLs from HTML body (za validaciju pri save) */
+/** Extract image URLs from HTML body (za validaciju pri save). Uključuje src i data-url. */
 export function extractImageUrlsFromHtml(html: string): string[] {
   if (!html?.trim()) return [];
-  const matches = html.matchAll(/<img[^>]+src=["']([^"']+)["']/gi);
-  return [...matches].map((m) => m[1].trim()).filter(Boolean);
+  const urls: string[] = [];
+  const srcMatches = html.matchAll(/<img[^>]+src=["']([^"']+)["']/gi);
+  for (const m of srcMatches) {
+    const u = m[1].trim();
+    if (u) urls.push(u);
+  }
+  const dataUrlMatches = html.matchAll(/<img[^>]+data-url=["']([^"']+)["']/gi);
+  for (const m of dataUrlMatches) {
+    const u = m[1].trim();
+    if (u && !urls.includes(u)) urls.push(u);
+  }
+  return urls;
+}
+
+/** Normalizira URL za usporedbu – uklanja query string (?t=...) da cache bust ne uzrokuje lažne alarme. */
+export function normalizeImageUrlForCompare(url: string): string {
+  const i = url.indexOf("?");
+  return i >= 0 ? url.slice(0, i) : url;
 }
 
 export async function getBlog(): Promise<BlogData> {

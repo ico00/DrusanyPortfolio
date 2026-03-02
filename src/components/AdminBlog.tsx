@@ -1738,7 +1738,12 @@ export default function AdminBlog({
               key={post.id}
               className="flex items-center gap-4 rounded-lg border border-zinc-800 bg-zinc-900/50 p-4"
             >
-              <div className="h-14 w-20 shrink-0 overflow-hidden rounded-md bg-zinc-800">
+              <button
+                type="button"
+                onClick={() => handleEditClick(post)}
+                className="h-14 w-20 shrink-0 cursor-pointer overflow-hidden rounded-md bg-zinc-800 transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-zinc-900"
+                aria-label="Edit"
+              >
                 {post.thumbnail ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
@@ -1754,7 +1759,7 @@ export default function AdminBlog({
                     <ImageIcon className="h-6 w-6" />
                   </div>
                 )}
-              </div>
+              </button>
               <div className="min-w-0 flex-1">
                 <h4 className="font-medium text-zinc-200">{post.title || "Bez naslova"}</h4>
                 <p className="text-sm text-zinc-500">

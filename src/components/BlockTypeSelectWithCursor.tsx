@@ -22,7 +22,7 @@ import {
   useEditorState,
 } from "@blocknote/react";
 import type { BlockTypeSelectItem } from "@blocknote/react";
-import { RiCodeBlock, RiLayoutGrid2Fill } from "react-icons/ri";
+import { RiCodeBlock, RiLayoutGrid2Fill, RiYoutubeFill } from "react-icons/ri";
 import { useMemo } from "react";
 
 /** Default items + Code block + Media+Content (BlockNote blockTypeSelectItems ne uključuje sve) */
@@ -42,14 +42,22 @@ function blockTypeSelectItemsWithCodeBlock(
     props: {},
     icon: RiLayoutGrid2Fill,
   };
+  const youtubeEmbedItem: BlockTypeSelectItem = {
+    name: "YouTube video",
+    type: "youtubeEmbed",
+    props: {},
+    icon: RiYoutubeFill,
+  };
   // Umetni nakon quote, prije toggle_list
   const quoteIdx = base.findIndex((i) => i.type === "quote");
   const insertAt = quoteIdx >= 0 ? quoteIdx + 1 : base.length;
   const withCode = [...base.slice(0, insertAt), codeBlockItem, ...base.slice(insertAt)];
-  // Umetni Media+Content nakon image
+  // Umetni Media+Content i YouTube nakon image
   const imageIdx = withCode.findIndex((i) => i.type === "image");
   const mediaInsertAt = imageIdx >= 0 ? imageIdx + 1 : withCode.length;
-  return [...withCode.slice(0, mediaInsertAt), mediaContentItem, ...withCode.slice(mediaInsertAt)];
+  const withMedia = [...withCode.slice(0, mediaInsertAt), mediaContentItem, ...withCode.slice(mediaInsertAt)];
+  const youtubeInsertAt = mediaInsertAt + 1;
+  return [...withMedia.slice(0, youtubeInsertAt), youtubeEmbedItem, ...withMedia.slice(youtubeInsertAt)];
 }
 
 export function BlockTypeSelectWithCursor(props: {

@@ -18,7 +18,7 @@ Statični fotografski portfolio izgrađen na Next.js – galerija s masonry layo
 - **Direktni linkovi** – URL slug po slici (npr. `/?category=concerts&image=depeche-mode-arena-zagreb-2013`)
 - **About** – Split layout (lijevo slika s citatom, desno sadržaj); sekcije About, Press, **Gear** (grupirano po kategorijama: Cameras, Lenses, Accessories; kartice bez lightboxa); fiksni nav na dnu s aktivnim linkom koji prati scroll; **dekorativni navodnik** na blockquote citatima
 - **Contact** – Isti layout kao About; kontakt forma (Formspree) – name, email, subject, message; fallback na mailto
-- **Blog** – Lista postova (migrirano iz WordPressa – `npm run blog:import:all`); metapodaci (Tekst i fotografije, Datum objave, Kategorija) i ikonama; **status** (draft / published) – draft postovi se ne prikazuju javno; **sidebar** s pretragom (debounced 300ms), kategorijama (abecedno sortirane), **istaknutim člancima** (featured) i Google Maps; **glatka animacija** pri promjeni filtera kategorija; pojedinačni post s naslovom na vrhu, featured slikom, sadržajem (**slike od ruba do ruba** – breakout CSS smanjuje bijeli okvir) i masonry galerijom (lightbox, aperture cursor, EXIF); **LCP optimizacija** – featured slika s loading eager, fetchPriority high i preload; galerije loading lazy; **progresivno učitavanje** galerije – za postove s 100+ slika prikazuje se prva grupa, zatim učitavanje pri skrolanju; format datuma dd. mm. yyyy.; BlockNote WYSIWYG editor s **uploadom slika** u sadržaj, **Media + Content** blok (pola slika, pola tekst), **Media tab** za odabir postojeće slike; **Footer** (copyright); **ScrollToTop** gumb – pozicioniran desno od ruba sadržaja članka; **mobilna verzija** – autor (ikona + ime) ispod featured slike, kategorija kao link/filter; **linkovi u sadržaju** – hover: deblja linija, svjetlo plava boja
+- **Blog** – Lista postova (migrirano iz WordPressa – `npm run blog:import:all`); metapodaci (Tekst i fotografije, Datum objave, Kategorija) i ikonama; **status** (draft / published) – draft postovi se ne prikazuju javno; **sidebar** s pretragom (debounced 300ms), kategorijama (**accordion** za Sport, Gradovi – podkategorije abecedno sortirane), **istaknutim člancima** (featured), **planovima** (planirani snimanja – datum + naziv iz plans.json) i Google Maps; **glatka animacija** pri promjeni filtera kategorija; pojedinačni post s naslovom na vrhu, featured slikom, sadržajem (slike 100% širine stupca; **YouTube video blok** – zalijepi link, embed po širini; overflow-x-hidden sprječava preljev) i masonry galerijom (lightbox, aperture cursor, EXIF); **LCP optimizacija** – featured slika s loading eager, fetchPriority high i preload; galerije loading lazy; **progresivno učitavanje** galerije – za postove s 100+ slika prikazuje se prva grupa, zatim učitavanje pri skrolanju; format datuma dd. mm. yyyy.; BlockNote WYSIWYG editor s **uploadom slika** u sadržaj, **Media + Content** blok (pola slika, pola tekst), **YouTube video blok** (Block style / slash `/youtube` – zalijepi link), **Media tab** za odabir postojeće slike; **Footer** (copyright); **ScrollToTop** gumb – pozicioniran desno od ruba sadržaja članka; **mobilna verzija** – autor (ikona + ime) ispod featured slike, kategorija kao link/filter; **linkovi u sadržaju** – hover: deblja linija, svjetlo plava boja
 - **Theme** – Prilagodba fonta, veličine i boje po elementu (title, heading, headingOnDark, **blogPostTitle**, **blogListCardTitle**, **blogListCardMetadata**, **widgetTitle**, body, quote, code, nav, caption) putem Admin → Theme; **grupne kontrole** (Blog Headings, Blog Body); **accordion** sekcije; live preview; fontovi u `themeFonts.ts` (sans, serif, mono, Shantell Sans, Red Hat Display)
 - **Admin panel** – Samo u development modu: **Dashboard** (kartice: Portfolio, Blog, Portfolio Categories, Blog Categories, Static pages, Blog posts; bar charti "Images by category in portfolio" i "Images by category in blog"; Content health); galerija (upload, edit, hero, sortiranje) s **custom DateTimePicker**; About/Contact (quote, Formspree endpoint); Blog s **DatePicker**, **upload slika u sadržaj** (BlockNote `/image` – Upload, **Media** tab za odabir postojeće slike, Embed), **resize** slika, **Media + Content** blok; **BlockNote editor** – Block style i Formatting toolbar **na vrhu bloka** (ne kod kursora), **okvir blokova** (lagani tanki border, padding); **Media** – agregirani prikaz svih slika (portfolio, blog, stranice), filter, search as you type, paginacija, lightbox, Download/Copy URL/Detach/Delete, **multiple selection** (bulk akcije); **Theme** – prilagodba fonta, veličine i boje po elementu (title, heading, body, quote, nav, caption) s live previewom; **sidebar accordion**; **toast** poruke (success/error)
 
@@ -80,6 +80,9 @@ Otvori [http://localhost:3000](http://localhost:3000) u pregledniku.
 | `npm run dev` | Pokreće development server na portu 3000 |
 | `npm run build` | Generira statični output u folder `out/` |
 | `npm run preview` | Servira `out/` folder lokalno (za testiranje produkcijskog builda) |
+| `npm run dev:open` | Otvara Terminal s dev serverom i Chrome s localhost:3000 + /admin |
+| `npm run deploy:static` | Deploy: build, push na drusany-static, rsync na server |
+| `npm run deploy:uploads` | Deploy samo uploads: rsync/FTP public/uploads/ (samo promijenjene datoteke) |
 | `npm run lint` | Pokreće ESLint |
 | `node scripts/populate-blog-exif.mjs` | Popunjava blogExif.json EXIF podacima iz postojećih blog galerijskih slika |
 | `npm run blog:import` | Import 1 posta iz WordPress SQL dumpa (provjera) |
@@ -113,13 +116,16 @@ DrusanyPortfolio/
 │   │   ├── press.json       # Objavljene fotografije (About)
 │   │   ├── blog.json        # Blog postovi (slug yymmdd-naslov, title, date, categories, thumbnail, gallery)
 │   │   ├── blogExif.json    # EXIF za blog galerijske slike (populate-blog-exif.mjs)
-│   │   ├── blogWidgets.json # Konfiguracija blog sidebara (search, categories, featured-posts, maps)
+│   │   ├── blogWidgets.json # Konfiguracija blog sidebara (search, categories, featured-posts, plans, maps)
+│   │   ├── plans.json       # Planirani snimanja za PlansWidget (date, name)
 │   │   ├── theme.json       # Theme konfiguracija (font, fontSize, color po elementu)
 │   │   └── themeFonts.ts   # Konfiguracija fontova za Theme (dodavanje novih fontova)
-│   └── lib/              # getGallery, pages, gear, press, blog, blogWidgets, theme, slug, exif, sanitize, utils, fileUtils, imageValidation, jsonLock, blogCleanup, rateLimit
+│   └── lib/              # getGallery, pages, gear, press, plans, blog, blogWidgets, theme, slug, exif, sanitize, utils, fileUtils, imageValidation, jsonLock, blogCleanup, rateLimit; blocknoteImageSchema, blocknoteMediaContentSchema, blocknoteYouTubeSchema
 ├── .env.example          # NEXT_PUBLIC_SITE_URL, RATE_LIMIT_* (opcionalno)
 ├── scripts/
 │   ├── deploy-static.sh            # Deploy: build, kopira u drusany-static, push, rsync over SSH (samo promijenjene datoteke)
+│   ├── deploy-uploads.sh           # Deploy uploads: rsync/FTP samo public/uploads/ (samo promijenjene datoteke)
+│   ├── dev-and-open.sh             # Otvara Terminal s npm run dev i Chrome s localhost:3000 + /admin
 │   ├── populate-blog-exif.mjs      # Popunjava blogExif.json iz postojećih slika
 │   ├── import-wordpress-blog.mjs   # Import starih postova iz WordPress SQL dumpa (blog:import, blog:import:all)
 │   └── cleanup-blog-categories.mjs # Čišćenje kategorija (blog:cleanup-categories)
@@ -132,7 +138,7 @@ Admin je dostupan **samo kada pokreneš `npm run dev`** – u produkcijskom buil
 
 **Funkcionalnosti:**
 - **Dashboard:** Kartice (Portfolio, Blog, Portfolio Categories, Blog Categories, Static pages, Blog posts); bar charti "Images by category in portfolio" i "Images by category in blog"; **Content health** – metrike s ikonama (Camera, Tag, ImageOff, Search); slike bez EXIF-a, slike bez slug-a, blog postovi bez featured slike (klik otvara galeriju s filterom ili Blog)
-- **Sigurnost:** Rate limiting (200 req/min po IP – bulk upload), path traversal zaštita, ograničenje uploada 20 MB, magic bytes provjera, HTML sanitizacija; file locking za JSON; pri promjeni blog slug-a/datuma automatsko preimenovanje foldera i ažuriranje putanja (blog.json, blogExif, HTML sadržaj)
+- **Sigurnost:** Rate limiting (200 req/min po IP – bulk upload), path traversal zaštita, ograničenje uploada 20 MB, magic bytes provjera, HTML sanitizacija (iframe samo youtube.com/embed); file locking za JSON; pri promjeni blog slug-a/datuma automatsko preimenovanje foldera i ažuriranje putanja (blog.json, blogExif, HTML sadržaj)
 - **Galerija:** Sidebar accordion; odabir kategorije → upload slika; EXIF preview (datum fallback); **custom DateTimePicker** (datum + vrijeme); uređivanje opisa (title, venue, sport, slug, keywords…); slug **as you type**; drag-and-drop sortiranje; hero odabir; brisanje; **Content health** – gumb "Generiraj slugove" kad je filter no-slug; **toast** poruke
 - **Pages:** About – citat na slici, naslov, BlockNote sadržaj; Contact – Formspree endpoint, email (fallback), naslov, uvodni tekst (BlockNote)
 - **Blog:** Kreiranje i uređivanje blog postova – **status** (draft / published, custom StatusSelect); title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum – **promjena datuma automatski ažurira slug**; **Category** (višestruki odabir, abecedno), thumbnail, sadržaj (BlockNote s **uploadom slika** – `/image` → Upload/**Media**/Embed, resize ručice; **Media + Content** blok – pola slika, pola tekst; **Block style** i Formatting toolbar **na vrhu bloka**; okvir blokova; debounced body updates za fluidniji editor), galerija (drag-and-drop, bulk delete); **filter bar** u listi – **Search** (pretraga po naslovu, slug-u, kategorijama; URL `?q=...`; debounce 300ms), Status, Category (višestruki odabir), Mjesec, Sort; lista skrivena kad je forma otvorena; **formOnly** (`/admin/blog/edit/[id]`, `/admin/blog/new`) učitava samo jedan post – brže; **promjena datuma/slug-a** – automatsko preimenovanje foldera, ažuriranje putanja u blog.json, blogExif, HTML sadržaju; **zaštita od gubitka slika** – blocksToFullHTML (lossless), backup prije save (`[slug].html.backup`), validacija prije save (409 ako bi nestale slike, confirm dialog); **SEO** – meta description placeholder (Fotografije + event + lokacija + godina + što se vidi); brisanje slika iz galerije briše i fizičke datoteke s diska
@@ -188,7 +194,7 @@ RewriteRule ^admin/?$ admin.html [L]
   SSH_PORT=21098
   ```
 - Alternativa: FTP deploy (`FTP_HOST`, `FTP_USER`, `FTP_PASS`) ili cPanel Deploy HEAD Commit.
-- Slike (`uploads/`) ostaju na serveru – nove foldere uploadaš ručno (FTP/File Manager).
+- **Uploads (slike):** `./scripts/deploy-uploads.sh` ili `npm run deploy:uploads` – rsync/FTP samo `public/uploads/`, šalje samo promijenjene datoteke (istovjetno deploy-static.sh, ali samo za uploads).
 
 ## 📖 Dokumentacija
 

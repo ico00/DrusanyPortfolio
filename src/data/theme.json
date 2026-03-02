@@ -99,7 +99,7 @@
   },
   "body": {
     "fontFamily": "redHatDisplay",
-    "fontSize": "1.2rem",
+    "fontSize": "1.1rem",
     "color": "#3f3f46",
     "fontWeight": "400",
     "fontStyle": "normal"
@@ -112,8 +112,8 @@
     "fontStyle": "italic"
   },
   "code": {
-    "fontFamily": "redHatDisplay",
-    "fontSize": "1.2rem",
+    "fontFamily": "mono",
+    "fontSize": "1rem",
     "color": "#18181b",
     "fontWeight": "400",
     "fontStyle": "normal"

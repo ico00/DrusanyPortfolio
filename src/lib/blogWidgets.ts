@@ -36,11 +36,19 @@ export interface FeaturedPostsWidgetConfig {
   title: string;
 }
 
+export interface PlansWidgetConfig {
+  id: string;
+  type: "plans";
+  enabled: boolean;
+  title: string;
+}
+
 export type BlogWidgetConfig =
   | SearchWidgetConfig
   | CategoriesWidgetConfig
   | MapsWidgetConfig
-  | FeaturedPostsWidgetConfig;
+  | FeaturedPostsWidgetConfig
+  | PlansWidgetConfig;
 
 export interface BlogWidgetsData {
   widgets: BlogWidgetConfig[];

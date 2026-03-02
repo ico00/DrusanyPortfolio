@@ -1,6 +1,6 @@
 import path from "path";
 import { readFile, rename } from "fs/promises";
-import { getBlog, getBlogPost, saveBlog, saveBlogBody, getBlogContentPath, extractImageUrlsFromHtml } from "@/lib/blog";
+import { getBlog, getBlogPost, saveBlog, saveBlogBody, getBlogContentPath, extractImageUrlsFromHtml, normalizeImageUrlForCompare } from "@/lib/blog";
 import type { BlogGalleryMetadata, BlogSeo } from "@/lib/blog";
 import { withLock } from "@/lib/jsonLock";
 import { checkRateLimit } from "@/lib/rateLimit";
@@ -214,7 +214,8 @@ export async function PUT(request: Request) {
         }
         const oldUrls = extractImageUrlsFromHtml(oldBody);
         const newUrls = extractImageUrlsFromHtml(body.body);
-        const removed = oldUrls.filter((u) => !newUrls.includes(u));
+        const newNormalized = new Set(newUrls.map(normalizeImageUrlForCompare));
+        const removed = oldUrls.filter((u) => !newNormalized.has(normalizeImageUrlForCompare(u)));
         if (removed.length > 0 && !body.forceSave) {
           return {
             error: "images_removed" as const,

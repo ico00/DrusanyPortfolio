@@ -24,9 +24,7 @@ import {
   Search,
 } from "lucide-react";
 import { CATEGORIES } from "./CategorySelect";
-import {
-  getBlogCategoryStackedChartData,
-} from "@/data/blogCategories";
+import { getBlogCategoryStackedChartData } from "@/data/blogCategories";
 
 function normalizeCategory(cat: string): string {
   return cat
@@ -390,6 +388,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                   <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
                   <XAxis
                     dataKey="name"
+                    interval={0}
                     tick={{ fill: "#a1a1aa", fontSize: 12 }}
                     axisLine={{ stroke: "#52525b" }}
                   />
@@ -398,6 +397,7 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                     axisLine={{ stroke: "#52525b" }}
                   />
                   <Tooltip
+                    shared={false}
                     cursor={false}
                     contentStyle={{
                       backgroundColor: "#27272a",

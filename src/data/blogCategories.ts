@@ -23,6 +23,8 @@ export const BLOG_CATEGORIES: BlogCategoryItem[] = [
   { slug: "auti", label: "Auti" },
   { slug: "kucnecarolije", label: "Kućne čarolije" },
   { slug: "macro", label: "Macro" },
+  { slug: "zivotinje", label: "Životinje" },
+
 
   { slug: "avioni", label: "Avioni" },
   { slug: "savjeti", label: "Savjeti" },
@@ -255,7 +257,7 @@ export function getBlogCategoryStackedChartData(
 
   type RowWithTotal = Record<string, string | number> & { _total: number };
   const data = Object.entries(rows)
-    .map(([_, row]): RowWithTotal | null => {
+    .map(([, row]): RowWithTotal | null => {
       const total = Object.entries(row)
         .filter(([k]) => k !== "name")
         .reduce((s, [, v]) => s + (Number(v) || 0), 0);

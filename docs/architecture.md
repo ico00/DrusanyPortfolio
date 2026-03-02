@@ -111,7 +111,7 @@ Sadržaj About i Contact stranica. Struktura:
 
 ### 3.3 Blog: `src/data/blog.json`
 
-Blog postovi. Struktura: `{ "posts": [ { "id", "slug", "title", "date", "time", "categories", "thumbnail", "thumbnailFocus", "gallery", "status" } ] }`. **Migracija:** Stari postovi uvezeni iz WordPressa putem `npm run blog:import:all` (skripta `import-wordpress-blog.mjs` parsira SQL dump, generira `blog.json` i HTML datoteke). **Status:** `"draft" | "published"` – draft postovi se ne prikazuju javno; `getPublishedPosts()` filtrira; postovi bez `status` tretiraju se kao objavljeni. **Slug format:** `yymmdd-naslov` (npr. `251228-advent-2025`) – generira se putem `generateBlogSlug` iz `@/lib/slug`. Sadržaj (`body`) je u `src/data/blog/[slug].html`. **Backup:** `saveBlogBody` stvara `[slug].html.backup` prije overwrite-a – omogućuje oporavak ako nešto pođe po zlu. Galerija: niz URL-ova (`/uploads/blog/[datum]-[slug]/gallery/...`). **Slike u sadržaju:** `/uploads/blog/[datum]-[slug]/content/*.webp` – uploadane iz BlockNote editora. **Promjena datuma/slug-a:** Kad u adminu promijeniš datum ili slug i spremiš, `blogCleanup` automatski preimenuje folder i ažurira sve putanje (blog.json, blogExif.json, HTML sadržaj). Datum u DatePickeru automatski ažurira slug (format yymmdd-naslov). **Zaštita od gubitka slika:** BlockNote koristi `blocksToFullHTML` (lossless) umjesto `blocksToHTMLLossy`; PUT API validira prije save – ako bi nestale slike, vraća 409 s upozorenjem; korisnik može potvrditi i spremiti s `forceSave`. Pri čitanju posta (`getBlogPost`) galerija se obogaćuje dimenzijama (Sharp metadata) za masonry layout – `galleryImages: { src, width, height }[]`. **Pretraga:** `getBlogWithBodies()` učitava body i generira `bodySearchText` (plain text bez HTML-a) za pretragu po sadržaju članka; koristi samo published postove.
+Blog postovi. Struktura: `{ "posts": [ { "id", "slug", "title", "date", "time", "categories", "thumbnail", "thumbnailFocus", "gallery", "status" } ] }`. **Migracija:** Stari postovi uvezeni iz WordPressa putem `npm run blog:import:all` (skripta `import-wordpress-blog.mjs` parsira SQL dump, generira `blog.json` i HTML datoteke). **Status:** `"draft" | "published"` – draft postovi se ne prikazuju javno; `getPublishedPosts()` filtrira; postovi bez `status` tretiraju se kao objavljeni. **Slug format:** `yymmdd-naslov` (npr. `251228-advent-2025`) – generira se putem `generateBlogSlug` iz `@/lib/slug`. Sadržaj (`body`) je u `src/data/blog/[slug].html`. **Backup:** `saveBlogBody` stvara `[slug].html.backup` prije overwrite-a – omogućuje oporavak ako nešto pođe po zlu. Galerija: niz URL-ova (`/uploads/blog/[datum]-[slug]/gallery/...`). **Slike u sadržaju:** `/uploads/blog/[datum]-[slug]/content/*.webp` – uploadane iz BlockNote editora. **BlockNote blokovi:** Image (displayWidth full/50/25), Media+Content, **YouTube video** (zalijepi link → embed po širini stranice). **Promjena datuma/slug-a:** Kad u adminu promijeniš datum ili slug i spremiš, `blogCleanup` automatski preimenuje folder i ažurira sve putanje (blog.json, blogExif.json, HTML sadržaj). Datum u DatePickeru automatski ažurira slug (format yymmdd-naslov). **Zaštita od gubitka slika:** BlockNote koristi `blocksToFullHTML` (lossless) umjesto `blocksToHTMLLossy`; PUT API validira prije save – ako bi nestale slike, vraća 409 s upozorenjem; korisnik može potvrditi i spremiti s `forceSave`. Pri čitanju posta (`getBlogPost`) galerija se obogaćuje dimenzijama (Sharp metadata) za masonry layout – `galleryImages: { src, width, height }[]`. **Pretraga:** `getBlogWithBodies()` učitava body i generira `bodySearchText` (plain text bez HTML-a) za pretragu po sadržaju članka; koristi samo published postove.
 
 ### 3.3.1 Blog kategorije: `src/data/blogCategories.ts`
 
@@ -119,7 +119,11 @@ Struktura kategorija s roditeljima i podkategorijama (npr. Sport → Nogomet, Ru
 
 ### 3.3.2 Blog Widgets: `src/data/blogWidgets.json`
 
-Konfiguracija sidebara na blog stranici. Struktura: `{ "widgets": [ { "id", "type", "enabled", "title", ... } ] }`. Tipovi: **search** (filter-as-you-type), **categories** (kategorije s linkovima), **featured-posts** (istaknuti članci – postovi s `featured: true`, do 3), **maps** (locations s embedUrl iz Google My Maps – `mid=` parametar). *Instagram widget uklonjen.*
+Konfiguracija sidebara na blog stranici. Struktura: `{ "widgets": [ { "id", "type", "enabled", "title", ... } ] }`. Tipovi: **search** (filter-as-you-type), **categories** (kategorije s linkovima), **featured-posts** (istaknuti članci – postovi s `featured: true`, do 3), **plans** (planirani snimanja – lista iz `plans.json`, datum + naziv, sortirano po datumu), **maps** (locations s embedUrl iz Google My Maps – `mid=` parametar). *Instagram widget uklonjen.*
+
+### 3.3.2a Planovi: `src/data/plans.json`
+
+Lista planiranih snimanja za widget "Planovi" u blog sidebaru. Struktura: `{ "plans": [ { "date": "YYYY-MM-DD", "name": "Naziv snimanja" } ] }`. Učitava se putem `getPlans()` iz `@/lib/plans`; sortira se po datumu (ascending).
 
 ### 3.3.3 Blog EXIF: `src/data/blogExif.json`
 
@@ -587,11 +591,11 @@ Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
 - **Tablica:** Granice, padding, header pozadina; tamna varijanta za prose-invert
 
 **Stranice:**
-- **ProseContent:** Client komponenta koja renderira HTML (dangerouslySetInnerHTML); injektira `.quote-decor` span u svaki blockquote – Safari kompatibilno; **wrapa slike** u `div.prose-img-wrapper` – vizual kao BlogGallery/PressSection (zaobljeni uglovi, sjena, hover scale 1.03); **poravnanje** – `data-text-alignment` (BlockNote) za center/left/right; **full-width slike** – breakout od ruba do ruba (margin -1.5rem, width calc(100% + 3rem)) – smanjuje bijeli okvir
+- **ProseContent:** Client komponenta koja renderira HTML (dangerouslySetInnerHTML); injektira `.quote-decor` span u svaki blockquote – Safari kompatibilno; **wrapa slike** u `div.prose-img-wrapper` – vizual kao BlogGallery/PressSection (zaobljeni uglovi, sjena, hover scale 1.03); **wrapa YouTube iframe-ove** u `.prose-youtube-wrapper` za full-width prikaz; **poravnanje** – `data-text-alignment` (BlockNote) za center/left/right; **full-width slike** – `width: 100%` i `max-width: 100%` (bez breakouta – sprječava preljev stupca); BlockNote `bn-file-block-content-wrapper` s inline width se poništava u `processProseHtml` za full-width slike
 - **About / Contact:** `ProseContent` s `prose prose-invert prose-lg`, naslov (h1) odvojen, svijetli tekst na tamnoj pozadini; About i Contact imaju split layout (left image + right content)
 - **Blog:** `ProseContent` s `prose prose-zinc prose-headings:font-serif`, bijela pozadina; **formatBlogDate** – datum u formatu `dd. mm. yyyy.`; **Footer** – copyright (© year, All rights reserved / Sva prava pridržana ovisno o stranici)
 
-**BlockNote editor (admin):** Razmak između blokova – `.blocknote-editor-wrapper .bn-block-group > .bn-block-outer { margin-bottom: 1.5rem }`; **okvir blokova** – border (zinc-600), border-radius, padding (0.5rem 0.75rem); quote blok s dekorativnim navodnikom (CSS ::before); **trailing blok** – zadnji prazan blok nije moguće obrisati (namjerno – entry point za novi sadržaj)
+**BlockNote editor (admin):** Razmak između blokova – `.blocknote-editor-wrapper .bn-block-group > .bn-block-outer { margin-bottom: 1.5rem }`; **okvir blokova** – border (zinc-600), border-radius, padding (0.5rem 0.75rem); quote blok s dekorativnim navodnikom (CSS ::before); **trailing blok** – zadnji prazan blok nije moguće obrisati (namjerno – entry point za novi sadržaj); **YouTube video blok** – Block style dropdown i slash menu (`/youtube`, `/video`, `/embed`); zalijepi link → video se prikaže; `blocknoteYouTubeSchema` u `blogBlockNoteSchema`
 
 ### 6.6 Animations (Framer Motion)
 
@@ -622,6 +626,7 @@ npm run dev
 ```
 
 - Pokreće dev server na `http://localhost:3000`
+- **dev:open** – `npm run dev:open` ili `./scripts/dev-and-open.sh`: otvara novi Terminal prozor s dev serverom, čeka da server starta, zatim otvara Chrome s 2 taba (localhost:3000, localhost:3000/admin)
 - Admin panel dostupan na `/admin`
 - API routes aktivne: `/api/upload`, `/api/exif-preview`, `/api/update`, `/api/delete`, `/api/hero`, `/api/reorder`, `/api/gallery`, `/api/gallery/generate-slugs`, `/api/media`, `/api/media-delete`, `/api/media-detach`, `/api/content-health`, `/api/health`, `/api/pages`, `/api/blog`, `/api/theme`
 - Hot reload za brze promjene
@@ -710,11 +715,12 @@ DrusanyPortfolio/
 │   │   └── globals.css
 │   ├── components/
 │   │   ├── blog/
-│   │   │   ├── BlogSidebar.tsx       # Sidebar s widgetima (search, categories, featured-posts, maps)
+│   │   │   ├── BlogSidebar.tsx       # Sidebar s widgetima (search, categories, featured-posts, plans, maps)
 │   │   │   ├── ScrollToTop.tsx       # Gumb "Vrati se na vrh" – pozicioniran desno od ruba sadržaja članka
 │   │   │   ├── SearchWidget.tsx      # Filter-as-you-type po naslovu, slug-u, kategorijama, sadržaju
-│   │   │   ├── CategoriesWidget.tsx  # Kategorije s linkovima
+│   │   │   ├── CategoriesWidget.tsx  # Kategorije s linkovima; accordion za Sport, Gradovi (podkategorije abecedno)
 │   │   │   ├── FeaturedPostsWidget.tsx # Istaknuti članci (featured postovi, do 3)
+│   │   │   ├── PlansWidget.tsx       # Planovi – planirani snimanja (datum + naziv, iz plans.json)
 │   │   │   └── GoogleMapsWidget.tsx  # Embed karte iz Google My Maps
 │   │   ├── AboutImage.tsx        # Slika za About/Contact (fill, object-cover)
 │   │   ├── AboutNav.tsx          # Fiksni nav na dnu About (About, Press, Gear); aktivni link prati scroll
@@ -759,6 +765,7 @@ DrusanyPortfolio/
 │   │   ├── exif.ts         # Zajednički EXIF modul (formatExposure, formatAperture, getExifExtras, getExifDescription, getKeywords, dateToISO, formatDateForInput)
 │   │   ├── getGallery.ts   # Čitanje gallery.json, sortiranje po order (pa capturedAt desc), generiranje slug
 │   │   ├── gear.ts         # getGear – čitanje gear.json
+│   │   ├── plans.ts        # getPlans – čitanje plans.json (planirani snimanja za widget)
 │   │   ├── imageValidation.ts # Magic bytes provjera (JPEG/PNG/GIF/WebP)
 │   │   ├── jsonLock.ts     # File locking (proper-lockfile) za gallery, blog, pages
 │   │   ├── pages.ts        # getPages, savePages – About/Contact; sanitizeProseHtml pri čitanju
@@ -766,8 +773,9 @@ DrusanyPortfolio/
 │   │   ├── blog.ts         # getBlog, getBlogPost – čitanje blog.json, sanitizeProseHtml za body, enrichBlogGallery (Sharp)
 │   │   ├── blocknoteImageSchema.tsx    # Custom Image block (displayWidth), blogBlockNoteSchema
 │   │   ├── blocknoteMediaContentSchema.tsx  # Media + Content blok (pola slika, pola tekst)
+│   │   ├── blocknoteYouTubeSchema.tsx # YouTube video blok (embed po širini stranice)
 │   │   ├── rateLimit.ts    # Rate limiting (200 req/min po IP) za admin API
-│   │   ├── sanitize.ts     # sanitizeProseHtml – HTML sanitizacija (sanitize-html); rel="noopener noreferrer" na vanjskim linkovima
+│   │   ├── sanitize.ts     # sanitizeProseHtml – HTML sanitizacija (sanitize-html); rel="noopener noreferrer" na vanjskim linkovima; iframe samo za youtube.com/embed (transformTags)
 │   │   ├── slug.ts         # slugify, generateSlug (title+venue+year), generateBlogSlug, isValidBlogSlug, normalizeBlogSlug (yymmdd-naslov); koristi transliterateCroatian iz utils
 │   │   ├── theme.ts        # getTheme, saveTheme, themeToCssVariables – čitanje/spremanje theme.json
 │   │   ├── utils.ts        # transliterateCroatian, sanitizeFilename, sanitizeFolderName – centralizirane funkcije za upload API
@@ -783,12 +791,16 @@ DrusanyPortfolio/
 │       ├── press.json      # Objavljene fotografije (About)
 │       ├── blog.json       # Blog postovi
 │       ├── blogExif.json   # EXIF za blog galerijske slike (camera, lens, exposure, aperture, iso)
-│       ├── blogWidgets.json # Konfiguracija blog sidebara (search, categories, featured-posts, maps)
+│       ├── blogWidgets.json # Konfiguracija blog sidebara (search, categories, featured-posts, plans, maps)
+│       ├── plans.json      # Planirani snimanja za PlansWidget (date, name)
 │       ├── theme.json     # Theme konfiguracija (font, fontSize, color po elementu)
 │       └── themeFonts.ts  # Konfiguracija fontova za Theme (dodavanje novih fontova)
 ├── scripts/
 │   ├── deploy-static.sh            # Build, kopira out/ u drusany-static, push, rsync na server (samo promijenjene datoteke)
 │   ├── deploy-ftp.mjs              # FTP deploy (alternativa ako nemaš SSH)
+│   ├── deploy-uploads.sh           # rsync/FTP samo public/uploads/ (samo promijenjene datoteke)
+│   ├── deploy-uploads-ftp.mjs      # FTP deploy uploads (alternativa ako nemaš SSH)
+│   ├── dev-and-open.sh             # Otvara Terminal s npm run dev i Chrome s localhost:3000 + /admin
 │   ├── populate-blog-exif.mjs      # Popunjava blogExif.json iz postojećih slika (exifr)
 │   ├── import-wordpress-blog.mjs   # Import starih postova iz WordPress SQL dumpa
 │   └── cleanup-blog-categories.mjs  # Uklanja kategorije koje više ne postoje u blogCategories
@@ -845,7 +857,7 @@ DrusanyPortfolio/
 
 - **About (`/about`):** Split layout – lijevo fiksna slika (40% širine na desktopu) s opcionalnim citatom u donjem lijevom kutu; desno scrollabilni sadržaj (Back, naslov, prose HTML, PressSection, GearSection); **AboutNav** fiksno na dnu – linkovi About, Press, Gear s aktivnim stanjem (crta ispod); scroll na vrh pri učitavanju; aktivni link prati scroll (listener na main + window)
 - **Contact (`/contact`):** Isti layout kao About – lijevo slika, desno sadržaj; sadrži Back, naslov, uvodni prose (iz pages.json), **ContactForm** (name, email, subject, message); Formspree za slanje; fallback na mailto ako Formspree nije postavljen; success/error stanja
-- **Blog (`/blog`):** Lista postova – kartice s naslovom, metapodacima (Tekst i fotografije: Ivica Drusany, Datum objave, Kategorija) i slikom ispod; bez overlayja na slikama; **BlogSidebar** s desne strane – **SearchWidget** (debounced 300ms – lokalni state za trenutni odziv, URL nakon pauze; pretraga po naslovu, slug-u, kategorijama, sadržaju), **CategoriesWidget** (kategorije **abecedno sortirane** po labelu), **FeaturedPostsWidget** (istaknuti članci, do 3), GoogleMapsWidget (embed iz Google My Maps); **pretraga** po `q` parametru; sortiranje od najnovijeg; **filtiranje kategorija** – glatka fade animacija (AnimatePresence) pri promjeni filtera; `scroll={false}` na linkovima da stranica ne skrola na vrh; `/blog/[slug]` – pojedinačni post: naslov i metapodaci na vrhu, featured slika ispod, prose body (slike s poravnanjem, vizual kao galerija), galerija na dnu (EXIF iz blogExif.json); bijela pozadina; **Footer** na dnu stranice; **ScrollToTop** gumb – pozicioniran desno od ruba sadržaja članka (`lg:right-[max(27rem,calc(50vw-14.5rem))]`)
+- **Blog (`/blog`):** Lista postova – kartice s naslovom, metapodacima (Tekst i fotografije: Ivica Drusany, Datum objave, Kategorija) i slikom ispod; bez overlayja na slikama; **BlogSidebar** s desne strane – **SearchWidget** (debounced 300ms – lokalni state za trenutni odziv, URL nakon pauze; pretraga po naslovu, slug-u, kategorijama, sadržaju), **CategoriesWidget** (kategorije abecedno; **accordion** za Sport, Gradovi – roditelj s chevronom, podkategorije abecedno sortirane), **FeaturedPostsWidget** (istaknuti članci, do 3), **PlansWidget** (planirani snimanja – datum + naziv iz plans.json, ispod Istaknutih članaka), GoogleMapsWidget (embed iz Google My Maps); **pretraga** po `q` parametru; sortiranje od najnovijeg; **filtiranje kategorija** – glatka fade animacija (AnimatePresence) pri promjeni filtera; `scroll={false}` na linkovima da stranica ne skrola na vrh; `/blog/[slug]` – pojedinačni post: naslov i metapodaci na vrhu, featured slika ispod, prose body (slike s poravnanjem, vizual kao galerija; **YouTube video blok** – embed po širini stranice; **overflow-x-hidden** na content wrapperu sprječava preljev slika), galerija na dnu (EXIF iz blogExif.json); bijela pozadina; **Footer** na dnu stranice; **ScrollToTop** gumb – pozicioniran desno od ruba sadržaja članka (`lg:right-[max(27rem,calc(50vw-14.5rem))]`)
 - **Blog metapodaci:** Ikone (PenLine, Camera, Calendar, Tag); redak „Tekst i fotografije: Ivica Drusany“, „Datum objave: dd. mm. yyyy.“, „Kategorija:“ s linkovima (donja crta, border-b); razmak između blokova: inline `marginRight: "3rem"` (Safari kompatibilnost). **Mobilna verzija:** autor (ikona + „Ivica Drusany“) ispod featured slike; kategorija također link/filter (`/blog?kategorija=...`); search widget isti razmak kao na blog listi (`py-24`)
 - **Blog galerija:** Ista logika kao portfolio – masonry (shortest column), dimenzije iz Sharp metadata; lightbox (prev/next, swipe, Escape); aperture cursor na thumbovima i lightboxu; brisanje slika iz admina briše i fizičke datoteke; **progresivno učitavanje** – galerije s više od 24 slike prikazuju prvu grupu, zatim učitavaju sljedeće pri skrolanju (Intersection Observer); indikator napretka (npr. 24/100); lightbox i dalje radi s cijelom listom
 - **LCP optimizacija (blog post):** Glavna slika (thumbnail) je LCP element – `loading="eager"`, `fetchPriority="high"`, `sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"`; `preload()` iz `react-dom` dodaje `<link rel="preload" as="image">` u head; galerijske slike (BlogGallery) imaju `loading="lazy"` – slike se učitavaju tek pri skrolanju
@@ -875,7 +887,7 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 - **Path traversal zaštita** – `blog-delete-file` provjerava da rezolvirana putanja ostane unutar `public/uploads/blog/`; `media-delete` unutar `public/uploads/`
 - **Ograničenje uploada** – 20 MB po datoteci (upload, blog-upload, exif-preview)
 - **Magic bytes provjera** – `imageValidation.ts` provjerava file signature (JPEG/PNG/GIF/WebP) prije obrade
-- **HTML sanitizacija** – `sanitizeProseHtml` (sanitize-html) pri čitanju u `getPages`, `getBlogPost`; automatski dodaje `rel="noopener noreferrer"` na vanjske linkove (tabnabbing zaštita)
+- **HTML sanitizacija** – `sanitizeProseHtml` (sanitize-html) pri čitanju u `getPages`, `getBlogPost`; automatski dodaje `rel="noopener noreferrer"` na vanjske linkove (tabnabbing zaštita); **iframe** – dozvoljen samo za `youtube.com/embed` URL (transformTags zamjenjuje ostale iframe-ove s div placeholderom)
 - **Rate limiting** – `src/lib/rateLimit.ts`: in-memory limiter (200 req/min po IP, `RATE_LIMIT_MAX_REQUESTS`, `RATE_LIMIT_WINDOW_MS`); primijenjen na sve admin API rute; povećan s 60 na 200 radi bulk uploada. Za produkciju s više instanci zamijeniti s Redis (npr. @upstash/ratelimit)
 - **File locking** – `jsonLock.ts` (proper-lockfile) za `gallery.json`, `blog.json`, `pages.json` – sprječava race condition
 - Ako se ikad doda server-side admin u produkciji, obavezno: autentikacija
@@ -905,7 +917,7 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 | **Gallery** | Balanced masonry (shortest column, heights array, aspect ratio); stupci približno jednake visine; useColumnCount (1–4 stupaca), venue filter (Concerts), sport filter (Sport), hover efekti na filterima; scroll na vrh pri učitavanju; ImageCard hover (title @ venue ili Sport // title, datum); Interiors, Animals bez opisa/datuma |
 | **Lightbox** | Fit-to-screen, numeracija + X na vrhu, caption + EXIF u jednom okviru (crna prozirna pozadina), EXIF toggle (ikona kamere), copyright popup na desni klik, URL sync `?image=slug` |
 | **Filtriranje** | Client-side preko JSON-a (`?category=slug`, `?venue=slug` za Concerts, `?sport=slug` za Sport); search filter **debounced** (200ms portfolio, 300ms blog) – lokalni state za trenutni odziv; direktni linkovi `?image=slug` |
-| **Pages & Blog** | `pages.json` (About: title, html, quote; Contact: title, html, email, formspreeEndpoint); `gear.json`, `press.json`; **ProseContent** (HTML + .quote-decor u blockquote; **sanitizeProseHtml** pri čitanju; **wrapa slike** u prose-img-wrapper – zaobljeni uglovi, sjena, hover scale; data-text-alignment za poravnanje); About split layout (image + content), AboutNav, ContactForm (Formspree); BlockNote editor; prose blockquote s dekorativnim navodnikom, tablica; **Blog:** slug `yymmdd-naslov` (validacija); **BlogSidebar** (SearchWidget debounced 300ms, CategoriesWidget abecedno, FeaturedPostsWidget, GoogleMapsWidget); pretraga po naslovu/slug-u/kategorijama/sadržaju; **filtiranje kategorija** – glatka fade animacija (AnimatePresence), scroll: false; kategorije (višestruki odabir), masonry galerija (Sharp dimenzije), **progresivno učitavanje** (24 slike po grupi, Intersection Observer); lightbox, aperture cursor, metapodaci (Tekst i fotografije, Datum objave, Kategorija) s ikonama, format datuma dd. mm. yyyy.; **BlockNote slike u sadržaju** – upload (content/), resize handles, poravnanje; blog-delete-file za brisanje fajlova s diska; **blogCleanup** pri promjeni slug-a/datuma; **ScrollToTop** – pozicija desno od ruba sadržaja članka |
+| **Pages & Blog** | `pages.json` (About: title, html, quote; Contact: title, html, email, formspreeEndpoint); `gear.json`, `press.json`, `plans.json`; **ProseContent** (HTML + .quote-decor u blockquote; **sanitizeProseHtml** pri čitanju – iframe samo youtube.com/embed; **wrapa slike** u prose-img-wrapper – zaobljeni uglovi, sjena, hover scale; **wrapa YouTube iframe** u prose-youtube-wrapper; data-text-alignment za poravnanje; full-width slike 100% širine bez breakouta); About split layout (image + content), AboutNav, ContactForm (Formspree); BlockNote editor (Image, Media+Content, **YouTube video**); prose blockquote s dekorativnim navodnikom, tablica; **Blog:** slug `yymmdd-naslov` (validacija); **BlogSidebar** (SearchWidget debounced 300ms, CategoriesWidget – accordion za Sport/Gradovi, podkategorije abecedno, FeaturedPostsWidget, **PlansWidget** (planirani snimanja), GoogleMapsWidget); pretraga po naslovu/slug-u/kategorijama/sadržaju; **filtiranje kategorija** – glatka fade animacija (AnimatePresence), scroll: false; kategorije (višestruki odabir), masonry galerija (Sharp dimenzije), **progresivno učitavanje** (24 slike po grupi, Intersection Observer); lightbox, aperture cursor, metapodaci (Tekst i fotografije, Datum objave, Kategorija) s ikonama, format datuma dd. mm. yyyy.; **BlockNote slike u sadržaju** – upload (content/), resize handles, poravnanje; blog-delete-file za brisanje fajlova s diska; **blogCleanup** pri promjeni slug-a/datuma; **ScrollToTop** – pozicija desno od ruba sadržaja članka |
 | **Export** | `output: 'export'`, `images.unoptimized: true` |
 | **Output** | `out/` folder |
 | **SEO** | **sitemap.xml**, **robots.txt** – generirani pri buildu (`sitemap.ts`, `robots.ts`); sitemap uključuje sve stranice, blog postove i paginaciju; robots allow /, disallow /admin, /api/; koristi NEXT_PUBLIC_SITE_URL |

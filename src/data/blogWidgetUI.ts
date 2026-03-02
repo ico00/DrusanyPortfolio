@@ -2,13 +2,14 @@
  * Centralizirani stilovi za blog sidebar widgete
  *
  * Dizajn: jedinstveni panel – bijela pozadina, tamna slova.
- * Koristi BLOG_WIDGET_UI u SearchWidget, CategoriesWidget, FeaturedPostsWidget, GoogleMapsWidget.
+ * Koristi BLOG_WIDGET_UI u SearchWidget, CategoriesWidget, FeaturedPostsWidget, PlansWidget, GoogleMapsWidget.
  *
  * Povezani fajlovi:
  * - src/components/blog/BlogSidebar.tsx
  * - src/components/blog/SearchWidget.tsx
  * - src/components/blog/CategoriesWidget.tsx
  * - src/components/blog/FeaturedPostsWidget.tsx
+ * - src/components/blog/PlansWidget.tsx
  * - src/components/blog/GoogleMapsWidget.tsx
  */
 

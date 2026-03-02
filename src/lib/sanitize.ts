@@ -37,7 +37,10 @@ const PROSE_ALLOWED_TAGS = [
   "figure",
   "figcaption",
   "div",
+  "iframe",
 ];
+
+const YOUTUBE_EMBED_REGEX = /^https?:\/\/(?:www\.)?youtube\.com\/embed\/[\w-]+(?:\?.*)?$/;
 
 const PROSE_ALLOWED_ATTRIBUTES: Record<string, string[]> = {
   a: ["href", "target", "rel", "title"],
@@ -47,6 +50,7 @@ const PROSE_ALLOWED_ATTRIBUTES: Record<string, string[]> = {
   th: ["colspan", "rowspan"],
   figure: ["class"],
   div: ["class", "style"],
+  iframe: ["src", "title", "allow", "allowfullscreen", "frameborder", "width", "height", "class"],
 };
 
 /**
@@ -63,6 +67,21 @@ export function sanitizeProseHtml(html: string): string {
       img: ["http", "https", "data", "/"],
     },
     transformTags: {
+      iframe: (_tagName, attribs) => {
+        const src = attribs.src ?? "";
+        if (!YOUTUBE_EMBED_REGEX.test(src)) {
+          return { tagName: "div" as const, attribs: { class: "sanitized-iframe-removed" } };
+        }
+        const iframeAttribs: Record<string, string> = {
+          src,
+          title: attribs.title || "YouTube video",
+          allow: attribs.allow || "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+          allowfullscreen: "allowfullscreen",
+          frameborder: "0",
+          class: attribs.class || "",
+        };
+        return { tagName: "iframe" as const, attribs: iframeAttribs };
+      },
       a: (_tagName, attribs) => {
         const href = attribs.href ?? "";
         const isExternal =

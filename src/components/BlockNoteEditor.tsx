@@ -15,7 +15,7 @@ import {
 } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/shadcn";
 import TiptapLink from "@tiptap/extension-link";
-import { RiLayoutGrid2Fill } from "react-icons/ri";
+import { RiLayoutGrid2Fill, RiYoutubeFill } from "react-icons/ri";
 import "@blocknote/shadcn/style.css";
 import "@blocknote/core/fonts/inter.css";
 import { FloatingBlockTypeBar } from "./FloatingBlockTypeBar";
@@ -145,6 +145,16 @@ export default function BlockNoteEditor({
         editor.getExtension(FilePanelExtension)?.showMenu(insertedBlock.id);
       },
     };
+    const youtubeEmbedItem = {
+      title: "YouTube video",
+      subtext: "Ubaci YouTube link",
+      aliases: ["youtube", "video", "embed"],
+      group: "Media" as const,
+      icon: <RiYoutubeFill size={18} />,
+      onItemClick: () => {
+        insertOrUpdateBlockForSlashMenu(editor, { type: "youtubeEmbed" as any });
+      },
+    };
     // Umetni nakon Image (traži po title)
     const imageIdx = defaultItems.findIndex(
       (i) => i.title?.toLowerCase().includes("image") || i.title === "Slika"
@@ -153,6 +163,7 @@ export default function BlockNoteEditor({
     return [
       ...defaultItems.slice(0, insertAt),
       mediaContentItem,
+      youtubeEmbedItem,
       ...defaultItems.slice(insertAt),
     ];
   }, [editor]);
