@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,7 +12,7 @@ import {
   postHasCategory,
   formatBlogDate,
 } from "@/data/blogCategories";
-import { getPostsForPage } from "@/lib/pagination";
+import { getPostsForPage, getTotalPages } from "@/lib/pagination";
 import type { BlogPost } from "@/lib/blog";
 import Pagination from "./blog/Pagination";
 import ViewfinderOverlay from "./ViewfinderOverlay";
@@ -34,6 +35,9 @@ export default function BlogList({
 
   let displayPosts: BlogPost[];
   let showPagination = false;
+  let effectivePage = currentPage;
+  let effectiveTotalPages = totalPages;
+  const queryString = [kategorija && `kategorija=${encodeURIComponent(kategorija)}`, searchQuery.trim() && `q=${encodeURIComponent(searchQuery.trim())}`].filter(Boolean).join("&");
 
   if (hasActiveFilter) {
     let filtered = kategorija
@@ -58,11 +62,16 @@ export default function BlogList({
       });
     }
 
-    displayPosts = [...filtered].sort((a, b) => {
+    const sortedFiltered = [...filtered].sort((a, b) => {
       const da = a.date + (a.time || "00:00");
       const db = b.date + (b.time || "00:00");
       return db.localeCompare(da);
     });
+
+    effectiveTotalPages = getTotalPages(sortedFiltered.length);
+    effectivePage = Math.min(Math.max(1, currentPage), effectiveTotalPages);
+    displayPosts = getPostsForPage(sortedFiltered, effectivePage);
+    showPagination = effectiveTotalPages > 1;
   } else {
     displayPosts = getPostsForPage(posts, currentPage);
     showPagination = totalPages > 1;
@@ -75,16 +84,24 @@ export default function BlogList({
   }
 
   const filterKey = `${kategorija ?? "all"}_${searchQuery.trim()}`;
+  const contentKey = `${filterKey}_${effectivePage}`;
+
+  useEffect(() => {
+    document.documentElement.dataset.blogList = "true";
+    return () => {
+      delete document.documentElement.dataset.blogList;
+    };
+  }, []);
 
   return (
     <AnimatePresence mode="wait">
       {displayPosts.length === 0 ? (
         <motion.p
-          key={filterKey}
+          key={contentKey}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
+          transition={{ duration: 0.3 }}
           className="mt-8 text-lg leading-relaxed text-zinc-600"
         >
           {searchQuery.trim()
@@ -95,11 +112,11 @@ export default function BlogList({
         </motion.p>
       ) : (
         <motion.div
-          key={filterKey}
+          key={contentKey}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
+          transition={{ duration: 0.3 }}
         >
           <ul className="mt-12 space-y-12">
             {displayPosts.map((post) => (
@@ -151,7 +168,6 @@ export default function BlogList({
                                   `/blog?kategorija=${encodeURIComponent(
                                     slug,
                                   )}`,
-                                  { scroll: false },
                                 );
                               }}
                               className="inline-block border-b border-transparent pb-0.5 text-inherit transition-[color,border-color] duration-200 hover:border-zinc-900 hover:text-zinc-900"
@@ -187,7 +203,11 @@ export default function BlogList({
             ))}
           </ul>
           {showPagination && (
-            <Pagination currentPage={currentPage} totalPages={totalPages} />
+            <Pagination
+              currentPage={effectivePage}
+              totalPages={effectiveTotalPages}
+              queryString={queryString}
+            />
           )}
         </motion.div>
       )}

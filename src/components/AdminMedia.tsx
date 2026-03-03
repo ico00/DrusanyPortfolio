@@ -177,6 +177,15 @@ export default function AdminMedia() {
     if (lightboxIndex !== null && lightboxIndex >= filtered.length) setLightboxIndex(null);
   }, [lightboxIndex, filtered.length]);
 
+  const pageChangedRef = useRef(false);
+  useEffect(() => {
+    if (!pageChangedRef.current) {
+      pageChangedRef.current = true;
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [page]);
+
   useEffect(() => {
     if (lightboxIndex !== null) {
       document.body.style.overflow = "hidden";

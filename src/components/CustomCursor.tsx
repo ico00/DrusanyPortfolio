@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { Aperture } from "lucide-react";
 
@@ -8,6 +9,7 @@ const APERTURE_SIZE = 32;
 const DOT_SIZE = 10;
 
 export default function CustomCursor() {
+  const pathname = usePathname();
   const [isEnabled, setIsEnabled] = useState<boolean | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -56,7 +58,7 @@ export default function CustomCursor() {
   }, []);
 
   useEffect(() => {
-    if (!isEnabled) return;
+    if (!isEnabled || pathname?.startsWith("/admin")) return;
 
     document.body.style.cursor = "none";
     document.body.classList.add("custom-cursor-active");
@@ -72,9 +74,12 @@ export default function CustomCursor() {
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseover", handleElementHover);
     };
-  }, [isEnabled, handleMouseMove, handleMouseLeave, handleElementHover]);
+  }, [isEnabled, pathname, handleMouseMove, handleMouseLeave, handleElementHover]);
 
   if (!isEnabled) return null;
+
+  // Admin stranice – isključi custom cursor radi performansi (galerija s puno thumbnails)
+  if (pathname?.startsWith("/admin")) return null;
 
   return (
     <>

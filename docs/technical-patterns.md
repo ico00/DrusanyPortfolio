@@ -196,7 +196,7 @@ iOS Safari automatski zumira input kad je font manji od 16px. Search input mora 
 
 ### 4.6 Blog galerija – potvrda pri brisanju slike
 
-Pri brisanju slike iz blog galerije preko delete ikone (SortableGalleryItem) prikazuje se `confirm(ADMIN_UI.blog.deleteImageConfirm(1))` prije poziva `removeGalleryImage`. Poruke u `adminUI.ts`: `deleteImageConfirm` (jednina), `deleteImagesConfirm` (množina).
+Pri brisanju slike iz blog galerije (SortableGalleryItem ili bulk delete) prikazuje se **custom modal** umjesto native `confirm()`. State `deleteImageConfirmModal` s `count` i `onConfirm` callbackom; modal koristi `ADMIN_UI.modal`, `ADMIN_UI.buttons.secondary` (Odustani), `ADMIN_UI.buttons.danger` (Obriši). Poruke u `adminUI.ts`: `deleteImageConfirm`, `deleteImagesConfirm(n)`, `deleteImageModal.cancel`, `deleteImageModal.confirm`.
 
 **Referentna komponenta:** `src/components/AdminBlog.tsx`
 
@@ -270,7 +270,7 @@ Implementacija: `BlogFilePanel` (Upload + Media + Embed) koristi se umjesto defa
 Block style i Formatting toolbar pojavljuju se **na vrhu bloka** (ne kod kursora). Koristi se block start pozicija (`$from.start()`) umjesto pozicije kursora.
 
 **Komponente:**
-- **FloatingBlockTypeBar** – Block style dropdown; koristi `useEditorState` s block start pozicijom; `placement: "top-start"` za poravnanje lijevo
+- **FloatingBlockTypeBar** – Block style dropdown; koristi `useEditorState` s block start pozicijom; `placement: "top-start"` za poravnanje lijevo. **Prikazuje se samo kad editor ima fokus** (`hasFocus` state, focusin/focusout na `editor.domElement`) – sprječava prikaz u zadnjem (trailing) bloku pri učitavanju gdje ProseMirror postavlja kursor po defaultu.
 - **BlockTopFormattingToolbarController** – Custom FormattingToolbarController; koristi block start za pozicioniranje; koristi se u `CustomFormattingToolbar` umjesto default `FormattingToolbarController`
 
 **Referentne datoteke:** `src/components/FloatingBlockTypeBar.tsx`, `src/components/BlockTopFormattingToolbarController.tsx`, `src/components/CustomFormattingToolbar.tsx`
@@ -294,13 +294,19 @@ Svaki blok u BlockNote editoru ima lagani tanki okvir. Stilovi u `globals.css`:
 
 Zadnji prazan blok u editoru **nije moguće obrisati** – namjerno ponašanje (ProseMirror TrailingNode). Služi kao entry point za dodavanje novog sadržaja. Pri spremanju prazni blokovi se obično ne šalju u HTML.
 
-### 5.7 Zaštita od gubitka slika pri spremanju
+### 5.7 BlockNote side menu (+ i ⋮⋮) – patch za klikabilnost
+
+BlockNote side menu (gumb + za dodavanje bloka, točkice za drag handle) nestaje kad miš ide prema njemu jer ProseMirror gubi hover nad blokom. **Patch** u `patches/@blocknote+core+0.46.2.patch` modificira `SideMenuExtension`: prije skrivanja menija provjerava `document.elementFromPoint(x, y)?.closest(".bn-side-menu")` – ako je miš nad menijem, meni ostaje vidljiv i klikabilan. **patch-package** primjenjuje patch pri `npm install` (postinstall). Ako nadogradiš BlockNote, ponovno pokreni `npx patch-package @blocknote/core` nakon ručne izmjene u `node_modules`.
+
+**Referentne datoteke:** `patches/@blocknote+core+0.46.2.patch`, `package.json` (postinstall)
+
+### 5.8 Zaštita od gubitka slika pri spremanju
 
 - **blocksToFullHTML** – BlockNoteEditor koristi lossless konverziju (već u 5).
 - **Backup** – `saveBlogBody` stvara `[slug].html.backup` prije overwrite-a; `.backup` u `.gitignore`.
 - **Validacija** – PUT `/api/blog` uspoređuje broj slika u starom vs novom body-ju; ako novi ima manje, vraća **409** (`images_removed`, `removedCount`, `removedUrls`); AdminBlog prikazuje confirm, retry s `forceSave: true`.
 
-### 5.8 Promjena datuma ili slug-a – automatsko usklađivanje
+### 5.9 Promjena datuma ili slug-a – automatsko usklađivanje
 
 Kad u adminu promijeniš datum ili slug posta i spremiš, `blogCleanup` automatski:
 

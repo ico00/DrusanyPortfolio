@@ -20,7 +20,8 @@ Ovaj dokument opisuje arhitekturu statičnog fotografskog portfolija izgrađenog
 | **exifr** | 7.x | EXIF metadata extraction (datum, naslov, camera, lens, exposure, aperture, ISO) |
 | **sanitize-html** | 2.x | HTML sanitizacija pri čitanju sadržaja (getPages, getBlogPost) |
 | **proper-lockfile** | 4.x | File locking za JSON (gallery, blog, pages) – read-modify-write |
-| **BlockNote** | 0.46.x | Block-based rich text editor (About, Contact, Blog) – shadcn UI |
+| **BlockNote** | 0.46.x | Block-based rich text editor (About, Contact, Blog) – shadcn UI; **patch** u `patches/` za side menu klikabilnost |
+| **patch-package** | 8.x | Patch za @blocknote/core (SideMenuExtension – meni ostaje vidljiv kad je miš nad .bn-side-menu); postinstall primjenjuje patcheve |
 | **react-day-picker** | 9.x | Custom kalendar za datum/vrijeme u adminu |
 | **Recharts** | 3.x | Dashboard grafikoni (bar charts) |
 
@@ -319,7 +320,7 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 - Tabovi "About" i "Contact" u adminu
 - **About:** Polje "Citat na slici" (quote); naslov; BlockNote editor za sadržaj
 - **Contact:** Polje "Formspree endpoint" (preporučeno); polje "Email" (fallback za mailto); naslov; BlockNote editor za uvodni tekst iznad forme
-- BlockNote editor – blokovi (paragraf, naslov H1–H6, citat, lista, tablica, slika); side menu (⋮⋮ +), slash menu (`/`), formatiranje teksta (označi → toolbar)
+- BlockNote editor – blokovi (paragraf, naslov H1–H6, citat, lista, tablica, slika); side menu (⋮⋮ +) – **patch** u `patches/` omogućuje klikabilnost (meni ostaje vidljiv kad je miš nad njim); slash menu (`/`), formatiranje teksta (označi → toolbar)
 - **Razmak između blokova:** `space-y-14` između form sekcija; BlockNote blokovi imaju `margin-bottom: 1.5rem` (globals.css)
 - Spremanje putem `/api/pages`
 
@@ -338,7 +339,7 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 **BlockNote editor (BlockNoteEditor.tsx):**
 - **BlockNote** (@blocknote/shadcn) – block-based WYSIWYG, sprema HTML
 - **Toolbar na vrhu bloka:** Block style i Formatting toolbar pojavljuju se **na vrhu bloka** (ne kod kursora) – `FloatingBlockTypeBar` i `BlockTopFormattingToolbarController` koriste block start poziciju (`$from.start()`); placement `top-start` za poravnanje lijevo
-- **FloatingBlockTypeBar:** Label "Block style:"; prikazuje trenutni stil bloka kad je kursor u bloku (bez označavanja teksta); dropdown za promjenu tipa (Paragraph, Heading 1–6, Quote, **Code block**, **YouTube video**, itd.) – `blockTypeSelectItemsWithCodeBlock` proširuje default listu
+- **FloatingBlockTypeBar:** Label "Block style:"; prikazuje trenutni stil bloka kad je kursor u bloku (bez označavanja teksta); prikazuje se **samo kad editor ima fokus** (sprječava popup u trailing bloku pri učitavanju); dropdown za promjenu tipa (Paragraph, Heading 1–6, Quote, **Code block**, **YouTube video**, itd.) – `blockTypeSelectItemsWithCodeBlock` proširuje default listu
 - **BlockTopFormattingToolbarController:** Custom FormattingToolbarController koji pozicionira Bold/Italic/link toolbar na vrh bloka; koristi se umjesto default FormattingToolbarController
 - **Tamna tema:** `data-theme="dark"` na html kad je admin otvoren; zinc/amber paleta; **jedinstvena pozadina** (zinc-800) – traka i sadržaj isti ton; **svjetliji tekst** (zinc-100) za bolju čitljivost
 - **Okvir blokova:** Svaki blok ima lagani tanki okvir (`border: 1px solid zinc-600`), zaobljene uglove (`border-radius: 0.375rem`) i padding (`0.5rem 0.75rem`) – globals.css `.bn-block-outer`
@@ -609,9 +610,13 @@ Sadržaj stranica renderira se s Tailwind `prose` klasama. U `globals.css`:
 
 ### 7.1 Skripte u `package.json`
 
+- **postinstall** – `patch-package` primjenjuje patcheve iz `patches/` (npr. @blocknote/core za side menu klikabilnost)
+- **dev**, **build**, **start** – standardne Next.js naredbe
+
 ```json
 {
   "scripts": {
+    "postinstall": "patch-package",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
@@ -803,6 +808,7 @@ DrusanyPortfolio/
 │   ├── populate-blog-exif.mjs      # Popunjava blogExif.json iz postojećih slika (exifr)
 │   ├── import-wordpress-blog.mjs   # Import starih postova iz WordPress SQL dumpa
 │   └── cleanup-blog-categories.mjs  # Uklanja kategorije koje više ne postoje u blogCategories
+├── patches/               # patch-package – patchevi za npm pakete (npr. @blocknote+core za side menu)
 ├── out/                   # Generirano pri build (gitignore)
 ├── next.config.ts
 ├── package.json
@@ -846,7 +852,7 @@ DrusanyPortfolio/
 
 ### Custom Cursor (desktop only)
 
-- **CustomCursor.tsx** u layoutu; aktivno samo kad `(hover: hover)` (touch uređaji isključeni)
+- **CustomCursor.tsx** u layoutu; aktivno samo kad `(hover: hover)` (touch uređaji isključeni); **isključeno na `/admin`** – radi performansi (galerija s puno thumbnails uzrokuje trzaje kursora zbog mouseover → setState)
 - **z-index:** `z-[999999]` – kursor uvijek na vrhu (iznad BlockNote popupova 99999); `pointer-events: none` da klikovi prolaze
 - **Dot:** Bijela točka (10px), `mix-blend-mode: difference`; **trenutni odziv** – `useMotionValue` za x/y, ažurira se direktno u `mousemove` bez React re-rendera; `setIsVisible` samo pri prvom pomicanju (ref), ne na svaki move
 - **Aperture ikona:** Prikazuje se samo preko fotografija (`data-cursor-aperture` na galeriji, hero slideru, lightboxu, **blog galeriji**); scale 1.5 na hover nad klikabilnim elementima; **spring animacija** (stiffness 500, damping 28) – namjerno kašnjenje, glatko prati miš

@@ -19,9 +19,11 @@ import type { BlogPost } from "@/lib/blog";
 
 interface BlogSidebarProps {
   posts: BlogPost[];
+  /** Na mobilu prikaži search u sidebaru (blog post); inače je skriven jer je na vrhu (blog lista) */
+  searchOnMobile?: boolean;
 }
 
-export default async function BlogSidebar({ posts }: BlogSidebarProps) {
+export default async function BlogSidebar({ posts, searchOnMobile = false }: BlogSidebarProps) {
   const { widgets } = await getBlogWidgets();
   const enabled = widgets.filter((w) => w.enabled);
 
@@ -34,10 +36,11 @@ export default async function BlogSidebar({ posts }: BlogSidebarProps) {
     const content = await WidgetRenderer({ widget, posts });
     if (content !== null) {
       const isSearch = widget.type === "search";
+      const searchMobileClass = isSearch && !searchOnMobile ? "hidden lg:block" : "";
       sections.push(
         <section
           key={widget.id}
-          className={`border-t border-zinc-200 first:border-t-0 ${isSearch ? "hidden lg:block px-0 py-5" : "p-5"}`}
+          className={`border-t border-zinc-200 first:border-t-0 ${isSearch ? `${searchMobileClass} px-0 py-5` : "p-5"}`}
         >
           {content}
         </section>

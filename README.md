@@ -129,6 +129,7 @@ DrusanyPortfolio/
 │   ├── populate-blog-exif.mjs      # Popunjava blogExif.json iz postojećih slika
 │   ├── import-wordpress-blog.mjs   # Import starih postova iz WordPress SQL dumpa (blog:import, blog:import:all)
 │   └── cleanup-blog-categories.mjs # Čišćenje kategorija (blog:cleanup-categories)
+├── patches/              # patch-package – patchevi za npm pakete (npr. @blocknote/core za side menu)
 └── out/                  # Statični output (generira se pri build)
 ```
 

@@ -9,7 +9,7 @@
  * - src/components/DatePicker.tsx – ADMIN_UI.datePicker
  * - src/components/DateTimePicker.tsx – isto
  * - src/contexts/UnsavedChangesContext.tsx – ADMIN_UI.confirmModal, modal, buttons
- * - src/components/AdminBlog.tsx – toast, duplicate modal (hrvatski)
+ * - src/components/AdminBlog.tsx – toast, duplicate modal, deleteImageModal (hrvatski)
  * - src/components/AdminClient.tsx – toast, duplicate modal (engleski)
  * - src/components/AdminPages.tsx – toast
  * - src/components/BlockNoteErrorBoundary.tsx – editorError, buttons
@@ -172,6 +172,10 @@ export const ADMIN_UI = {
     publishedHint: "Visible on blog",
     deleteImageConfirm: "Obriši ovu sliku iz galerije?",
     deleteImagesConfirm: (n: number) => (n === 1 ? "Obriši ovu sliku iz galerije?" : `Obriši ${n} slika?`),
+    deleteImageModal: {
+      cancel: "Odustani",
+      confirm: "Obriši",
+    },
   },
 
   // ─── Media (admin media list) ───

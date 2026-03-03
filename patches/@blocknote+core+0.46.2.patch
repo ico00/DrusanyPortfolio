@@ -1,0 +1,20 @@
+diff --git a/node_modules/@blocknote/core/dist/TrailingNode-CxM966vN.js b/node_modules/@blocknote/core/dist/TrailingNode-CxM966vN.js
+index 3ac6fe1..b1c3c38 100644
+--- a/node_modules/@blocknote/core/dist/TrailingNode-CxM966vN.js
++++ b/node_modules/@blocknote/core/dist/TrailingNode-CxM966vN.js
+@@ -1192,11 +1192,15 @@ class Ft {
+         clientY: this.mousePos.y
+       });
+       if ((e == null ? void 0 : e.element) !== this.pmView.dom || e.distance > se) {
++        const elUnder = this.mousePos && document.elementFromPoint(this.mousePos.x, this.mousePos.y);
++        if (elUnder?.closest?.(".bn-side-menu") && (o = this.state) != null && o.show) return;
+         (o = this.state) != null && o.show && (this.state.show = !1, this.updateState(this.state));
+         return;
+       }
+       const t = Ht(this.mousePos, this.pmView);
+       if (!t || !this.editor.isEditable) {
++        const elUnder = this.mousePos && document.elementFromPoint(this.mousePos.x, this.mousePos.y);
++        if (elUnder?.closest?.(".bn-side-menu") && (r = this.state) != null && r.show) return;
+         (r = this.state) != null && r.show && (this.state.show = !1, this.updateState(this.state));
+         return;
+       }

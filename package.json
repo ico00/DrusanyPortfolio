@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "patch-package",
     "press:dimensions": "node scripts/add-press-dimensions.mjs",
     "gear:dimensions": "node scripts/add-gear-dimensions.mjs",
     "blog:import": "node scripts/import-wordpress-blog.mjs",
@@ -60,6 +61,7 @@
     "basic-ftp": "^5.2.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "patch-package": "^8.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

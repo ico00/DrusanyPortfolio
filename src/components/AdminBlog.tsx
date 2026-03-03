@@ -275,6 +275,10 @@ export default function AdminBlog({
     existingSize: number | null;
   } | null>(null);
   const duplicateResolveRef = useRef<((action: "overwrite" | "add" | "cancel") => void) | null>(null);
+  const [deleteImageConfirmModal, setDeleteImageConfirmModal] = useState<{
+    count: number;
+    onConfirm: () => void;
+  } | null>(null);
   const applyToAllRef = useRef<"overwrite" | "add" | "cancel" | null>(null);
   const [selectedGalleryUrls, setSelectedGalleryUrls] = useState<Set<string>>(new Set());
   const initialFormRef = useRef<string | null>(null);
@@ -392,6 +396,15 @@ export default function AdminBlog({
     const maxPage = Math.max(1, Math.ceil(filteredCount / ADMIN_POSTS_PER_PAGE));
     if (listPage > maxPage) setListPage(maxPage);
   }, [filteredCount, listPage]);
+
+  const listPageChangedRef = useRef(false);
+  useEffect(() => {
+    if (!listPageChangedRef.current) {
+      listPageChangedRef.current = true;
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [listPage]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -680,6 +693,19 @@ export default function AdminBlog({
     []
   );
 
+  const closeDeleteImageConfirmModal = useCallback(() => {
+    setDeleteImageConfirmModal(null);
+  }, []);
+
+  useEffect(() => {
+    if (!deleteImageConfirmModal) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeDeleteImageConfirmModal();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [deleteImageConfirmModal, closeDeleteImageConfirmModal]);
+
   const bodyRef = useRef<string | null>(null);
   const bodyDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const BODY_DEBOUNCE_MS = 200;
@@ -842,10 +868,7 @@ export default function AdminBlog({
 
   const deselectAllGallery = () => setSelectedGalleryUrls(new Set());
 
-  const handleBulkDeleteGallery = async () => {
-    if (selectedGalleryUrls.size === 0) return;
-    if (!confirm(ADMIN_UI.blog.deleteImagesConfirm(selectedGalleryUrls.size))) return;
-    const urls = Array.from(selectedGalleryUrls);
+  const doBulkDeleteGalleryWithUrls = useCallback(async (urls: string[]) => {
     const urlSet = new Set(urls);
     setForm((f) => {
       const nextMeta = { ...f.galleryMetadata };
@@ -863,6 +886,18 @@ export default function AdminBlog({
       if (!ok) failed++;
     }
     showToast(failed > 0 ? "error" : "success", failed > 0 ? ADMIN_UI.blog.deleteFailed(failed) : ADMIN_UI.blog.removedFromGallery);
+  }, []);
+
+  const handleBulkDeleteGallery = () => {
+    if (selectedGalleryUrls.size === 0) return;
+    const urls = Array.from(selectedGalleryUrls);
+    setDeleteImageConfirmModal({
+      count: urls.length,
+      onConfirm: () => {
+        closeDeleteImageConfirmModal();
+        void doBulkDeleteGalleryWithUrls(urls);
+      },
+    });
   };
 
   const handleBulkApplyMetadata = () => {
@@ -1099,9 +1134,6 @@ export default function AdminBlog({
                     }
                   />
                 </div>
-                <span className="text-xs text-zinc-500">
-                  {form.status === "draft" ? ADMIN_UI.blog.draftHint : ADMIN_UI.blog.publishedHint}
-                </span>
               </div>
               <div className="flex items-center gap-3">
                 <label className="text-sm text-zinc-400">{ADMIN_UI.blog.featuredPost}</label>
@@ -1109,7 +1141,7 @@ export default function AdminBlog({
                 type="button"
                 onClick={() => {
                   if (!form.featured) {
-                    const featuredCount = posts.filter((p) => p.featured && p.id !== form.id).length;
+                    const featuredCount = posts.filter((p) => p.featured && p.id !== editingId).length;
                     if (featuredCount >= 3) {
                       showToast("error", ADMIN_UI.blog.maxFeaturedReached);
                       return;
@@ -1130,9 +1162,6 @@ export default function AdminBlog({
                   strokeWidth={1.5}
                 />
               </button>
-              <span className="text-xs text-zinc-500">
-                {form.featured ? ADMIN_UI.blog.showsInWidget : ADMIN_UI.blog.addToFeatured}
-              </span>
               </div>
             </div>
             <div className="rounded-lg border-2 border-sky-500/30 bg-sky-950/25 p-4 ring-1 ring-sky-500/10">
@@ -1486,8 +1515,13 @@ export default function AdminBlog({
                             setThumbnailCacheBust(`${Date.now()}-${Math.random().toString(36).slice(2)}`);
                           }}
                           onRemove={() => {
-                            if (!confirm(ADMIN_UI.blog.deleteImagesConfirm(1))) return;
-                            removeGalleryImage(url);
+                            setDeleteImageConfirmModal({
+                              count: 1,
+                              onConfirm: () => {
+                                closeDeleteImageConfirmModal();
+                                removeGalleryImage(url);
+                              },
+                            });
                           }}
                         />
                       ))}
@@ -1954,6 +1988,38 @@ export default function AdminBlog({
         })()}
       </div>
       </>
+      )}
+
+      {deleteImageConfirmModal && (
+        <div
+          className={ADMIN_UI.modal.overlay}
+          onClick={closeDeleteImageConfirmModal}
+        >
+          <div
+            className={ADMIN_UI.modal.card}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className={ADMIN_UI.modal.body}>
+              {ADMIN_UI.blog.deleteImagesConfirm(deleteImageConfirmModal.count)}
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={closeDeleteImageConfirmModal}
+                className={ADMIN_UI.buttons.secondary}
+              >
+                {ADMIN_UI.blog.deleteImageModal.cancel}
+              </button>
+              <button
+                type="button"
+                onClick={() => deleteImageConfirmModal.onConfirm()}
+                className={ADMIN_UI.buttons.danger}
+              >
+                {ADMIN_UI.blog.deleteImageModal.confirm}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {duplicateModal && (

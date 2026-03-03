@@ -7,6 +7,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Blog lista – trenutno učitavanje na vrhu umjesto smooth scrolla */
+html[data-blog-list] {
+  scroll-behavior: auto;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

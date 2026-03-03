@@ -8,7 +8,6 @@ import Header from "@/components/Header";
 import ProseContent from "@/components/ProseContent";
 import BlogGallery from "@/components/BlogGallery";
 import BlogSidebar from "@/components/blog/BlogSidebar";
-import SearchWidget from "@/components/blog/SearchWidget";
 import ScrollToTop from "@/components/blog/ScrollToTop";
 import ViewfinderOverlay from "@/components/ViewfinderOverlay";
 import { getBlog, getBlogPost, getPublishedPosts } from "@/lib/blog";
@@ -144,12 +143,6 @@ export default async function BlogPostPage({
       </Suspense>
 
       <div className="mx-auto max-w-7xl px-6 py-24">
-        {/* Mobile: search na vrhu – vizual kao na gallery (donja crta, bez okvira) */}
-        <div className="mb-6 lg:hidden">
-          <Suspense fallback={<div className="h-12 animate-pulse rounded border-b border-zinc-200" />}>
-            <SearchWidget variant="minimal" />
-          </Suspense>
-        </div>
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           <article className="min-w-0 flex-1">
             <header>
@@ -262,7 +255,7 @@ export default async function BlogPostPage({
 
           <aside className="w-full shrink-0 lg:w-80">
             <div className="sticky top-24">
-              <BlogSidebar posts={publishedPosts} />
+              <BlogSidebar posts={publishedPosts} searchOnMobile />
             </div>
           </aside>
         </div>

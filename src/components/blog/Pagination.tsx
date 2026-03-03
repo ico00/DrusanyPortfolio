@@ -3,22 +3,28 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-/** Build href for a page: 1 = /blog, 2+ = /blog/page/N */
-function pageHref(page: number): string {
-  return page === 1 ? "/blog" : `/blog/page/${page}`;
+/** Build href for a page: 1 = /blog, 2+ = /blog/page/N. Preserves query params when provided. */
+function pageHref(page: number, queryString?: string): string {
+  const base = page === 1 ? "/blog" : `/blog/page/${page}`;
+  if (queryString?.trim()) {
+    return `${base}?${queryString}`;
+  }
+  return base;
 }
 
 export default function Pagination({
   currentPage,
   totalPages,
+  queryString,
 }: {
   currentPage: number;
   totalPages: number;
+  queryString?: string;
 }) {
   if (totalPages <= 1) return null;
 
-  const prevHref = currentPage > 1 ? pageHref(currentPage - 1) : null;
-  const nextHref = currentPage < totalPages ? pageHref(currentPage + 1) : null;
+  const prevHref = currentPage > 1 ? pageHref(currentPage - 1, queryString) : null;
+  const nextHref = currentPage < totalPages ? pageHref(currentPage + 1, queryString) : null;
 
   /** Page numbers to show: first, last, current, current±1, with ellipsis when far */
   const show = new Set<number>([1, totalPages, currentPage, currentPage - 1, currentPage + 1]);
@@ -73,7 +79,7 @@ export default function Pagination({
           ) : (
             <Link
               key={p}
-              href={pageHref(p)}
+              href={pageHref(p, queryString)}
               className="inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-md px-2 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
             >
               {p}

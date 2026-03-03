@@ -3,6 +3,8 @@
 /**
  * Floating popup sa stilovima bloka koji se pojavljuje iznad trenutnog bloka
  * kad je kursor u editoru. Koristi PositionPopover za pozicioniranje.
+ * Prikazuje se samo kad editor ima fokus – inače bi se pri učitavanju prikazivao
+ * u zadnjem (trailing) bloku gdje ProseMirror postavlja kursor po defaultu.
  */
 import { flip, offset, shift } from "@floating-ui/react";
 import {
@@ -10,11 +12,27 @@ import {
   useBlockNoteEditor,
   useEditorState,
 } from "@blocknote/react";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { BlockTypeSelectWithCursor } from "./BlockTypeSelectWithCursor";
 
 export function FloatingBlockTypeBar() {
   const editor = useBlockNoteEditor();
+  const [hasFocus, setHasFocus] = useState(false);
+
+  useEffect(() => {
+    const el = editor?.domElement;
+    if (!el) return;
+    const onFocusIn = () => setHasFocus(true);
+    const onFocusOut = (e: FocusEvent) => {
+      if (!el.contains(e.relatedTarget as Node)) setHasFocus(false);
+    };
+    el.addEventListener("focusin", onFocusIn);
+    el.addEventListener("focusout", onFocusOut);
+    return () => {
+      el.removeEventListener("focusin", onFocusIn);
+      el.removeEventListener("focusout", onFocusOut);
+    };
+  }, [editor?.domElement]);
 
   // Pozicija kursora – prikaži samo kad je collapsed selection (samo kursor, bez označenog teksta)
   // Kad je selekcija, FormattingToolbar se već prikazuje
@@ -39,7 +57,9 @@ export function FloatingBlockTypeBar() {
   });
 
   // PositionPopover treba editor.domElement?.firstElementChild – bez toga baca "isConnected" TypeError
+  // Prikaži samo kad editor ima fokus – sprječava prikaz u zadnjem bloku pri učitavanju
   const position =
+    hasFocus &&
     rawPosition &&
     editor?.domElement?.firstElementChild &&
     editor?.prosemirrorView
