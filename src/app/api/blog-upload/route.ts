@@ -6,6 +6,7 @@ import { getBlogUploadDir } from "@/lib/blog";
 import { hasValidImageSignature } from "@/lib/imageValidation";
 import { getExifExtras } from "@/lib/exif";
 import { checkRateLimit } from "@/lib/rateLimit";
+import { requireDevApiResponse } from "@/lib/apiDevOnly";
 import { slugify } from "@/lib/slug";
 import { fileExists } from "@/lib/fileUtils";
 import { sanitizeFilename } from "@/lib/utils";
@@ -35,12 +36,8 @@ const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
 export async function POST(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return Response.json(
-      { error: "Samo u development modu" },
-      { status: 403, headers: { "Content-Type": "application/json" } }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const formData = await request.formData();

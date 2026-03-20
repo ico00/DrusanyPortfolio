@@ -44,6 +44,12 @@ const YOUTUBE_EMBED_REGEX = /^https?:\/\/(?:www\.)?youtube\.com\/embed\/[\w-]+(?
 
 const PROSE_ALLOWED_ATTRIBUTES: Record<string, string[]> = {
   a: ["href", "target", "rel", "title"],
+  h1: ["id"],
+  h2: ["id"],
+  h3: ["id"],
+  h4: ["id"],
+  h5: ["id"],
+  h6: ["id"],
   img: ["src", "alt", "title", "width", "data-text-alignment", "data-display-width", "data-preview-width", "data-prose-split", "data-name", "data-url"],
   span: ["class"],
   td: ["colspan", "rowspan"],

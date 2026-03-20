@@ -5,6 +5,7 @@ import type { BlogGalleryMetadata, BlogSeo } from "@/lib/blog";
 import { withLock } from "@/lib/jsonLock";
 import { checkRateLimit } from "@/lib/rateLimit";
 import { normalizeBlogSlug } from "@/lib/slug";
+import { requireDevApiResponse } from "@/lib/apiDevOnly";
 
 const BLOG_JSON_PATH = path.join(process.cwd(), "src", "data", "blog.json");
 
@@ -44,12 +45,8 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return Response.json(
-      { error: "Only available in development mode" },
-      { status: 403, headers: { "Content-Type": "application/json" } }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const body = (await request.json()) as {
@@ -134,12 +131,8 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return Response.json(
-      { error: "Only available in development mode" },
-      { status: 403, headers: { "Content-Type": "application/json" } }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const body = (await request.json()) as {
@@ -296,12 +289,8 @@ export async function PUT(request: Request) {
 export async function DELETE(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return Response.json(
-      { error: "Only available in development mode" },
-      { status: 403, headers: { "Content-Type": "application/json" } }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const { searchParams } = new URL(request.url);

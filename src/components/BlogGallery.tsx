@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Camera } from "lucide-react";
 import type { BlogGalleryImage } from "@/lib/blog";
+import { useColumnCount } from "@/hooks/useColumnCount";
 
 const COPYRIGHT_START = 2026;
 
@@ -16,26 +17,8 @@ function getCopyrightYear(): string {
 }
 
 const SWIPE_THRESHOLD = 50;
-const BREAKPOINTS = [640, 768, 1024] as const;
 const INITIAL_COUNT = 24;
 const LOAD_MORE_BATCH = 24;
-
-function useColumnCount(): number {
-  const [cols, setCols] = useState(4);
-  useEffect(() => {
-    const getCols = (w: number) => {
-      if (w < BREAKPOINTS[0]) return 1;
-      if (w < BREAKPOINTS[1]) return 2;
-      if (w < BREAKPOINTS[2]) return 3;
-      return 4;
-    };
-    const update = () => setCols(getCols(window.innerWidth));
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-  return cols;
-}
 
 interface BlogGalleryProps {
   images: BlogGalleryImage[];

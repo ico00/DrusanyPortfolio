@@ -1,6 +1,7 @@
 import { getTheme, saveTheme } from "@/lib/theme";
 import type { ThemeConfig } from "@/lib/theme";
 import { checkRateLimit } from "@/lib/rateLimit";
+import { requireDevApiResponse } from "@/lib/apiDevOnly";
 
 export const dynamic = "force-static";
 
@@ -20,12 +21,8 @@ export async function GET() {
 export async function PUT(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return Response.json(
-      { error: "Only available in development mode" },
-      { status: 403 }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const body = (await request.json()) as ThemeConfig;

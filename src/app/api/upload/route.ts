@@ -15,47 +15,17 @@ import {
 import { generateSlug, slugify } from "@/lib/slug";
 import { fileExists } from "@/lib/fileUtils";
 import { sanitizeFilename, sanitizeFolderName } from "@/lib/utils";
+import { requireDevApiResponse } from "@/lib/apiDevOnly";
+import type { GalleryImage, GalleryData } from "@/lib/getGallery";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
 
-export interface GalleryImage {
-  id: string;
-  title: string;
-  category: string;
-  alt: string;
-  src: string;
-  thumb: string;
-  width: number;
-  height: number;
-  capturedAt: string;
-  createdAt: string;
-  isHero?: boolean;
-  camera?: string;
-  lens?: string;
-  exposure?: string;
-  aperture?: string;
-  iso?: number;
-  venue?: string;
-  sport?: string;
-  foodDrink?: string;
-  keywords?: string;
-  slug?: string;
-}
-
-export interface GalleryData {
-  images: GalleryImage[];
-}
-
 export async function POST(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return new Response(
-      JSON.stringify({ error: "Upload only available in development mode" }),
-      { status: 403, headers: { "Content-Type": "application/json" } }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const formData = await request.formData();

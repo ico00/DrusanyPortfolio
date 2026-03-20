@@ -120,11 +120,11 @@ Struktura kategorija s roditeljima i podkategorijama (npr. Sport → Nogomet, Ru
 
 ### 3.3.2 Blog Widgets: `src/data/blogWidgets.json`
 
-Konfiguracija sidebara na blog stranici. Struktura: `{ "widgets": [ { "id", "type", "enabled", "title", ... } ] }`. Tipovi: **search** (filter-as-you-type; text-base 16px – sprječava iOS Safari zoom), **categories** (kategorije s linkovima), **featured-posts** (istaknuti članci – postovi s `featured: true`, **max 3** – validacija u AdminBlog i API, toast `maxFeaturedReached` pri prekoračenju), **plans** (planirani snimanja – lista iz `plans.json`, datum + naziv, sortirano po datumu), **maps** (locations s embedUrl iz Google My Maps – `mid=` parametar). *Instagram widget uklonjen.*
+Konfiguracija sidebara na blog stranici. Struktura: `{ "widgets": [ { "id", "type", "enabled", "title", ... } ] }`. Tipovi: **search** (filter-as-you-type; text-base 16px – sprječava iOS Safari zoom), **categories** (kategorije s linkovima), **featured-posts** (istaknuti članci – postovi s `featured: true`, **max 3** – validacija u AdminBlog i API, toast `maxFeaturedReached` pri prekoračenju), **plans** (planirani snimanja – lista iz `plans.json`, datum + naziv, sortirano po datumu), **maps** (locations s embedUrl iz Google My Maps – `mid=` parametar). *Instagram widget uklonjen.* **Stilovi javnog sidebara:** `BLOG_WIDGET_UI` u `blogWidgetUI.ts` – uključujući `rowHover`, `itemActive`/`itemInactive` (`border-l-2` na hoveru/aktivnom linku), `inputWrapper` za search. **Admin uređivanje:** `parseBlogWidgetsPayload` / `saveBlogWidgets` u `lib/blogWidgets.ts`, `GET`/`PUT /api/blog-widgets`.
 
 ### 3.3.2a Planovi: `src/data/plans.json`
 
-Lista planiranih snimanja za widget "Planovi" u blog sidebaru. Struktura: `{ "plans": [ { "date": "YYYY-MM-DD", "name": "Naziv snimanja" } ] }`. Učitava se putem `getPlans()` iz `@/lib/plans`; sortira se po datumu (ascending).
+Lista planiranih snimanja za widget "Planovi" u blog sidebaru. Struktura: `{ "plans": [ { "date": "YYYY-MM-DD", "name": "Naziv snimanja" } ] }`. Učitava se putem `getPlans()` iz `@/lib/plans`; sortira se po datumu (ascending). **Admin:** `parsePlansPayload`, `savePlans`, `getPlansData` u `lib/plans.ts`; `PUT /api/plans` (dev only) – isti guard kao theme/blog-widgets.
 
 ### 3.3.3 Blog EXIF: `src/data/blogExif.json`
 
@@ -283,7 +283,8 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 
 **Funkcionalnost:**
 - **Sidebar accordion:** Samo jedan podmeni (Gallery ili Pages) može biti otvoren; animacija otvaranja/zatvaranja (grid-template-rows)
-- **Theme tab:** Ispod Blog – Customize Theme; **grupne kontrole** (Blog Headings, Blog Body) – mijenjaju više elemenata odjednom; **accordion** – sve sekcije zatvorene po defaultu; elementi: title, headingOnDark, blogPostTitle, blogListCardTitle, blogListCardMetadata, widgetTitle, body, quote, code, nav, caption, headingH1–h6; custom dropdown; live preview; spremanje putem `/api/theme`; za statički export: uređivanje samo u dev modu (`npm run dev`), zatim `npm run build`
+- **Blog widgets tab:** Sidebar stavka „Blog widgets“ (`/admin?tab=widgets`, ikona LayoutGrid, fuchsia naglasak) – komponenta **`BlogWidgetsAdmin`**; učitavanje `GET /api/blog-widgets` + `GET /api/plans` (paralelno); **Save widgets** → `PUT /api/blog-widgets`; **Save plans** (unutar expanda Plans retka) → `PUT /api/plans`. Redoslijed widgeta (dnd-kit); po retku: prikaz u sidebaru, naslov; **maps** – expand za lokacije/embed URL; **plans** – expand za listu događaja (datum + naziv). **Layout retka (md+):** CSS grid s fiksnim širinama prvih stupaca (`2.25rem` drag, `10.5rem` badge, `minmax(10.5rem,12.5rem)` checkbox+label, `minmax(0,1fr)` Title, `auto` akcije) da se polja *Title* poravnaju u stupac; ispod `md` jedan stupac. Tekstovi u **`ADMIN_UI.adminWidgets`**
+- **Theme tab:** Customize Theme; **grupne kontrole** (Blog Headings, Blog Body) – mijenjaju više elemenata odjednom; **accordion** – sve sekcije zatvorene po defaultu; elementi: title, headingOnDark, blogPostTitle, blogListCardTitle, blogListCardMetadata, widgetTitle, body, quote, code, nav, caption, headingH1–h6; custom dropdown; live preview; spremanje putem `/api/theme`; za statički export: uređivanje samo u dev modu (`npm run dev`), zatim `npm run build`
 - **Category-first flow:** Korisnik prvo odabere kategoriju; bez odabira upload je onemogućen
 - **Galerija filtrirana po kategoriji:** Prikazuje se samo galerija odabrane kategorije (ne opća galerija sa svim slikama)
 - Upload novih slika (file input) – slike idu u odabranu kategoriju
@@ -328,6 +329,7 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 - Lista postova s **thumbnail** u popisu, **format datuma** `dd. mm. yyyy.` i **vrijeme u 24h**; **badge** za status (Draft / Objavljeno) i SEO
 - **Filter bar:** Status (All / Draft / Published), Category (višestruki odabir, OR logika), Mjesec (dinamički iz datuma postova), Sort (Najnovije / Najstarije); custom dropdowni (`FilterSelect`, `FilterMultiSelect`); **lista i filter bar skriveni** kad je otvoren formular (edit ili new) – prikazuje se samo forma
 - Polja: **status** (Draft / Published, custom `StatusSelect`; default za novi: Published), title, slug (format `yymmdd-naslov`), **custom DatePicker** za datum, **Category** (višestruki odabir, abecedno sortirane), thumbnail (opcionalno), **sadržaj (BlockNote)** – iznad galerije, galerija (drag-and-drop, bulk delete, select all)
+- **Metadata u jednom redu:** Datum, vrijeme (`type="time"`), Status i Featured post (`Star`) u zajedničkom `flex` kontejneru (`flex-wrap`, `items-end`, `gap-x-4`); na užim širinama prelom u više redaka
 - **editLoading:** Pri otvaranju uređivanja prikazuje se loader dok se body ne učitava – sprječava BlockNote popover crash (`reference.element` undefined)
 - **formOnly mode** (`/admin/blog/edit/[id]`, `/admin/blog/new`): Učitava samo jedan post putem `GET /api/blog?id=xxx` – bez učitavanja cijele liste (~770 postova); brže učitavanje i manje memorije
 - **Search u filter baru** – pretraga po naslovu, slug-u, kategorijama; URL param `?q=...`; debounce 300ms; isti stil kao AdminMedia
@@ -338,14 +340,14 @@ U produkcijskom buildu (`npm run build`) admin ruta se ne uključuje u output.
 
 **BlockNote editor (BlockNoteEditor.tsx):**
 - **BlockNote** (@blocknote/shadcn) – block-based WYSIWYG, sprema HTML
-- **Toolbar na vrhu bloka:** Block style i Formatting toolbar pojavljuju se **na vrhu bloka** (ne kod kursora) – `FloatingBlockTypeBar` i `BlockTopFormattingToolbarController` koriste block start poziciju (`$from.start()`); placement `top-start` za poravnanje lijevo
-- **FloatingBlockTypeBar:** Label "Block style:"; prikazuje trenutni stil bloka kad je kursor u bloku (bez označavanja teksta); prikazuje se **samo kad editor ima fokus** (sprječava popup u trailing bloku pri učitavanju); dropdown za promjenu tipa (Paragraph, Heading 1–6, Quote, **Code block**, **YouTube video**, itd.) – `blockTypeSelectItemsWithCodeBlock` proširuje default listu
-- **BlockTopFormattingToolbarController:** Custom FormattingToolbarController koji pozicionira Bold/Italic/link toolbar na vrh bloka; koristi se umjesto default FormattingToolbarController
+- **Formatting toolbar na vrhu bloka:** `BlockTopFormattingToolbarController` pozicionira Bold/Italic/link na vrh bloka (block start `$from.start()`, `placement: top-start`); prikaz i uz **prazan kursor** u tekstualnom bloku (ne samo uz selekciju), uz iste iznimke kao BlockNote (npr. bez prikaza u code/media blokovima dok nema selekcije)
+- **Tip bloka:** bez plutajuće „Block style“ trake – koristi **slash menu** (`/`) za umetanje tipova (Heading, Quote, Code block, YouTube, …); proširenja u `getSlashMenuItems` / `BlockTypeSelectWithCursor` (`blockTypeSelectItemsWithCodeBlock`) i dalje vrijede za slash / eventualnu statičku traku
 - **Tamna tema:** `data-theme="dark"` na html kad je admin otvoren; zinc/amber paleta; **jedinstvena pozadina** (zinc-800) – traka i sadržaj isti ton; **svjetliji tekst** (zinc-100) za bolju čitljivost
 - **Okvir blokova:** Svaki blok ima lagani tanki okvir (`border: 1px solid zinc-600`), zaobljene uglove (`border-radius: 0.375rem`) i padding (`0.5rem 0.75rem`) – globals.css `.bn-block-outer`
 - **Fontovi u editoru = fontovi na stranici:** font-sans (body), font-serif (naslovi) – WYSIWYG
-- **Formatting Toolbar:** Neprozirna pozadina (zinc-800), svijetli tekst; dropdowni (Block style, izbornici) također neprozirni
-- **File/Image panel (`/image`):** Neprozirna pozadina (`.bn-panel`, `.bn-panel-popover`); **modal** – centriran kad je otvoren, scroll stranice zaključan (`FilePanelScrollLock`); **Upload tab** – ako se proslijedi `uploadFile` prop (AdminBlog kada ima slug i datum), slike se uploadaju u `content/` putem `/api/blog-upload` type `content`; **Media tab** – odabir postojeće slike iz biblioteke (`/api/media`); **Embed tab** – unos URL-a
+- **Formatting Toolbar:** Neprozirna pozadina (zinc-800), svijetli tekst; dropdowni u toolbaru također neprozirni
+- **File/Image panel (`/image`):** Neprozirna pozadina (`.bn-panel`, `.bn-panel-popover`); **modal** – centriran kad je otvoren, scroll stranice zaključan (`FilePanelScrollLock`); **Upload tab** – **`BlogUploadTab`** (`src/components/blocknote/BlogUploadTab.tsx`): drag-and-drop zona + nativni file input (zamjena za default `UploadTab` u `BlogFilePanel`); engleski tekst *Drag and drop file here or Choose file*; otvaranje file pickera preko `querySelector('input[type="file"]')` jer shadcn `FileInput` nema `ref` u tipovima. **`globals.css`:** `.bn-panel input[type="file"].bn-file-input` – stiliziranje `::file-selector-button` / `::-webkit-file-upload-button` (razmak i rub između gumba i teksta „No file chosen“). Ako se proslijedi `uploadFile` prop (AdminBlog kada ima slug i datum), slike idu u `content/` putem `/api/blog-upload` type `content`; **Media tab** – odabir postojeće slike (`/api/media`); **Embed tab** – unos URL-a
+- **Tooltipovi toolbar gumba (Bold, Italic, …):** Radix `[data-slot="tooltip-content"]` – u admin tamnoj temi (`[data-theme="dark"]` na `html`) crna pozadina, rub i blaga sjena (`globals.css`), da se ne stapaju s `zinc-800`
 - **Resize ručice:** Slike imaju drag-handles (lijevo/desno) za promjenu širine; vidljive u dark modu (svijetla pozadina); default širina uploadanih slika: 512px (`previewWidth`)
 
 ### 4.5 API Routes (dev only)
@@ -514,6 +516,22 @@ Svi API endpointi provjeravaju `process.env.NODE_ENV !== 'production'` i vraćaj
 - **PUT:** **Rate limit** provjera; prima `ThemeConfig`, sprema u `theme.json`; dostupno samo u development modu
 - **force-static** – obavezno za kompatibilnost s `output: export`; bez toga Next.js baca grešku
 
+#### `/api/blog-widgets` (GET, PUT)
+
+**Lokacija:** `src/app/api/blog-widgets/route.ts`
+
+- **GET:** Vraća `{ widgets }` iz `src/data/blogWidgets.json` (isti izvor kao `getBlogWidgets()` na blogu)
+- **PUT:** **Rate limit**; validacija (`parseBlogWidgetsPayload` u `lib/blogWidgets.ts`); sprema JSON; **samo dev** (`requireDevApiResponse`)
+- **force-static** na ruti – kao `/api/theme`
+
+#### `/api/plans` (GET, PUT)
+
+**Lokacija:** `src/app/api/plans/route.ts`
+
+- **GET:** Vraća `{ plans }` iz `src/data/plans.json` (`getPlansData` / `getPlans`)
+- **PUT:** **Rate limit**; `parsePlansPayload` + `savePlans` u `lib/plans.ts`; **samo dev**
+- **force-static** – kao `/api/theme`
+
 ---
 
 ## 5. Static Export Configuration
@@ -566,7 +584,7 @@ fontSize: {
 **Balanced Left-to-Right Masonry (implementirano)**
 
 - **Balansirana raspodjela** – slike se dodaju u stupac s najmanjom trenutnom visinom (shortest column first); rezultat: stupci približno jednake visine, minimalne praznine
-- **useColumnCount hook:** Određuje broj stupaca prema viewportu (1 col &lt;640px, 2 cols 640–768px, 3 cols 768–1024px, 4 cols ≥1024px)
+- **useColumnCount hook:** `src/hooks/useColumnCount.ts` – preset `gallery`: 1 col &lt;640px, 2 cols 640–768px, 3 cols 768–1024px, 4 cols ≥1024px (Gallery, BlogGallery); preset `press`: 2 stupca / 3 na širokim (PressSection)
 - **imageColumns algoritam:** Niz `heights` (jedan po stupcu, inicijalno 0). Za svaku sliku: `aspectRatio = height/width`; slika ide u stupac s `Math.min(...heights)`; `heights[shortestIdx] += aspectRatio`
 - **Redoslijed:** Slike se obrađuju sekvencijalno iz `filteredImages` – prve idu u prazne stupce (1, 2, 3, 4 u prvom redu), zatim se popunjavaju rupe; redoslijed se prirodno održava
 - **Layout:** `display: grid` s `grid-template-columns: repeat(columnCount, 1fr)`; svaki stupac je `flex flex-col` s `gap-2 sm:gap-4`
@@ -633,7 +651,7 @@ npm run dev
 - Pokreće dev server na `http://localhost:3000`
 - **dev:open** – `npm run dev:open` ili `./scripts/dev-and-open.sh`: otvara novi Terminal prozor s dev serverom, čeka da server starta, zatim otvara Chrome s 2 taba (localhost:3000, localhost:3000/admin)
 - Admin panel dostupan na `/admin`
-- API routes aktivne: `/api/upload`, `/api/exif-preview`, `/api/update`, `/api/delete`, `/api/hero`, `/api/reorder`, `/api/gallery`, `/api/gallery/generate-slugs`, `/api/media`, `/api/media-delete`, `/api/media-detach`, `/api/content-health`, `/api/health`, `/api/pages`, `/api/blog`, `/api/theme`
+- API routes aktivne: `/api/upload`, `/api/exif-preview`, `/api/update`, `/api/delete`, `/api/hero`, `/api/reorder`, `/api/gallery`, `/api/gallery/generate-slugs`, `/api/media`, `/api/media-delete`, `/api/media-detach`, `/api/content-health`, `/api/health`, `/api/pages`, `/api/blog`, `/api/blog-widgets`, `/api/plans`, `/api/theme`
 - Hot reload za brze promjene
 
 ### 7.2.1 Skripte za održavanje
@@ -732,7 +750,8 @@ DrusanyPortfolio/
 │   │   ├── ContactForm.tsx       # Kontakt forma (Formspree); name, email, subject, message
 │   │   ├── PressSection.tsx      # About – objavljene fotografije (masonry)
 │   │   ├── GearSection.tsx       # About – fotografska oprema (grupirano po kategorijama: Cameras, Lenses, Accessories; kartice, bez lightboxa)
-│   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog, Media, Theme)
+│   │   ├── AdminClient.tsx       # Admin UI (Dashboard, Gallery, Pages, Blog, Media, Blog widgets, Theme)
+│   │   ├── BlogWidgetsAdmin.tsx  # /admin?tab=widgets – blog sidebar widgeti (dnd, maps embeds)
 │   │   ├── AdminMedia.tsx       # Media library (agregirani prikaz, filter, search, paginacija, detach, bulk)
 │   │   ├── AdminDashboard.tsx    # Dashboard – kartice (Portfolio, Blog, Portfolio Categories, Blog Categories, Static pages, Blog posts); bar chart "Images by category in portfolio"; **stacked bar chart** "Images by category in blog" – glavne kategorije na X-osi, podkategorije (npr. Atletika, Nogomet) kao segmenti unutar stupca; Content health s ikonama – Camera, Tag, ImageOff, Search
 │   │   ├── AdminPages.tsx        # About/Contact editor (BlockNote, quote, FormspreeEndpoint)
@@ -741,14 +760,14 @@ DrusanyPortfolio/
 │   │   ├── BlogList.tsx          # Lista blog postova (metapodaci, filtriranje)
 │   │   ├── blocknote/
 │   │   │   ├── BlogFilePanel.tsx       # Upload + Media + Embed tabovi
+│   │   │   ├── BlogUploadTab.tsx       # Upload tab: drag-and-drop + file input
 │   │   │   ├── FilePanelScrollLock.tsx # Scroll lock + modal kad je File Panel otvoren
 │   │   │   └── MediaLibraryTab.tsx     # Odabir postojeće slike iz /api/media
 │   │   ├── BlockNoteEditor.tsx   # BlockNote WYSIWYG (HTML)
 │   │   ├── BlockNoteEditorDynamic.tsx  # Dynamic import, ssr: false
 │   │   ├── BlockNoteErrorBoundary.tsx  # Error boundary za BlockNote editor
 │   │   ├── BlockTopFormattingToolbarController.tsx  # Formatting toolbar na vrhu bloka
-│   │   ├── FloatingBlockTypeBar.tsx    # Block style bar na vrhu bloka (block start pozicija)
-│   │   ├── StaticBlockTypeBar.tsx # Traka stila bloka (cursor position)
+│   │   ├── StaticBlockTypeBar.tsx # (nije u upotrebi) Traka stila bloka – BlockTypeSelectWithCursor
 │   │   ├── DateTimePicker.tsx    # Datum + vrijeme (react-day-picker, tamna tema)
 │   │   ├── DatePicker.tsx        # Samo datum (Blog)
 │   │   ├── AdminDateDropdown.tsx # Custom dropdown mjesec/godina (admin)
@@ -765,12 +784,12 @@ DrusanyPortfolio/
 │   │   ├── HeroSlider.tsx    # 6 category slides, auto-play 4s, wheel/swipe/strelicama lijevo-desno
 │   │   └── HomeContent.tsx   # Conditional Hero/Gallery; overflow hidden na hero
 │   ├── lib/
-│   │   ├── blogWidgets.ts   # getBlogWidgets – čitanje blogWidgets.json
+│   │   ├── blogWidgets.ts   # getBlogWidgets, parseBlogWidgetsPayload, saveBlogWidgets (admin PUT)
 │   │   ├── blogCleanup.ts  # Pri promjeni slug-a/datuma: preimenuje folder, ažurira blog.json, blogExif, HTML sadržaj; briše stari slug.html; brisanje posta
 │   │   ├── exif.ts         # Zajednički EXIF modul (formatExposure, formatAperture, getExifExtras, getExifDescription, getKeywords, dateToISO, formatDateForInput)
 │   │   ├── getGallery.ts   # Čitanje gallery.json, sortiranje po order (pa capturedAt desc), generiranje slug
 │   │   ├── gear.ts         # getGear – čitanje gear.json
-│   │   ├── plans.ts        # getPlans – čitanje plans.json (planirani snimanja za widget)
+│   │   ├── plans.ts        # getPlans, getPlansData, parsePlansPayload, savePlans (admin PUT)
 │   │   ├── imageValidation.ts # Magic bytes provjera (JPEG/PNG/GIF/WebP)
 │   │   ├── jsonLock.ts     # File locking (proper-lockfile) za gallery, blog, pages
 │   │   ├── pages.ts        # getPages, savePages – About/Contact; sanitizeProseHtml pri čitanju
@@ -845,6 +864,7 @@ DrusanyPortfolio/
 - **Logo:** Inline SVG komponenta `DrusanyLogo` (iz `public/drusany-logo.svg`), poravnat na lijevo (`preserveAspectRatio="xMinYMid meet"`), eksplicitna boja (#ffffff hero / #18181b kategorije)
 - **Layout:** Bez `mx-auto` – sadržaj poravnat na lijevo; smanjen lijevi padding (`pl-4`)
 - **Pozadina:** Na stranici s kategorijom uvijek bijela pozadina (`bg-white/95`); na hero-u transparent, pri scrollu tamna
+- **forceLightMode:** Opcionalni prop – kad je `true`, forsira svijetli header (bijela pozadina, tamni tekst) bez obzira na `usePathname()`. Koristi se na blog stranicama (BlogListLayout, blog/[slug]/page.tsx) jer `usePathname()` može tijekom hydration nakon punog refresha (Ctrl+R) vratiti pogrešnu vrijednost – header bi tada mislio da je na home stranici i prikazivao transparentan/tamni stil; pri skrolanju bi se pojavila tamna verzija. Prosljeđivanjem `forceLightMode` iz server komponente zaobilazimo oslanjanje na client-side pathname
 - **Linkovi:** Home, Portfolio (dropdown kategorija), About, Blog, Contact
 - **HeroSlider:** "View Gallery" link (ne "View Project"); prikaz **title @ venue** ako postoji
 - **Aktivna stranica:** `usePathname` + `useSearchParams` za određivanje trenutne lokacije; crta ispod (`border-b`) aktivnog linka na desktopu; crta lijevo (`border-l-2`) u Portfolio dropdownu i mobilnom izborniku
@@ -917,7 +937,7 @@ Fiksna lista u `CategorySelect` i `Header`: concerts, sport, animals, interiors,
 | **Pouzdanost** | File locking (JSON), čišćenje orphan datoteka (blog slug), HTTP 500 pri greškama |
 | **Admin features** | Sidebar accordion (Gallery/Pages); Category-first flow; Upload; EXIF preview (datum fallback: DateTimeOriginal→CreateDate→DateTime→ModifyDate); **custom DateTimePicker** (datum+vrijeme); **DatePicker** (Blog); **AdminDateDropdown** (mjesec/godina); CategorySelect, VenueSelect, SportSelect; Edit modal (**slug as you type**); Hero toggle; Delete; **drag-and-drop sortiranje**; **AdminPages** (About/Contact), **AdminBlog** – **status** (draft/published, StatusSelect), **filter bar** (Status, Category multi, Mjesec, Sort; lista skrivena kad je forma otvorena), BlockNote editor s StaticBlockTypeBar (**Block style** label, **debounced body** 200ms), **formOnly** učitava samo jedan post (`?id=`), **upload slika u sadržaj** (content/), **editLoading** (sprječava popover crash); **BlogCategorySelect** (abecedno); **FilterSelect**, **FilterMultiSelect**; **AdminDashboard** – stacked bar chart za blog kategorije (glavne kategorije, podkategorije kao segmenti); **AdminMedia** – agregirani prikaz slika (portfolio, blog, stranice), filter, search as you type, paginacija (25/stranica, Go to page), lightbox, Download/Copy URL/Detach/Delete, **multiple selection** (bulk Delete, Download, Copy URLs, Detach); **Theme** – Customize Theme (font, veličina, boja za title, heading, **headingOnDark**, body, quote, nav, caption); custom dropdown; live preview; **toast** (emerald/red, Check/AlertCircle); **Dashboard** (Recharts bar/pie, tooltip stilizacija); **Content health** – metrike s ikonama (Camera, Tag, ImageOff, Search), chips layout; klik otvara galeriju s filterom ili Blog; Media link u sidebaru i na `/admin/blog` ruti; `?tab=media` u URL-u za direktan pristup |
 | **Home** | HeroSlider (6 slides, auto-play 4s, strelice lijevo-desno, "View Gallery", title @ venue) ili masonry Gallery po `?category`; hero samo ručno odabrana |
-| **Header** | Logo (inline SVG), poravnanje lijevo, Search u nav (kad galerija, expandable hover), aktivna stranica (border-b/border-l), hover efekti (Safari: inline-block, eksplicitne boje) |
+| **Header** | Logo (inline SVG), poravnanje lijevo, Search u nav (kad galerija, expandable hover), aktivna stranica (border-b/border-l), hover efekti (Safari: inline-block, eksplicitne boje); **forceLightMode** na blogu (zaobilazi usePathname hydration) |
 | **Custom Cursor** | Dot (useMotionValue, trenutni odziv) + aperture (useSpring, kašnjenje), mix-blend-difference, desktop only |
 | **Gallery** | Balanced masonry (shortest column, heights array, aspect ratio); stupci približno jednake visine; useColumnCount (1–4 stupaca), venue filter (Concerts), sport filter (Sport), hover efekti na filterima; scroll na vrh pri učitavanju; ImageCard hover (title @ venue ili Sport // title, datum); Interiors, Animals bez opisa/datuma |
 | **Lightbox** | Fit-to-screen, numeracija + X na vrhu, caption + EXIF u jednom okviru (crna prozirna pozadina), EXIF toggle (ikona kamere), copyright popup na desni klik, URL sync `?image=slug` |

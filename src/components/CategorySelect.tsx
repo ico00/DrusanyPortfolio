@@ -2,25 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ChevronDown,
-  Music,
-  Trophy,
-  Cat,
-  Home,
-  MapPin,
-  Coffee,
-  Tag,
-} from "lucide-react";
+import { ChevronDown, Tag } from "lucide-react";
+import { PORTFOLIO_CATEGORIES_WITH_ICONS } from "@/data/portfolioCategoryIcons";
 
-export const CATEGORIES = [
-  { slug: "concerts", label: "Concerts", icon: Music },
-  { slug: "sport", label: "Sport", icon: Trophy },
-  { slug: "animals", label: "Animals", icon: Cat },
-  { slug: "interiors", label: "Interiors", icon: Home },
-  { slug: "zagreb", label: "Zagreb", icon: MapPin },
-  { slug: "food-drink", label: "Food & Drink", icon: Coffee },
-] as const;
+export const CATEGORIES = PORTFOLIO_CATEGORIES_WITH_ICONS;
 
 interface CategorySelectProps {
   value: string;

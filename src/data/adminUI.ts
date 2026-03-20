@@ -178,6 +178,42 @@ export const ADMIN_UI = {
     },
   },
 
+  // ─── Blog sidebar widgets (/admin?tab=widgets) ───
+  adminWidgets: {
+    title: "Blog sidebar widgets",
+    description:
+      "Order, visibility, and titles for the widget column on /blog. Map widget: tab labels and embed URLs. Plans widget: edit events in plans.json (Save plans).",
+    save: "Save widgets",
+    saving: "Saving…",
+    saved: "Widgets saved.",
+    saveError: "Failed to save widgets.",
+    loadError: "Failed to load widgets.",
+    unavailableTitle: "Widgets API not available",
+    unavailableBody:
+      "Editing only works in development (npm run dev). In production, edit src/data/blogWidgets.json and rebuild.",
+    shown: "Show in sidebar",
+    titleLabel: "Title",
+    drag: "Drag to reorder",
+    typeLabel: "Type",
+    mapSection: "Map tabs & embed URLs",
+    locationName: "Tab label",
+    embedUrl: "Embed URL",
+    addLocation: "Add map tab",
+    removeLocation: "Remove",
+    expandMaps: "Edit map embeds",
+    collapseMaps: "Hide map embeds",
+    plansSection: "Events in plans.json (Plans widget)",
+    expandPlans: "Edit planned events",
+    collapsePlans: "Hide planned events",
+    planDate: "Date",
+    planName: "Event name",
+    addPlan: "Add event",
+    savePlans: "Save plans",
+    savingPlans: "Saving…",
+    plansSaved: "Plans saved.",
+    savePlansError: "Failed to save plans.",
+  },
+
   // ─── Media (admin media list) ───
   mediaBulk: {
     selectAll: "Select all",

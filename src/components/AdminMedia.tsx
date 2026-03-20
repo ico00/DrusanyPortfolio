@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Image as ImageIcon, Filter, Grid3X3, List, Trash2, Download, Copy, Check, AlertCircle, X, ChevronLeft, ChevronRight, Search, Unlink, Square, CheckSquare } from "lucide-react";
 import type { MediaItem, MediaUsage } from "@/app/api/media/route";
 import { ADMIN_UI } from "@/data/adminUI";
+import { formatAdminTableDate } from "@/lib/formatDate";
 
 type FilterType = "all" | "portfolio" | "blog" | "page";
 type ViewMode = "grid" | "list";
@@ -235,12 +236,7 @@ export default function AdminMedia() {
 
   const formatDate = (iso?: string) => {
     if (!iso) return "—";
-    try {
-      const d = new Date(iso);
-      return d.toLocaleDateString("hr-HR", { day: "2-digit", month: "2-digit", year: "numeric" });
-    } catch {
-      return iso;
-    }
+    return formatAdminTableDate(iso);
   };
 
   const getFullUrl = (url: string) =>

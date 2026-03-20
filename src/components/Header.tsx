@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ChevronDown, Menu, X, Search } from "lucide-react";
+import { PORTFOLIO_CATEGORIES } from "@/data/portfolioCategories";
 
 export function DrusanyLogo({ className, fill }: { className?: string; fill?: string }) {
   return (
@@ -34,23 +35,19 @@ export function DrusanyLogo({ className, fill }: { className?: string; fill?: st
   );
 }
 
-const PORTFOLIO_CATEGORIES = [
-  { label: "Concerts", slug: "concerts" },
-  { label: "Sport", slug: "sport" },
-  { label: "Animals", slug: "animals" },
-  { label: "Interiors", slug: "interiors" },
-  { label: "Zagreb", slug: "zagreb" },
-  { label: "Food & Drink", slug: "food-drink" },
-] as const;
+interface HeaderProps {
+  /** Kad true, forsira svijetli header (zaobilazi usePathname hydration na blogu) */
+  forceLightMode?: boolean;
+}
 
-export default function Header() {
+export default function Header({ forceLightMode = false }: HeaderProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
   const category = searchParams.get("category");
   const categoryFromPath = PORTFOLIO_CATEGORIES.find((c) => pathname === `/${c.slug}`)?.slug;
-  const isBlogPage = pathname === "/blog" || pathname.startsWith("/blog/");
-  const isHeroMode = !category && !categoryFromPath && !isBlogPage;
+  const isBlogPage = forceLightMode || pathname === "/blog" || (pathname != null && pathname.startsWith("/blog/"));
+  const isHeroMode = !forceLightMode && !category && !categoryFromPath && !isBlogPage;
   const effectiveCategory = categoryFromPath ?? category?.toLowerCase();
   const isHome = pathname === "/" && !category;
   const isPortfolio = (pathname === "/" && !!category) || !!categoryFromPath;

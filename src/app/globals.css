@@ -165,6 +165,16 @@ h1.theme-page-title {
   color: rgb(125 211 252); /* sky-300 – svjetlo plava na tamnoj pozadini */
 }
 
+/* Blog post – sidreni linkovi iz TOC (fiksni header + traka napretka) */
+.blog-post-prose.prose h1,
+.blog-post-prose.prose h2,
+.blog-post-prose.prose h3,
+.blog-post-prose.prose h4,
+.blog-post-prose.prose h5,
+.blog-post-prose.prose h6 {
+  scroll-margin-top: 5.5rem;
+}
+
 /* BlockNote editor – linkovi: ista boja kao tekst, underline, hover amber */
 .blocknote-editor-wrapper a[href] {
   color: inherit !important;
@@ -217,7 +227,7 @@ body.custom-cursor-active * {
   cursor: none !important;
 }
 
-/* RichTextEditor – svijetli tekst na tamnoj pozadini */
+/* BlockNote / ProseMirror u adminu – svijetli tekst na tamnoj pozadini */
 .ProseMirror {
   color: rgb(244 244 245); /* zinc-100 – svjetliji za bolju čitljivost */
 }
@@ -467,6 +477,45 @@ body.custom-cursor-active * {
   max-width: min(95vw, 1200px) !important;
   overflow: hidden !important;
 }
+
+/* BlockNote – Upload tab: razmak i vizualno odvajanje gumba od teksta "No file chosen" */
+[data-theme="dark"] .bn-panel input[type="file"].bn-file-input,
+.blocknote-editor-wrapper .bn-panel input[type="file"].bn-file-input {
+  min-height: 2.75rem;
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+[data-theme="dark"] .bn-panel input[type="file"].bn-file-input::file-selector-button,
+.blocknote-editor-wrapper .bn-panel input[type="file"].bn-file-input::file-selector-button {
+  margin-right: 0.875rem;
+  padding: 0.4rem 0.75rem;
+  border: 0;
+  border-right: 1px solid rgb(82 82 91); /* zinc-600 */
+  border-radius: 0.25rem 0 0 0.25rem;
+  background-color: rgb(63 63 70);
+  color: rgb(244 244 245);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+[data-theme="dark"] .bn-panel input[type="file"].bn-file-input::file-selector-button:hover,
+.blocknote-editor-wrapper .bn-panel input[type="file"].bn-file-input::file-selector-button:hover {
+  background-color: rgb(82 82 91);
+}
+[data-theme="dark"] .bn-panel input[type="file"].bn-file-input::-webkit-file-upload-button,
+.blocknote-editor-wrapper .bn-panel input[type="file"].bn-file-input::-webkit-file-upload-button {
+  margin-right: 0.875rem;
+  padding: 0.4rem 0.75rem;
+  border: 0;
+  border-right: 1px solid rgb(82 82 91);
+  border-radius: 0.25rem 0 0 0.25rem;
+  background-color: rgb(63 63 70);
+  color: rgb(244 244 245);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
 /* File Panel kao modal – centriran kad je otvoren */
 body[data-file-panel-open] [data-file-panel="true"] {
   position: fixed !important;
@@ -490,6 +539,19 @@ body[data-file-panel-open] [data-file-panel="true"] {
 [data-theme="dark"] .bn-formatting-toolbar [data-slot="select-trigger"] {
   color: rgb(244 244 245) !important;
   background-color: rgb(63 63 70) !important;
+}
+
+/* BlockNote toolbar – tooltip (Bold, Italic, …): crna pozadina + rub da ne spliješe s zinc-800 */
+[data-theme="dark"] [data-slot="tooltip-content"] {
+  background-color: rgb(0 0 0) !important;
+  color: rgb(244 244 245) !important;
+  border: 1px solid rgb(113 113 122) !important; /* zinc-500 */
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 4px 14px rgba(0, 0, 0, 0.55) !important;
+}
+[data-theme="dark"] [data-slot="tooltip-content"] > svg:last-child {
+  fill: rgb(0 0 0) !important;
 }
 
 /* BlockNote – resize ručice za slike vidljive na tamnoj pozadini */

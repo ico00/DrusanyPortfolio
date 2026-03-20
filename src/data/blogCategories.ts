@@ -6,7 +6,15 @@ export interface BlogCategoryItem {
 
 export const BLOG_CATEGORIES: BlogCategoryItem[] = [
   { slug: "info", label: "Info" },
-  { slug: "putovanja", label: "Putovanja" },
+  { slug: "putovanja", 
+    label: "Putovanja",
+  subcategories: [
+    { slug: "irska", label: "Irska" },
+    { slug: "nizozemska", label: "Nizozemska" },
+    { slug: "skotska", label: "Škotska" },
+    { slug: "francuska", label: "Francuska" },
+  ],
+},
   {
     slug: "sport",
     label: "Sport",
@@ -178,12 +186,7 @@ const PARENT_TO_SUBS: Record<string, string[]> = (() => {
   return m;
 })();
 
-/** Format date as dd. mm. yyyy. (input: YYYY-MM-DD) */
-export function formatBlogDate(dateStr: string): string {
-  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
-  const [y, m, d] = dateStr.split("-");
-  return `${d}. ${m}. ${y}.`;
-}
+export { formatBlogDate } from "@/lib/formatDate";
 
 /**
  * Podaci za stacked bar chart – glavne kategorije na X-osi, podkategorije kao segmenti.

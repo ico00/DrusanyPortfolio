@@ -4,17 +4,12 @@ import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { PORTFOLIO_CATEGORIES } from "@/data/portfolioCategories";
+import { formatPortfolioDateLong } from "@/lib/formatDate";
 import type { GalleryImage } from "@/lib/getGallery";
 import { VENUES } from "./VenueSelect";
 
-const SLIDES = [
-  { label: "Concerts", slug: "concerts" },
-  { label: "Sport", slug: "sport" },
-  { label: "Animals", slug: "animals" },
-  { label: "Interiors", slug: "interiors" },
-  { label: "Zagreb", slug: "zagreb" },
-  { label: "Food & Drink", slug: "food-drink" },
-] as const;
+const SLIDES = PORTFOLIO_CATEGORIES;
 
 function normalizeCategory(cat: string): string {
   return cat
@@ -47,9 +42,11 @@ export default function HeroSlider({ images }: HeroSliderProps) {
     image: getHeroImageForCategory(images, s.slug),
   }));
 
+  const slideCount = SLIDES.length;
   const goTo = useCallback(
-    (index: number) => setCurrent((Math.max(0, index) + SLIDES.length) % SLIDES.length),
-    []
+    (index: number) =>
+      setCurrent((Math.max(0, index) + slideCount) % slideCount),
+    [slideCount]
   );
 
   const goNext = useCallback(() => goTo(current + 1), [current, goTo]);
@@ -149,13 +146,9 @@ export default function HeroSlider({ images }: HeroSliderProps) {
           {!["animals", "interiors", "food-drink"].includes(slide.slug) &&
             (heroImg?.capturedAt || heroImg?.createdAt) && (
               <p className="mt-2 text-sm text-white/60">
-                {new Date(
+                {formatPortfolioDateLong(
                   heroImg.capturedAt || heroImg.createdAt || ""
-                ).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+                )}
               </p>
             )}
 

@@ -1,4 +1,7 @@
-/** Portfolio kategorije – koristi se za generateStaticParams, sitemap, Header, itd. */
+/**
+ * Portfolio kategorije – jedan izvor za slug + label (sitemap, static params, Header, HeroSlider).
+ * Ikone za admin: `@/data/portfolioCategoryIcons` → PORTFOLIO_CATEGORIES_WITH_ICONS.
+ */
 
 export const PORTFOLIO_CATEGORIES = [
   { slug: "concerts", label: "Concerts" },

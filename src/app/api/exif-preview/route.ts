@@ -7,6 +7,7 @@ import {
   getKeywords,
 } from "@/lib/exif";
 import { checkRateLimit } from "@/lib/rateLimit";
+import { requireDevApiResponse } from "@/lib/apiDevOnly";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
@@ -14,12 +15,8 @@ const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
 export async function POST(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return new Response(
-      JSON.stringify({ error: "EXIF preview only available in development" }),
-      { status: 403, headers: { "Content-Type": "application/json" } }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const formData = await request.formData();

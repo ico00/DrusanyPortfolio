@@ -17,7 +17,7 @@ export default function BlogListLayout({
   return (
     <div className="min-h-screen bg-white">
       <Suspense fallback={<div className="h-16" />}>
-        <Header />
+        <Header forceLightMode />
       </Suspense>
       <div className="mx-auto max-w-7xl px-6 py-24">
         {/* Mobile: search na vrhu – vizual kao na gallery (donja crta, bez okvira) */}

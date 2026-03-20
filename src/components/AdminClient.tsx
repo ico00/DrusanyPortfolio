@@ -29,6 +29,7 @@ import AdminPages from "./AdminPages";
 import AdminBlog from "./AdminBlog";
 import AdminDashboard from "./AdminDashboard";
 import ThemeAdmin from "./ThemeAdmin";
+import BlogWidgetsAdmin from "./BlogWidgetsAdmin";
 import AdminMedia from "./AdminMedia";
 import {
   DndContext,
@@ -46,6 +47,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { formatAdminCaptureDate } from "@/lib/formatDate";
 import CategorySelect, { CATEGORIES } from "./CategorySelect";
 import VenueSelect from "./VenueSelect";
 import SportSelect from "./SportSelect";
@@ -210,14 +212,9 @@ function SortableImageCard({
         <p className="text-xs text-zinc-500">{img.category}</p>
         {(img.capturedAt || img.createdAt) && (
           <p className="mt-1 text-xs text-zinc-600">
-            {new Date(img.capturedAt || img.createdAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false,
-            })}
+            {formatAdminCaptureDate(
+              img.capturedAt || img.createdAt
+            )}
           </p>
         )}
       </div>
@@ -301,10 +298,23 @@ export default function AdminClient() {
   const tabFromUrl = searchParams.get("tab");
   const categoryFromUrl = searchParams.get("category");
   const filterFromUrl = searchParams.get("filter");
-  const [adminTab, setAdminTab] = useState<"dashboard" | "gallery" | "about" | "contact" | "blogPage" | "homePage" | "media" | "blog" | "theme">("dashboard");
+  const [adminTab, setAdminTab] = useState<
+    "dashboard" | "gallery" | "about" | "contact" | "blogPage" | "homePage" | "media" | "blog" | "theme" | "widgets"
+  >("dashboard");
 
   useEffect(() => {
-    const valid = ["dashboard", "gallery", "about", "contact", "blogPage", "homePage", "media", "blog", "theme"];
+    const valid = [
+      "dashboard",
+      "gallery",
+      "about",
+      "contact",
+      "blogPage",
+      "homePage",
+      "media",
+      "blog",
+      "theme",
+      "widgets",
+    ];
     if (tabFromUrl && valid.includes(tabFromUrl)) {
       setAdminTab(tabFromUrl as typeof adminTab);
     } else if (!tabFromUrl) {
@@ -837,6 +847,7 @@ export default function AdminClient() {
                   ? `Content health filter: ${blogFilter === "no-seo" ? "missing meta description" : "missing featured image"}`
                   : "Create and manage blog posts")}
               {adminTab === "theme" && "Customize fonts, sizes and colors"}
+              {adminTab === "widgets" && "Blog sidebar: order, visibility, titles, map embeds"}
             </p>
           </div>
 
@@ -877,6 +888,12 @@ export default function AdminClient() {
         {adminTab === "theme" && (
           <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8">
             <ThemeAdmin />
+          </div>
+        )}
+
+        {adminTab === "widgets" && (
+          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8">
+            <BlogWidgetsAdmin />
           </div>
         )}
 

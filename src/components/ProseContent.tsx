@@ -3,110 +3,20 @@
 import { useMemo, useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import { parseHTML } from "linkedom";
+import { processProseHtml } from "@/lib/processProseHtml";
 
-const QUOTE_CHAR = "\u201C"; // Lijevi tipografski navodnik (zaobljen)
 const SWIPE_THRESHOLD = 50;
 
-function processProseHtml(html: string): { processedHtml: string; imageUrls: string[] } {
-  // linkedom na serveru i klijentu – isti parser = identičan output = nema hydration mismatch
-  const { document: doc } = parseHTML(`<!DOCTYPE html><html><body>${html}</body></html>`);
-  const imageUrls: string[] = [];
-
-  // YouTube iframe – wrap u prose-youtube-wrapper za full-width prikaz
-  doc.querySelectorAll("iframe[src*='youtube.com/embed']").forEach((iframe) => {
-    if (iframe.closest(".prose-youtube-wrapper")) return;
-    const wrapper = doc.createElement("figure");
-    wrapper.className = "prose-youtube-wrapper";
-    const inner = doc.createElement("div");
-    inner.className = "relative w-full";
-    inner.setAttribute("style", "aspect-ratio: 16/9; padding: 6xpx; box-sizing: border-box");
-    iframe.setAttribute("style", "position:absolute;inset:0;width:100%;height:100%");
-    iframe.parentNode?.insertBefore(wrapper, iframe);
-    wrapper.appendChild(inner);
-    inner.appendChild(iframe);
-  });
-
-  // Blockquote dekoracija
-  doc.querySelectorAll("blockquote").forEach((bq) => {
-    if (bq.querySelector(".quote-decor")) return;
-    const span = doc.createElement("span");
-    span.className = "quote-decor";
-    span.setAttribute("aria-hidden", "true");
-    span.textContent = QUOTE_CHAR;
-    bq.insertBefore(span, bq.firstChild);
-  });
-
-  // Wrap slike – isto kao BlogGallery/Gallery: data-cursor-hover, data-cursor-aperture
-  const imgs = Array.from(doc.querySelectorAll("img"));
-  imgs.forEach((img) => {
-    if (img.closest(".prose-img-wrapper")) return;
-    const src = img.getAttribute("src");
-    if (src) imageUrls.push(src);
-
-    const parent = img.parentNode;
-    if (!parent) return;
-
-    // Širina: data-display-width (full|50|25) ili data-preview-width/width za ručni resize
-    const displayWidth = img.getAttribute("data-display-width");
-    const previewWidth =
-      img.getAttribute("data-preview-width") || img.getAttribute("width");
-    const hasCustomWidth =
-      (displayWidth && displayWidth !== "full") ||
-      (previewWidth && parseInt(previewWidth, 10) > 0);
-
-    const wrapper = doc.createElement("button");
-    wrapper.type = "button";
-    wrapper.className = hasCustomWidth
-      ? "prose-img-wrapper cursor-pointer group relative block overflow-hidden rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-white"
-      : "prose-img-wrapper cursor-pointer group relative block w-full overflow-hidden rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-white";
-    wrapper.setAttribute("data-cursor-hover", "");
-    wrapper.setAttribute("data-cursor-aperture", "");
-    if (src) wrapper.setAttribute("data-index", String(imageUrls.length - 1));
-    const alignment = img.getAttribute("data-text-alignment");
-    wrapper.setAttribute("data-text-alignment", alignment || "center");
-
-    if (displayWidth && displayWidth !== "full") {
-      wrapper.setAttribute("data-display-width", displayWidth);
-      wrapper.setAttribute("style", `width: ${displayWidth}%; max-width: ${displayWidth}%`);
-    } else if (previewWidth) {
-      const px = parseInt(previewWidth, 10);
-      if (!isNaN(px) && px > 0) {
-        wrapper.setAttribute("style", `max-width: ${px}px`);
-      }
-    }
-
-    const insertParent = parent.nodeName === "P" ? parent.parentNode : parent;
-    if (!insertParent) return;
-    const insertBefore = parent.nodeName === "P" ? parent : img;
-    insertParent.insertBefore(wrapper, insertBefore);
-    wrapper.appendChild(img);
-    img.setAttribute("data-cursor-aperture", "");
-
-    // BlockNote struktura: bn-file-block-content-wrapper ima inline width (npr. 512px)
-    // koji ograničava full-width slike – poništimo ga kad je slika full-width
-    // max-width: 100% sprječava prelazak širine stupca
-    if (!hasCustomWidth) {
-      const fileWrapper = wrapper.closest(".bn-file-block-content-wrapper") as
-        | (Element & { style?: CSSStyleDeclaration })
-        | null;
-      if (fileWrapper?.style) {
-        fileWrapper.style.width = "100%";
-        fileWrapper.style.maxWidth = "100%";
-      }
-    }
-  });
-
-  const bodyHtml = doc.body?.innerHTML ?? html;
-  return { processedHtml: bodyHtml, imageUrls };
-}
-
 export default function ProseContent({
-  html,
+  html = "",
+  processed,
   className,
   id,
 }: {
-  html: string;
+  /** Ignorira se ako je zadan `processed` */
+  html?: string;
+  /** Unaprijed obrađen HTML (npr. blog – jedan parse zajedno s TOC) */
+  processed?: { processedHtml: string; imageUrls: string[] };
   className?: string;
   id?: string;
 }) {
@@ -114,8 +24,9 @@ export default function ProseContent({
   const touchStartX = useRef<number>(0);
 
   const { processedHtml, imageUrls } = useMemo(
-    () => processProseHtml(html),
-    [html]
+    () =>
+      processed ?? processProseHtml(html),
+    [html, processed]
   );
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);

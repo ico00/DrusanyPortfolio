@@ -1,17 +1,14 @@
 import { unlink } from "fs/promises";
 import path from "path";
 import { checkRateLimit } from "@/lib/rateLimit";
+import { requireDevApiResponse } from "@/lib/apiDevOnly";
 
 /** Briše datoteku iz public/uploads (samo development) */
 export async function POST(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return Response.json(
-      { error: "Samo u development modu" },
-      { status: 403, headers: { "Content-Type": "application/json" } }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const { url } = (await request.json()) as { url?: string };

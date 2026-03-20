@@ -5,10 +5,11 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, PenLine, Camera, Calendar, Tag } from "lucide-react";
 import Header from "@/components/Header";
-import ProseContent from "@/components/ProseContent";
 import BlogGallery from "@/components/BlogGallery";
 import BlogSidebar from "@/components/blog/BlogSidebar";
+import BlogPostLayoutClient from "@/components/blog/BlogPostLayoutClient";
 import ScrollToTop from "@/components/blog/ScrollToTop";
+import BlogReadingProgress from "@/components/blog/BlogReadingProgress";
 import ViewfinderOverlay from "@/components/ViewfinderOverlay";
 import { getBlog, getBlogPost, getPublishedPosts } from "@/lib/blog";
 import {
@@ -107,7 +108,7 @@ export default async function BlogPostPage({
       return (
         <div className="min-h-screen bg-white">
           <Suspense fallback={<div className="h-16" />}>
-            <Header />
+            <Header forceLightMode />
           </Suspense>
           <article className="mx-auto max-w-4xl px-6 py-24">
             <Link
@@ -139,69 +140,40 @@ export default async function BlogPostPage({
   return (
     <div className="min-h-screen bg-white">
       <Suspense fallback={<div className="h-16" />}>
-        <Header />
+        <Header forceLightMode />
       </Suspense>
+      <BlogReadingProgress />
 
-      <div className="mx-auto max-w-7xl px-6 py-24">
-        <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
-          <article className="min-w-0 flex-1">
-            <header>
-              <h1 className="theme-blog-post-title font-normal tracking-tight">
-                {post.title}
-              </h1>
-              <p className="mt-3 flex flex-wrap items-center gap-y-2 text-sm text-zinc-500">
-                <span
-                  className="inline-flex items-center gap-1.5"
-                  style={{ marginRight: "3rem" }}
-                >
-                  <Calendar className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                  <span className="sm:hidden">
-                    <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
-                  </span>
-                  <span className="hidden sm:inline">
-                    Datum objave:{" "}
-                    <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
-                  </span>
+      <BlogPostLayoutClient
+        header={
+          <header>
+            <h1 className="theme-blog-post-title font-normal tracking-tight">
+              {post.title}
+            </h1>
+            <p className="mt-3 flex flex-wrap items-center gap-y-2 text-sm text-zinc-500">
+              <span
+                className="inline-flex items-center gap-1.5"
+                style={{ marginRight: "3rem" }}
+              >
+                <Calendar className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                <span className="sm:hidden">
+                  <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
                 </span>
-                {/* Kategorija: link/filter pored datuma na mobilu i u zasebnom segmentu na desktopu */}
-                <span
-                  className="inline-flex items-center gap-1.5 sm:hidden"
-                  style={{ marginRight: "3rem" }}
-                >
-                  <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                  {categories.length > 0 ? (
-                    categories.map((catSlug, index) => (
-                      <span key={catSlug}>
-                        {index > 0 ? ", " : ""}
-                        <Link
-                          href={`/blog?kategorija=${encodeURIComponent(
-                            catSlug,
-                          )}`}
-                          className="inline-block border-b border-transparent pb-0.5 text-zinc-600 transition-[color,border-color] duration-200 hover:border-zinc-900 hover:text-zinc-900"
-                        >
-                          {getShortCategoryLabel(catSlug)}
-                        </Link>
-                      </span>
-                    ))
-                  ) : (
-                    "—"
-                  )}
+                <span className="hidden sm:inline">
+                  Datum objave:{" "}
+                  <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
                 </span>
-                <span
-                  className="hidden sm:inline-flex items-center gap-1.5"
-                  style={{ marginRight: "3rem" }}
-                >
-                  <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                  <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                  Tekst i fotografije: Ivica Drusany
-                </span>
-                <span className="hidden sm:inline-flex items-center gap-1.5">
-                  <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                  Kategorija:{" "}
-                  {categories.length > 0 ? (
-                    categories.map((catSlug) => (
+              </span>
+              <span
+                className="inline-flex items-center gap-1.5 sm:hidden"
+                style={{ marginRight: "3rem" }}
+              >
+                <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                {categories.length > 0 ? (
+                  categories.map((catSlug, index) => (
+                    <span key={catSlug}>
+                      {index > 0 ? ", " : ""}
                       <Link
-                        key={catSlug}
                         href={`/blog?kategorija=${encodeURIComponent(
                           catSlug,
                         )}`}
@@ -209,57 +181,76 @@ export default async function BlogPostPage({
                       >
                         {getShortCategoryLabel(catSlug)}
                       </Link>
-                    ))
-                  ) : (
-                    "—"
-                  )}
-                </span>
-              </p>
-            </header>
-
-            {post.thumbnail && (
-              <div className="relative mt-6 overflow-hidden bg-zinc-100 -mx-6 w-[calc(100%+3rem)] md:mx-0 md:mt-8 md:w-full">
-                <div className="relative aspect-[3/2] w-full md:aspect-video">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={post.thumbnail}
-                    alt=""
-                    loading="eager"
-                    fetchPriority="high"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="h-full w-full object-cover"
-                    style={{ objectPosition: focusPoint }}
-                  />
-                  <ViewfinderOverlay />
-                </div>
-              </div>
-            )}
-
-            {/* Autor – ikona + naziv ispod featured slike na mobilu */}
-            <p className="mt-3 flex items-center gap-1.5 text-sm text-zinc-500 sm:hidden">
-              <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-              <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-              Ivica Drusany
+                    </span>
+                  ))
+                ) : (
+                  "—"
+                )}
+              </span>
+              <span
+                className="hidden sm:inline-flex items-center gap-1.5"
+                style={{ marginRight: "3rem" }}
+              >
+                <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                Tekst i fotografije: Ivica Drusany
+              </span>
+              <span className="hidden sm:inline-flex items-center gap-1.5">
+                <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                Kategorija:{" "}
+                {categories.length > 0 ? (
+                  categories.map((catSlug) => (
+                    <Link
+                      key={catSlug}
+                      href={`/blog?kategorija=${encodeURIComponent(
+                        catSlug,
+                      )}`}
+                      className="inline-block border-b border-transparent pb-0.5 text-zinc-600 transition-[color,border-color] duration-200 hover:border-zinc-900 hover:text-zinc-900"
+                    >
+                      {getShortCategoryLabel(catSlug)}
+                    </Link>
+                  ))
+                ) : (
+                  "—"
+                )}
+              </span>
             </p>
-
-            <div className="overflow-x-hidden bg-white py-12 md:py-16 -mx-6 w-[calc(100%+3rem)] px-6 md:mx-0 md:w-full">
-              <ProseContent
-                html={post.body || ""}
-                className="prose prose-lg prose-zinc max-w-none prose-headings:font-serif"
-              />
-              {post.galleryImages && post.galleryImages.length > 0 && (
-                <BlogGallery images={post.galleryImages} />
-              )}
+          </header>
+        }
+        thumbnail={
+          post.thumbnail ? (
+            <div className="relative mt-6 overflow-hidden bg-zinc-100 -mx-6 w-[calc(100%+3rem)] md:mx-0 md:mt-8 md:w-full">
+              <div className="relative aspect-[3/2] w-full md:aspect-video">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={post.thumbnail}
+                  alt=""
+                  loading="eager"
+                  fetchPriority="high"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="h-full w-full object-cover"
+                  style={{ objectPosition: focusPoint }}
+                />
+                <ViewfinderOverlay />
+              </div>
             </div>
-          </article>
-
-          <aside className="w-full shrink-0 lg:w-80">
-            <div className="sticky top-24">
-              <BlogSidebar posts={publishedPosts} searchOnMobile />
-            </div>
-          </aside>
-        </div>
-      </div>
+          ) : null
+        }
+        authorMobile={
+          <p className="mt-3 flex items-center gap-1.5 text-sm text-zinc-500 sm:hidden">
+            <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+            <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+            Ivica Drusany
+          </p>
+        }
+        proseHtml={post.body || ""}
+        gallery={
+          post.galleryImages && post.galleryImages.length > 0 ? (
+            <BlogGallery images={post.galleryImages} />
+          ) : null
+        }
+        sidebar={<BlogSidebar posts={publishedPosts} searchOnMobile />}
+      />
       <ScrollToTop />
     </div>
   );

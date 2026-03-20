@@ -4,33 +4,16 @@ import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import type { PressItem } from "@/lib/press";
+import { useColumnCount } from "@/hooks/useColumnCount";
 
 const SWIPE_THRESHOLD = 50;
-
-const BREAKPOINTS = [640, 768, 1024] as const;
-
-function useColumnCount(): number {
-  const [cols, setCols] = useState(2);
-  useEffect(() => {
-    const getCols = (w: number) => {
-      if (w < BREAKPOINTS[0]) return 2;
-      if (w < BREAKPOINTS[2]) return 2;
-      return 3;
-    };
-    const update = () => setCols(getCols(window.innerWidth));
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-  return cols;
-}
 
 interface PressSectionProps {
   items: PressItem[];
 }
 
 export default function PressSection({ items }: PressSectionProps) {
-  const columnCount = useColumnCount();
+  const columnCount = useColumnCount("press");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const touchStartX = useRef<number>(0);
 

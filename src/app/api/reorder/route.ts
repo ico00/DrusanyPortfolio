@@ -3,6 +3,7 @@ import path from "path";
 import type { GalleryData } from "@/lib/getGallery";
 import { withLock } from "@/lib/jsonLock";
 import { checkRateLimit } from "@/lib/rateLimit";
+import { requireDevApiResponse } from "@/lib/apiDevOnly";
 
 function normalizeCategory(cat: string): string {
   return cat
@@ -15,12 +16,8 @@ function normalizeCategory(cat: string): string {
 export async function POST(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return new Response(
-      JSON.stringify({ error: "Reorder only available in development mode" }),
-      { status: 403, headers: { "Content-Type": "application/json" } }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const body = (await request.json()) as {

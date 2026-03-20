@@ -4,18 +4,15 @@ import { ensureSlug } from "@/lib/getGallery";
 import type { GalleryData } from "@/lib/getGallery";
 import { withLock } from "@/lib/jsonLock";
 import { checkRateLimit } from "@/lib/rateLimit";
+import { requireDevApiResponse } from "@/lib/apiDevOnly";
 
 export const dynamic = "force-static";
 
 export async function POST(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return Response.json(
-      { error: "Only available in development mode" },
-      { status: 403 }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const galleryPath = path.join(process.cwd(), "src", "data", "gallery.json");

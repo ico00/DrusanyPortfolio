@@ -2,9 +2,9 @@
   "images": [
     {
       "id": "ce99610a-9ac6-4f4d-a4c9-5618d0edacff",
-      "title": "",
+      "title": "Mirko Cro Cop Filipović VS Ray Sefo",
       "category": "sport",
-      "alt": "",
+      "alt": "Mirko Cro Cop Filipović VS Ray Sefo",
       "src": "/uploads/full/sport/_mg_8661.webp",
       "thumb": "/uploads/thumbs/sport/_mg_8661.webp",
       "width": 2048,
@@ -17,8 +17,10 @@
       "iso": 1250,
       "isHero": true,
       "sport": "martialarts",
-      "slug": "2012",
-      "order": 2
+      "slug": "mirko-cro-cop-filipovic-vs-ray-sefo-2012",
+      "order": 2,
+      "keywords": "cro cop, mirko filipović, ray sefo, zagreb, arena zagreb, croatia, mma, final fight, ",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "99ff67df-cc05-421b-83bc-853df497302a",
@@ -58,7 +60,9 @@
       "iso": 3200,
       "venue": "cibona",
       "isHero": false,
-      "slug": "dino-dvornik-cibona-2006"
+      "slug": "dino-dvornik-cibona-2006",
+      "keywords": "dino dvornik, zagreb, croatia, cibona, rip, ",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "e8b5998b-1938-431a-8fab-5e8404ce3906",
@@ -78,7 +82,9 @@
       "iso": 3200,
       "venue": "cibona",
       "isHero": false,
-      "slug": "james-brown-cibona-2006"
+      "slug": "james-brown-cibona-2006",
+      "keywords": "james brown, concert, zagreb, cibona, croatia, rip, ",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "4894abbe-5695-4693-a6a7-fb234ab36e0d",
@@ -98,7 +104,9 @@
       "iso": 1600,
       "venue": "lisinski",
       "isHero": false,
-      "slug": "arsen-dedic-lisinski-2009"
+      "slug": "arsen-dedic-lisinski-2009",
+      "keywords": "arsen dedić, concert, lisinski, rip, zagreb, croatia, ",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "b6f646f0-accc-45a6-9000-1bd3c0a00848",
@@ -239,7 +247,9 @@
       "iso": 1250,
       "venue": "arena-zagreb",
       "isHero": false,
-      "slug": "leonard-cohen-arena-zagreb-2010"
+      "slug": "leonard-cohen-arena-zagreb-2010",
+      "keywords": "leonard cohen, arena zagreb, concert, rip, croatia, ",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "fa4b2155-1a72-4e1d-9940-9a7b34e9fbdb",
@@ -259,7 +269,9 @@
       "iso": 800,
       "venue": "arena-zagreb",
       "isHero": false,
-      "slug": "djordje-balasevic-arena-zagreb-2010"
+      "slug": "djordje-balasevic-arena-zagreb-2010",
+      "keywords": "đorđe balašević, đole, debeli, arena zagreb, concert, rip, croatia, ",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "dc227a6b-b4fd-4f10-88c4-c829d5378fa1",
@@ -279,7 +291,9 @@
       "iso": 1600,
       "venue": "arena-zagreb",
       "isHero": false,
-      "slug": "joe-cocker-arena-zagreb-2011"
+      "slug": "joe-cocker-arena-zagreb-2011",
+      "keywords": "joe cocker, legend, concert, arena zagreb, rip, croatia, ",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "4568ee0e-7979-4131-887d-3e8af1adcb0f",
@@ -299,8 +313,9 @@
       "iso": 6400,
       "venue": "salata",
       "isHero": false,
-      "keywords": "The Pogues, Shane MacGowan, Šalata, licitar, ",
-      "slug": "the-pogues-salata-2011"
+      "keywords": "The Pogues, Shane MacGowan, Šalata, licitar, rip, ",
+      "slug": "the-pogues-salata-2011",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "8eb272b4-37b2-4ccb-b77b-e862f84bab14",
@@ -320,7 +335,9 @@
       "iso": 1250,
       "venue": "arena-zagreb",
       "isHero": false,
-      "slug": "george-michael-arena-zagreb-2011"
+      "slug": "george-michael-arena-zagreb-2011",
+      "keywords": "george michael, concert, arena zagreb, croatia, zagreb, rip, ",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "1c2556a3-4e59-4c49-a805-9ba1bd438123",
@@ -810,9 +827,9 @@
     },
     {
       "id": "c470b772-cac8-4ed3-8ed7-622a4f8c8e1b",
-      "title": "Croatia VS Denmark, UEFA Nations League",
+      "title": "Croatia VS Denmark",
       "category": "sport",
-      "alt": "Croatia VS Denmark, UEFA Nations League",
+      "alt": "Croatia VS Denmark",
       "src": "/uploads/full/sport/220922-hrvatska-danska_260.webp",
       "thumb": "/uploads/thumbs/sport/220922-hrvatska-danska_260.webp",
       "width": 2048,
@@ -826,7 +843,7 @@
       "aperture": "f/2.8",
       "iso": 3200,
       "keywords": "sport, football, soccer, uefa, nations league, croatia, zagreb, maksimir stadium, denmark",
-      "slug": "croatia-vs-denmark-uefa-nations-league-2022",
+      "slug": "croatia-vs-denmark-2022",
       "sport": "football",
       "thumbnailFocus": "47% 47%",
       "order": 0
@@ -5333,9 +5350,9 @@
     },
     {
       "id": "efe24015-8958-4815-93f0-c0e75cefc4d4",
-      "title": "Tvornica kulture, 1.7.2019.",
+      "title": "Flogging Molly",
       "category": "concerts",
-      "alt": "Tvornica kulture, 1.7.2019.",
+      "alt": "Flogging Molly",
       "src": "/uploads/full/concerts/190701-flogging_molly_085.webp",
       "thumb": "/uploads/thumbs/concerts/190701-flogging_molly_085.webp",
       "width": 2048,
@@ -5347,19 +5364,21 @@
       "exposure": "1/320",
       "aperture": "f/2.8",
       "iso": 5000,
-      "keywords": "flogging molly, koncert, tvornica kulture, fotografije, fotke, slike, reportaža, galerija, ivica drusany",
-      "slug": "tvornica-kulture-172019-2019"
+      "keywords": "flogging molly, dave king, koncert, tvornica kulture, fotografije, fotke, slike, reportaža, galerija, ivica drusany",
+      "slug": "flogging-molly-tvornica-kulture-2019",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "dfb5db47-4cce-4b9a-bb54-f7e9d57ecccd",
-      "title": "MSU, 6.7.2019.",
+      "title": "The Strange",
       "category": "concerts",
-      "alt": "MSU, 6.7.2019.",
+      "alt": "The Strange",
       "src": "/uploads/full/concerts/190706-the_strange_193.webp",
       "thumb": "/uploads/thumbs/concerts/190706-the_strange_193.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2019-07-06T20:09:59.000Z",
+      "capturedAt": "2019-07-06T20:09:00.000Z",
       "createdAt": "2026-02-16T14:07:30.113Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5367,37 +5386,41 @@
       "aperture": "f/2.8",
       "iso": 4000,
       "keywords": "The Strange, Chris Eckman, Dalibor Pavičić, MSU, koncert, fotografije, fotke, reportaža, slike, izvještaj, galerija, ivica drusany",
-      "slug": "msu-672019-2019"
+      "slug": "the-strange-msu-2019",
+      "venue": "msu",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "31477664-ce2a-4ca3-9c3b-1110d1858e3b",
-      "title": "Šalata, 27.7.2019, predgrupa Skunk Anansie",
+      "title": "Lovely Quinces",
       "category": "concerts",
-      "alt": "Šalata, 27.7.2019, predgrupa Skunk Anansie",
+      "alt": "Lovely Quinces",
       "src": "/uploads/full/concerts/190727-lovely_quinces_043.webp",
       "thumb": "/uploads/thumbs/concerts/190727-lovely_quinces_043.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2019-07-27T18:02:29.000Z",
+      "capturedAt": "2019-07-27T18:02:00.000Z",
       "createdAt": "2026-02-16T14:07:30.271Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
       "exposure": "1/500",
       "aperture": "f/2.8",
       "iso": 800,
-      "keywords": "dunja ercegović, skunk anansie, šalata, koncert, zagreb, hrvatska, fotografije, fotke, slike, reportaža, izvještaj, galerija, ivica drusany",
-      "slug": "salata-2772019-predgrupa-skunk-anansie-2019"
+      "keywords": "lovely quinces, dunja ercegović, skunk anansie, šalata, koncert, zagreb, hrvatska, fotografije, fotke, slike, reportaža, izvještaj, galerija, ivica drusany",
+      "slug": "lovely-quinces-salata-2019",
+      "venue": "salata",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "bbf9a0c8-2a5c-43ae-9bb5-dd3dcd039ad8",
-      "title": "Šalata, 27.7.2019",
+      "title": "Skunk Anansie",
       "category": "concerts",
-      "alt": "Šalata, 27.7.2019",
+      "alt": "Skunk Anansie",
       "src": "/uploads/full/concerts/190727-skunk_anansie_133.webp",
       "thumb": "/uploads/thumbs/concerts/190727-skunk_anansie_133.webp",
       "width": 1365,
       "height": 2048,
-      "capturedAt": "2019-07-27T19:15:22.000Z",
+      "capturedAt": "2019-07-27T19:15:00.000Z",
       "createdAt": "2026-02-16T14:07:30.471Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5405,49 +5428,57 @@
       "aperture": "f/2.8",
       "iso": 4000,
       "keywords": "skunk anansie, skin, šalata, koncert, zagreb, hrvatska, fotografije, fotke, slike, reportaža, izvještaj, galerija, ivica drusany",
-      "slug": "salata-2772019-2019"
+      "slug": "skunk-anansie-salata-2019",
+      "venue": "salata",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "d1ecf26b-60b5-4ce7-b22e-a07403868fe5",
-      "title": "Tvornica kulture, 24.11.2019.",
+      "title": "Majke",
       "category": "concerts",
-      "alt": "Tvornica kulture, 24.11.2019.",
+      "alt": "Majke",
       "src": "/uploads/full/concerts/191124-majke_254-1.webp",
       "thumb": "/uploads/thumbs/concerts/191124-majke_254-1.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2019-11-24T20:04:34.000Z",
+      "capturedAt": "2019-11-24T20:04:00.000Z",
       "createdAt": "2026-02-16T14:07:30.618Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
       "exposure": "1/4",
       "aperture": "f/9",
       "iso": 320,
-      "slug": "tvornica-kulture-24112019-2019"
+      "slug": "majke-tvornica-kulture-2019",
+      "venue": "tvornica-kulture",
+      "keywords": "majke, goran bare, tvornica kulture, zagreb, koncert, ",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "86f54c75-bab6-475a-b56f-bc3265e1ad9c",
-      "title": "Tvornica kulture, 15.1.2020.",
+      "title": "Sinead O'Conner",
       "category": "concerts",
-      "alt": "Tvornica kulture, 15.1.2020.",
+      "alt": "Sinead O'Conner",
       "src": "/uploads/full/concerts/200115-sinead_o-connor_031.webp",
       "thumb": "/uploads/thumbs/concerts/200115-sinead_o-connor_031.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2020-01-15T20:07:22.000Z",
+      "capturedAt": "2020-01-15T20:07:00.000Z",
       "createdAt": "2026-02-16T14:07:30.806Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
       "exposure": "1/320",
       "aperture": "f/2.8",
       "iso": 5000,
-      "slug": "tvornica-kulture-1512020-2020"
+      "slug": "sinead-oconner-tvornica-kulture-2020",
+      "keywords": "sinead o'conner, rip, irish, singer, concert, tvornica kulture zagreb, ",
+      "thumbnailFocus": "50% 50%",
+      "venue": "tvornica-kulture"
     },
     {
       "id": "369ac0cb-0bbb-48a3-b80e-db4dae50d409",
-      "title": "Dom sportova, 8.2.2020.",
+      "title": "Editors",
       "category": "concerts",
-      "alt": "Dom sportova, 8.2.2020.",
+      "alt": "Editors",
       "src": "/uploads/full/concerts/200208-editors_190.webp",
       "thumb": "/uploads/thumbs/concerts/200208-editors_190.webp",
       "width": 2048,
@@ -5460,20 +5491,20 @@
       "aperture": "f/1.4",
       "iso": 800,
       "keywords": "editors, zagreb, hrvatska, dom sportova, koncert, fotografije, fotke, slike, reportaža, galerija, izvještaj, ivica drusany",
-      "slug": "dom-sportova-822020-domsportova-2020",
+      "slug": "editors-domsportova-2020",
       "venue": "domsportova",
       "thumbnailFocus": "50% 50%"
     },
     {
       "id": "bc7d7102-161e-4534-8a99-e664293f09da",
-      "title": "26.2.2022. - Partibrejkers, Tvornica kulture",
+      "title": "Partibrejkers",
       "category": "concerts",
-      "alt": "26.2.2022. - Partibrejkers, Tvornica kulture",
+      "alt": "Partibrejkers",
       "src": "/uploads/full/concerts/220226-partibrejkers_217.webp",
       "thumb": "/uploads/thumbs/concerts/220226-partibrejkers_217.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2022-02-26T21:29:56.000Z",
+      "capturedAt": "2022-02-26T21:29:00.000Z",
       "createdAt": "2026-02-16T14:07:31.357Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5481,18 +5512,20 @@
       "aperture": "f/3.5",
       "iso": 320,
       "keywords": "partibrejkers, koncert, 40 godina, tvornica kulture, zagreb, Zoran Kostić Cane, Nebojša Antonijević Anton",
-      "slug": "2622022-partibrejkers-tvornica-kulture-2022"
+      "slug": "partibrejkers-tvornica-kulture-2022",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "32b4ca6c-b8bb-4bb0-a503-60e4886b3cd7",
-      "title": "Natali Dizdar, Tvornica Kulture 11.3.2022.",
+      "title": "Natali Dizdar",
       "category": "concerts",
-      "alt": "Natali Dizdar, Tvornica Kulture 11.3.2022.",
+      "alt": "Natali Dizdar",
       "src": "/uploads/full/concerts/220311-natali_dizdar_264.webp",
       "thumb": "/uploads/thumbs/concerts/220311-natali_dizdar_264.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2022-03-11T21:09:27.000Z",
+      "capturedAt": "2022-03-11T21:09:00.000Z",
       "createdAt": "2026-02-16T14:07:31.528Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5500,25 +5533,30 @@
       "aperture": "f/2.8",
       "iso": 6400,
       "keywords": "natali dizdar, tvornica kulture, koncert, zagreb",
-      "slug": "natali-dizdar-tvornica-kulture-1132022-2022"
+      "slug": "natali-dizdar-tvornica-kulture-2022",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "f9c7ab13-ec50-41c1-a80f-bea536f4eb96",
-      "title": "",
+      "title": "Skunk Anansie",
       "category": "concerts",
-      "alt": "Gallery image",
+      "alt": "Skunk Anansie",
       "src": "/uploads/full/concerts/220513-skunk_anansie_348.webp",
       "thumb": "/uploads/thumbs/concerts/220513-skunk_anansie_348.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2022-05-13T19:23:44.000Z",
+      "capturedAt": "2022-05-13T19:23:00.000Z",
       "createdAt": "2026-02-16T14:07:31.694Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
       "exposure": "1/250",
       "aperture": "f/2.8",
       "iso": 1600,
-      "slug": "2022"
+      "slug": "skunk-anansie-domsportova-2022",
+      "venue": "domsportova",
+      "keywords": "skunk anansie, skin, concert, zagreb, croatia, šalata, ",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "a566626b-657a-49a3-a8f8-23b7eaa18d5b",
@@ -5543,14 +5581,14 @@
     },
     {
       "id": "0940f74b-9cf4-4688-857c-b942d9b4350e",
-      "title": "Black Francis (Charles Thompson IV), frontmen and guitarist of alternative rock band Pixies",
+      "title": "Pixies",
       "category": "concerts",
-      "alt": "Black Francis (Charles Thompson IV), frontmen and guitarist of alternative rock band Pixies",
+      "alt": "Pixies",
       "src": "/uploads/full/concerts/220827-pixies_207-1.webp",
       "thumb": "/uploads/thumbs/concerts/220827-pixies_207-1.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2022-08-27T19:09:51.000Z",
+      "capturedAt": "2022-08-27T19:09:00.000Z",
       "createdAt": "2026-02-16T14:07:32.060Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5558,18 +5596,20 @@
       "aperture": "f/2.8",
       "iso": 2500,
       "keywords": "pixies, velesajam, zagreb, concert, tour, croatia, venue, rock, band",
-      "slug": "black-francis-charles-thompson-iv-frontmen-and-guitarist-of-alternative-rock-band-pixies-2022"
+      "slug": "pixies-misc-2022",
+      "venue": "misc",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "501d4dfd-ad02-4b0d-9fa3-482e64d2bc3b",
-      "title": "The Slow Show, Velesajam 27.8.2022.",
+      "title": "The Slow Show",
       "category": "concerts",
-      "alt": "The Slow Show, Velesajam 27.8.2022.",
+      "alt": "The Slow Show",
       "src": "/uploads/full/concerts/220827-the_slow_show_072.webp",
       "thumb": "/uploads/thumbs/concerts/220827-the_slow_show_072.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2022-08-27T18:04:42.000Z",
+      "capturedAt": "2022-08-27T18:04:00.000Z",
       "createdAt": "2026-02-16T14:07:32.235Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5577,18 +5617,20 @@
       "aperture": "f/2.8",
       "iso": 2500,
       "keywords": "the slow show, velesajam, zagreb, predgrupa, pixies, indie",
-      "slug": "the-slow-show-velesajam-2782022-2022"
+      "slug": "the-slow-show-misc-2022",
+      "venue": "misc",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "c1eac9ed-0b34-4b75-a0b2-65e1f13f7ca7",
-      "title": "Kovacs - Tvornica kulture 26.9.2022.",
+      "title": "Kovacs",
       "category": "concerts",
-      "alt": "Kovacs - Tvornica kulture 26.9.2022.",
+      "alt": "Kovacs",
       "src": "/uploads/full/concerts/220925-kovacs_341.webp",
       "thumb": "/uploads/thumbs/concerts/220925-kovacs_341.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2022-09-25T19:43:05.000Z",
+      "capturedAt": "2022-09-25T19:43:00.000Z",
       "createdAt": "2026-02-16T14:07:32.376Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5596,18 +5638,20 @@
       "aperture": "f/3.5",
       "iso": 100,
       "keywords": "sharon, kovacs, tvornica kulture, zagreb, hrvatska, koncert",
-      "slug": "kovacs-tvornica-kulture-2692022-2022"
+      "slug": "kovacs-tvornica-kulture-2022",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "367a1df5-18de-46e6-9af0-0ec116c4a9a1",
-      "title": "Hladno pivo, 35 godina - Dom sportova 13.10.2022.",
+      "title": "Hladno pivo",
       "category": "concerts",
-      "alt": "Hladno pivo, 35 godina - Dom sportova 13.10.2022.",
+      "alt": "Hladno pivo",
       "src": "/uploads/full/concerts/221013-hladno_pivo_111.webp",
       "thumb": "/uploads/thumbs/concerts/221013-hladno_pivo_111.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2022-10-13T19:16:20.000Z",
+      "capturedAt": "2022-10-13T19:16:00.000Z",
       "createdAt": "2026-02-16T14:07:32.579Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5615,18 +5659,20 @@
       "aperture": "f/2.8",
       "iso": 2500,
       "keywords": "hladno pivo, 35 godina, koncert, dom sportova, zagreb",
-      "slug": "hladno-pivo-35-godina-dom-sportova-13102022-2022"
+      "slug": "hladno-pivo-domsportova-2022",
+      "venue": "domsportova",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "4cc9aad7-574a-4081-9517-7307c9a88efa",
-      "title": "Stjepan Jimmy Stanić / Tvornica kulture, 14.2.2023.",
+      "title": "Stjepan Jimmy Stanić",
       "category": "concerts",
-      "alt": "Stjepan Jimmy Stanić / Tvornica kulture, 14.2.2023.",
+      "alt": "Stjepan Jimmy Stanić",
       "src": "/uploads/full/concerts/230214-jimmy_stanic_076.webp",
       "thumb": "/uploads/thumbs/concerts/230214-jimmy_stanic_076.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2023-02-14T20:59:53.000Z",
+      "capturedAt": "2023-02-14T20:59:00.000Z",
       "createdAt": "2026-02-16T14:07:32.733Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5634,18 +5680,20 @@
       "aperture": "f/2.8",
       "iso": 3200,
       "keywords": "Stjepan Jimmy Stanić, valentinovo, koncert, zagreb",
-      "slug": "stjepan-jimmy-stanic-tvornica-kulture-1422023-2023"
+      "slug": "stjepan-jimmy-stanic-tvornica-kulture-2023",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "4b57bf36-4040-4131-ae56-9162cb7ca2c5",
-      "title": "14. 4. 2023.: Laibach, Tvornica kulture, Zagreb",
+      "title": "Laibach",
       "category": "concerts",
-      "alt": "14. 4. 2023.: Laibach, Tvornica kulture, Zagreb",
+      "alt": "Laibach",
       "src": "/uploads/full/concerts/230414-laibach_189-enhanced-nr.webp",
       "thumb": "/uploads/thumbs/concerts/230414-laibach_189-enhanced-nr.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2023-04-14T18:39:12.000Z",
+      "capturedAt": "2023-04-14T18:39:00.000Z",
       "createdAt": "2026-02-16T14:07:32.858Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5653,18 +5701,20 @@
       "aperture": "f/2.8",
       "iso": 250,
       "keywords": "Laibach, tvornica kulture, zagreb, koncertm",
-      "slug": "14-4-2023-laibach-tvornica-kulture-zagreb-2023"
+      "slug": "laibach-tvornica-kulture-2023",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "1cd1035e-6675-4b36-839a-8d84d3750466",
-      "title": "Repetitor / Tvornica kulture / 5.5.2023.",
+      "title": "Repetitor",
       "category": "concerts",
-      "alt": "Repetitor / Tvornica kulture / 5.5.2023.",
+      "alt": "Repetitor",
       "src": "/uploads/full/concerts/230505-repetitor_070.webp",
       "thumb": "/uploads/thumbs/concerts/230505-repetitor_070.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2023-05-05T20:53:13.000Z",
+      "capturedAt": "2023-05-05T20:53:00.000Z",
       "createdAt": "2026-02-16T14:07:33.088Z",
       "camera": "Canon EOS 5D Mark IV",
       "lens": "EF16-35mm f/2.8L III USM",
@@ -5672,18 +5722,20 @@
       "aperture": "f/2.8",
       "iso": 16000,
       "keywords": "repetitor, tvornica kulture, zagreb, koncert",
-      "slug": "repetitor-tvornica-kulture-552023-2023"
+      "slug": "repetitor-tvornica-kulture-2023",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "442832f3-0542-4135-aa7f-5fc6cd9bac5f",
-      "title": "Buč Kesidi / Šalata, 27.5.2023",
+      "title": "Buč Kesidi",
       "category": "concerts",
-      "alt": "Buč Kesidi / Šalata, 27.5.2023",
+      "alt": "Buč Kesidi",
       "src": "/uploads/full/concerts/230527-buc_kesidi_029.webp",
       "thumb": "/uploads/thumbs/concerts/230527-buc_kesidi_029.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2023-05-27T19:09:41.000Z",
+      "capturedAt": "2023-05-27T19:09:00.000Z",
       "createdAt": "2026-02-16T14:07:33.251Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5691,18 +5743,20 @@
       "aperture": "f/2.8",
       "iso": 2000,
       "keywords": "buč kesidi, koncert, zagreb, šalata",
-      "slug": "buc-kesidi-salata-2752023-2023"
+      "slug": "buc-kesidi-salata-2023",
+      "venue": "salata",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "a5a90f47-5596-4d63-bbe2-50d22d9614db",
-      "title": "Elemental / Šalata, 3.6.2023.",
+      "title": "Elemental",
       "category": "concerts",
-      "alt": "Elemental / Šalata, 3.6.2023.",
+      "alt": "Elemental",
       "src": "/uploads/full/concerts/230603-elemental_180.webp",
       "thumb": "/uploads/thumbs/concerts/230603-elemental_180.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2023-06-03T18:40:56.000Z",
+      "capturedAt": "2023-06-03T18:40:00.000Z",
       "createdAt": "2026-02-16T14:07:33.416Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF17-40mm f/4L USM",
@@ -5710,18 +5764,20 @@
       "aperture": "f/4",
       "iso": 1250,
       "keywords": "elemental, koncert, 25 godina, zagreb, šalata",
-      "slug": "elemental-salata-362023-2023"
+      "slug": "elemental-salata-2023",
+      "venue": "salata",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "21c83d70-0a7e-49d7-bbf8-a2d05770dd3c",
-      "title": "Let 3, Šalata 2.9.2023.",
+      "title": "Let 3",
       "category": "concerts",
-      "alt": "Let 3, Šalata 2.9.2023.",
+      "alt": "Let 3",
       "src": "/uploads/full/concerts/230902-let3_069.webp",
       "thumb": "/uploads/thumbs/concerts/230902-let3_069.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2023-09-02T18:21:01.000Z",
+      "capturedAt": "2023-09-02T18:21:00.000Z",
       "createdAt": "2026-02-16T14:07:33.636Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF17-40mm f/4L USM",
@@ -5729,18 +5785,20 @@
       "aperture": "f/4",
       "iso": 4000,
       "keywords": "let 3, šalata, koncert, zagreb",
-      "slug": "let-3-salata-292023-2023"
+      "slug": "let-3-salata-2023",
+      "venue": "salata",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "8b01fba9-6d94-4264-a051-a466825c4334",
-      "title": "14.10.2023. - Partibrejkers, Tvornica kulture",
+      "title": "Partibrejkers",
       "category": "concerts",
-      "alt": "14.10.2023. - Partibrejkers, Tvornica kulture",
+      "alt": "Partibrejkers",
       "src": "/uploads/full/concerts/231014-partibrejkers_215.webp",
       "thumb": "/uploads/thumbs/concerts/231014-partibrejkers_215.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2023-10-14T20:15:42.000Z",
+      "capturedAt": "2023-10-14T20:15:00.000Z",
       "createdAt": "2026-02-16T14:07:33.830Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5748,18 +5806,20 @@
       "aperture": "f/2.8",
       "iso": 16000,
       "keywords": "partibrejkers, cane, anton, tvornica kulture, koncert, muzika, zagreb",
-      "slug": "14102023-partibrejkers-tvornica-kulture-2023"
+      "slug": "partibrejkers-tvornica-kulture-2023",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "3a210848-f779-4275-b25f-7332e1a16f24",
-      "title": "Električni orgazam / Tvornica kulture, 4.11.2023.",
+      "title": "Električni orgazam",
       "category": "concerts",
-      "alt": "Električni orgazam / Tvornica kulture, 4.11.2023.",
+      "alt": "Električni orgazam",
       "src": "/uploads/full/concerts/231104-elektricni_orgazam_110.webp",
       "thumb": "/uploads/thumbs/concerts/231104-elektricni_orgazam_110.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2023-11-04T21:39:31.000Z",
+      "capturedAt": "2023-11-04T21:39:00.000Z",
       "createdAt": "2026-02-16T14:07:34.034Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5767,37 +5827,41 @@
       "aperture": "f/2.8",
       "iso": 8000,
       "keywords": "električni orgazam, koncert, zagreb, tvornica kulture",
-      "slug": "elektricni-orgazam-tvornica-kulture-4112023-2023"
+      "slug": "elektricni-orgazam-tvornica-kulture-2023",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "e84f49fd-24e8-49cd-b4d0-15cee4fb3458",
-      "title": "TV Eye /Tvornica kulture, 4.11.2023.",
+      "title": "TV Eye",
       "category": "concerts",
-      "alt": "TV Eye /Tvornica kulture, 4.11.2023.",
+      "alt": "TV Eye",
       "src": "/uploads/full/concerts/231104-tv_eye_068.webp",
       "thumb": "/uploads/thumbs/concerts/231104-tv_eye_068.webp",
       "width": 1365,
       "height": 2048,
-      "capturedAt": "2023-11-04T21:06:55.000Z",
+      "capturedAt": "2023-11-04T21:06:00.000Z",
       "createdAt": "2026-02-16T14:07:34.291Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
       "exposure": "1/250",
       "aperture": "f/2.8",
       "iso": 12800,
-      "keywords": "tv eye, tvornica kulture, zagreb, koncert",
-      "slug": "tv-eye-tvornica-kulture-4112023-2023"
+      "keywords": "tv eye, tvornica kulture, zagreb, koncert, miran kurspahić, ",
+      "slug": "tv-eye-tvornica-kulture-2023",
+      "venue": "tvornica-kulture",
+      "thumbnailFocus": "57% 30%"
     },
     {
       "id": "960c9202-7b7f-4bc1-92d2-5e64a194e37c",
-      "title": "Donkey Hot /  Arena Zagreb, 22.12.2023.",
+      "title": "Donkey Hot",
       "category": "concerts",
-      "alt": "Donkey Hot /  Arena Zagreb, 22.12.2023.",
+      "alt": "Donkey Hot",
       "src": "/uploads/full/concerts/231222-donkey_hot_056.webp",
       "thumb": "/uploads/thumbs/concerts/231222-donkey_hot_056.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2023-12-22T20:24:12.000Z",
+      "capturedAt": "2023-12-22T20:24:00.000Z",
       "createdAt": "2026-02-16T14:07:34.470Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5805,18 +5869,20 @@
       "aperture": "f/2.8",
       "iso": 3200,
       "keywords": "donkey hot, vili gobac, koncert, zagreb, arena, rock and roll",
-      "slug": "donkey-hot-arena-zagreb-22122023-2023"
+      "slug": "donkey-hot-arena-zagreb-2023",
+      "venue": "arena-zagreb",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "38c65f58-2935-4381-bb43-0bd78ec0cc7b",
-      "title": "Goran Bare & Majke /  Arena Zagreb, 22.12.2023.",
+      "title": "Goran Bare & Majke",
       "category": "concerts",
-      "alt": "Goran Bare & Majke /  Arena Zagreb, 22.12.2023.",
+      "alt": "Goran Bare & Majke",
       "src": "/uploads/full/concerts/231222-goran_bare__majke_169.webp",
       "thumb": "/uploads/thumbs/concerts/231222-goran_bare__majke_169.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2023-12-22T21:01:09.000Z",
+      "capturedAt": "2023-12-22T21:01:00.000Z",
       "createdAt": "2026-02-16T14:07:34.616Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L IS III USM",
@@ -5824,7 +5890,9 @@
       "aperture": "f/11",
       "iso": 400,
       "keywords": "goran bare, majke, koncert, zagreb, arena, rock and roll",
-      "slug": "goran-bare-majke-arena-zagreb-22122023-2023"
+      "slug": "goran-bare-majke-arena-zagreb-2023",
+      "venue": "arena-zagreb",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "1ac61544-08ab-4095-a7c3-15f98db77982",
@@ -6011,7 +6079,7 @@
       "iso": 100,
       "keywords": "mačevanje, sport, europsko prvenstvo, zagreb, hrvatska, fotografije, izvještaj, reportaža, muškarci, žene, arena, dvorana, sablja, mač",
       "slug": "europsko-seniorsko-prvenstvo-u-macevanju-2013-2013-2",
-      "order": 67
+      "order": 59
     },
     {
       "id": "ecc312a3-65f4-4bd7-93ec-509384938f98",
@@ -6050,7 +6118,7 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "slug": "2013",
-      "order": 65
+      "order": 64
     },
     {
       "id": "d8e9a268-eb40-4f85-bad6-02ff57bf53a4",
@@ -6069,7 +6137,7 @@
       "aperture": "f/3.5",
       "iso": 1600,
       "slug": "2013-2",
-      "order": 64
+      "order": 41
     },
     {
       "id": "03d96f6d-63c1-46a3-8f5a-784ceb970ed1",
@@ -6089,7 +6157,7 @@
       "iso": 2000,
       "keywords": "sport, borilački sport, MMA, zagreb, finale, cibona, dvorana dražena petrovića, hrvatska, fotografije, fotke, croatian MMA league, reportaža, izvještaj",
       "slug": "finale-hrvatske-mma-lige-zagreb-02112013-2013",
-      "order": 63
+      "order": 67
     },
     {
       "id": "42844da0-2acf-46dd-abb1-087153a60df5",
@@ -6109,7 +6177,7 @@
       "iso": 2500,
       "keywords": "sport, klizanje, zagreb, dom sportova, 46 zlatna pirueta, natjecanje, fotografije, fotke, slike, reportaža, izvještaj, galerija, ivica drusany, Yuna Kim, Miki Ando",
       "slug": "46-zlatna-pirueta-zagreba-gala-zagreb-07122013-2013",
-      "order": 62
+      "order": 21
     },
     {
       "id": "1dc17486-0ad3-4cf0-9859-4144d3e6877d",
@@ -6129,7 +6197,7 @@
       "iso": 2000,
       "keywords": "sport, atletika, zagreb, hrvatska, IAAF, 64 hanžekovićev memorijal, mladost",
       "slug": "64-hanzekovicev-memorijal-zagreb-29214-2014",
-      "order": 4
+      "order": 8
     },
     {
       "id": "cfaa7362-dd74-4ca4-b03f-d570ad63ea15",
@@ -6149,7 +6217,7 @@
       "iso": 500,
       "keywords": "2014, auti, automobilizam, blato, fotke, fotografije, izvještaj, makadam, rally, reportaža, santa domenica, slike, sport, sveta nedelja, utrka",
       "slug": "5-rally-show-santa-domenica-2014-g-trincossi-superbuggy-cosworth-4x4-2014",
-      "order": 61
+      "order": 63
     },
     {
       "id": "ad5cad6a-bbcd-4b49-a50c-918540d477ba",
@@ -6168,7 +6236,7 @@
       "aperture": "f/2.8",
       "iso": 400,
       "slug": "prvo-kolo-prvenstva-hrvatske-zagreb-olimpija-zagreb-2032015-2015",
-      "order": 60
+      "order": 62
     },
     {
       "id": "bcf0a865-f503-4dc8-96f4-b5d2c8e0525e",
@@ -6188,7 +6256,7 @@
       "iso": 1000,
       "keywords": "sport, rukomet, zagreb, prvo plinarsko društvo, arena, hrvatska, velux, ehf, liga prvaka, fotografije, fotke, slike, reportaža, galerija, izvještaj, ivica drusany, momčad, barcelona, španjolska",
       "slug": "ehf-liga-prvaka-cetvrtina-finala-zagreb-ppd-barcelona-zagreb-942015-2015",
-      "order": 59
+      "order": 61
     },
     {
       "id": "49fad66c-ed08-42d0-a3c2-cbc15506a6bb",
@@ -6207,7 +6275,7 @@
       "aperture": "f/2.8",
       "iso": 160,
       "slug": "2015",
-      "order": 58
+      "order": 60
     },
     {
       "id": "cda6eff4-367e-4757-9818-8f8c48a7237a",
@@ -6226,7 +6294,7 @@
       "aperture": "f/9",
       "iso": 100,
       "slug": "2015-2",
-      "order": 50
+      "order": 48
     },
     {
       "id": "215db41c-af68-4f6a-bd46-6f54cda50186",
@@ -6246,7 +6314,7 @@
       "iso": 100,
       "keywords": "sport, biciklizam, tour of croatia, 2016, zagreb, etapa 6, bicikli, natjecanje, utrka, hrvatska, sveti martin na muri, cilj, fotografije, slike, galerija, fotke, ivica drusany",
       "slug": "tour-of-croatia-2016-2016",
-      "order": 57
+      "order": 58
     },
     {
       "id": "71bb2e81-e495-471b-865e-f376c71e361f",
@@ -6266,7 +6334,7 @@
       "iso": 1600,
       "keywords": "action, arena, athlete, ball, blue, champions, championship, club, competition, court, croatia, drustvo, ehf, europe, european, field, game, goal, group, hall, hand, handball, indoors, jersey, league, man, match, player, playing, plinarsko, popular, ppd, professional, prvo, sport, team, velux, venue, zagreb, macedonya, vardar",
       "slug": "zagreb-croatia-october-22-2016-ehf-mens-champions-league-2016-17-group-b-phase-hc-zagreb-ppd-vs-hc-vardar-igor-karacic-18-shooting-at-goal-2016",
-      "order": 56
+      "order": 57
     },
     {
       "id": "9231b6f3-8803-4d14-8a63-e3b3fc650252",
@@ -6285,7 +6353,7 @@
       "aperture": "f/8",
       "iso": 320,
       "slug": "boris-berakovic-damir-vlasic-toyota-celica-gt-4-no-limit-2016",
-      "order": 55
+      "order": 53
     },
     {
       "id": "3b0c762e-d303-4e3a-8dba-9adb1e290222",
@@ -6304,7 +6372,7 @@
       "aperture": "f/2.8",
       "iso": 400,
       "slug": "beppo-harrach-dominik-jahn-ford-fiesta-r5-no-limit-2016",
-      "order": 54
+      "order": 14
     },
     {
       "id": "63574763-02a0-490c-ae00-8fc389af2f0e",
@@ -6324,7 +6392,7 @@
       "iso": 1250,
       "keywords": "ppd zagreb, prvo plinarsko društvo, zagreb, celje, pivovarna, laško, fotografije, fotke, slike, galerija, izvještaj, rukomet, sport, arena, liga prvaka, 12. kolo, slovenci, slovenija, momčad, natjecanje, ehf, veluh, sezona, grupa B, ivica drusany",
       "slug": "ehf-liga-prvaka-201617-grupa-b-14-kolo-2017",
-      "order": 53
+      "order": 56
     },
     {
       "id": "21ec2ae2-b1d8-491a-8bc4-527537b6045c",
@@ -6344,7 +6412,7 @@
       "iso": 2000,
       "keywords": "2017, 2018, competition, croatia, field, fifa, football, game, grass, group, maksimir, march, pitch, qualification, qualifier, round, russia, soccer, sport, stadium, team, uefa, ukraine, venue, world cup, zagreb, athlete, jersey",
       "slug": "zagreb-croatia-march-24-2017-european-qualifier-for-2018-fifa-world-cup-russia-round-1-group-1-croatia-vs-ukraine-2017",
-      "order": 52
+      "order": 51
     },
     {
       "id": "e0456c85-ba09-4865-a915-cd6ce6dd8249",
@@ -6363,26 +6431,28 @@
       "aperture": "f/2.8",
       "iso": 640,
       "slug": "2017",
-      "order": 51
+      "order": 55
     },
     {
       "id": "a32f0a23-1ae0-44fb-9b9f-4a8e2973e8bd",
-      "title": "",
+      "title": "Cibona VS Cedevita",
       "category": "sport",
-      "alt": "Gallery image",
+      "alt": "Cibona VS Cedevita",
       "src": "/uploads/full/sport/170601_cibona-cedevita_402.webp",
       "thumb": "/uploads/thumbs/sport/170601_cibona-cedevita_402.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2017-06-01T19:25:37.000Z",
+      "capturedAt": "2017-06-01T19:25:00.000Z",
       "createdAt": "2026-02-27T18:45:43.392Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF85mm f/1.8 USM",
       "exposure": "1/1000",
       "aperture": "f/1.8",
       "iso": 2000,
-      "slug": "2017-2",
-      "order": 1
+      "slug": "cibona-vs-cedevita-2017",
+      "order": 1,
+      "sport": "basketball",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "76cd110b-34b1-4088-a731-70e52ed545ad",
@@ -6401,7 +6471,7 @@
       "aperture": "f/2",
       "iso": 100,
       "slug": "2017-3",
-      "order": 13
+      "order": 15
     },
     {
       "id": "316bdc82-d137-44bd-ab59-0fcce96d15a5",
@@ -6421,27 +6491,29 @@
       "iso": 1600,
       "keywords": "ijf, judo grand prix, zagreb, 2017, sport, competition, croatia, europe, dom sportova, venue, tatami, mat, kimono",
       "slug": "zagreb-croatia-october-1-2017-ijf-judo-grand-prix-zagreb-2017-jorge-fonesca-blue-vs-miklos-cirjenics-white-2017",
-      "order": 43
+      "order": 45
     },
     {
       "id": "f010aff7-05c4-4d6c-bcdc-9b9945f79483",
-      "title": "FIFA Svjetsko prvenstvo 2018. kvalifikacije - Grupa I, Hrvatska - Finska",
+      "title": "Croatia VS Finland",
       "category": "sport",
-      "alt": "FIFA Svjetsko prvenstvo 2018. kvalifikacije - Grupa I, Hrvatska - Finska",
+      "alt": "Croatia VS Finland",
       "src": "/uploads/full/sport/171006-hrvatska-finska_565.webp",
       "thumb": "/uploads/thumbs/sport/171006-hrvatska-finska_565.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2017-10-06T19:58:03.000Z",
+      "capturedAt": "2017-10-06T19:58:00.000Z",
       "createdAt": "2026-02-27T18:45:43.952Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF70-200mm f/2.8L USM",
       "exposure": "1/1000",
       "aperture": "f/2.8",
       "iso": 2000,
-      "keywords": "sport, nogomet, reprezentacija, hrvatska, finska, kvalifikacije, fifa, 2018, rusija, grupa i, skupina, stadion, rujevica, rijeka, fotografije, fotke, slike, reportaža, galerija, izvještaj, ivica drusany",
-      "slug": "fifa-svjetsko-prvenstvo-2018-kvalifikacije-grupa-i-hrvatska-finska-2017",
-      "order": 3
+      "keywords": "luka modrić, football, croatia, finland, fifa, qualification, world cup, zagreb, maksimir, ",
+      "slug": "croatia-vs-finland-2017",
+      "order": 3,
+      "sport": "football",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "9ae80d8f-0352-42ee-a551-0499b33193f9",
@@ -6461,7 +6533,7 @@
       "iso": 2000,
       "keywords": "sport, basketball, aba league, season 2017/2018, round 5, cedevita, crvena zvezda, croatia, zagreb, serbia, beograd, dom sportova",
       "slug": "zagreb-croatia-october-22-2017-aba-league-20172018-round-5-cedevita-vs-crvena-zvezda-roko-leni-ukic-1-and-pero-antic-12-2017",
-      "order": 49
+      "order": 50
     },
     {
       "id": "286a73a9-28ac-42e7-bc04-5c0f83d44be3",
@@ -6480,7 +6552,7 @@
       "aperture": "f/5.6",
       "iso": 2000,
       "slug": "mladost-ljubljana-2017",
-      "order": 48
+      "order": 47
     },
     {
       "id": "83162eb5-9d13-4fd2-8a28-6c8497dcea88",
@@ -6500,7 +6572,7 @@
       "iso": 1600,
       "keywords": "sport, handball, ehf, men, championship, league, 2017-2018, ppd zagreb, barcelona, spain, croatia, arena, competition, group a, phase",
       "slug": "zagreb-croatia-november-23-2017-ehf-mens-champions-league-2017-18-group-a-phase-hc-zagreb-ppd-vs-hc-barcelona-damir-bicanic-77-dika-mem-24-and-victor-tomas-gonzalez-8-2017",
-      "order": 47
+      "order": 54
     },
     {
       "id": "5f2278c5-cca9-4afb-81d9-6e0a9c1c3143",
@@ -6520,7 +6592,7 @@
       "iso": 250,
       "keywords": "sport, figure skating, ice skating, golden spin, zagreb, croatia, competition, famous, gala evening, dom sportova, 50th, dance, event, performing, skater, zlatna pirueta",
       "slug": "zagreb-croatia-december-9-2017-50th-golden-spin-of-zagreb-stanislava-konstantinova-skating-at-gala-evening-2017",
-      "order": 20
+      "order": 28
     },
     {
       "id": "6442fada-1cb3-4ae5-8c0a-2acaa7bfe10a",
@@ -6540,7 +6612,7 @@
       "iso": 1250,
       "keywords": "arena, championship, competition, croatia, ehf, EHF Euro Croatia 2018, euro2018, european handball championship, france, group 1, handball, main round, match, sport, zagreb",
       "slug": "zagreb-croatia-january-24-2018-ehf-euro-croatia-2018-main-round-group-i-zagreb-croatia-vs-france-cedric-sorhaindo-20-and-marko-mamic-30-2018",
-      "order": 45
+      "order": 49
     },
     {
       "id": "9b17a00d-674e-4a28-b697-a1454c76cb3d",
@@ -6560,7 +6632,7 @@
       "iso": 1250,
       "keywords": "arena, championship, competition, croatia, ehf, EHF Euro Croatia 2018, euro2018, european handball championship, france, group 1, handball, main round, match, sport, zagreb",
       "slug": "zagreb-croatia-january-24-2018-ehf-euro-croatia-2018-main-round-group-i-zagreb-croatia-vs-france-nikola-karabatic-13-and-marko-kopljar-8-2018",
-      "order": 44
+      "order": 46
     },
     {
       "id": "da641dfd-bdaa-4b34-ac31-db6733d1b972",
@@ -6580,7 +6652,7 @@
       "iso": 1250,
       "keywords": "arena, championship, competition, croatia, ehf, EHF Euro Croatia 2018, euro2018, european handball championship, france, group 1, handball, main round, match, sport, zagreb",
       "slug": "zagreb-croatia-january-24-2018-ehf-euro-croatia-2018-main-round-group-i-zagreb-croatia-vs-france-luka-cindric-33-and-nicolas-tournat-30-2018",
-      "order": 42
+      "order": 44
     },
     {
       "id": "b8ef0a78-e1d5-435c-8eef-5648fd855e56",
@@ -6600,7 +6672,7 @@
       "iso": 1250,
       "keywords": "arena, competition, croatia, ehf, EHF Euro Croatia 2018, euro2018, european handball championship, handball, main round, norway, round 1, sport, sweden, zagreb",
       "slug": "zagreb-croatia-january-24-2018-ehf-euro-croatia-2018-main-round-group-i-zagreb-sweden-vs-norway-2018",
-      "order": 46
+      "order": 52
     },
     {
       "id": "27db152a-7260-4aeb-a93f-a0adfe4e7e39",
@@ -6620,7 +6692,7 @@
       "iso": 1250,
       "keywords": "arena, competition, croatia, ehf, EHF Euro Croatia 2018, euro2018, european handball championship, handball, sport, france, zagreb, denmark, finals, match, bronze, medal",
       "slug": "zagreb-croatia-january-29-2018-ehf-euro-croatia-2018-bronze-medal-match-france-vs-denmark-mikkel-hansen-24-and-kentin-mahe-14-2018",
-      "order": 41
+      "order": 42
     },
     {
       "id": "7f03a12e-b3aa-4489-aa95-0e2e4f4aec79",
@@ -6640,7 +6712,7 @@
       "iso": 1600,
       "keywords": "arena, competition, croatia, ehf, EHF Euro Croatia 2018, euro2018, european handball championship, handball, sport, france, zagreb, denmark, finals, match, bronze, medal",
       "slug": "zagreb-croatia-january-29-2018-ehf-euro-croatia-2018-bronze-medal-match-france-vs-denmark-nikola-karabatic-13-celebrating-goal-2018",
-      "order": 10
+      "order": 7
     },
     {
       "id": "665d3b41-8d57-4e27-990e-a903d2dbadde",
@@ -6660,7 +6732,7 @@
       "iso": 1600,
       "keywords": "arena, competition, croatia, ehf, EHF Euro Croatia 2018, euro2018, european handball championship, handball, sport, sweden, zagreb, spain, finals, match",
       "slug": "zagreb-croatia-january-29-2018-ehf-euro-croatia-2018-final-match-medal-award-ceremony-spanish-team-on-podium-with-gold-medals-and-trophy-2018",
-      "order": 40
+      "order": 12
     },
     {
       "id": "30f0e8bb-dd6a-492e-8f60-0e5af424205c",
@@ -6680,7 +6752,7 @@
       "iso": 320,
       "keywords": "sport, motocross, mx, prvenstvo zagorja, 2018, bedenica, zagorje, motori, cross, utrka, fotografije, fotke, slike, reportaža, izvještaj, galerija, ivica drusany",
       "slug": "bedenica-1352018-2018",
-      "order": 39
+      "order": 37
     },
     {
       "id": "638e77d9-6a27-4654-a06b-e0dc8ab60104",
@@ -6700,7 +6772,7 @@
       "iso": 100,
       "keywords": "sport, motocross, mx, prvenstvo zagorja, 2018, bedenica, zagorje, motori, cross, utrka, fotografije, fotke, slike, reportaža, izvještaj, galerija, ivica drusany",
       "slug": "bedenica-1352018-2018-2",
-      "order": 38
+      "order": 43
     },
     {
       "id": "b9dcdd00-1e7e-4a1c-9d0a-010dc2b586a6",
@@ -6720,7 +6792,7 @@
       "iso": 100,
       "keywords": "sport, motocross, mx, prvenstvo zagorja, 2018, bedenica, zagorje, motori, cross, utrka, fotografije, fotke, slike, reportaža, izvještaj, galerija, ivica drusany",
       "slug": "bedenica-1352018-2018-3",
-      "order": 37
+      "order": 40
     },
     {
       "id": "bfce7652-afeb-4b3c-adb7-c62ef9d70aa2",
@@ -6739,7 +6811,7 @@
       "aperture": "f/1.4",
       "iso": 3200,
       "slug": "2018",
-      "order": 35
+      "order": 38
     },
     {
       "id": "416d2115-256e-4da9-a82e-18b688468647",
@@ -6759,7 +6831,7 @@
       "iso": 100,
       "keywords": "automobilizam, oldimers, rijeka, grobnik, utrka, histo cup, staza, automotodrom, fotografije, fotke, glaerija, reportaža, slike, ivica drusany",
       "slug": "grobnik-1662018-2018",
-      "order": 34
+      "order": 65
     },
     {
       "id": "eda15b3e-fa6f-4cf8-8454-2fc178eec977",
@@ -6779,7 +6851,7 @@
       "iso": 2500,
       "keywords": "sport, hokej na travi, hockey series open 2018, zagreb, mladost, hrvatska, austrija, fotografije, fotke, galerija, reportaža, ivica drusany",
       "slug": "austrija-hrvatska-zagreb-2762018-2018",
-      "order": 33
+      "order": 36
     },
     {
       "id": "a3ddeb3b-25a2-4bdc-b482-2accc1383c7e",
@@ -6798,7 +6870,7 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "slug": "2018-2",
-      "order": 26
+      "order": 30
     },
     {
       "id": "9ef9cc45-6f61-407c-b71e-2747d91ee0e7",
@@ -6817,7 +6889,7 @@
       "aperture": "f/2",
       "iso": 2000,
       "slug": "2018-3",
-      "order": 7
+      "order": 6
     },
     {
       "id": "12292ed3-72c8-42cf-8096-e2bd7c839cf3",
@@ -6836,7 +6908,7 @@
       "aperture": "f/3.2",
       "iso": 125,
       "slug": "zagreb-croatia-september-20-2018-uefa-europa-league-20182019-group-d-match-day-1-gnk-dinamo-vs-sk-fenerbahce-2018",
-      "order": 5
+      "order": 9
     },
     {
       "id": "d107f7b7-3788-427b-93ab-f113b6ac3e4c",
@@ -6856,7 +6928,7 @@
       "iso": 1600,
       "keywords": "sport, handball, velux, ehf, champions league, group phase, ppd zagreb, psg, paris, france, croatia, arena zagreb",
       "slug": "zagreb-croatia-september-29-2018-ehf-mens-championship-league-group-phase-ppd-zagreb-vs-psg-hansen-mikkel-24-and-kontrec-tin-9-2018",
-      "order": 31
+      "order": 5
     },
     {
       "id": "7c4ac6cf-8a56-44b3-b6b1-d26707c0ae87",
@@ -6875,7 +6947,7 @@
       "aperture": "f/2.8",
       "iso": 2500,
       "slug": "zagreb-croatia-november-8-2018-uefa-europa-league-20182019-group-d-match-day-4-gnk-dinamo-zagreb-vs-spartak-trnava-2018",
-      "order": 30
+      "order": 34
     },
     {
       "id": "bce763c7-e25f-4596-a54a-350388a63895",
@@ -6894,7 +6966,7 @@
       "aperture": "f/2.8",
       "iso": 1600,
       "slug": "zagreb-croatia-november-15-2018-uefa-nations-league-group-stage-group-a4-matchday-5-croatia-vs-spain-2018",
-      "order": 29
+      "order": 33
     },
     {
       "id": "657031d5-0f60-4304-9921-1e728cbd4f37",
@@ -6913,7 +6985,7 @@
       "aperture": "f/2",
       "iso": 1000,
       "slug": "zagreb-croatia-october-29-2018-ebel-league-20182019-medvescak-zagreb-vs-kac-2018",
-      "order": 6
+      "order": 10
     },
     {
       "id": "3575a065-f8c0-42ac-be79-abaf17f08082",
@@ -6932,7 +7004,7 @@
       "aperture": "f/4",
       "iso": 2500,
       "slug": "zagreb-croatia-february-21-2019-uefa-europa-league-20182019-round-of-32-2nd-leg-gnk-dinamo-zagreb-vs-viktoria-plzen-2019",
-      "order": 28
+      "order": 22
     },
     {
       "id": "92415031-8734-4e93-ad82-ff7b716d15a4",
@@ -6952,7 +7024,7 @@
       "iso": 2500,
       "keywords": "sport, football, soccer, uefa, euro 2020, qualifier, qualifying round, croatia, zagreb, maksimir stadium, azerbaijan, match, game",
       "slug": "zagreb-croatia-march-21-2019-uefa-euro-2020-qualifying-round-group-e-croatia-vs-azerbaijan-luka-modric-10-eddy-14-and-dmitri-nazarov-13-2019",
-      "order": 27
+      "order": 24
     },
     {
       "id": "a165aa1f-50cd-4541-af55-8fb897cc167a",
@@ -6966,7 +7038,7 @@
       "capturedAt": "2026-02-27T18:45:49.232Z",
       "createdAt": "2026-02-27T18:45:49.407Z",
       "slug": "2026",
-      "order": 36
+      "order": 39
     },
     {
       "id": "17ebeca2-b01f-4a89-a7fe-f81625ab8039",
@@ -6986,7 +7058,7 @@
       "iso": 2500,
       "keywords": "sport, football, uefa, champions league, 2019/2020, group c, dinamo, zagreb, croatia, maksimir stadium, atalanta, italy, soccer, competition",
       "slug": "zagreb-croatia-september-18-2019-uefa-champions-league-group-c-matchday-1-gnk-dinamo-vs-atalanta-bc-2019",
-      "order": 25
+      "order": 29
     },
     {
       "id": "dd16a06e-7e1b-4284-82de-2ee077293308",
@@ -7005,7 +7077,7 @@
       "aperture": "f/2.8",
       "iso": 400,
       "slug": "2019",
-      "order": 24
+      "order": 27
     },
     {
       "id": "4cc047ee-68db-4e6f-8f27-751955529628",
@@ -7025,7 +7097,7 @@
       "iso": 320,
       "keywords": "sport, biciklizam, cro race, utrka, etapa 6, zagreb, hrvatska, fotografije, fotke, slike, reportaža, izvještaj, galerija, ivica drusany",
       "slug": "etapa-6-zagreb-2019",
-      "order": 23
+      "order": 25
     },
     {
       "id": "5b290e45-2fa3-41d5-9f3c-147332cd5606",
@@ -7045,7 +7117,7 @@
       "iso": 160,
       "keywords": "sport, biciklizam, cro race, utrka, etapa 6, zagreb, hrvatska, fotografije, fotke, slike, reportaža, izvještaj, galerija, ivica drusany",
       "slug": "etapa-6-zagreb-2019-2",
-      "order": 22
+      "order": 23
     },
     {
       "id": "15bba193-eed7-409c-8d14-f97733a35a10",
@@ -7064,7 +7136,7 @@
       "aperture": "f/2",
       "iso": 100,
       "slug": "2019-2",
-      "order": 21
+      "order": 32
     },
     {
       "id": "94181013-d20c-4255-b36b-df0283d3c5f5",
@@ -7084,7 +7156,7 @@
       "iso": 320,
       "keywords": "rally show santa domenica, rally, utrka, sport, automobilizam, fotografije, fotke, reportaža, galerija, izvještaj, album, foto, ivica drusany",
       "slug": "sveta-nedelja-croatia-november-24-2019-10-rally-show-santa-domenica-2019",
-      "order": 12
+      "order": 16
     },
     {
       "id": "f703d6d2-305a-4c1d-b6a8-7dd66a049b3a",
@@ -7104,18 +7176,18 @@
       "iso": 100,
       "keywords": "rally show santa domenica, rally, utrka, sport, automobilizam, fotografije, fotke, reportaža, galerija, izvještaj, album, foto, ivica drusany",
       "slug": "sveta-nedelja-croatia-november-24-2019-10th-rally-show-santa-domenica-2019",
-      "order": 19
+      "order": 20
     },
     {
       "id": "6d69d9da-3617-4dd1-aa1e-43bd342efb86",
-      "title": "ZAGREB, CROATIA – DECEMBER 11, 2019: UEFA Champions League, Group C – Matchday 6. GNK Dinamo VS FC Machester City FC.",
+      "title": "UEFA Champions League, Group C – Matchday 6. GNK Dinamo VS FC Machester City FC",
       "category": "sport",
-      "alt": "ZAGREB, CROATIA – DECEMBER 11, 2019: UEFA Champions League, Group C – Matchday 6. GNK Dinamo VS FC Machester City FC.",
+      "alt": "UEFA Champions League, Group C – Matchday 6. GNK Dinamo VS FC Machester City FC",
       "src": "/uploads/full/sport/191211-dinamo-manchester_city_407.webp",
       "thumb": "/uploads/thumbs/sport/191211-dinamo-manchester_city_407.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2019-12-11T19:04:22.000Z",
+      "capturedAt": "2019-12-11T19:04:00.000Z",
       "createdAt": "2026-02-27T18:45:51.035Z",
       "camera": "Canon EOS-1D X Mark II",
       "lens": "EF300mm f/2.8L IS USM",
@@ -7123,8 +7195,10 @@
       "aperture": "f/2.8",
       "iso": 2500,
       "keywords": "uefa champions league, sport, football, soccer, manchester city, dinamo, zagreb, maksimir, stadium, group c, competition, game, match, croatia",
-      "slug": "zagreb-croatia-december-11-2019-uefa-champions-league-group-c-matchday-6-gnk-dinamo-vs-fc-machester-city-fc-2019",
-      "order": 8
+      "slug": "uefa-champions-league-group-c-matchday-6-gnk-dinamo-vs-fc-machester-city-fc-2019",
+      "order": 4,
+      "sport": "football",
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "bd80a6df-e5d6-426d-86ad-0600aab6f444",
@@ -7144,7 +7218,7 @@
       "iso": 2500,
       "keywords": "uefa champions league, sport, football, soccer, manchester city, dinamo, zagreb, maksimir, stadium, group c, competition, game, match, croatia",
       "slug": "zagreb-croatia-december-11-2019-uefa-champions-league-group-c-matchday-6-gnk-dinamo-vs-fc-machester-city-fc-bad-blue-boys-dinamos-supporters-on-north-stand-fire-torches-2019",
-      "order": 18
+      "order": 19
     },
     {
       "id": "b22eee02-941b-4ce4-8211-1917e5e02fe5",
@@ -7164,7 +7238,7 @@
       "iso": 100,
       "keywords": "WRC, Word Rally Championship, Rally, Racing, Croatia, 2021, SS, sport, cars, samobor",
       "slug": "samobor-croatia-april-24-2021-wrc-croatia-rally-2021-ss-13-mali-lipovec-grdanjci-2-33-elfyn-evans-scott-martin-gbr-gbr-driving-toyota-yaris-wrc-for-toyota-gazoo-racing-wrt-rc1-wrc-2021",
-      "order": 32
+      "order": 35
     },
     {
       "id": "a863f2ac-d14c-439a-b840-a77b17e96397",
@@ -7184,7 +7258,7 @@
       "iso": 100,
       "keywords": "WRC, Word Rally Championship, Rally, Racing, Croatia, 2021, SS, sport, cars, samobor",
       "slug": "samobor-croatia-april-24-2021-wrc-croatia-rally-2021-ss-13-mali-lipovec-grdanjci-2-24-mads-ostberg-torstein-eriksen-nor-nor-driving-citroen-c3-for-trt-world-rally-team-rc2-rally2-2021",
-      "order": 17
+      "order": 31
     },
     {
       "id": "eb5b3739-5b2a-4c62-bf60-a54507d8999e",
@@ -7204,7 +7278,7 @@
       "iso": 1000,
       "keywords": "CRO Race, sport, zagreb, croatia, stage 6, street, race, racing, bicycle",
       "slug": "zagreb-croatia-october-3-2021-cro-race-2021-stage-6-zagreb-2021",
-      "order": 16
+      "order": 26
     },
     {
       "id": "35257719-ecda-4edb-8676-8c59a6f42bfd",
@@ -7224,7 +7298,7 @@
       "iso": 320,
       "keywords": "sport, athletics, marathon, running. 29, zagreb, croatia, town, street, half marathon",
       "slug": "zagreb-croatia-october-10-2021-29th-zagreb-marathon-2021-moses-lekuraa-1004-2021",
-      "order": 15
+      "order": 18
     },
     {
       "id": "2c56f744-c599-4c54-8ece-5e4303527f17",
@@ -7244,7 +7318,7 @@
       "iso": 1600,
       "keywords": "sport, američki nogomet, balkanska liga, zagreb patriots, novi sad wild dogs, nk studentski grad, zagreb, hrvatska",
       "slug": "zagreb-hrvatska-29-svibanj-2022-3-kolo-bfl-a-zagreb-patriots-vs-novi-sad-wild-dogs-2022",
-      "order": 14
+      "order": 17
     },
     {
       "id": "490c785e-fc5f-4aa6-8caf-0c014426b0f9",
@@ -7264,7 +7338,7 @@
       "iso": 125,
       "keywords": "zagrebački maraton, atletika, trčanje, zagreb, hrvatska, sport",
       "slug": "zagreb-1102022-30-zagrebacki-maraton-2022-2022",
-      "order": 9
+      "order": 11
     },
     {
       "id": "4984ca57-5f24-4841-a3a2-a4f90279fac8",
@@ -7284,7 +7358,7 @@
       "iso": 400,
       "keywords": "68. lipanjski turnir, jahanje, hipodrom, sport, zagreb, preponsko jahanje, natjecanje, turnir, konji",
       "slug": "zagreb-croatia-june-2-2024-68-lipanjski-turnir-2024",
-      "order": 11
+      "order": 13
     },
     {
       "id": "c20ccb69-9874-4359-8417-0bb9014c868e",

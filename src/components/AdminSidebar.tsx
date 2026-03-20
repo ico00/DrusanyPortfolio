@@ -10,6 +10,7 @@ import {
   FileText,
   BookOpen,
   LayoutDashboard,
+  LayoutGrid,
   Palette,
   Images,
   ChevronDown,
@@ -258,6 +259,21 @@ export default function AdminSidebar() {
           >
             <BookOpen className={`h-5 w-5 shrink-0 ${isBlogRoute ? "text-violet-400" : ""}`} />
             Blog
+          </AdminNavLink>
+          <AdminNavLink
+            href="/admin?tab=widgets"
+            className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+              tab === "widgets"
+                ? "border-l-2 border-fuchsia-500/80 bg-zinc-800 text-white"
+                : "border-l-2 border-transparent text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-200"
+            }`}
+            onClick={() => {
+              setGalleryExpanded(false);
+              setPagesExpanded(false);
+            }}
+          >
+            <LayoutGrid className={`h-5 w-5 shrink-0 ${tab === "widgets" ? "text-fuchsia-400" : ""}`} />
+            Blog widgets
           </AdminNavLink>
           <AdminNavLink
             href="/admin?tab=theme"

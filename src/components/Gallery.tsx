@@ -6,6 +6,8 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Camera } from "lucide-react";
 import type { GalleryImage } from "@/lib/getGallery";
+import { formatPortfolioDateLong } from "@/lib/formatDate";
+import { useColumnCount } from "@/hooks/useColumnCount";
 import { VENUES } from "./VenueSelect";
 import { SPORTS } from "./SportSelect";
 import { FOOD_DRINK } from "./FoodDrinkSelect";
@@ -44,25 +46,6 @@ const itemVariants = {
 };
 
 const SWIPE_THRESHOLD = 50;
-
-const BREAKPOINTS = [640, 768, 1024] as const;
-
-function useColumnCount(): number {
-  const [cols, setCols] = useState(4);
-  useEffect(() => {
-    const getCols = (w: number) => {
-      if (w < BREAKPOINTS[0]) return 1;
-      if (w < BREAKPOINTS[1]) return 2;
-      if (w < BREAKPOINTS[2]) return 3;
-      return 4;
-    };
-    const update = () => setCols(getCols(window.innerWidth));
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-  return cols;
-}
 
 interface GalleryProps {
   images: GalleryImage[];
@@ -560,11 +543,9 @@ export default function Gallery({ images, categorySlug: categorySlugProp }: Gall
                   {categorySlug?.toLowerCase() !== "food-drink" &&
                     (img.capturedAt || img.createdAt) && (
                     <p className="translate-y-2.5 text-xs text-white/70 opacity-0 transition-all duration-500 ease-out group-hover:-translate-y-[10px] group-hover:opacity-100">
-                      {new Date(img.capturedAt || img.createdAt!).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
+                      {formatPortfolioDateLong(
+                        img.capturedAt || img.createdAt!
+                      )}
                     </p>
                   )}
                 </div>
@@ -769,11 +750,10 @@ export default function Gallery({ images, categorySlug: categorySlugProp }: Gall
                             <>
                               {(lightboxImage.venue || lightboxImage.sport) ? ", " : ""}
                               <span className="text-white/80">
-                                {new Date(lightboxImage.capturedAt || lightboxImage.createdAt!).toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                })}
+                                {formatPortfolioDateLong(
+                                  lightboxImage.capturedAt ||
+                                    lightboxImage.createdAt!
+                                )}
                               </span>
                             </>
                           )}

@@ -16,7 +16,9 @@
     "preview": "npx serve out",
     "deploy:static": "./scripts/deploy-static.sh",
     "deploy:uploads": "./scripts/deploy-uploads.sh",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@blocknote/core": "^0.46.2",
@@ -63,6 +65,7 @@
     "eslint-config-next": "16.1.6",
     "patch-package": "^8.0.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }

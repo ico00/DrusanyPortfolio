@@ -57,7 +57,7 @@ const { processedHtml, imageUrls } = useMemo(
 );
 ```
 
-**Korak 2:** U `processProseHtml`:
+**Korak 2:** U `processProseHtml` ([`src/lib/processProseHtml.ts`](src/lib/processProseHtml.ts)):
 - Parsiraj HTML s **linkedom** (i na serveru i na klijentu – isti parser = nema hydration mismatch)
 - Za svaku sliku: stvori `<button>` wrapper, dodaj `data-cursor-hover`, `data-cursor-aperture`, `data-index`
 - Dodaj `data-cursor-aperture` i na samu `<img>` (da `target.closest()` uvijek pronađe element)
@@ -99,26 +99,38 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 | Slike + lightbox + aperture (React) | BlogGallery | `src/components/BlogGallery.tsx` |
 | Slike + lightbox + aperture (React) | Gallery | `src/components/Gallery.tsx` |
 | Slike + lightbox + aperture (HTML string) | ProseContent | `src/components/ProseContent.tsx` |
+| Obrada proze (slike, TOC, blockquote, YouTube) | processProseHtml | `src/lib/processProseHtml.ts` |
+| TOC članka (h1–h6) | BlogPostToc, BlogPostLayoutClient | `src/components/blog/BlogPostToc.tsx`, `BlogPostLayoutClient.tsx` |
 | Custom cursor | CustomCursor | `src/components/CustomCursor.tsx` |
 | Stacked chart (blog kategorije) | AdminDashboard | `src/components/AdminDashboard.tsx` |
 | Chart podaci | getBlogCategoryStackedChartData | `src/data/blogCategories.ts` |
 | Sanitizer (whitelist atributa) | sanitizeProseHtml | `src/lib/sanitize.ts` |
 | Centralizirane util funkcije | transliterateCroatian, sanitizeFilename, sanitizeFolderName | `src/lib/utils.ts` |
+| Portfolio kategorije (slug + label) | PORTFOLIO_CATEGORIES | `src/data/portfolioCategories.ts` |
+| Portfolio kategorije + Lucide ikone | PORTFOLIO_CATEGORIES_WITH_ICONS | `src/data/portfolioCategoryIcons.tsx` |
+| Masonry broj stupaca (resize) | useColumnCount(`"gallery"` \| `"press"`) | `src/hooks/useColumnCount.ts` |
+| Dev-only API guard | requireDevApiResponse | `src/lib/apiDevOnly.ts` |
+| Format datuma (blog, portfolio, admin) | formatBlogDate, formatPortfolioDateLong, … | `src/lib/formatDate.ts` |
 | Provjera postojanja datoteke | fileExists | `src/lib/fileUtils.ts` (samo server) |
-| Blog sidebar widgeti (stilovi) | BLOG_WIDGET_UI | `src/data/blogWidgetUI.ts` |
+| Blog sidebar widgeti (stilovi, hover rub) | BLOG_WIDGET_UI (`rowHover`, `itemInactive`, `inputWrapper`) | `src/data/blogWidgetUI.ts` |
+| Blog widget konfiguracija (JSON) | getBlogWidgets, blogWidgets.json | `src/lib/blogWidgets.ts`, `src/data/blogWidgets.json` |
+| Admin: blog widgeti + planovi | BlogWidgetsAdmin (grid Title stupac na `md+`), `/api/blog-widgets`, `/api/plans` | `BlogWidgetsAdmin.tsx`, `api/blog-widgets/route.ts`, `api/plans/route.ts`, `lib/blogWidgets.ts`, `lib/plans.ts` |
+| Admin stringovi (blog widgeti) | `ADMIN_UI.adminWidgets` | `src/data/adminUI.ts` |
+| Admin blog forma – metadata red | AdminBlog (Datum, vrijeme, Status, Featured u jednom redu) | `src/components/AdminBlog.tsx` |
 | Blog widget komponente | SearchWidget, CategoriesWidget, FeaturedPostsWidget, PlansWidget, GoogleMapsWidget | `src/components/blog/` |
 | Accordion (grid-rows) | CategoriesWidget (kategorije s podkategorijama), AdminSidebar | `src/components/blog/CategoriesWidget.tsx` |
-| Block type select popup (dodavanje blokova) | BlockTypeSelectWithCursor | `src/components/BlockTypeSelectWithCursor.tsx` |
-| Block style bar na vrhu bloka | FloatingBlockTypeBar | `src/components/FloatingBlockTypeBar.tsx` |
+| Block type select (slash `/` i proširenja tipova) | BlockTypeSelectWithCursor, `getSlashMenuItems` | `src/components/BlockTypeSelectWithCursor.tsx`, `BlockNoteEditor.tsx` |
 | Formatting toolbar na vrhu bloka | BlockTopFormattingToolbarController | `src/components/BlockTopFormattingToolbarController.tsx` |
 | Link toolbar (FormattingToolbar) | CustomCreateLinkButton | `src/components/CustomCreateLinkButton.tsx` |
 | Custom Image block (displayWidth) | blocknoteImageSchema | `src/lib/blocknoteImageSchema.tsx` |
 | YouTube video blok (embed po širini stranice) | blocknoteYouTubeSchema | `src/lib/blocknoteYouTubeSchema.tsx` |
-| File Panel (Upload + Media + Embed) | BlogFilePanel | `src/components/blocknote/BlogFilePanel.tsx` |
+| File Panel (Upload + Media + Embed) | BlogFilePanel, BlogUploadTab | `src/components/blocknote/BlogFilePanel.tsx`, `BlogUploadTab.tsx` |
 | Media tab (odabir postojeće slike) | MediaLibraryTab | `src/components/blocknote/MediaLibraryTab.tsx` |
 | Theme grupe, accordion, elementi | ThemeAdmin | `src/components/ThemeAdmin.tsx` |
 | Prose linkovi (hover) | globals.css | `.prose a`, `.prose-invert a` |
 | LCP optimizacija (blog thumbnail) | blog/[slug]/page.tsx | `src/app/(with-footer)/blog/[slug]/page.tsx` |
+| Traka napretka čitanja (post) | BlogReadingProgress + `data-blog-reading-article` na `<article>` | `src/components/blog/BlogReadingProgress.tsx` |
+| Header (forceLightMode za blog) | Header | `src/components/Header.tsx` |
 
 ---
 
@@ -165,6 +177,10 @@ Dizajn: **jedinstveni panel** – bijela pozadina (`bg-white`), tamna slova (`te
 
 **Korak 3:** Referentne komponente: BlogSidebar, SearchWidget, CategoriesWidget, FeaturedPostsWidget, PlansWidget, GoogleMapsWidget.
 
+### 4.0.1 BLOG_WIDGET_UI – lijeva crta na hoveru
+
+Javni blog sidebar koristi **`BLOG_WIDGET_UI`** (`src/data/blogWidgetUI.ts`): **`rowHover`** (`border-l-2 border-transparent`, `hover:border-zinc-300`) na redovima linkova; **`itemInactive` / `itemActive`** – aktivna stavka s `border-l-2`; **`inputWrapper`** – isti obrazac na `hover` / `focus-within` za default SearchWidget. **CategoriesWidget** – naslov akordeona također koristi `rowHover`. **Minimalni** SearchWidget (`variant="minimal"`) kombinira `rowHover` s donjom crtom.
+
 ### 4.1 CategoriesWidget – accordion za kategorije s podkategorijama
 
 Kategorije koje imaju podkategorije (Sport, Gradovi – iz `BLOG_CATEGORIES` u `blogCategories.ts`) prikazuju se kao accordion: roditelj s chevronom za expand/collapse, podkategorije uvučene ispod. Kategorije bez podkategorija ostaju obični linkovi. **Pattern:** `grid-rows-[1fr]` / `grid-rows-[0fr]` za animaciju (kao AdminSidebar). Podkategorije se sortiraju abecedno po labelu. Kad je aktivna podkategorija ili roditelj, accordion se automatski otvara.
@@ -173,7 +189,7 @@ Kategorije koje imaju podkategorije (Sport, Gradovi – iz `BLOG_CATEGORIES` u `
 
 ### 4.2 PlansWidget – planirani snimanja
 
-Widget "Planovi" prikazuje listu snimanja koja se planiraju. Podaci u `src/data/plans.json`: `{ "plans": [ { "date": "YYYY-MM-DD", "name": "Naziv snimanja" } ] }`. `getPlans()` iz `@/lib/plans` učitava i sortira po datumu (ascending). Prikaz: datum (formatBlogDate) pa naziv. Redoslijed u sidebaru: u `blogWidgets.json` stavka `type: "plans"` ispod `featured-posts`.
+Widget "Planovi" prikazuje listu snimanja koja se planiraju. Podaci u `src/data/plans.json`: `{ "plans": [ { "date": "YYYY-MM-DD", "name": "Naziv snimanja" } ] }`. `getPlans()` iz `@/lib/plans` učitava i sortira po datumu (ascending). Prikaz: datum (formatBlogDate) pa naziv. Redoslijed u sidebaru: u `blogWidgets.json` stavka `type: "plans"`. **Admin:** `/admin?tab=widgets` → red *Plans* → *Edit planned events* → uređivanje + *Save plans* (`PUT /api/plans`, dev only); `parsePlansPayload` / `savePlans` u `lib/plans.ts`.
 
 ### 4.3 FeaturedPostsWidget – istaknuti članci (max 3)
 
@@ -194,7 +210,17 @@ iOS Safari automatski zumira input kad je font manji od 16px. Search input mora 
 
 **Referentne komponente:** `src/components/blog/BlogListLayout.tsx`, `src/app/(with-footer)/blog/[slug]/page.tsx`
 
-### 4.6 Blog galerija – potvrda pri brisanju slike
+### 4.6 Header na blogu – forceLightMode (hydration fix)
+
+Nakon klika na kategoriju u CategoriesWidget i punog refresha (Ctrl+R), `usePathname()` može tijekom hydration vratiti pogrešnu vrijednost – header bi mislio da je na home stranici i prikazivao transparentan stil; pri skrolanju bi se pojavila tamna verzija umjesto svijetle.
+
+**Rješenje:** Proslijediti `forceLightMode` iz server komponente. BlogListLayout i blog/[slug]/page.tsx koriste `<Header forceLightMode />` – header tada ne ovisi o `usePathname()` i uvijek prikazuje svijetli stil (bijela pozadina, tamni tekst).
+
+**Kad dodaješ novu stranicu s Headerom:** Ako je stranica na bijeloj pozadini (kao blog) i nema hero moda, proslijedi `forceLightMode` da izbjegneš hydration probleme.
+
+**Referentne datoteke:** `src/components/Header.tsx`, `src/components/blog/BlogListLayout.tsx`, `src/app/(with-footer)/blog/[slug]/page.tsx`
+
+### 4.7 Blog galerija – potvrda pri brisanju slike
 
 Pri brisanju slike iz blog galerije (SortableGalleryItem ili bulk delete) prikazuje se **custom modal** umjesto native `confirm()`. State `deleteImageConfirmModal` s `count` i `onConfirm` callbackom; modal koristi `ADMIN_UI.modal`, `ADMIN_UI.buttons.secondary` (Odustani), `ADMIN_UI.buttons.danger` (Obriši). Poruke u `adminUI.ts`: `deleteImageConfirm`, `deleteImagesConfirm(n)`, `deleteImageModal.cancel`, `deleteImageModal.confirm`.
 
@@ -265,15 +291,30 @@ Implementacija: `BlogFilePanel` (Upload + Media + Embed) koristi se umjesto defa
 
 **Referentne datoteke:** `src/components/blocknote/BlogFilePanel.tsx`, `src/components/blocknote/MediaLibraryTab.tsx`
 
-### 5.4 Toolbar na vrhu bloka (Block style + Formatting)
+### 5.3.1 File Panel – Upload tab (`BlogUploadTab`)
 
-Block style i Formatting toolbar pojavljuju se **na vrhu bloka** (ne kod kursora). Koristi se block start pozicija (`$from.start()`) umjesto pozicije kursora.
+- **`BlogFilePanel`** koristi **`BlogUploadTab`** umjesto default **`UploadTab`** iz `@blocknote/react`.
+- **Drag-and-drop:** zona s `preventDefault` na `dragover`; brojač na `dragenter`/`dragleave`; `drop` uz prvu datoteku; `fileMatchesAccept` usklađuje s `accept` sheme bloka.
+- **Tekst (EN):** *Drag and drop file here or Choose file*; klik na gumb poziva nativni picker preko `dropzoneRef` + `querySelector('input[type="file"]')` (BlockNote `FileInput` u tipovima ne izlaže `ref`).
+- **Stil nativnog file inputa:** `globals.css` – `.bn-panel input[type="file"].bn-file-input` – `::file-selector-button` i `::-webkit-file-upload-button` (margin, rub, pozadina gumba) da se „Choose file“ i „No file chosen“ vizualno odvoje.
 
-**Komponente:**
-- **FloatingBlockTypeBar** – Block style dropdown; koristi `useEditorState` s block start pozicijom; `placement: "top-start"` za poravnanje lijevo. **Prikazuje se samo kad editor ima fokus** (`hasFocus` state, focusin/focusout na `editor.domElement`) – sprječava prikaz u zadnjem (trailing) bloku pri učitavanju gdje ProseMirror postavlja kursor po defaultu.
-- **BlockTopFormattingToolbarController** – Custom FormattingToolbarController; koristi block start za pozicioniranje; koristi se u `CustomFormattingToolbar` umjesto default `FormattingToolbarController`
+**Referentne datoteke:** `src/components/blocknote/BlogUploadTab.tsx`, `src/components/blocknote/BlogFilePanel.tsx`, `src/app/globals.css`
 
-**Referentne datoteke:** `src/components/FloatingBlockTypeBar.tsx`, `src/components/BlockTopFormattingToolbarController.tsx`, `src/components/CustomFormattingToolbar.tsx`
+### 5.4 Formatting toolbar na vrhu bloka
+
+Formatting toolbar (Bold, Italic, link, …) pojavljuje se **na vrhu bloka** i kad je samo **kursor u tekstualnom bloku**, i kad je **označen tekst** (BlockNoteov extension inače prikazuje samo uz selekciju). Koristi se block start (`$from.start()`) za poziciju. Na **code / slika / YouTube / file / video / audio** blokovima se ne prikazuje dok je selekcija prazna.
+
+**Komponenta:** **BlockTopFormattingToolbarController** – u `CustomFormattingToolbar` umjesto default `FormattingToolbarController`.
+
+**Tip bloka:** Nema plutajuće „Block style“ trake; tipovi blokova umetaju se preko **slash menija** (`/`). Proširenja (npr. code block, YouTube) – `blockTypeSelectItemsWithCodeBlock` u `BlockTypeSelectWithCursor.tsx` i stavke u `getSlashMenuItems` u `BlockNoteEditor.tsx`.
+
+**Referentne datoteke:** `src/components/BlockTopFormattingToolbarController.tsx`, `src/components/CustomFormattingToolbar.tsx`, `src/components/BlockNoteEditor.tsx`
+
+**Uklonjeno:** plutajuća **FloatingBlockTypeBar** („Block style:“ na kursoru) – više nije u `BlockNoteEditor.tsx`; tip bloka isključivo **slash** (`/`) i proširenja u `getSlashMenuItems`.
+
+### 5.4.1 Admin – tooltipovi formatting toolbar gumba
+
+BlockNote/shadcn koriste Radix **`[data-slot="tooltip-content"]`** (portal na `body`). U admin tamnoj temi (`document.documentElement` **`data-theme="dark"`** iz `AdminClient`) u **`globals.css`** pravilo **`[data-theme="dark"] [data-slot="tooltip-content"]`** postavlja crnu pozadinu, svijetli tekst, rub i blagu sjenu; strelica (`svg` zadnji child) `fill` usklađen s pozadinom.
 
 ### 5.5 Okvir blokova u editoru
 
@@ -383,6 +424,7 @@ const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
 - **createPortal + MutationObserver** u Reactu – rizik beskonačne petlje i blokade aplikacije; koristi sigurniji pristup (npr. `position: fixed` + `getBoundingClientRect`)
 - **Mijenjanje više od traženog** – ako korisnik traži npr. promjenu boje slova, ne diraj okvir bloka, dropdown pozadinu niti formatting toolbar
 - **Zaboraviti whitelist u sanitizeru** – kad dodaješ nove atribute na slike (npr. `data-display-width`), odmah ih dodaj u `PROSE_ALLOWED_ATTRIBUTES` i `transformTags` u `src/lib/sanitize.ts`
+- **Header na blogu bez forceLightMode** – nakon refresha na `/blog?kategorija=...` `usePathname()` može vratiti pogrešnu vrijednost tijekom hydration; header bi prikazao transparentan/tamni stil. Koristi `<Header forceLightMode />` u BlogListLayout i blog/[slug]/page.tsx
 
 ---
 

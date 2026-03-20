@@ -16,11 +16,11 @@ import { useState } from "react";
 import {
   ComponentProps,
   EmbedTab,
-  UploadTab,
   useComponentsContext,
   useBlockNoteEditor,
   useDictionary,
 } from "@blocknote/react";
+import { BlogUploadTab } from "./BlogUploadTab";
 import { MediaLibraryTab } from "./MediaLibraryTab";
 
 type PanelProps = ComponentProps["FilePanel"]["Root"];
@@ -44,7 +44,7 @@ export const BlogFilePanel = <
           {
             name: dict.file_panel.upload.title,
             tabPanel: (
-              <UploadTab blockId={props.blockId} setLoading={setLoading} />
+              <BlogUploadTab blockId={props.blockId} setLoading={setLoading} />
             ),
           },
         ]

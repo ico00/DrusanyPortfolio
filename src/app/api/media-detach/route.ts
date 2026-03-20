@@ -1,6 +1,7 @@
 import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import { checkRateLimit } from "@/lib/rateLimit";
+import { requireDevApiResponse } from "@/lib/apiDevOnly";
 import { getGallery } from "@/lib/getGallery";
 import { getBlog, saveBlog, getBlogContentPath } from "@/lib/blog";
 import { getPages, savePages } from "@/lib/pages";
@@ -23,12 +24,8 @@ function removeImgFromHtml(html: string, url: string): string {
 export async function POST(request: Request) {
   const rateLimitRes = checkRateLimit(request);
   if (rateLimitRes) return rateLimitRes;
-  if (process.env.NODE_ENV !== "development") {
-    return Response.json(
-      { error: "Only available in development mode" },
-      { status: 403 }
-    );
-  }
+  const devBlock = requireDevApiResponse();
+  if (devBlock) return devBlock;
 
   try {
     const body = (await request.json()) as {

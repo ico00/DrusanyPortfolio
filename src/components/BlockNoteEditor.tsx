@@ -18,7 +18,6 @@ import TiptapLink from "@tiptap/extension-link";
 import { RiYoutubeFill } from "react-icons/ri";
 import "@blocknote/shadcn/style.css";
 import "@blocknote/core/fonts/inter.css";
-import { FloatingBlockTypeBar } from "./FloatingBlockTypeBar";
 import { CustomFormattingToolbar } from "./CustomFormattingToolbar";
 import { BlogFilePanel } from "./blocknote/BlogFilePanel";
 import { FilePanelScrollLock } from "./blocknote/FilePanelScrollLock";
@@ -195,7 +194,6 @@ export default function BlockNoteEditor({
             />
           </>
         )}
-        <FloatingBlockTypeBar />
         <CustomFormattingToolbar />
       </BlockNoteView>
     </div>

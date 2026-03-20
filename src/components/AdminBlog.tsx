@@ -1099,8 +1099,8 @@ export default function AdminBlog({
                 placeholder="yymmdd-slug (e.g. 251228-advent-2025)"
               />
             </div>
-            <div className="flex gap-4">
-              <div className="flex-1">
+            <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
+              <div className="min-w-[min(100%,11rem)] flex-1 basis-44">
                 <label className="mb-2 block text-sm text-zinc-400">{ADMIN_UI.blog.date}</label>
                 <DatePicker
                   value={form.date}
@@ -1113,19 +1113,17 @@ export default function AdminBlog({
                   }
                 />
               </div>
-              <div className="w-24">
+              <div className="w-28 shrink-0">
                 <label className="mb-2 block text-sm text-zinc-400">{ADMIN_UI.blog.time}</label>
                 <input
                   type="time"
                   value={form.time}
                   onChange={(e) => setForm((f) => ({ ...f, time: e.target.value }))}
-                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-2.5 text-zinc-100 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
                 />
               </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-6">
-              <div className="flex items-center gap-2">
-                <label className="text-sm text-zinc-400">Status</label>
+              <div className="shrink-0">
+                <label className="mb-2 block text-sm text-zinc-400">Status</label>
                 <div className="w-40">
                   <StatusSelect
                     value={form.status}
@@ -1135,33 +1133,39 @@ export default function AdminBlog({
                   />
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <label className="text-sm text-zinc-400">{ADMIN_UI.blog.featuredPost}</label>
-              <button
-                type="button"
-                onClick={() => {
-                  if (!form.featured) {
-                    const featuredCount = posts.filter((p) => p.featured && p.id !== editingId).length;
-                    if (featuredCount >= 3) {
-                      showToast("error", ADMIN_UI.blog.maxFeaturedReached);
-                      return;
+              <div className="shrink-0">
+                <label className="mb-2 block text-sm text-zinc-400">
+                  {ADMIN_UI.blog.featuredPost}
+                </label>
+                <div className="flex h-10 items-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!form.featured) {
+                        const featuredCount = posts.filter((p) => p.featured && p.id !== editingId).length;
+                        if (featuredCount >= 3) {
+                          showToast("error", ADMIN_UI.blog.maxFeaturedReached);
+                          return;
+                        }
+                      }
+                      setForm((f) => ({ ...f, featured: !f.featured }));
+                    }}
+                    className={`rounded p-2 transition-colors ${
+                      form.featured
+                        ? "text-amber-400 hover:text-amber-300"
+                        : "text-zinc-500 hover:text-zinc-400"
+                    }`}
+                    title={form.featured ? ADMIN_UI.blog.removeFromFeatured : ADMIN_UI.blog.addToFeatured}
+                    aria-label={
+                      form.featured ? ADMIN_UI.blog.removeFromFeatured : ADMIN_UI.blog.addToFeatured
                     }
-                  }
-                  setForm((f) => ({ ...f, featured: !f.featured }));
-                }}
-                className={`rounded p-2 transition-colors ${
-                  form.featured
-                    ? "text-amber-400 hover:text-amber-300"
-                    : "text-zinc-500 hover:text-zinc-400"
-                }`}
-                title={form.featured ? ADMIN_UI.blog.removeFromFeatured : ADMIN_UI.blog.addToFeatured}
-                aria-label={form.featured ? ADMIN_UI.blog.removeFromFeatured : ADMIN_UI.blog.addToFeatured}
-              >
-                <Star
-                  className={`h-5 w-5 ${form.featured ? "fill-amber-400" : ""}`}
-                  strokeWidth={1.5}
-                />
-              </button>
+                  >
+                    <Star
+                      className={`h-5 w-5 ${form.featured ? "fill-amber-400" : ""}`}
+                      strokeWidth={1.5}
+                    />
+                  </button>
+                </div>
               </div>
             </div>
             <div className="rounded-lg border-2 border-sky-500/30 bg-sky-950/25 p-4 ring-1 ring-sky-500/10">

@@ -3,7 +3,12 @@
 /**
  * FormattingToolbarController koji pozicionira toolbar na vrh bloka umjesto
  * kod kursora/selekcije. Koristi block start poziciju za konzistentan UX.
+ *
+ * BlockNoteov FormattingToolbarExtension prikazuje toolbar samo uz ne-praznu
+ * selekciju; ovdje dodajemo i prikaz kad je samo kursor u tekstualnom bloku
+ * (isti UX kao bivši FloatingBlockTypeBar, ali s formatting akcijama).
  */
+import type { BlockNoteEditor } from "@blocknote/core";
 import {
   blockHasType,
   defaultProps,
@@ -11,7 +16,8 @@ import {
 } from "@blocknote/core";
 import { FormattingToolbarExtension } from "@blocknote/core/extensions";
 import { flip, offset, shift } from "@floating-ui/react";
-import { FC, useMemo } from "react";
+import { TextSelection } from "prosemirror-state";
+import { FC, useEffect, useMemo, useState } from "react";
 import {
   FormattingToolbar,
   PositionPopover,
@@ -22,6 +28,40 @@ import {
 } from "@blocknote/react";
 import type { FloatingUIOptions } from "@blocknote/react";
 import type { FormattingToolbarProps } from "@blocknote/react";
+
+/** Blokovi bez inline formatiranja – toolbar nema smisla na samom kursoru. */
+const COLLAPSED_TOOLBAR_DENY_BLOCK_TYPES = new Set([
+  "codeBlock",
+  "image",
+  "youtubeEmbed",
+  "file",
+  "video",
+  "audio",
+]);
+
+function collapsedSelectionAllowsFormattingToolbar(
+  editor: BlockNoteEditor
+): boolean {
+  try {
+    const sel = editor.prosemirrorState.selection;
+    if (!(sel instanceof TextSelection) || !sel.empty) {
+      return false;
+    }
+    const $from = sel.$from;
+    for (let d = $from.depth; d > 0; d--) {
+      if ($from.node(d).type.spec.code) {
+        return false;
+      }
+    }
+    const { block } = editor.getTextCursorPosition();
+    if (COLLAPSED_TOOLBAR_DENY_BLOCK_TYPES.has(block.type)) {
+      return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 const textAlignmentToPlacement = (
   textAlignment: DefaultProps["textAlignment"]
@@ -46,15 +86,64 @@ export function BlockTopFormattingToolbarController(props: {
   const formattingToolbar = useExtension(FormattingToolbarExtension, {
     editor,
   });
-  const show = useExtensionState(FormattingToolbarExtension, {
+  const showFromExtension = useExtensionState(FormattingToolbarExtension, {
     editor,
   });
+
+  const [hasFocus, setHasFocus] = useState(false);
+  const [mouseDown, setMouseDown] = useState(false);
+
+  useEffect(() => {
+    const el = editor?.domElement;
+    if (!el) return;
+    const onFocusIn = () => setHasFocus(true);
+    const onFocusOut = (e: FocusEvent) => {
+      if (!el.contains(e.relatedTarget as Node)) setHasFocus(false);
+    };
+    el.addEventListener("focusin", onFocusIn);
+    el.addEventListener("focusout", onFocusOut);
+    return () => {
+      el.removeEventListener("focusin", onFocusIn);
+      el.removeEventListener("focusout", onFocusOut);
+    };
+  }, [editor?.domElement]);
+
+  // Kao BlockNote FormattingToolbar: ne prikazuj collapsed toolbar dok je tipka miša dolje (označavanje)
+  useEffect(() => {
+    const el = editor?.domElement;
+    if (!el) return;
+    const onDown = (e: PointerEvent) => {
+      if (e.isPrimary) setMouseDown(true);
+    };
+    const onUp = (e: PointerEvent) => {
+      if (e.isPrimary) setMouseDown(false);
+    };
+    el.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointerup", onUp, { capture: true });
+    window.addEventListener("pointercancel", onUp, { capture: true });
+    return () => {
+      el.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointerup", onUp, { capture: true });
+      window.removeEventListener("pointercancel", onUp, { capture: true });
+    };
+  }, [editor?.domElement]);
+
+  const collapsedAllowed = useEditorState({
+    editor,
+    selector: ({ editor }) => collapsedSelectionAllowsFormattingToolbar(editor),
+  });
+
+  const toolbarOpen =
+    showFromExtension ||
+    (hasFocus && !mouseDown && collapsedAllowed);
 
   // Koristi block start umjesto selekcije – toolbar na vrhu bloka
   const position = useEditorState({
     editor,
     selector: ({ editor }) => {
-      if (!formattingToolbar.store.state) return undefined;
+      const extShow = formattingToolbar.store.state;
+      const collapsedOk = collapsedSelectionAllowsFormattingToolbar(editor);
+      if (!extShow && !collapsedOk) return undefined;
       try {
         const sel = editor.prosemirrorState.selection;
         const $from = (sel as { $from?: { start: () => number } }).$from;
@@ -92,7 +181,7 @@ export function BlockTopFormattingToolbarController(props: {
     () => ({
       ...props.floatingUIOptions,
       useFloatingOptions: {
-        open: show,
+        open: toolbarOpen,
         onOpenChange: (open, _event, reason) => {
           formattingToolbar.store.setState(open);
           if (reason === "escape-key") {
@@ -108,14 +197,20 @@ export function BlockTopFormattingToolbarController(props: {
         ...props.floatingUIOptions?.elementProps,
       },
     }),
-    [show, placement, props.floatingUIOptions, formattingToolbar.store, editor]
+    [
+      toolbarOpen,
+      placement,
+      props.floatingUIOptions,
+      formattingToolbar.store,
+      editor,
+    ]
   );
 
   const Component = props.formattingToolbar || FormattingToolbar;
 
   return (
     <PositionPopover position={position} {...floatingUIOptions}>
-      {show && <Component />}
+      {toolbarOpen && <Component />}
     </PositionPopover>
   );
 }
