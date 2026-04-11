@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getBlog, getPublishedPosts } from "@/lib/blog";
 import { getTotalPages, sortPostsByDate } from "@/lib/pagination";
 import { PORTFOLIO_CATEGORIES } from "@/data/portfolioCategories";
+import { blogCategoryListPath, getAllBlogCategorySlugs } from "@/data/blogCategories";
 
 export const dynamic = "force-static";
 
@@ -57,6 +58,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
+  const blogCategoryPages: MetadataRoute.Sitemap = getAllBlogCategorySlugs().map(
+    (slug) => ({
+      url: `${siteUrl}${blogCategoryListPath(slug)}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.75,
+    }),
+  );
+
   const blogPostPages: MetadataRoute.Sitemap = sorted.map((post) => ({
     url: `${siteUrl}/blog/${post.slug}`,
     lastModified: post.date ? new Date(post.date + (post.time ? `T${post.time}:00` : "T12:00:00")) : new Date(),
@@ -64,5 +74,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...categoryPages, ...blogListPages, ...blogPostPages];
+  return [
+    ...staticPages,
+    ...categoryPages,
+    ...blogListPages,
+    ...blogCategoryPages,
+    ...blogPostPages,
+  ];
 }

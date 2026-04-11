@@ -3,8 +3,30 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-/** Build href for a page: 1 = /blog, 2+ = /blog/page/N. Preserves query params when provided. */
-function pageHref(page: number, queryString?: string): string {
+/**
+ * Build href za paginaciju. Kad je categorySlug postavljen, stranica 1 ide na
+ * /blog/kategorija/slug (OG-friendly); stranice 2+ na /blog/page/N?kategorija=…
+ */
+function pageHref(
+  page: number,
+  queryString: string | undefined,
+  categorySlug: string | undefined,
+): string {
+  const parts = (queryString ?? "").split("&").filter(Boolean);
+  const withoutCat = parts.filter((p) => !p.startsWith("kategorija="));
+  const qOnly = withoutCat.join("&");
+
+  if (categorySlug) {
+    const enc = encodeURIComponent(categorySlug);
+    if (page === 1) {
+      return qOnly.trim()
+        ? `/blog/kategorija/${enc}?${qOnly}`
+        : `/blog/kategorija/${enc}`;
+    }
+    const qs = [`kategorija=${enc}`, ...withoutCat].filter(Boolean).join("&");
+    return `/blog/page/${page}?${qs}`;
+  }
+
   const base = page === 1 ? "/blog" : `/blog/page/${page}`;
   if (queryString?.trim()) {
     return `${base}?${queryString}`;
@@ -16,15 +38,24 @@ export default function Pagination({
   currentPage,
   totalPages,
   queryString,
+  categorySlug,
 }: {
   currentPage: number;
   totalPages: number;
   queryString?: string;
+  /** Aktivna kategorija – str. 1 na /blog/kategorija/slug umjesto /blog?kategorija= */
+  categorySlug?: string;
 }) {
   if (totalPages <= 1) return null;
 
-  const prevHref = currentPage > 1 ? pageHref(currentPage - 1, queryString) : null;
-  const nextHref = currentPage < totalPages ? pageHref(currentPage + 1, queryString) : null;
+  const prevHref =
+    currentPage > 1
+      ? pageHref(currentPage - 1, queryString, categorySlug)
+      : null;
+  const nextHref =
+    currentPage < totalPages
+      ? pageHref(currentPage + 1, queryString, categorySlug)
+      : null;
 
   /** Page numbers to show: first, last, current, current±1, with ellipsis when far */
   const show = new Set<number>([1, totalPages, currentPage, currentPage - 1, currentPage + 1]);
@@ -79,7 +110,7 @@ export default function Pagination({
           ) : (
             <Link
               key={p}
-              href={pageHref(p, queryString)}
+              href={pageHref(p, queryString, categorySlug)}
               className="inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-md px-2 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
             >
               {p}

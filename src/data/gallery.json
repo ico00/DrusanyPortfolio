@@ -2584,14 +2584,14 @@
     },
     {
       "id": "b848bba7-8e02-4ffc-a47f-1a15837ae4fb",
-      "title": "Dome at Mirogoj cemetary in Zagreb",
+      "title": "Dome at Mirogoj cemetary",
       "category": "zagreb",
-      "alt": "Dome at Mirogoj cemetary in Zagreb",
+      "alt": "Dome at Mirogoj cemetary",
       "src": "/uploads/full/zagreb/_mg_4720.webp",
       "thumb": "/uploads/thumbs/zagreb/_mg_4720.webp",
       "width": 2048,
       "height": 1365,
-      "capturedAt": "2010-06-06T12:12:29.000Z",
+      "capturedAt": "2010-06-06T12:12:00.000Z",
       "createdAt": "2026-02-14T18:55:58.374Z",
       "camera": "Canon EOS 7D",
       "lens": "EF17-40mm f/4L USM",
@@ -2599,8 +2599,9 @@
       "aperture": "f/6.3",
       "iso": 160,
       "keywords": "mirogoj, cemetary, zagreb, croatia, wall, arcade, famous, big, beautiful, sky, cloud, summmer, monument, outdors, outside, sacred, dead, death, tower, window, hiatoric, ancient, ivy, building, balcony, dome",
-      "slug": "dome-at-mirogoj-cemetary-in-zagreb-2010",
-      "order": 78
+      "slug": "dome-at-mirogoj-cemetary-2010",
+      "order": 78,
+      "thumbnailFocus": "50% 50%"
     },
     {
       "id": "1c3292f5-e976-47c6-ae4c-b9e1d715f133",
@@ -3103,25 +3104,6 @@
       "iso": 100,
       "slug": "2015-5",
       "order": 46
-    },
-    {
-      "id": "bd838fda-3213-4008-9c1d-bd1ac22df4b3",
-      "title": "",
-      "category": "zagreb",
-      "alt": "Gallery image",
-      "src": "/uploads/full/zagreb/160805_zagrebancije_liv_035.webp",
-      "thumb": "/uploads/thumbs/zagreb/160805_zagrebancije_liv_035.webp",
-      "width": 2048,
-      "height": 1365,
-      "capturedAt": "2016-08-05T17:51:25.000Z",
-      "createdAt": "2026-02-14T18:56:03.825Z",
-      "camera": "Canon EOS 5D Mark II",
-      "lens": "35mm",
-      "exposure": "1/640",
-      "aperture": "f/1.4",
-      "iso": 100,
-      "slug": "2016",
-      "order": 45
     },
     {
       "id": "904df4e2-6d10-446e-8d59-8f1c6de95e74",

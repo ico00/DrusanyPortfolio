@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import {
   BLOG_CATEGORIES,
+  blogCategoryListPath,
   getBlogCategoryOptions,
+  getCategorySlugFromBlogPathname,
   postHasCategory,
   type BlogCategoryItem,
 } from "@/data/blogCategories";
@@ -78,7 +80,11 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
   const [expanded, setExpanded] = useState(false);
   const [expandedParents, setExpandedParents] = useState<Set<string>>(new Set());
   const searchParams = useSearchParams();
-  const activeSlug = searchParams.get("kategorija") ?? undefined;
+  const pathname = usePathname();
+  const activeSlug =
+    searchParams.get("kategorija") ??
+    getCategorySlugFromBlogPathname(pathname) ??
+    undefined;
 
   const counts = useMemo(() => getCategoryCounts(posts), [posts]);
   const widgetItems = useMemo(() => buildWidgetItems(counts), [counts]);
@@ -144,7 +150,7 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
                 return (
                   <li key={item.slug}>
                     <Link
-                      href={`/blog?kategorija=${encodeURIComponent(item.slug)}`}
+                      href={blogCategoryListPath(item.slug)}
                       scroll={false}
                       className={`block px-3 py-2 text-sm ${
                         activeSlug === item.slug ? BLOG_WIDGET_UI.itemActive : BLOG_WIDGET_UI.itemInactive
@@ -167,31 +173,25 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
               return (
                 <li key={cat.slug}>
                   <div className="space-y-0.5">
-                    <div className="flex items-stretch gap-0.5">
+                    <div className={`flex items-center px-3 py-2 text-sm ${
+                      isParentActive ? BLOG_WIDGET_UI.itemActive : BLOG_WIDGET_UI.itemInactive
+                    }`}>
+                      <Link
+                        href={blogCategoryListPath(cat.slug)}
+                        scroll={false}
+                        className="flex-1 min-w-0"
+                      >
+                        {cat.label}
+                      </Link>
                       <button
                         type="button"
-                        onClick={() => toggleParent(cat.slug)}
-                        className="flex shrink-0 items-center justify-center px-1.5 py-2 text-zinc-400 hover:text-zinc-600 transition-colors"
+                        onClick={(e) => { e.stopPropagation(); toggleParent(cat.slug); }}
+                        className="flex shrink-0 items-center justify-center px-1 text-zinc-400 hover:text-zinc-600 transition-colors"
                         aria-expanded={isParentExpanded}
                       >
-                        {isParentExpanded ? (
-                          <ChevronDown className="h-4 w-4" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4" />
-                        )}
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isParentExpanded ? "" : "-rotate-90"}`} />
                       </button>
-                      <Link
-                        href={`/blog?kategorija=${encodeURIComponent(cat.slug)}`}
-                        scroll={false}
-                        className={`flex-1 block px-2 py-2 text-sm min-w-0 ${
-                          isParentActive ? BLOG_WIDGET_UI.itemActive : BLOG_WIDGET_UI.itemInactive
-                        }`}
-                      >
-                        <span className="flex items-center justify-between gap-2">
-                          {cat.label}
-                          <span className="text-xs text-zinc-400 shrink-0">({parentCount})</span>
-                        </span>
-                      </Link>
+                      <span className="text-xs text-zinc-400 shrink-0 ml-1">({parentCount})</span>
                     </div>
                     <div
                       className={`grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out ${
@@ -203,7 +203,7 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
                           {subCounts.map(({ slug, label, count }) => (
                             <li key={slug}>
                               <Link
-                                href={`/blog?kategorija=${encodeURIComponent(slug)}`}
+                                href={blogCategoryListPath(slug)}
                                 scroll={false}
                                 className={`block px-2 py-1.5 text-sm ${
                                   activeSlug === slug ? BLOG_WIDGET_UI.itemActive : BLOG_WIDGET_UI.itemInactive

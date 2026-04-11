@@ -62,6 +62,8 @@ export async function POST(request: Request) {
       galleryMetadata?: Record<string, BlogGalleryMetadata>;
       featured?: boolean;
       status?: "draft" | "published";
+      authorText?: string;
+      authorPhoto?: string;
       body: string;
       seo?: BlogSeo;
     };
@@ -98,6 +100,8 @@ export async function POST(request: Request) {
       galleryMetadata: body.galleryMetadata ?? {},
       featured: body.featured ?? false,
       status: (body.status === "draft" ? "draft" : "published") as "draft" | "published",
+      ...(body.authorText?.trim() ? { authorText: body.authorText.trim() } : {}),
+      ...(body.authorPhoto?.trim() ? { authorPhoto: body.authorPhoto.trim() } : {}),
       seo: body.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
     };
     await withLock(BLOG_JSON_PATH, async () => {
@@ -149,6 +153,8 @@ export async function PUT(request: Request) {
       galleryMetadata?: Record<string, BlogGalleryMetadata>;
       featured?: boolean;
       status?: "draft" | "published";
+      authorText?: string;
+      authorPhoto?: string;
       body?: string;
       seo?: BlogSeo;
       /** Force save even if images would be removed (korisnik potvrdio upozorenje) */
@@ -210,6 +216,12 @@ export async function PUT(request: Request) {
       blog.posts[idx].featured = !!body.featured;
     }
     if (body.status !== undefined) blog.posts[idx].status = body.status === "draft" ? "draft" : "published";
+    if (body.authorText !== undefined) {
+      blog.posts[idx].authorText = body.authorText.trim() || undefined;
+    }
+    if (body.authorPhoto !== undefined) {
+      blog.posts[idx].authorPhoto = body.authorPhoto.trim() || undefined;
+    }
     if (body.seo !== undefined) {
       blog.posts[idx].seo = {
         metaTitle: body.seo.metaTitle?.trim() ?? "",

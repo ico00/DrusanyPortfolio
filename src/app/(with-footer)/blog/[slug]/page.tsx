@@ -13,6 +13,7 @@ import BlogReadingProgress from "@/components/blog/BlogReadingProgress";
 import ViewfinderOverlay from "@/components/ViewfinderOverlay";
 import { getBlog, getBlogPost, getPublishedPosts } from "@/lib/blog";
 import {
+  blogCategoryListPath,
   getDisplayCategories,
   getShortCategoryLabel,
   formatBlogDate,
@@ -50,8 +51,7 @@ export async function generateMetadata({
     ? `${baseUrl}${imagePath.startsWith("/") ? imagePath : `/${imagePath}`}`
     : undefined;
 
-  // Puni URL – og:url i canonical NIKAD ne smije završavati s /, samo na .html
-  const pageUrl = `${baseUrl}/blog/${slug}`.replace(/\/+$/, "");
+  const pageUrl = `${baseUrl}/blog/${post.slug}`.replace(/\/+$/, "");
 
   return {
     title,
@@ -90,9 +90,10 @@ export async function generateStaticParams() {
     return [{ slug: "_" }];
   }
 
-  // Kod exporta se blog postovi koriste kao /blog/${slug}.html,
-  // pa slug param ovdje uključuje .html ekstenziju.
-  return published.map((p) => ({ slug: `${p.slug}.html` }));
+  // Samo "čisti" slug — ako u param stavimo "foo.html", Next pravi direktorij
+  // blog/foo.html/ s __next*.txt (prefetch), a pravi HTML bude foo.html.html.
+  // S "foo" export je jedna datoteka blog/foo.html → prefetch /blog/foo.html/__next._tree.txt radi.
+  return published.map((p) => ({ slug: p.slug }));
 }
 
 export default async function BlogPostPage({
@@ -128,6 +129,9 @@ export default async function BlogPostPage({
 
   const focusPoint = post.thumbnailFocus || "50% 50%";
   const categories = getDisplayCategories(post);
+  const authorText = post.authorText?.trim() || "Ivica Drusany";
+  const authorPhoto = post.authorPhoto?.trim() || "Ivica Drusany";
+  const sameAuthor = authorText === authorPhoto;
 
   // Preload LCP slike za brži Largest Contentful Paint
   if (post.thumbnail) {
@@ -174,9 +178,7 @@ export default async function BlogPostPage({
                     <span key={catSlug}>
                       {index > 0 ? ", " : ""}
                       <Link
-                        href={`/blog?kategorija=${encodeURIComponent(
-                          catSlug,
-                        )}`}
+                        href={blogCategoryListPath(catSlug)}
                         className="inline-block border-b border-transparent pb-0.5 text-zinc-600 transition-[color,border-color] duration-200 hover:border-zinc-900 hover:text-zinc-900"
                       >
                         {getShortCategoryLabel(catSlug)}
@@ -187,14 +189,33 @@ export default async function BlogPostPage({
                   "—"
                 )}
               </span>
-              <span
-                className="hidden sm:inline-flex items-center gap-1.5"
-                style={{ marginRight: "3rem" }}
-              >
-                <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                Tekst i fotografije: Ivica Drusany
-              </span>
+              {sameAuthor ? (
+                <span
+                  className="hidden sm:inline-flex items-center gap-1.5"
+                  style={{ marginRight: "3rem" }}
+                >
+                  <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                  <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                  Tekst i fotografije: {authorText}
+                </span>
+              ) : (
+                <>
+                  <span
+                    className="hidden sm:inline-flex items-center gap-1.5"
+                    style={{ marginRight: "3rem" }}
+                  >
+                    <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                    Tekst: {authorText}
+                  </span>
+                  <span
+                    className="hidden sm:inline-flex items-center gap-1.5"
+                    style={{ marginRight: "3rem" }}
+                  >
+                    <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                    Fotografije: {authorPhoto}
+                  </span>
+                </>
+              )}
               <span className="hidden sm:inline-flex items-center gap-1.5">
                 <Tag className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
                 Kategorija:{" "}
@@ -202,9 +223,7 @@ export default async function BlogPostPage({
                   categories.map((catSlug) => (
                     <Link
                       key={catSlug}
-                      href={`/blog?kategorija=${encodeURIComponent(
-                        catSlug,
-                      )}`}
+                      href={blogCategoryListPath(catSlug)}
                       className="inline-block border-b border-transparent pb-0.5 text-zinc-600 transition-[color,border-color] duration-200 hover:border-zinc-900 hover:text-zinc-900"
                     >
                       {getShortCategoryLabel(catSlug)}
@@ -237,11 +256,24 @@ export default async function BlogPostPage({
           ) : null
         }
         authorMobile={
-          <p className="mt-3 flex items-center gap-1.5 text-sm text-zinc-500 sm:hidden">
-            <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-            <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-            Ivica Drusany
-          </p>
+          sameAuthor ? (
+            <p className="mt-3 flex items-center gap-1.5 text-sm text-zinc-500 sm:hidden">
+              <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+              <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+              {authorText}
+            </p>
+          ) : (
+            <div className="mt-3 flex flex-col gap-1 text-sm text-zinc-500 sm:hidden">
+              <p className="flex items-center gap-1.5">
+                <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                {authorText}
+              </p>
+              <p className="flex items-center gap-1.5">
+                <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+                {authorPhoto}
+              </p>
+            </div>
+          )
         }
         proseHtml={post.body || ""}
         gallery={
@@ -249,7 +281,7 @@ export default async function BlogPostPage({
             <BlogGallery images={post.galleryImages} />
           ) : null
         }
-        sidebar={<BlogSidebar posts={publishedPosts} searchOnMobile />}
+        sidebar={<Suspense fallback={<div className="h-64 animate-pulse rounded-2xl bg-zinc-100" />}><BlogSidebar posts={publishedPosts} searchOnMobile /></Suspense>}
       />
       <ScrollToTop />
     </div>

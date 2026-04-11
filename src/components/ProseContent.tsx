@@ -104,6 +104,35 @@ export default function ProseContent({
     };
   }, [lightboxIndex]);
 
+  /** Sinkronizacija CSS varijable --ba-pos s range inputom (prije/poslije blok). */
+  useEffect(() => {
+    const root = containerRef.current;
+    if (!root) return;
+    const figures = root.querySelectorAll<HTMLElement>(".prose-before-after");
+    const cleanups: (() => void)[] = [];
+
+    figures.forEach((fig) => {
+      const range = fig.querySelector<HTMLInputElement>(
+        ".prose-before-after-range"
+      );
+      if (!range) return;
+
+      const sync = () => {
+        fig.style.setProperty("--ba-pos", `${range.value}%`);
+      };
+
+      sync();
+      range.addEventListener("input", sync);
+      range.addEventListener("change", sync);
+      cleanups.push(() => {
+        range.removeEventListener("input", sync);
+        range.removeEventListener("change", sync);
+      });
+    });
+
+    return () => cleanups.forEach((fn) => fn());
+  }, [processedHtml]);
+
   return (
     <>
       <div

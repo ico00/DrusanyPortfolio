@@ -23,11 +23,18 @@ echo "▶️ Deploy uploads – šaljem samo promijenjene datoteke iz public/upl
 # rsync over SSH – preporučeno: samo promijenjene datoteke
 if [ -n "${SSH_HOST:-}" ] && [ -n "${SSH_USER:-}" ]; then
   SSH_PATH="${SSH_PATH:-/home/drusanyc/public_html}"
-  SSH_OPTS=(-avz --exclude='.DS_Store')
-  if [ -n "${SSH_PORT:-}" ]; then
-    SSH_OPTS+=(-e "ssh -p $SSH_PORT")
+  RSYNC_RSH="ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new"
+  [ -n "${SSH_PORT:-}" ] && RSYNC_RSH+=" -p ${SSH_PORT}"
+  [ -n "${SSH_KEY:-}" ] && RSYNC_RSH+=" -i ${SSH_KEY}"
+  SSH_OPTS=(-avz -e "$RSYNC_RSH" --exclude='.DS_Store')
+  # --delete: uklanja sa servera datoteke kojih lokalno više nema (obrisane fotke iz galerije).
+  # Bez --delete, stare slike ostaju zauvijek na serveru.
+  if [ "${UPLOADS_DELETE:-1}" = "1" ]; then
+    SSH_OPTS+=(--delete)
+    echo "  rsync --delete → $SSH_USER@$SSH_HOST:$SSH_PATH/uploads/"
+  else
+    echo "  rsync (bez --delete) → $SSH_USER@$SSH_HOST:$SSH_PATH/uploads/"
   fi
-  echo "  rsync → $SSH_USER@$SSH_HOST:$SSH_PATH/uploads/"
   rsync "${SSH_OPTS[@]}" "$UPLOADS_DIR/" "$SSH_USER@$SSH_HOST:$SSH_PATH/uploads/"
   echo "✅ rsync uploads završen."
 

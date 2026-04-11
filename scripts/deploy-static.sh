@@ -62,13 +62,44 @@ fi
 
 # rsync over SSH – preporučeno: samo promijenjene datoteke, brzo
 if [ -n "${SSH_HOST:-}" ] && [ -n "${SSH_USER:-}" ]; then
-  echo "▶️ rsync na server (samo promijenjene datoteke)..."
   SSH_PATH="${SSH_PATH:-/home/drusanyc/public_html}"
-  SSH_OPTS=(-avz --exclude='uploads' --exclude='.DS_Store')
+  SSH_CMD=(ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new)
   if [ -n "${SSH_PORT:-}" ]; then
-    SSH_OPTS+=(-e "ssh -p $SSH_PORT")
+    SSH_CMD+=(-p "${SSH_PORT}")
   fi
-  rsync "${SSH_OPTS[@]}" "$PROJECT_DIR/out/" "$SSH_USER@$SSH_HOST:$SSH_PATH/"
+  if [ -n "${SSH_KEY:-}" ]; then
+    SSH_CMD+=(-i "${SSH_KEY}")
+  fi
+
+  # Stari Next export je radio MAPU blog/foo.html/ s __next datotekama; novi export
+  # ima DATOTEKU blog/foo.html. Rsync ne može zamijeniti direktorij datotekom →
+  # "could not make way for new regular file". Isto može vrijediti za admin/blog/edit/*.html/.
+  if [ "${SKIP_REMOTE_HTML_DIR_CLEANUP:-}" != "1" ]; then
+    echo "▶️ SSH: uklanjam legacy direktorije blog/*.html i admin/blog/edit/*.html (samo type -d)…"
+    "${SSH_CMD[@]}" "${SSH_USER}@${SSH_HOST}" bash -s -- "$SSH_PATH" << 'REMOTE_CLEANUP'
+set -eu
+cd "$1" || { echo "Remote: ne postoji $1"; exit 1; }
+for base in blog admin/blog/edit; do
+  [ -d "$base" ] || continue
+  for d in "$base"/*.html; do
+    [ -d "$d" ] || continue
+    echo "  rm -rf $d"
+    rm -rf "$d"
+  done
+done
+REMOTE_CLEANUP
+  else
+    echo "ℹ️  Preskačem SSH cleanup (SKIP_REMOTE_HTML_DIR_CLEANUP=1)."
+  fi
+
+  echo "▶️ rsync na server (--delete uklanja ostatke starog exporta; uploads je isključen)…"
+  # --exclude uploads: ne šaljemo lokalni uploads iz out/; isključeni path na receiveru
+  # se po defaultu NE briše uz --delete (bez --delete-excluded).
+  RSYNC_RSH="ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new"
+  [ -n "${SSH_PORT:-}" ] && RSYNC_RSH+=" -p ${SSH_PORT}"
+  [ -n "${SSH_KEY:-}" ] && RSYNC_RSH+=" -i ${SSH_KEY}"
+  RSYNC_OPTS=(-avz --delete -e "$RSYNC_RSH" --exclude='uploads' --exclude='.DS_Store')
+  rsync "${RSYNC_OPTS[@]}" "$PROJECT_DIR/out/" "$SSH_USER@$SSH_HOST:$SSH_PATH/"
   echo "✅ rsync deploy završen."
 # FTP deploy – alternativa ako nemaš SSH
 elif [ -n "${FTP_HOST:-}" ] && [ -n "${FTP_USER:-}" ] && [ -n "${FTP_PASS:-}" ]; then
@@ -80,7 +111,10 @@ else
   echo "    1. Klikni 'Update from Remote' (povuče promjene s GitHuba)"
   echo "    2. Klikni 'Deploy HEAD Commit' (kopira u public_html)"
   echo ""
-  echo "   Za rsync (samo promijenjene datoteke): postavi SSH_HOST, SSH_USER u .env"
+  echo "   Ako deploy javlja 'could not make way for new regular file' za blog/*.html:"
+  echo "   na serveru jednom: find public_html/blog -maxdepth 1 -type d -name '*.html' -exec rm -rf {} +"
+  echo ""
+  echo "   Za rsync + automatski SSH cleanup: postavi SSH_HOST, SSH_USER u .env (SSH_PATH, SSH_PORT, SSH_KEY opcionalno)"
 fi
 echo ""
 

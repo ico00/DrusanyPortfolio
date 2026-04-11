@@ -24,6 +24,8 @@ export const BLOG_CATEGORIES: BlogCategoryItem[] = [
       { slug: "kosarka", label: "Košarka" },
       { slug: "atletika", label: "Atletika" },
       { slug: "jahanje", label: "Jahanje" },
+      { slug: "americkinogomet", label: "Američki nogomet" },
+
       { slug: "automobilizam", label: "Automobilizam" },
     ],
   },
@@ -56,6 +58,28 @@ export interface BlogCategoryOption {
   label: string;
   fullLabel: string;
   isSub: boolean;
+}
+
+/** Javni URL liste bloga po kategoriji – za dijeljenje (OG slika) i statički export. */
+export function blogCategoryListPath(slug: string): string {
+  const s = slug.toLowerCase().trim();
+  return `/blog/kategorija/${encodeURIComponent(s)}`;
+}
+
+/** Svi slugovi (roditelj + podkategorije) za generateStaticParams / sitemap. */
+export function getAllBlogCategorySlugs(): string[] {
+  return getBlogCategoryOptions().map((o) => o.slug);
+}
+
+/** Iz pathname tipa /blog/kategorija/sport izvlači slug kategorije. */
+export function getCategorySlugFromBlogPathname(pathname: string): string | undefined {
+  const m = /^\/blog\/kategorija\/([^/?#]+)/.exec(pathname);
+  if (!m) return undefined;
+  try {
+    return decodeURIComponent(m[1]).toLowerCase().trim();
+  } catch {
+    return m[1].toLowerCase().trim();
+  }
 }
 
 export function getBlogCategoryOptions(): BlogCategoryOption[] {

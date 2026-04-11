@@ -197,8 +197,15 @@ export async function POST(request: Request) {
       const contentDir = path.join(baseDir, "content");
       await mkdir(contentDir, { recursive: true });
       const nameToUse = (file.name || originalFilename).trim();
-      const filename = sanitizeFilename(nameToUse || "image", { slug });
-      const outPath = path.join(contentDir, filename);
+      let filename = sanitizeFilename(nameToUse || "image", { slug });
+      let outPath = path.join(contentDir, filename);
+      if (await fileExists(outPath)) {
+        const stem = path.basename(filename, ".webp");
+        let n = 2;
+        while (await fileExists(path.join(contentDir, `${stem}_${n}.webp`))) n++;
+        filename = `${stem}_${n}.webp`;
+        outPath = path.join(contentDir, filename);
+      }
       await sharp(buffer)
         .rotate()
         .keepExif()

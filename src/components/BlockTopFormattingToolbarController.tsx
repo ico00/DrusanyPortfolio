@@ -34,6 +34,7 @@ const COLLAPSED_TOOLBAR_DENY_BLOCK_TYPES = new Set([
   "codeBlock",
   "image",
   "youtubeEmbed",
+  "beforeAfter",
   "file",
   "video",
   "audio",

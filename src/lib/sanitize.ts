@@ -38,6 +38,7 @@ const PROSE_ALLOWED_TAGS = [
   "figcaption",
   "div",
   "iframe",
+  "input",
 ];
 
 const YOUTUBE_EMBED_REGEX = /^https?:\/\/(?:www\.)?youtube\.com\/embed\/[\w-]+(?:\?.*)?$/;
@@ -50,13 +51,26 @@ const PROSE_ALLOWED_ATTRIBUTES: Record<string, string[]> = {
   h4: ["id"],
   h5: ["id"],
   h6: ["id"],
-  img: ["src", "alt", "title", "width", "data-text-alignment", "data-display-width", "data-preview-width", "data-prose-split", "data-name", "data-url"],
-  span: ["class"],
+  img: [
+    "src",
+    "alt",
+    "title",
+    "width",
+    "class",
+    "data-text-alignment",
+    "data-display-width",
+    "data-preview-width",
+    "data-prose-split",
+    "data-name",
+    "data-url",
+  ],
+  span: ["class", "aria-hidden", "data-bn-export"],
   td: ["colspan", "rowspan"],
   th: ["colspan", "rowspan"],
-  figure: ["class"],
-  div: ["class", "style"],
+  figure: ["class", "data-orientation"],
+  div: ["class", "style", "aria-hidden"],
   iframe: ["src", "title", "allow", "allowfullscreen", "frameborder", "width", "height", "class"],
+  input: ["type", "class", "min", "max", "value", "step", "aria-label"],
 };
 
 /**
@@ -118,7 +132,35 @@ export function sanitizeProseHtml(html: string): string {
           out["data-name"] = attribs["data-name"];
         if (attribs["data-url"])
           out["data-url"] = attribs["data-url"];
+        if (attribs.class) out.class = attribs.class;
         return { tagName: "img", attribs: out };
+      },
+      input: (_tagName, attribs) => {
+        const cls = attribs.class || "";
+        if (
+          attribs.type !== "range" ||
+          !cls.includes("prose-before-after-range")
+        ) {
+          return {
+            tagName: "div" as const,
+            attribs: { class: "sanitized-input-removed" } as Record<
+              string,
+              string
+            >,
+          };
+        }
+        return {
+          tagName: "input" as const,
+          attribs: {
+            type: "range",
+            class: cls,
+            min: attribs.min || "0",
+            max: attribs.max || "100",
+            value: attribs.value || "50",
+            step: attribs.step || "0.5",
+            "aria-label": attribs["aria-label"] || "Usporedba prije i poslije",
+          } as Record<string, string>,
+        };
       },
     },
   });

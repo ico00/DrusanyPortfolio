@@ -90,9 +90,27 @@ export function processProseHtml(html: string): {
     bq.insertBefore(span, bq.firstChild);
   });
 
+  /* Stari export blocksToFullHTML omotavao je prije/poslije u .bn-before-after-block (+ gumb u HTML-u). */
+  doc.querySelectorAll(".bn-before-after-block").forEach((wrap) => {
+    const fig = wrap.querySelector("figure.prose-before-after");
+    if (!fig || !wrap.parentNode) return;
+    wrap.parentNode.insertBefore(fig, wrap);
+    wrap.remove();
+  });
+
+  doc.querySelectorAll(".bn-export-placeholder").forEach((el) => el.remove());
+
+  doc.querySelectorAll("p").forEach((p) => {
+    const t = p.textContent?.trim() ?? "";
+    if (t === "Postavke klizača (slike, opisi, smjer)") {
+      p.remove();
+    }
+  });
+
   const imgs = Array.from(doc.querySelectorAll("img"));
   imgs.forEach((img) => {
     if (img.closest(".prose-img-wrapper")) return;
+    if (img.closest(".prose-before-after")) return;
     const src = img.getAttribute("src");
     if (src) imageUrls.push(src);
 

@@ -144,7 +144,15 @@ export const YouTubeEmbedToExternalHTML = (
 ) => {
   const url = props.block.props.url || "";
   const videoId = extractYouTubeVideoId(url);
-  if (!videoId) return null;
+  if (!videoId) {
+    return (
+      <span
+        className="bn-export-placeholder"
+        aria-hidden="true"
+        data-bn-export="youtube-incomplete"
+      />
+    );
+  }
 
   const embedUrl = getEmbedUrl(videoId);
   return (

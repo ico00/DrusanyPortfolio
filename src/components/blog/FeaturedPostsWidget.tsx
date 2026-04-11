@@ -32,8 +32,7 @@ export default function FeaturedPostsWidget({
       <h3 className={BLOG_WIDGET_UI.title}>{title}</h3>
       <ul className="mt-4 space-y-3">
         {featured.map((post) => {
-          // generateStaticParams vraća slug s .html – href mora biti konzistentan (dev i prod)
-          const href = `/blog/${post.slug}.html`;
+          const href = `/blog/${post.slug}`;
 
           return (
           <li key={post.id}>

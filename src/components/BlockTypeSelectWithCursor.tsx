@@ -22,7 +22,7 @@ import {
   useEditorState,
 } from "@blocknote/react";
 import type { BlockTypeSelectItem } from "@blocknote/react";
-import { RiCodeBlock, RiYoutubeFill } from "react-icons/ri";
+import { RiCodeBlock, RiContrast2Line, RiYoutubeFill } from "react-icons/ri";
 import { useMemo } from "react";
 
 /** Default items + Code block + YouTube (BlockNote blockTypeSelectItems ne uključuje sve) */
@@ -42,6 +42,12 @@ function blockTypeSelectItemsWithCodeBlock(
     props: {},
     icon: RiYoutubeFill,
   };
+  const beforeAfterItem: BlockTypeSelectItem = {
+    name: "Prije / poslije",
+    type: "beforeAfter",
+    props: {},
+    icon: RiContrast2Line,
+  };
   // Umetni nakon quote, prije toggle_list
   const quoteIdx = base.findIndex((i) => i.type === "quote");
   const insertAt = quoteIdx >= 0 ? quoteIdx + 1 : base.length;
@@ -49,7 +55,18 @@ function blockTypeSelectItemsWithCodeBlock(
   // Umetni YouTube nakon image
   const imageIdx = withCode.findIndex((i) => i.type === "image");
   const youtubeInsertAt = imageIdx >= 0 ? imageIdx + 1 : withCode.length;
-  return [...withCode.slice(0, youtubeInsertAt), youtubeEmbedItem, ...withCode.slice(youtubeInsertAt)];
+  const withYoutube = [
+    ...withCode.slice(0, youtubeInsertAt),
+    youtubeEmbedItem,
+    ...withCode.slice(youtubeInsertAt),
+  ];
+  const imageIdx2 = withYoutube.findIndex((i) => i.type === "image");
+  const baInsertAt = imageIdx2 >= 0 ? imageIdx2 + 2 : withYoutube.length;
+  return [
+    ...withYoutube.slice(0, baInsertAt),
+    beforeAfterItem,
+    ...withYoutube.slice(baInsertAt),
+  ];
 }
 
 export function BlockTypeSelectWithCursor(props: {

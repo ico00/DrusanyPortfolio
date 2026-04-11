@@ -116,7 +116,7 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 | Blog widget konfiguracija (JSON) | getBlogWidgets, blogWidgets.json | `src/lib/blogWidgets.ts`, `src/data/blogWidgets.json` |
 | Admin: blog widgeti + planovi | BlogWidgetsAdmin (grid Title stupac na `md+`), `/api/blog-widgets`, `/api/plans` | `BlogWidgetsAdmin.tsx`, `api/blog-widgets/route.ts`, `api/plans/route.ts`, `lib/blogWidgets.ts`, `lib/plans.ts` |
 | Admin stringovi (blog widgeti) | `ADMIN_UI.adminWidgets` | `src/data/adminUI.ts` |
-| Admin blog forma – metadata red | AdminBlog (Datum, vrijeme, Status, Featured u jednom redu) | `src/components/AdminBlog.tsx` |
+| Admin blog forma – metadata red | AdminBlog (Datum, vrijeme, Status, Autor teksta, Autor fotografija, Featured u jednom redu) | `src/components/AdminBlog.tsx` |
 | Blog widget komponente | SearchWidget, CategoriesWidget, FeaturedPostsWidget, PlansWidget, GoogleMapsWidget | `src/components/blog/` |
 | Accordion (grid-rows) | CategoriesWidget (kategorije s podkategorijama), AdminSidebar | `src/components/blog/CategoriesWidget.tsx` |
 | Block type select (slash `/` i proširenja tipova) | BlockTypeSelectWithCursor, `getSlashMenuItems` | `src/components/BlockTypeSelectWithCursor.tsx`, `BlockNoteEditor.tsx` |
@@ -131,6 +131,9 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 | LCP optimizacija (blog thumbnail) | blog/[slug]/page.tsx | `src/app/(with-footer)/blog/[slug]/page.tsx` |
 | Traka napretka čitanja (post) | BlogReadingProgress + `data-blog-reading-article` na `<article>` | `src/components/blog/BlogReadingProgress.tsx` |
 | Header (forceLightMode za blog) | Header | `src/components/Header.tsx` |
+| Blog lista po kategoriji (OG/share) | `blog/kategorija/[slug]/page.tsx` | `src/app/(with-footer)/blog/kategorija/[slug]/page.tsx` |
+| Put kategorije za linkove | `blogCategoryListPath`, `getAllBlogCategorySlugs`, `getCategorySlugFromBlogPathname` | `src/data/blogCategories.ts` |
+| Paginacija bloga s kategorijom | Pagination (`categorySlug`) | `src/components/blog/Pagination.tsx` |
 
 ---
 
@@ -185,6 +188,8 @@ Javni blog sidebar koristi **`BLOG_WIDGET_UI`** (`src/data/blogWidgetUI.ts`): **
 
 Kategorije koje imaju podkategorije (Sport, Gradovi – iz `BLOG_CATEGORIES` u `blogCategories.ts`) prikazuju se kao accordion: roditelj s chevronom za expand/collapse, podkategorije uvučene ispod. Kategorije bez podkategorija ostaju obični linkovi. **Pattern:** `grid-rows-[1fr]` / `grid-rows-[0fr]` za animaciju (kao AdminSidebar). Podkategorije se sortiraju abecedno po labelu. Kad je aktivna podkategorija ili roditelj, accordion se automatski otvara.
 
+**Accordion strelica:** Chevron (`ChevronDown`) je na **desnoj strani** retka (između naziva i broja postova), s rotacijom: `-rotate-90` kad je zatvoreno, `rotate-0` kad je otvoreno (animacija 200ms). Raspored retka: `[Naziv kategorije] ... [▼ strelica] [(broj)]`. Stil (`itemActive`/`itemInactive`) je na cijelom retku (`div`), ne samo na linku — tako da se debljina selekcije podudara s običnim kategorijama.
+
 **Referentna komponenta:** `src/components/blog/CategoriesWidget.tsx`
 
 ### 4.2 PlansWidget – planirani snimanja
@@ -193,7 +198,7 @@ Widget "Planovi" prikazuje listu snimanja koja se planiraju. Podaci u `src/data/
 
 ### 4.3 FeaturedPostsWidget – istaknuti članci (max 3)
 
-Istaknuti članci su ograničeni na **maksimalno 3**. Validacija na više mjesta: AdminBlog (forma – checkbox disabled kad je 3, lista – gumb za dodavanje 4. skriven, save/create – provjera prije slanja), API (`PUT` i `POST` – vraća 400 ako prekorači). Pri pokušaju dodavanja 4. prikazuje se toast s porukom `ADMIN_UI.blog.maxFeaturedReached`. **Linkovi** – uvijek `/blog/${post.slug}.html` (i u dev i u prod), jer `generateStaticParams` vraća slugove s ekstenzijom.
+Istaknuti članci su ograničeni na **maksimalno 3**. Validacija na više mjesta: AdminBlog (forma – checkbox disabled kad je 3, lista – gumb za dodavanje 4. skriven, save/create – provjera prije slanja), API (`PUT` i `POST` – vraća 400 ako prekorači). Pri pokušaju dodavanja 4. prikazuje se toast s porukom `ADMIN_UI.blog.maxFeaturedReached`. **Linkovi** – `/blog/${post.slug}` (čisti URL bez `.html`).
 
 **Referentne datoteke:** `src/components/blog/FeaturedPostsWidget.tsx`, `src/components/AdminBlog.tsx`, `src/app/api/blog/route.ts`, `src/data/adminUI.ts`
 
@@ -226,6 +231,42 @@ Pri brisanju slike iz blog galerije (SortableGalleryItem ili bulk delete) prikaz
 
 **Referentna komponenta:** `src/components/AdminBlog.tsx`
 
+### 4.8 Blog post – autor teksta i fotografija
+
+Svaki post ima dva opcionalna polja: `authorText` (autor teksta) i `authorPhoto` (autor fotografija). Oba su u `BlogPost` interfaceu (`src/lib/blog.ts`) i spremaju se u `blog.json`. Default za oba: **"Ivica Drusany"**.
+
+**Admin forma:** Dva input polja u metadata redu (Datum, Vrijeme, Status, **Autor teksta**, **Autor fotografija**, Featured). Placeholder: "Ivica Drusany". Kad su prazna, ne spremaju se u JSON (čist blog.json za postojeće postove).
+
+**Prikaz na blogu (blog post + BlogList):**
+- **Isti autori** (oba prazna ili isti tekst) → kompaktno: `📝 📷 Tekst i fotografije: Ivica Drusany`
+- **Različiti autori** → odvojeno: `📝 Tekst: Pero Perić` i `📷 Fotografije: Ivica Drusany`
+
+**Backward compatible** – postovi bez `authorText`/`authorPhoto` automatski prikazuju default "Ivica Drusany".
+
+**Referentne datoteke:** `src/lib/blog.ts` (BlogPost interface), `src/components/AdminBlog.tsx` (forma; `openCreate` mora uključivati `authorText`/`authorPhoto` u početni objekt forme), `src/app/api/blog/route.ts` (POST/PUT), `src/app/(with-footer)/blog/[slug]/page.tsx` (prikaz), `src/components/BlogList.tsx` (lista)
+
+### 4.9 Blog – lista po kategoriji (`/blog/kategorija/[slug]`) i dijeljenje (Open Graph)
+
+**Problem:** URL `blog.html?kategorija=slug` dijeli isti statički HTML kao `/blog` – u `<head>` nema posebnog `og:image` po kategoriji; društvene mreže prikazuju generički blog.
+
+**Rješenje:** Za svaku kategoriju (roditelj + podkategorije iz `getBlogCategoryOptions()`) generira se statička stranica **`/blog/kategorija/[slug]`** (`generateStaticParams`, `dynamicParams: false`).
+
+**Metadata (`generateMetadata`):** Naslov `{label kategorije} | {blog SEO title}`; opis iz `pages.json` blog SEO ili fallback; **canonical** `/blog/kategorija/slug`; **`og:image` / Twitter** – apsolutni URL **thumbnaila najnovijeg objavljenog posta** u toj kategoriji (`postHasCategory`), ako nema thumbnaila – prva slika iz `gallery`.
+
+**UI:** `BlogListLayout` prima opcionalno `initialCategorySlug`; `BlogList` spaja `?kategorija=` iz URL-a s tim slugom (path-URL i dalje filtrira isto). **Linkovi** na filter kategorije koriste **`blogCategoryListPath(slug)`** → `/blog/kategorija/slug` (CategoriesWidget, BlogList, blog post stranica). **CategoriesWidget** – aktivna stavka: `searchParams.get("kategorija")` **ili** `getCategorySlugFromBlogPathname(pathname)`.
+
+**SearchWidget:** `router.replace` koristi **puni `pathname`** (ne skraćivanje na `/blog`) da pretraga na `/blog/kategorija/foo` ostane na toj ruti s `?q=`.
+
+**Paginacija:** Prop `categorySlug` – stranica 1 → `/blog/kategorija/slug` (i eventualno `?q=`); stranice 2+ → `/blog/page/N?kategorija=…` (+ `q`).
+
+**Sitemap:** `getAllBlogCategorySlugs()` – sve kategorijske stranice u `sitemap.ts`.
+
+**Apache (`public/.htaccess`):** Pravilo **prije** pravila za pojedinačni post – `RewriteRule ^blog/kategorija/([^/]+)$ blog/kategorija/$1.html` uz `RewriteCond` da datoteka postoji.
+
+**Backward compatible:** Stari `?kategorija=` i dalje radi na klijentu; za **preview pri dijeljenju** preporučen je čisti URL `/blog/kategorija/slug`.
+
+**Referentne datoteke:** `blog/kategorija/[slug]/page.tsx`, `BlogListLayout.tsx`, `BlogList.tsx`, `Pagination.tsx`, `SearchWidget.tsx`, `CategoriesWidget.tsx`, `blog/[slug]/page.tsx`, `sitemap.ts`, `public/.htaccess`
+
 ---
 
 ## 5. BlockNote / TipTap
@@ -234,6 +275,7 @@ Kad radiš s linkovima u BlockNote editoru:
 
 - **Link se otvara pri kliku** – korisnik ne može uređivati tekst unutar linka. Rješenje: `TiptapLink.configure({ openOnClick: false })` u `_tiptapOptions` (BlockNote schema).
 - **editLoading** – pri otvaranju uređivanja prikaži loader dok se body ne učitava; sprječava popover crash (`reference.element` undefined, `isConnected`).
+- **contentReady pri mountu editora** – u `BlockNoteEditor.tsx` state `contentReady` postavlja se na `true` tek nakon što `setTimeout(0)` završi `replaceBlocks` (ili odmah ako nema HTML sadržaja). `mounted` (formatting toolbar / FilePanel) ovisi o `contentReady`, ne samo o `requestAnimationFrame` – inače race: toolbar se montira prije nego što je DOM sinkroniziran s učitanim blokovima → Floating UI `Cannot read properties of undefined (reading 'isConnected')`.
 - **FormattingToolbar.Button** – zahtijeva obavezan `label` prop (BlockNote 0.46+).
 - **CustomCreateLinkButton** – `checkLinkInSchema` vraća `boolean` (ne type predicate – custom shema nije kompatibilna s default tipovima); za `anchor?.target === "_blank"` koristiti `anchor ? anchor.target === "_blank" : true` (ne `?? true` – boolean nije nullish).
 - **blocknoteImageSchema** – `createImageBlockConfig({})` zahtijeva objekat (ne prazan poziv); `displayWidth` u `parseImageWithDisplayWidth` mora biti literal tip `"full" | "50" | "25"` (type assertion ako dolazi iz `getAttribute`).
@@ -425,6 +467,8 @@ const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
 - **Mijenjanje više od traženog** – ako korisnik traži npr. promjenu boje slova, ne diraj okvir bloka, dropdown pozadinu niti formatting toolbar
 - **Zaboraviti whitelist u sanitizeru** – kad dodaješ nove atribute na slike (npr. `data-display-width`), odmah ih dodaj u `PROSE_ALLOWED_ATTRIBUTES` i `transformTags` u `src/lib/sanitize.ts`
 - **Header na blogu bez forceLightMode** – nakon refresha na `/blog?kategorija=...` `usePathname()` može vratiti pogrešnu vrijednost tijekom hydration; header bi prikazao transparentan/tamni stil. Koristi `<Header forceLightMode />` u BlogListLayout i blog/[slug]/page.tsx
+- **JSX prop s duplim `{`** – npr. `authorMobile={{ sameAuthor ? (` – parser tumači unutarnji `{` kao objekt. Ispravno: `authorMobile={sameAuthor ? (` (jedan par vitičastih za cijeli izraz).
+- **AdminBlog `setForm` / TypeScript** – ako `BlogPost` forma dobije nova polja (`authorText`, `authorPhoto`), svi kodovi koji postavljaju cijeli objekt forme (`openCreate`, `openEdit`) moraju ih uključiti; inače build pada na `SetStateAction`.
 
 ---
 
@@ -434,41 +478,72 @@ Detaljniji opis projekta: **`docs/architecture.md`**.
 
 ---
 
-## 9. Statčki export na shared hostingu (Apache)
+## 9. Statički export na shared hostingu (Apache)
 
 Kad se projekt deploya na klasični shared hosting (Apache + cPanel/FTP) s `output: "export"`:
 
 - **.htaccess** – koristi se `.htaccess` iz `public/.htaccess` koji se pri buildu kopira u root `out/`:
 
 ```apache
+DirectorySlash Off
+Options -Indexes -MultiViews
 DirectoryIndex index.html
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
 
-# Izričita pravila: ruta bez .html -> odgovarajući .html (radi refresha)
-# Samo glavne stranice; blog postovi (/blog/slug) koriste eksplicitne .html linkove u kodu
-RewriteRule ^about/?$ about.html [L]
-RewriteRule ^blog/?$ blog.html [L]
-RewriteRule ^contact/?$ contact.html [L]
-RewriteRule ^admin/?$ admin.html [L]
+# /blog → blog.html (301)
+RewriteRule ^blog/?$ /blog.html [L,R=301]
+
+# RSC/prefetch segmenti (slug.html.txt → slug.txt, slug.html/__next.* → slug/__next.*)
+RewriteRule ^blog/(.+)\.html\.txt$ blog/$1.txt [L]
+RewriteRule ^([^/]+)\.html\.txt$ $1.txt [L]
+RewriteRule ^blog/(.+)\.html/(__next\..+)$ blog/$1/$2 [L]
+RewriteRule ^index\.html/(__next\..+)$ /$1 [L]
+RewriteRule ^([^/]+)\.html/(__next\..+)$ $1/$2 [L]
+
+# Blog lista po kategoriji: /blog/kategorija/slug → blog/kategorija/slug.html
+RewriteCond %{DOCUMENT_ROOT}/blog/kategorija/$1.html -f
+RewriteRule ^blog/kategorija/([^/]+)$ blog/kategorija/$1.html [L]
+
+# Blog post: /blog/slug → blog/slug.html (eksplicitno — blog/slug/ direktorij postoji)
+RewriteCond %{DOCUMENT_ROOT}/blog/$1.html -f
+RewriteRule ^blog/([^/]+)$ blog/$1.html [L]
+
+# Stari /blog/slug.html → 301 na čisti URL (samo originalni zahtjev, ne interni rewrite)
+RewriteCond %{THE_REQUEST} \s/blog/[^\s]+\.html
+RewriteCond %{DOCUMENT_ROOT}/blog/$1.html -f
+RewriteRule ^blog/(.+)\.html$ /blog/$1 [L,R=301]
+
+# Portfolio kategorije
+RewriteRule ^(concerts|sport|animals|interiors|zagreb|food-drink)/?$ $1.html [L]
+
+# Fallback: /path → path.html (ako nije datoteka NI direktorij)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
 </IfModule>
 ```
 
-- **Blog post URL‑ovi** – zbog ograničenja hostinga i `generateStaticParams` (output: export) pojedinačni postovi koriste eksplicitne `.html` linkove:
+- **Blog post URL‑ovi** – čisti URL-ovi (bez `.html`):
   - lista: `/blog`
-  - post: `/blog/${post.slug}.html`
-  - referentne komponente: `BlogList` i `FeaturedPostsWidget` – **uvijek** koriste `.html` (i u dev i u prod), jer `generateStaticParams` vraća slugove s ekstenzijom.
+  - post: `/blog/${post.slug}` (bez `.html`)
+  - `generateStaticParams` vraća čisti slug (npr. `251228-advent-2025`); Next generira `blog/slug.html` (datoteka) i `blog/slug/` (direktorij sa segmentima za prefetch) — nema sukoba
+  - **Važno:** Na disku postoji i datoteka `blog/slug.html` i direktorij `blog/slug/` (sa `__next` segment datotekama za prefetch). Apache bez eksplicitnog pravila vidi direktorij i ne servira `.html` datoteku — zato je potrebno pravilo #2 (`^blog/([^/]+)$`) koje eksplicitno servira `.html`.
+  - Stari `/blog/slug.html` URL-ovi (bookmarkovi, Google indeks) dobivaju **301 redirect** na čisti oblik; `%{THE_REQUEST}` osigurava da se redirect primjenjuje samo na originalni zahtjev, ne na interni rewrite (inače bi nastala petlja)
+  - Fallback pravilo (#4) ima `!-d` uvjet jer bez njega Apache bi pokušao servirati direktorij umjesto dodati `.html`
+  - referentne komponente: `BlogList`, `FeaturedPostsWidget`, `CustomCreateLinkButton` – svi koriste `/blog/${slug}` (bez `.html`)
 - **Mobile blog layout (full‑bleed)** – na mobilnom:
   - featured slike i tamni blok ispod njih (naslov + datum) na listi bloga idu **od ruba do ruba** (`-mx-6 w-[calc(100%+3rem)]`, unutarnji sadržaj ima `px-6`);
   - isto za featured sliku i tekstualni dio posta na stranici `blog/[slug]/page.tsx`.
-  - **Blog post mobilna specifika:** search widget isti razmak kao blog lista (`py-24`); autor (ikona + „Ivica Drusany“) ispod featured slike – bez teksta „Tekst i fotografije:“; kategorija kao **Link** (`/blog?kategorija=...`) – filter radi i na mobilu.
+  - **Blog post mobilna specifika:** search widget isti razmak kao blog lista (`py-24`); autor ispod featured slike; kategorija kao **Link** na **`/blog/kategorija/{slug}`** (`blogCategoryListPath`) – filter i OG-friendly URL.
   - referentne komponente: `BlogList`, `blog/[slug]/page.tsx`.
 
 ### 9.1 Deploy (rsync over SSH)
 
-**Trenutno stanje (veljača 2026):** rsync over SSH – jedan korak, samo promijenjene datoteke. Workflow: uređuješ u adminu → spremiš → `./scripts/deploy-static.sh` → gotovo.
+**Trenutno stanje (ožujak 2026):** rsync over SSH – jedan korak, samo promijenjene datoteke. Workflow: uređuješ u adminu → spremiš → `./scripts/deploy-static.sh` → gotovo.
 
 - **Repozitoriji:**
   - `DrusanyPortfolio` – izvorni kod (ovaj projekt).
@@ -481,7 +556,9 @@ RewriteRule ^admin/?$ admin.html [L]
     - briše `uploads` iz `drusany-static`
     - generira `.cpanel.yml`
     - `git add`, `git commit`, `git push` na `drusany-static`
-    - **rsync over SSH** (ako su `SSH_HOST`, `SSH_USER` u `.env`) – prenosi samo promijenjene datoteke direktno u `public_html`
+    - **SSH cleanup** – briše legacy `blog/*.html/` direktorije na serveru (ako postoje) prije rsync-a; koristi jednostavnu `for` petlju (ne process substitution `< <(find ...)` — `/dev/fd` ne postoji na shared hostingu)
+    - **rsync over SSH** (ako su `SSH_HOST`, `SSH_USER` u `.env`) – `--delete` uklanja stare datoteke; `--exclude uploads` štiti fotografije; prenosi samo promijenjene datoteke direktno u `public_html`
+- **deploy-uploads.sh** – rsync samo `public/uploads/`; `--delete` po defaultu (`UPLOADS_DELETE=1`) briše sa servera fotografije kojih lokalno nema; `UPLOADS_DELETE=0 npm run deploy:uploads` za upload bez brisanja
 - **cPanel Git™ Version Control:**
   - klonirani repo `drusany-static` koristi `.cpanel.yml` (skripta ga generira pri svakom deployu)
   - **Važno:** `cp -R *` ne kopira dotfileove – `.htaccess` mora biti eksplicitno u tasku
@@ -513,3 +590,35 @@ deployment:
 ### 9.2 Brzi start dev (dev-and-open)
 
 Skripta `./scripts/dev-and-open.sh` ili `npm run dev:open`: otvara novi Terminal prozor s `npm run dev`, čeka da server odgovori (max 30 s), zatim otvara Google Chrome s 2 taba – `http://localhost:3000` i `http://localhost:3000/admin`. Korisno za brzi pokretanje razvoja bez ručnog otvaranja preglednika.
+
+---
+
+## 10. Hydration i Suspense (useSearchParams)
+
+Komponente koje koriste `useSearchParams()` (`BlogList`, `SearchWidget`, `CategoriesWidget`) moraju biti unutar `Suspense` granice. Sa `output: "export"`, Next.js na serveru može renderirati Suspense fallback za te komponente, dok klijent renderira pravi sadržaj.
+
+**Pravilo:** Koristiti **jedan `Suspense`** oko cijelog bloka sadržaja koji sadrži više komponenti s `useSearchParams()`, a ne zasebni Suspense za svaku. Višestruki Suspense blokovi unutar istog kontejnera stvaraju strukturalne razlike između serverskog i klijentskog DOM-a → hydration mismatch.
+
+**Primjer (BlogListLayout):**
+
+```tsx
+<div className="mx-auto max-w-7xl px-6 py-24">
+  <Suspense fallback={<div className="h-96 animate-pulse rounded-2xl bg-zinc-50" />}>
+    <div className="mb-6 lg:hidden">
+      <SearchWidget variant="minimal" />
+    </div>
+    <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
+      <main className="min-w-0 flex-1">
+        <BlogList posts={posts} ... />
+      </main>
+      <aside>
+        <BlogSidebar posts={posts} />
+      </aside>
+    </div>
+  </Suspense>
+</div>
+```
+
+**Na blog post stranici** (`blog/[slug]/page.tsx`): `BlogSidebar` se prosljeđuje kao prop `sidebar` u `BlogPostLayoutClient` i omotava u `Suspense`.
+
+**Referentne datoteke:** `BlogListLayout.tsx`, `blog/[slug]/page.tsx`, `BlogPostLayoutClient.tsx`

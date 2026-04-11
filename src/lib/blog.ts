@@ -59,6 +59,10 @@ export interface BlogPost {
   featured?: boolean;
   /** Status objave – draft se ne prikazuje javno */
   status?: "draft" | "published";
+  /** Autor teksta (default: "Ivica Drusany") */
+  authorText?: string;
+  /** Autor fotografija (default: "Ivica Drusany") */
+  authorPhoto?: string;
   body?: string; // body comes from file; deprecated in JSON
   /** Plain text from body for search (from getBlogWithBodies) */
   bodySearchText?: string;

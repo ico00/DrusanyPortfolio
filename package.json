@@ -11,7 +11,7 @@
     "blog:cleanup-categories": "node scripts/cleanup-blog-categories.mjs",
     "dev": "next dev",
     "dev:open": "./scripts/dev-and-open.sh",
-    "build": "next build",
+    "build": "next build && node scripts/fix-next-static-export.mjs",
     "start": "next start",
     "preview": "npx serve out",
     "deploy:static": "./scripts/deploy-static.sh",

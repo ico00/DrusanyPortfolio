@@ -11,15 +11,43 @@ RewriteBase /
 # 1. Ako je zahtjev točno za mapu /blog ili /blog/, silom pošalji na blog.html
 RewriteRule ^blog/?$ /blog.html [L,R=301]
 
-# 2. Blog post – provjeri postoji li .html datoteka, serviraj je (sprječava gledanje u /blog mapu)
+# 1b–1c. Next.js output:export + javni URL /blog/slug.html — klijent traži drugačije putanje od datoteka na disku:
+#   GET …/slug.html.txt     → blog/slug.txt (RSC navigacija)
+#   GET …/slug.html/__next.* → blog/slug/__next.* (prefetch segmenti)
+RewriteRule ^blog/(.+)\.html\.txt$ blog/$1.txt [L]
+# RSC navigacija: /blog.html.txt → blog.txt (slug pravilo iznad pokriva /blog/članak.html.txt)
+RewriteRule ^([^/]+)\.html\.txt$ $1.txt [L]
+RewriteRule ^blog/(.+)\.html/(__next\..+)$ blog/$1/$2 [L]
+
+# 1d–1e. Prefetch za stranice „na korijenu” kao /blog.html, /about.html:
+#   Next traži /blog.html/__next._tree.txt, datoteka je blog/__next._tree.txt.
+#   Za /index.html/__next.* segmenti su u korijenu sitea (/__next._tree.txt).
+RewriteRule ^index\.html/(__next\..+)$ /$1 [L]
+RewriteRule ^([^/]+)\.html/(__next\..+)$ $1/$2 [L]
+
+# 1f. Blog lista po kategoriji – /blog/kategorija/slug → blog/kategorija/slug.html
+RewriteCond %{DOCUMENT_ROOT}/blog/kategorija/$1.html -f
+RewriteRule ^blog/kategorija/([^/]+)$ blog/kategorija/$1.html [L]
+
+# 2. Blog post – čisti URL /blog/slug → blog/slug.html
+#    Direktorij blog/slug/ postoji (segment datoteke), pa fallback pravilo ne radi.
+#    Ovo pravilo eksplicitno servira .html datoteku.
 RewriteCond %{DOCUMENT_ROOT}/blog/$1.html -f
-RewriteRule ^blog/(.+)\.html$ blog/$1.html [L]
+RewriteRule ^blog/([^/]+)$ blog/$1.html [L]
+
+# 2b. Stari /blog/slug.html URL-ovi → 301 redirect na čisti oblik
+#     %{THE_REQUEST} osigurava da se hvata samo originalni zahtjev, ne interni rewrite iz #2
+RewriteCond %{THE_REQUEST} \s/blog/[^\s]+\.html
+RewriteCond %{DOCUMENT_ROOT}/blog/$1.html -f
+RewriteRule ^blog/(.+)\.html$ /blog/$1 [L,R=301]
 
 # 3. Portfolio kategorije (čiste rute: /interiors, /concerts, itd.)
 RewriteRule ^(concerts|sport|animals|interiors|zagreb|food-drink)/?$ $1.html [L]
 
 # 4. Fallback za sve ostalo (index, about, contact...)
+#    !-f AND !-d: preskače direktorije (slug/ mape sa segment datotekama)
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.*)$ $1.html [L]
 </IfModule>

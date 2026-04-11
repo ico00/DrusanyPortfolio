@@ -162,32 +162,15 @@ Projekt se builda u čisto statični output (`out/`). Može se deployati na:
 
 - `next.config.ts` koristi `output: "export"` → cijeli site je čisti statični HTML u `out/`.
 - Na klasičnom Apache hostingu (`public_html`) koristi se `.htaccess` u rootu (dolazi iz `public/.htaccess`):
-
-```apache
-DirectoryIndex index.html
-
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /
-
-# Izričita pravila: ruta bez .html -> odgovarajući .html (radi refresha)
-# Samo glavne stranice; blog postovi (/blog/slug) koriste eksplicitne .html linkove u kodu
-RewriteRule ^about/?$ about.html [L]
-RewriteRule ^blog/?$ blog.html [L]
-RewriteRule ^contact/?$ contact.html [L]
-RewriteRule ^admin/?$ admin.html [L]
-</IfModule>
-```
-
-- Pojedinačni blog postovi se na takvom hostingu otvaraju preko URL‑ova s ekstenzijom, npr.
-  - lista: `/blog`
-  - post: `/blog/260110-sport-metadata-generator.html`
-  - ovo izbjegava ovisnost o naprednijim rewrite pravilima i osigurava da **refresh radi ispravno** i na ograničenim konfiguracijama.
+  - **Čisti URL-ovi** – blog postovi koriste `/blog/slug` (bez `.html`); Apache eksplicitno servira `blog/slug.html` jer na disku postoji i datoteka i direktorij (sa `__next` segment datotekama za prefetch)
+  - **301 redirect** za stare `/blog/slug.html` URL-ove (SEO, bookmarkovi) na čisti oblik
+  - **Fallback** – `/path` → `path.html` za ostale stranice (about, contact, portfolio kategorije)
+  - Detalji u `docs/technical-patterns.md` §9
 
 #### Deploy na shared hostingu (rsync over SSH)
 
 - **Workflow:** Uređuješ u adminu → Save → `./scripts/deploy-static.sh` → gotovo.
-- Skripta `scripts/deploy-static.sh`: build, kopira u `drusany-static`, push na GitHub, **rsync** na server (samo promijenjene datoteke).
+- Skripta `scripts/deploy-static.sh`: build, kopira u `drusany-static`, push na GitHub, SSH cleanup legacy direktorija, **rsync** na server (`--delete` za čišćenje starih datoteka, `--exclude uploads` za zaštitu fotografija).
 - **Postavka (jednokratno):** U cPanelu omogući SSH (Security → SSH Access), zapiši port. U `.env` dodaj:
   ```
   SSH_HOST=drusany.com
@@ -196,7 +179,7 @@ RewriteRule ^admin/?$ admin.html [L]
   SSH_PORT=21098
   ```
 - Alternativa: FTP deploy (`FTP_HOST`, `FTP_USER`, `FTP_PASS`) ili cPanel Deploy HEAD Commit.
-- **Uploads (slike):** `./scripts/deploy-uploads.sh` ili `npm run deploy:uploads` – rsync/FTP samo `public/uploads/`, šalje samo promijenjene datoteke (istovjetno deploy-static.sh, ali samo za uploads).
+- **Uploads (slike):** `./scripts/deploy-uploads.sh` ili `npm run deploy:uploads` – rsync samo `public/uploads/`; `--delete` po defaultu briše sa servera fotografije kojih lokalno nema; `UPLOADS_DELETE=0 npm run deploy:uploads` za upload bez brisanja.
 
 ## 📖 Dokumentacija
 

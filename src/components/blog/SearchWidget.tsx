@@ -35,8 +35,7 @@ export default function SearchWidget({ variant = "default" }: SearchWidgetProps)
     if (value.trim()) params.set("q", value);
     else params.delete("q");
     const query = params.toString();
-    const basePath = pathname.startsWith("/blog") ? "/blog" : pathname;
-    router.replace(query ? `${basePath}?${query}` : basePath, {
+    router.replace(query ? `${pathname}?${query}` : pathname, {
       scroll: false,
     });
   };

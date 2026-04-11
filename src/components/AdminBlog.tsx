@@ -250,6 +250,8 @@ export default function AdminBlog({
     featured: false,
     status: "draft" as "draft" | "published",
     body: "",
+    authorText: "",
+    authorPhoto: "",
     seo: { metaTitle: "", metaDescription: "", keywords: "" } as BlogSeo,
   });
   const [bulkTitle, setBulkTitle] = useState("");
@@ -507,6 +509,8 @@ export default function AdminBlog({
         featured: post.featured ?? false,
         status: (post.status === "draft" ? "draft" : "published") as "draft" | "published",
         body: full?.body ?? "",
+        authorText: post.authorText ?? "",
+        authorPhoto: post.authorPhoto ?? "",
         seo: post.seo ?? { metaTitle: "", metaDescription: "", keywords: "" },
       };
       setForm(formData);
@@ -560,6 +564,8 @@ export default function AdminBlog({
       featured: false,
       status: "published" as const,
       body: "",
+      authorText: "",
+      authorPhoto: "",
       seo: { metaTitle: "", metaDescription: "", keywords: "" } as BlogSeo,
     };
     setForm(formData);
@@ -1132,6 +1138,26 @@ export default function AdminBlog({
                     }
                   />
                 </div>
+              </div>
+              <div className="min-w-[min(100%,10rem)] flex-1 basis-40">
+                <label className="mb-2 block text-sm text-zinc-400">Autor teksta</label>
+                <input
+                  type="text"
+                  value={form.authorText}
+                  onChange={(e) => setForm((f) => ({ ...f, authorText: e.target.value }))}
+                  placeholder="Ivica Drusany"
+                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                />
+              </div>
+              <div className="min-w-[min(100%,10rem)] flex-1 basis-40">
+                <label className="mb-2 block text-sm text-zinc-400">Autor fotografija</label>
+                <input
+                  type="text"
+                  value={form.authorPhoto}
+                  onChange={(e) => setForm((f) => ({ ...f, authorPhoto: e.target.value }))}
+                  placeholder="Ivica Drusany"
+                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                />
               </div>
               <div className="shrink-0">
                 <label className="mb-2 block text-sm text-zinc-400">

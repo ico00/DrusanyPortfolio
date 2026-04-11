@@ -11,6 +11,7 @@ import {
   getBlogCategoryLabel,
   postHasCategory,
   formatBlogDate,
+  blogCategoryListPath,
 } from "@/data/blogCategories";
 import { getPostsForPage, getTotalPages } from "@/lib/pagination";
 import type { BlogPost } from "@/lib/blog";
@@ -21,14 +22,18 @@ export default function BlogList({
   posts,
   currentPage,
   totalPages,
+  initialCategorySlug,
 }: {
   posts: BlogPost[];
   currentPage: number;
   totalPages: number;
+  /** Iz rute /blog/kategorija/[slug] – isti filter kao ?kategorija= */
+  initialCategorySlug?: string;
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const kategorija = searchParams.get("kategorija") ?? undefined;
+  const kategorija =
+    searchParams.get("kategorija") ?? initialCategorySlug ?? undefined;
   const searchQuery = searchParams.get("q") ?? "";
 
   const hasActiveFilter = Boolean(kategorija || searchQuery.trim());
@@ -122,20 +127,43 @@ export default function BlogList({
             {displayPosts.map((post) => (
               <li key={post.id}>
                 <article className="group overflow-visible rounded-lg sm:overflow-hidden">
-                  <Link href={`/blog/${post.slug}.html`} className="block">
+                  <Link href={`/blog/${post.slug}`} className="block">
                   <div className="bg-white -mx-6 w-[calc(100%+3rem)] border-b-2 border-zinc-200 p-6 text-zinc-900 transition-colors group-hover:border-zinc-300 sm:mx-0 sm:w-full">
                     <h2 className="theme-blog-list-card-title font-normal tracking-tight text-zinc-900">
                       {post.title}
                     </h2>
                     <p className="theme-blog-list-card-metadata mt-3 flex flex-wrap items-center gap-y-2 text-zinc-600">
-                      <span
-                        className="hidden sm:inline-flex items-center gap-1.5"
-                        style={{ marginRight: "3rem" }}
-                      >
-                        <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
-                        <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
-                        Tekst i fotografije: Ivica Drusany
-                      </span>
+                      {(() => {
+                        const aText = post.authorText?.trim() || "Ivica Drusany";
+                        const aPhoto = post.authorPhoto?.trim() || "Ivica Drusany";
+                        return aText === aPhoto ? (
+                          <span
+                            className="hidden sm:inline-flex items-center gap-1.5"
+                            style={{ marginRight: "3rem" }}
+                          >
+                            <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
+                            <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
+                            Tekst i fotografije: {aText}
+                          </span>
+                        ) : (
+                          <>
+                            <span
+                              className="hidden sm:inline-flex items-center gap-1.5"
+                              style={{ marginRight: "3rem" }}
+                            >
+                              <PenLine className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
+                              Tekst: {aText}
+                            </span>
+                            <span
+                              className="hidden sm:inline-flex items-center gap-1.5"
+                              style={{ marginRight: "3rem" }}
+                            >
+                              <Camera className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
+                              Fotografije: {aPhoto}
+                            </span>
+                          </>
+                        );
+                      })()}
                       <span
                         className="inline-flex items-center gap-1.5"
                         style={{ marginRight: "3rem" }}
@@ -164,11 +192,7 @@ export default function BlogList({
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                router.push(
-                                  `/blog?kategorija=${encodeURIComponent(
-                                    slug,
-                                  )}`,
-                                );
+                                router.push(blogCategoryListPath(slug));
                               }}
                               className="inline-block border-b border-transparent pb-0.5 text-inherit transition-[color,border-color] duration-200 hover:border-zinc-900 hover:text-zinc-900"
                             >
@@ -207,6 +231,7 @@ export default function BlogList({
               currentPage={effectivePage}
               totalPages={effectiveTotalPages}
               queryString={queryString}
+              categorySlug={kategorija}
             />
           )}
         </motion.div>

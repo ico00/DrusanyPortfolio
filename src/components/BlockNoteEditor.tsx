@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   filterSuggestionItems,
   insertOrUpdateBlockForSlashMenu,
@@ -15,7 +15,7 @@ import {
 } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/shadcn";
 import TiptapLink from "@tiptap/extension-link";
-import { RiYoutubeFill } from "react-icons/ri";
+import { RiContrast2Line, RiYoutubeFill } from "react-icons/ri";
 import "@blocknote/shadcn/style.css";
 import "@blocknote/core/fonts/inter.css";
 import { CustomFormattingToolbar } from "./CustomFormattingToolbar";
@@ -69,12 +69,15 @@ export default function BlockNoteEditor({
     [useBlogSchema]
   );
 
+  const [contentReady, setContentReady] = useState(false);
+
   // Učitaj HTML sadržaj pri mountu (odgođeno da izbjegnemo flushSync unutar lifecycle-a)
   useEffect(() => {
     if (!editor || initialContentLoaded.current) return;
     const html = content?.trim();
     if (!html) {
       initialContentLoaded.current = true;
+      setContentReady(true);
       return;
     }
     const id = setTimeout(() => {
@@ -87,6 +90,7 @@ export default function BlockNoteEditor({
         // Ako parsiranje ne uspije, ostavi default
       }
       initialContentLoaded.current = true;
+      setContentReady(true);
     }, 0);
     return () => clearTimeout(id);
   }, [editor, content]);
@@ -94,9 +98,9 @@ export default function BlockNoteEditor({
   useEffect(() => {
     if (!editor) return;
     const unsub = editor.onChange(() => {
-      // blocksToFullHTML – lossless, čuva sve blokove (uključujući slike)
-      // blocksToHTMLLossy može gubiti blokove pri konverziji u standardni HTML
-      const html = editor.blocksToFullHTML(editor.document);
+      // blocksToHTMLLossy koristi toExternalHTML po bloku – bez curenja DOM-a iz React editora
+      // (npr. prije/poslije: blocksToFullHTML bi u HTML ubacio gumb „Postavke klizača”).
+      const html = editor.blocksToHTMLLossy(editor.document);
       onChangeRef.current?.(html);
     });
     return unsub;
@@ -125,30 +129,46 @@ export default function BlockNoteEditor({
     };
   }, []);
 
-  // Custom slash menu items – default + YouTube (samo kad je blog schema)
+  // Custom slash menu items – default + YouTube + prije/poslije (blog schema)
   const getCustomSlashMenuItems = useCallback(() => {
     const defaultItems = getDefaultReactSlashMenuItems(editor);
-    if (!editorHasBlockWithType(editor, "youtubeEmbed")) {
-      return defaultItems;
-    }
-    const youtubeEmbedItem = {
-      title: "YouTube video",
-      subtext: "Ubaci YouTube link",
-      aliases: ["youtube", "video", "embed"],
-      group: "Media" as const,
-      icon: <RiYoutubeFill size={18} />,
-      onItemClick: () => {
-        insertOrUpdateBlockForSlashMenu(editor, { type: "youtubeEmbed" as any });
-      },
-    };
-    // Umetni nakon Image (traži po title)
     const imageIdx = defaultItems.findIndex(
       (i) => i.title?.toLowerCase().includes("image") || i.title === "Slika"
     );
     const insertAt = imageIdx >= 0 ? imageIdx + 1 : defaultItems.length;
+
+    const extra: ReturnType<typeof getDefaultReactSlashMenuItems> = [];
+
+    if (editorHasBlockWithType(editor, "youtubeEmbed")) {
+      extra.push({
+        title: "YouTube video",
+        subtext: "Ubaci YouTube link",
+        aliases: ["youtube", "video", "embed"],
+        group: "Media" as const,
+        icon: <RiYoutubeFill size={18} />,
+        onItemClick: () => {
+          insertOrUpdateBlockForSlashMenu(editor, { type: "youtubeEmbed" as any });
+        },
+      });
+    }
+
+    if (editorHasBlockWithType(editor, "beforeAfter")) {
+      extra.push({
+        title: "Prije / poslije",
+        subtext: "Klizač usporedbe dviju slika",
+        aliases: ["before", "after", "slider", "usporedba", "prije", "poslije"],
+        group: "Media" as const,
+        icon: <RiContrast2Line size={18} />,
+        onItemClick: () => {
+          insertOrUpdateBlockForSlashMenu(editor, { type: "beforeAfter" as any });
+        },
+      });
+    }
+
+    if (extra.length === 0) return defaultItems;
     return [
       ...defaultItems.slice(0, insertAt),
-      youtubeEmbedItem,
+      ...extra,
       ...defaultItems.slice(insertAt),
     ];
   }, [editor]);
@@ -158,6 +178,13 @@ export default function BlockNoteEditor({
       filterSuggestionItems(getCustomSlashMenuItems(), query),
     [getCustomSlashMenuItems]
   );
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    if (!editor || !contentReady) return;
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, [editor, contentReady]);
 
   if (!editor) return null;
 
@@ -177,7 +204,7 @@ export default function BlockNoteEditor({
         slashMenu={!useBlogSchema}
         filePanel={!useBlogSchema}
       >
-        {useBlogSchema && (
+        {mounted && useBlogSchema && (
           <>
             <FilePanelScrollLock />
             <FilePanelController
@@ -194,7 +221,7 @@ export default function BlockNoteEditor({
             />
           </>
         )}
-        <CustomFormattingToolbar />
+        {mounted && <CustomFormattingToolbar />}
       </BlockNoteView>
     </div>
   );
