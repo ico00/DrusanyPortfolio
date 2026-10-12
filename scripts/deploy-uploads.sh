@@ -27,16 +27,35 @@ if [ -n "${SSH_HOST:-}" ] && [ -n "${SSH_USER:-}" ]; then
   [ -n "${SSH_PORT:-}" ] && RSYNC_RSH+=" -p ${SSH_PORT}"
   [ -n "${SSH_KEY:-}" ] && RSYNC_RSH+=" -i ${SSH_KEY}"
   SSH_OPTS=(-avz -e "$RSYNC_RSH" --exclude='.DS_Store')
-  # --delete: uklanja sa servera datoteke kojih lokalno više nema (obrisane fotke iz galerije).
-  # Bez --delete, stare slike ostaju zauvijek na serveru.
-  if [ "${UPLOADS_DELETE:-1}" = "1" ]; then
-    SSH_OPTS+=(--delete)
-    echo "  rsync --delete → $SSH_USER@$SSH_HOST:$SSH_PATH/uploads/"
-  else
-    echo "  rsync (bez --delete) → $SSH_USER@$SSH_HOST:$SSH_PATH/uploads/"
-  fi
+  # Namjerno bez --delete: sadržaj dignut ručno preko cPanela ne smije se brisati.
+  echo "  rsync → $SSH_USER@$SSH_HOST:$SSH_PATH/uploads/"
   rsync "${SSH_OPTS[@]}" "$UPLOADS_DIR/" "$SSH_USER@$SSH_HOST:$SSH_PATH/uploads/"
   echo "✅ rsync uploads završen."
+
+  # Brisanje samo onoga što je ova skripta sama poslala: usporedi popis datoteka iz
+  # prošlog deploya (manifest) s trenutnim; sa servera se briše samo razlika.
+  # Ručno dignut sadržaj nikad nije u manifestu pa ga skripta ne može dirnuti.
+  MANIFEST="$PROJECT_DIR/scripts/.uploads-manifest"
+  CURRENT="$(mktemp)"
+  trap 'rm -f "$CURRENT"' EXIT
+  (cd "$UPLOADS_DIR" && find . -type f ! -name '.DS_Store' | sed 's|^\./||' | LC_ALL=C sort) > "$CURRENT"
+  if [ -f "$MANIFEST" ]; then
+    REMOVED="$(LC_ALL=C comm -23 "$MANIFEST" "$CURRENT" | grep -v -e '^/' -e '\.\.' || true)"
+    if [ -n "$REMOVED" ]; then
+      echo "▶️ Brišem sa servera datoteke koje si obrisao lokalno:"
+      echo "$REMOVED" | sed 's/^/  - /'
+      SSH_CMD=(ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new)
+      [ -n "${SSH_PORT:-}" ] && SSH_CMD+=(-p "${SSH_PORT}")
+      [ -n "${SSH_KEY:-}" ] && SSH_CMD+=(-i "${SSH_KEY}")
+      echo "$REMOVED" | "${SSH_CMD[@]}" "$SSH_USER@$SSH_HOST" \
+        "cd '$SSH_PATH/uploads' && while IFS= read -r f; do rm -f -- \"\$f\"; done"
+    else
+      echo "ℹ️  Nema obrisanih datoteka za ukloniti sa servera."
+    fi
+  else
+    echo "ℹ️  Prvi deploy s manifestom: ništa se ne briše, popis se samo sprema."
+  fi
+  cp "$CURRENT" "$MANIFEST"
 
 # FTP deploy – alternativa ako nemaš SSH
 elif [ -n "${FTP_HOST:-}" ] && [ -n "${FTP_USER:-}" ] && [ -n "${FTP_PASS:-}" ]; then

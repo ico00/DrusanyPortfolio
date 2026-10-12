@@ -170,7 +170,7 @@ Projekt se builda u čisto statični output (`out/`). Može se deployati na:
 #### Deploy na shared hostingu (rsync over SSH)
 
 - **Workflow:** Uređuješ u adminu → Save → `./scripts/deploy-static.sh` → gotovo.
-- Skripta `scripts/deploy-static.sh`: build, kopira u `drusany-static`, push na GitHub, SSH cleanup legacy direktorija, **rsync** na server (`--delete` za čišćenje starih datoteka, `--exclude uploads` za zaštitu fotografija).
+- Skripta `scripts/deploy-static.sh`: build, kopira u `drusany-static`, push na GitHub, SSH cleanup legacy direktorija, **rsync** na server (bez `--delete`: ništa na serveru se ne briše; `--exclude uploads`).
 - **Postavka (jednokratno):** U cPanelu omogući SSH (Security → SSH Access), zapiši port. U `.env` dodaj:
   ```
   SSH_HOST=drusany.com
@@ -179,7 +179,7 @@ Projekt se builda u čisto statični output (`out/`). Može se deployati na:
   SSH_PORT=21098
   ```
 - Alternativa: FTP deploy (`FTP_HOST`, `FTP_USER`, `FTP_PASS`) ili cPanel Deploy HEAD Commit.
-- **Uploads (slike):** `./scripts/deploy-uploads.sh` ili `npm run deploy:uploads` – rsync samo `public/uploads/`; `--delete` po defaultu briše sa servera fotografije kojih lokalno nema; `UPLOADS_DELETE=0 npm run deploy:uploads` za upload bez brisanja.
+- **Uploads (slike):** `./scripts/deploy-uploads.sh` ili `npm run deploy:uploads` – rsync samo `public/uploads/`; bez `--delete`; sa servera briše samo datoteke koje je sama ranije poslala (manifest `scripts/.uploads-manifest`, commitati ga), pa ručno dignut sadržaj ostaje netaknut. SSH/rsync put; FTP ne briše.
 
 ## 📖 Dokumentacija
 

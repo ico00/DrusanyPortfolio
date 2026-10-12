@@ -557,8 +557,8 @@ RewriteRule ^(.*)$ $1.html [L]
     - generira `.cpanel.yml`
     - `git add`, `git commit`, `git push` na `drusany-static`
     - **SSH cleanup** – briše legacy `blog/*.html/` direktorije na serveru (ako postoje) prije rsync-a; koristi jednostavnu `for` petlju (ne process substitution `< <(find ...)` — `/dev/fd` ne postoji na shared hostingu)
-    - **rsync over SSH** (ako su `SSH_HOST`, `SSH_USER` u `.env`) – `--delete` uklanja stare datoteke; `--exclude uploads` štiti fotografije; prenosi samo promijenjene datoteke direktno u `public_html`
-- **deploy-uploads.sh** – rsync samo `public/uploads/`; `--delete` po defaultu (`UPLOADS_DELETE=1`) briše sa servera fotografije kojih lokalno nema; `UPLOADS_DELETE=0 npm run deploy:uploads` za upload bez brisanja
+    - **rsync over SSH** (ako su `SSH_HOST`, `SSH_USER` u `.env`) – bez `--delete` (ništa na serveru se ne briše); `--exclude uploads` izostavlja lokalne uploads; prenosi samo promijenjene datoteke direktno u `public_html`
+- **deploy-uploads.sh** – rsync samo `public/uploads/`; bez `--delete`; sa servera briše samo datoteke koje je sama ranije poslala (manifest `scripts/.uploads-manifest`, commitati ga), pa ručno dignut sadržaj ostaje netaknut. SSH/rsync put; FTP ne briše
 - **cPanel Git™ Version Control:**
   - klonirani repo `drusany-static` koristi `.cpanel.yml` (skripta ga generira pri svakom deployu)
   - **Važno:** `cp -R *` ne kopira dotfileove – `.htaccess` mora biti eksplicitno u tasku

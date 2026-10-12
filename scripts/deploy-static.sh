@@ -92,13 +92,16 @@ REMOTE_CLEANUP
     echo "ℹ️  Preskačem SSH cleanup (SKIP_REMOTE_HTML_DIR_CLEANUP=1)."
   fi
 
-  echo "▶️ rsync na server (--delete uklanja ostatke starog exporta; uploads je isključen)…"
-  # --exclude uploads: ne šaljemo lokalni uploads iz out/; isključeni path na receiveru
-  # se po defaultu NE briše uz --delete (bez --delete-excluded).
+  echo "▶️ rsync na server (bez --delete: ništa na serveru se ne briše; uploads je isključen)…"
+  # Namjerno bez --delete: sadržaj dignut ručno preko cPanela mora ostati netaknut.
+  # --exclude uploads: ne šaljemo lokalni uploads iz out/.
   RSYNC_RSH="ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new"
   [ -n "${SSH_PORT:-}" ] && RSYNC_RSH+=" -p ${SSH_PORT}"
   [ -n "${SSH_KEY:-}" ] && RSYNC_RSH+=" -i ${SSH_KEY}"
-  RSYNC_OPTS=(-avz --delete -e "$RSYNC_RSH" --exclude='uploads' --exclude='.DS_Store')
+  RSYNC_OPTS=(-avz -e "$RSYNC_RSH" \
+    --exclude='uploads' \
+    --exclude='LunaPic' \
+    --exclude='.DS_Store')
   rsync "${RSYNC_OPTS[@]}" "$PROJECT_DIR/out/" "$SSH_USER@$SSH_HOST:$SSH_PATH/"
   echo "✅ rsync deploy završen."
 # FTP deploy – alternativa ako nemaš SSH
