@@ -64,14 +64,14 @@ export function LinkEditModal({
               <LinkIcon className="h-5 w-5 text-amber-400" />
             </div>
             <h3 className="text-lg font-semibold text-zinc-100">
-              {hideRemoveButton ? "Dodaj link" : "Uredi link"}
+              {hideRemoveButton ? "Add link" : "Edit link"}
             </h3>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="rounded-full p-2 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200"
-            aria-label="Zatvori"
+            aria-label="Close"
           >
             <X className="h-5 w-5" />
           </button>
@@ -79,7 +79,7 @@ export function LinkEditModal({
 
         <div className="relative mb-4">
           <label className="mb-2 block text-sm font-medium text-zinc-400">
-            URL adresa
+            URL address
           </label>
           <input
             ref={inputRef}
@@ -88,7 +88,7 @@ export function LinkEditModal({
             onChange={(e) => onUrlChange(e.target.value)}
             onFocus={onSuggestionFocus}
             onKeyDown={onKeyDown}
-            placeholder="https://... ili /blog/slug ili /about"
+            placeholder="https://... or /blog/slug or /about"
             className="w-full rounded-lg border border-zinc-600 bg-zinc-700/50 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
           />
           {suggestionsVisible && suggestions.length > 0 && (
@@ -128,7 +128,7 @@ export function LinkEditModal({
               className="rounded border-zinc-600 bg-zinc-700 text-amber-500 focus:ring-amber-500"
             />
             <ExternalLink className="h-4 w-4 text-zinc-400" />
-            <span className="text-sm text-zinc-300">Otvori u novom tabu</span>
+            <span className="text-sm text-zinc-300">Open in new tab</span>
           </label>
         </div>
 
@@ -139,14 +139,14 @@ export function LinkEditModal({
               onClick={onClose}
               className="flex-1 rounded-lg border border-zinc-600 bg-zinc-700 px-4 py-2.5 text-sm font-medium text-zinc-200 hover:bg-zinc-600"
             >
-              Odustani
+              Cancel
             </button>
             <button
               type="button"
               onClick={onConfirm}
               className="flex-1 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-zinc-900 hover:bg-amber-400"
             >
-              {hideRemoveButton ? "Dodaj link" : "Spremi"}
+              {hideRemoveButton ? "Add link" : "Save"}
             </button>
           </div>
           {!hideRemoveButton && (
@@ -155,7 +155,7 @@ export function LinkEditModal({
               onClick={onRemove}
               className="rounded-lg border border-red-800 bg-red-900/20 px-4 py-2.5 text-sm font-medium text-red-400 hover:bg-red-900/30"
             >
-              Ukloni link (ostavi samo tekst)
+              Remove link (keep text only)
             </button>
           )}
         </div>

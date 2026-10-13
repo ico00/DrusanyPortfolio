@@ -223,7 +223,7 @@ const BeforeAfterBlock = (
           >
             <RiContrast2Line className="shrink-0 text-zinc-400" size={22} />
             <span className="text-sm font-medium text-zinc-300">
-              Prije / poslije
+              Before / after
             </span>
             <div
               className="ml-auto flex shrink-0 flex-wrap items-center gap-3"
@@ -242,7 +242,7 @@ const BeforeAfterBlock = (
                   }}
                   className="text-xs font-medium text-amber-400/90 underline decoration-amber-400/50 underline-offset-2 hover:text-amber-300"
                 >
-                  Prikaži samo klizač
+                  Show slider only
                 </button>
               )}
               <div
@@ -285,7 +285,7 @@ const BeforeAfterBlock = (
                       : "rgb(161 161 170)",
                 }}
               >
-                Vodoravno
+                Horizontal
               </button>
               <button
                 type="button"
@@ -317,7 +317,7 @@ const BeforeAfterBlock = (
                       : "rgb(161 161 170)",
                 }}
               >
-                Okomito
+                Vertical
               </button>
               </div>
             </div>
@@ -329,7 +329,7 @@ const BeforeAfterBlock = (
               onMouseDown={(e) => e.stopPropagation()}
             >
               <span className="text-xs text-zinc-400">
-                Opis „prije” (alt, opcionalno)
+                “Before” caption (alt, optional)
               </span>
               <input
                 type="text"
@@ -339,7 +339,7 @@ const BeforeAfterBlock = (
                     props: { beforeLabel: e.target.value },
                   })
                 }
-                placeholder="npr. prije obrade"
+                placeholder="e.g. prije obrade"
                 className="bn-ba-text-input rounded px-2 py-1.5 text-xs"
               />
             </label>
@@ -348,7 +348,7 @@ const BeforeAfterBlock = (
               onMouseDown={(e) => e.stopPropagation()}
             >
               <span className="text-xs text-zinc-400">
-                Opis „poslije” (alt, opcionalno)
+                “After” caption (alt, optional)
               </span>
               <input
                 type="text"
@@ -358,7 +358,7 @@ const BeforeAfterBlock = (
                     props: { afterLabel: e.target.value },
                   })
                 }
-                placeholder="npr. poslije obrade"
+                placeholder="e.g. poslije obrade"
                 className="bn-ba-text-input rounded px-2 py-1.5 text-xs"
               />
             </label>
@@ -366,7 +366,7 @@ const BeforeAfterBlock = (
 
           <div className="mb-3 grid gap-3 sm:grid-cols-2">
             <div className="flex flex-col gap-1">
-              <span className="text-xs text-zinc-500">Slika „prije”</span>
+              <span className="text-xs text-zinc-500">“Before” image</span>
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -380,12 +380,12 @@ const BeforeAfterBlock = (
                   }}
                   className="bn-ba-picker-btn"
                 >
-                  Odaberi
+                  Choose
                 </button>
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-xs text-zinc-500">Slika „poslije”</span>
+              <span className="text-xs text-zinc-500">“After” image</span>
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -399,7 +399,7 @@ const BeforeAfterBlock = (
                   }}
                   className="bn-ba-picker-btn"
                 >
-                  Odaberi
+                  Choose
                 </button>
               </div>
             </div>
@@ -409,8 +409,8 @@ const BeforeAfterBlock = (
 
       {showChrome && sameUrl && (
         <p className="mb-2 rounded border border-amber-600/50 bg-amber-950/40 px-2 py-1.5 text-xs text-amber-200">
-          Obje strane koriste istu datoteku (isti URL). Učitaj dvije različite
-          slike da usporedba ima smisla.
+          Both sides use the same file (same URL). Upload two different
+          images for the comparison to make sense.
         </p>
       )}
 
@@ -451,7 +451,7 @@ const BeforeAfterBlock = (
               max={100}
               value={sliderPct}
               step={0.5}
-              aria-label="Usporedba prije i poslije"
+              aria-label="Before and after comparison"
               onMouseDown={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
               onChange={(e) => setSliderPct(Number(e.target.value))}
@@ -460,7 +460,7 @@ const BeforeAfterBlock = (
         </figure>
       ) : (
         <p className="text-center text-xs text-zinc-500">
-          Učitaj obje slike da vidiš klizač.
+          Upload both images to see the slider.
         </p>
       )}
 
@@ -468,8 +468,8 @@ const BeforeAfterBlock = (
         <div className="mt-1.5 flex justify-center">
           <button
             type="button"
-            title="Postavke klizača"
-            aria-label="Postavke klizača: slike, opisi, smjer"
+            title="Slider settings"
+            aria-label="Slider settings: images, captions, direction"
             onMouseDown={(e) => {
               e.preventDefault();
               e.stopPropagation();

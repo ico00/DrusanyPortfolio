@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { PenLine, Camera, Calendar, Tag } from "lucide-react";
+import { PenLine, Camera, Calendar, Tag, Aperture } from "lucide-react";
 import {
   getDisplayCategories,
   getShortCategoryLabel,
@@ -124,8 +124,18 @@ export default function BlogList({
           transition={{ duration: 0.3 }}
         >
           <ul className="mt-12 space-y-12">
-            {displayPosts.map((post) => (
+            {displayPosts.map((post, index) => (
               <li key={post.id}>
+                {index > 0 && (
+                  <div
+                    className="mb-12 flex items-center justify-center gap-3"
+                    aria-hidden="true"
+                  >
+                    <span className="h-px flex-1 bg-zinc-200" />
+                    <Aperture className="h-4 w-4 shrink-0 text-zinc-300" />
+                    <span className="h-px flex-1 bg-zinc-200" />
+                  </div>
+                )}
                 <article className="group overflow-visible rounded-lg sm:overflow-hidden">
                   <Link href={`/blog/${post.slug}`} className="block">
                   <div className="bg-white -mx-6 w-[calc(100%+3rem)] border-b-2 border-zinc-200 p-6 text-zinc-900 transition-colors group-hover:border-zinc-300 sm:mx-0 sm:w-full">
@@ -221,6 +231,16 @@ export default function BlogList({
                     )}
                     {post.thumbnail && <ViewfinderOverlay />}
                   </div>
+                  {post.excerpt && (
+                    <div className="relative mt-4 pl-9 sm:pl-10">
+                      <span className="blog-list-card-excerpt-quote" aria-hidden="true">
+                        &#8220;
+                      </span>
+                      <p className="theme-blog-list-card-excerpt line-clamp-3 leading-relaxed">
+                        {post.excerpt}
+                      </p>
+                    </div>
+                  )}
                 </Link>
               </article>
             </li>

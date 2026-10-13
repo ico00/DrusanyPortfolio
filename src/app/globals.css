@@ -120,6 +120,28 @@ h1.theme-page-title {
   font-style: var(--theme-blogListCardMetadata-style, normal);
   color: var(--theme-blogListCardMetadata-color, #d4d4d8);
 }
+/* Blog list card – excerpt (prvi paragraf), ispod featured image */
+.theme-blog-list-card-excerpt {
+  font-family: var(--theme-blogListCardExcerpt-font, var(--font-serif));
+  font-size: var(--theme-blogListCardExcerpt-size, 1.125rem);
+  font-weight: var(--theme-blogListCardExcerpt-weight, 400);
+  font-style: var(--theme-blogListCardExcerpt-style, italic);
+  color: var(--theme-blogListCardExcerpt-color, #52525b);
+}
+/* Dekorativni navodnik ispred excerpta – manji i suptilniji od .quote-decor (koji je za blockquote u tekstu),
+   da ne preklapa prvi red teksta. */
+.blog-list-card-excerpt-quote {
+  position: absolute;
+  top: -0.3rem;
+  left: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--theme-blogListCardExcerpt-color, #52525b);
+  opacity: 0.2;
+  pointer-events: none;
+  user-select: none;
+}
 /* Blog sidebar widget naslov – !important jer button/h3 mogu imati reset */
 .theme-widget-title {
   font-family: var(--theme-widgetTitle-font, var(--font-serif)) !important;
@@ -128,11 +150,53 @@ h1.theme-page-title {
   font-style: var(--theme-widgetTitle-style, normal) !important;
   color: var(--theme-widgetTitle-color, #18181b) !important;
 }
+/* Tamna traka za naziv widgeta (sidebar) – nadjačava theme boju jer je button uvijek taman */
+.widget-title-bar.theme-widget-title {
+  color: #ffffff !important;
+}
 .prose p, .prose li, .prose-invert p, .prose-invert li {
   font-family: var(--theme-body-font, var(--font-sans));
   font-size: var(--theme-body-size, 1rem);
   font-weight: var(--theme-body-weight, 400);
   font-style: var(--theme-body-style, normal);
+  color: var(--theme-body-color, inherit);
+}
+/* Prose – vrati markere za liste (Tailwind reset ih gasi globalno) */
+.prose ul,
+.prose-invert ul {
+  list-style: none !important;
+  padding-left: 1.5rem !important;
+}
+.prose ol,
+.prose-invert ol {
+  list-style: decimal outside !important;
+  padding-left: 1.5rem !important;
+}
+.prose li,
+.prose-invert li {
+  display: list-item !important;
+}
+.prose ul > li,
+.prose-invert ul > li {
+  list-style-type: none !important;
+  position: relative;
+  padding-left: 1.5rem;
+}
+.prose ol > li,
+.prose-invert ol > li {
+  list-style-type: decimal !important;
+}
+.prose ul > li::before,
+.prose-invert ul > li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  color: rgb(82 82 91); /* zinc-600 */
+  font-weight: 600;
+}
+.prose li::marker,
+.prose-invert li::marker {
   color: var(--theme-body-color, inherit);
 }
 .prose blockquote, .prose-invert blockquote {
@@ -613,6 +677,20 @@ body[data-file-panel-open] [data-file-panel="true"] {
   margin-right: 0;
 }
 
+/* Prose – opis slike (figcaption): sitniji, svjetliji i centriran */
+.prose figure figcaption,
+.prose-invert figure figcaption {
+  margin-top: 0.65em;
+  text-align: center;
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.45;
+  font-style: normal;
+  color: rgb(113 113 122); /* zinc-500 */
+}
+.prose-invert figure figcaption {
+  color: rgb(161 161 170); /* zinc-400 – svjetlije na tamnoj podlozi */
+}
+
 /* Prose – sve slike (uključujući BlockNote /image) – fallback ako wrapper nije primijenjen */
 .prose img,
 .prose-invert img {
@@ -1025,6 +1103,46 @@ body[data-file-panel-open] [data-file-panel="true"] {
   cursor: ns-resize !important;
 }
 
+/* Filter galerije (as-you-type) – opt-in blok, filtrira BlogGallery ispod posta */
+.prose .prose-player-filter,
+.prose-invert .prose-player-filter {
+  margin: 1.5rem 0;
+}
+.prose-player-filter-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  /* type="search" donosi nativni okvir/fokus prsten (osobito Safari/WebKit) –
+     appearance: none ga isključuje i vraća naš border-bottom dizajn, dok
+     nativna "x" tipka za brisanje ostaje jer ne ovisi o appearance: searchfield. */
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  border-bottom: 1px solid rgb(212 212 216); /* zinc-300 */
+  border-radius: 0;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 16px 16px;
+  padding: 0.625rem 0.5rem 0.625rem 1.75rem;
+  font-size: 1rem;
+  color: rgb(24 24 27); /* zinc-900 */
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.prose-player-filter-input::placeholder {
+  color: rgb(161 161 170); /* zinc-400 */
+}
+.prose-player-filter-input:focus {
+  border-color: rgb(113 113 122); /* zinc-500 */
+}
+
+/* Blok "Filter galerije" u BlockNote adminu (tamna tema editora) */
+.bn-player-filter-block input:focus {
+  outline: none;
+}
+
 /* Prose – svi paragrafi ista boja (BlockNote postavlja inline boju samo kad je odabrana) */
 .prose-invert p {
   color: rgb(94 100 106); /* zinc-600 – isti ton kao ostali paragrafi s color pickerom */
@@ -1157,6 +1275,94 @@ body[data-file-panel-open] [data-file-panel="true"] {
 }
 .prose-invert td {
   color: rgb(228 228 231);
+}
+
+/* Tablica: opcije iz editora (data-striped) + native širine stupaca (colgroup) */
+/* Native BlockNote izvozi <colgroup><col style="width:…"> — fiksiraj raspored da širine drže. */
+.prose table:has(> colgroup) {
+  table-layout: fixed;
+}
+/* Naslijeđeno: stari članci s data-column-widths atributom na <table> */
+.prose table[data-column-widths]:not([data-column-widths=""]) {
+  table-layout: fixed;
+}
+.prose table[data-header-row="true"] tbody tr:first-child td,
+.prose table[data-header-row="true"] tbody tr:first-child th,
+.prose table[data-header-row="true"] thead th {
+  font-weight: 700;
+  background-color: rgb(39 39 42);
+  color: rgb(255 255 255);
+  border-color: rgb(63 63 70);
+}
+.prose-invert table[data-header-row="true"] tbody tr:first-child td,
+.prose-invert table[data-header-row="true"] tbody tr:first-child th,
+.prose-invert table[data-header-row="true"] thead th {
+  background-color: rgb(24 24 27);
+  color: rgb(244 244 245);
+  border-color: rgb(63 63 70);
+}
+.prose table[data-striped="true"] tbody tr:nth-child(even) td,
+.prose table[data-striped="true"] tbody tr:nth-child(even) th {
+  background-color: rgb(250 250 250);
+}
+.prose-invert table[data-striped="true"] tbody tr:nth-child(even) td,
+.prose-invert table[data-striped="true"] tbody tr:nth-child(even) th {
+  background-color: rgb(39 39 42);
+}
+/* Header red + zebra: prvi red neka ostane „header“ i na parnim „striped“ redovima */
+.prose table[data-striped="true"][data-header-row="true"] tbody tr:first-child td,
+.prose table[data-striped="true"][data-header-row="true"] tbody tr:first-child th {
+  background-color: rgb(39 39 42);
+  color: rgb(255 255 255);
+}
+.prose-invert table[data-striped="true"][data-header-row="true"] tbody tr:first-child td,
+.prose-invert table[data-striped="true"][data-header-row="true"] tbody tr:first-child th {
+  background-color: rgb(24 24 27);
+  color: rgb(244 244 245);
+}
+
+/* Admin BlockNote – attrs su na <table> (TipTap globalAttributes) */
+.bn-editor-dark table[data-header-row="true"] tbody tr:first-child td,
+.bn-editor-dark table[data-header-row="true"] tbody tr:first-child th,
+.bn-editor-dark table[data-header-row="true"] thead th {
+  font-weight: 700;
+  background-color: rgb(39 39 42);
+  color: rgb(244 244 245);
+}
+.bn-editor-dark table[data-striped="true"] tbody tr:nth-child(even) td,
+.bn-editor-dark table[data-striped="true"] tbody tr:nth-child(even) th {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.bn-editor-dark table[data-striped="true"][data-header-row="true"] tbody tr:first-child td,
+.bn-editor-dark table[data-striped="true"][data-header-row="true"] tbody tr:first-child th {
+  background-color: rgb(39 39 42);
+  color: rgb(244 244 245);
+}
+.bn-editor-dark table[data-column-widths]:not([data-column-widths=""]) {
+  table-layout: fixed;
+}
+
+/* Blog admin — Gutenberg platno: puna širina lijevog stupca (rub do ruba) */
+.blocknote-editor-wrapper.bn-layout-gutenberg .bn-container.bn-gutenberg-editor {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: clamp(0.75rem, 2vw, 1.25rem);
+  padding-block: 1.25rem 2.5rem;
+}
+
+/* Blog inspetor — scrollbar */
+.blog-inspector {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(63 63 70) transparent;
+}
+.blog-inspector ::-webkit-scrollbar {
+  width: 6px;
+}
+.blog-inspector ::-webkit-scrollbar-thumb {
+  background: rgb(63 63 70);
+  border-radius: 999px;
 }
 
 /* Admin – custom date picker (react-day-picker) tamna tema */

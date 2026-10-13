@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import type { LucideIcon } from "lucide-react";
 import {
   ImageIcon,
   FileText,
@@ -25,6 +26,35 @@ import {
 } from "lucide-react";
 import { CATEGORIES } from "./CategorySelect";
 import { getBlogCategoryStackedChartData } from "@/data/blogCategories";
+import { BLOG_CATEGORIES_WITH_ICONS } from "@/data/blogCategoryIcons";
+import DeployPanel from "./DeployPanel";
+
+const PORTFOLIO_ICON_BY_LABEL: Record<string, LucideIcon> = Object.fromEntries(
+  CATEGORIES.map((c) => [c.label, c.icon])
+);
+const BLOG_ICON_BY_LABEL: Record<string, LucideIcon> = Object.fromEntries(
+  BLOG_CATEGORIES_WITH_ICONS.map((c) => [c.label, c.icon])
+);
+
+/** XAxis tick koji umjesto teksta prikazuje ikonu kategorije (Recharts custom tick). */
+function CategoryIconTick({
+  x,
+  y,
+  payload,
+  iconByLabel,
+}: {
+  x?: number;
+  y?: number;
+  payload?: { value: string };
+  iconByLabel: Record<string, LucideIcon>;
+}) {
+  const Icon = (payload && iconByLabel[payload.value]) || Tag;
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <Icon x={-9} y={6} width={18} height={18} color="#a1a1aa" strokeWidth={1.75} />
+    </g>
+  );
+}
 
 function normalizeCategory(cat: string): string {
   return cat
@@ -183,6 +213,8 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
 
   return (
     <div className="space-y-8">
+      <DeployPanel />
+
       {/* Content health */}
       <div className="rounded-xl border border-zinc-700 bg-zinc-800/50 p-4">
         <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-zinc-200">
@@ -346,7 +378,9 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                 <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
                 <XAxis
                   dataKey="name"
-                  tick={{ fill: "#a1a1aa", fontSize: 12 }}
+                  interval={0}
+                  tick={<CategoryIconTick iconByLabel={PORTFOLIO_ICON_BY_LABEL} />}
+                  tickLine={false}
                   axisLine={{ stroke: "#52525b" }}
                 />
                 <YAxis
@@ -389,7 +423,8 @@ export default function AdminDashboard({ onContentHealthClick }: AdminDashboardP
                   <XAxis
                     dataKey="name"
                     interval={0}
-                    tick={{ fill: "#a1a1aa", fontSize: 12 }}
+                    tick={<CategoryIconTick iconByLabel={BLOG_ICON_BY_LABEL} />}
+                    tickLine={false}
                     axisLine={{ stroke: "#52525b" }}
                   />
                   <YAxis

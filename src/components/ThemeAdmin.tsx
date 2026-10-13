@@ -28,6 +28,7 @@ const ELEMENT_LABELS: Record<string, string> = {
   blogPostTitle: "Blog post title",
   blogListCardTitle: "Blog list card title (below featured image)",
   blogListCardMetadata: "Blog list card metadata (author, date, category)",
+  blogListCardExcerpt: "Blog list card excerpt (first paragraph, below featured image)",
   widgetTitle: "Blog sidebar widget title",
   body: "Body text",
   quote: "Quote (blockquote)",
@@ -44,6 +45,7 @@ const PREVIEW_TEXT: Record<string, string> = {
   blogPostTitle: "Blog post title",
   blogListCardTitle: "Sport Metadata Generator",
   blogListCardMetadata: "Text and photos: Ivica Drusany · Published: 10.01.2026 · Category: Info",
+  blogListCardExcerpt: "This weekend we were in Zagreb for the concert, and the atmosphere was incredible from the first song.",
   widgetTitle: "Categories",
   body: "This is sample body text displayed on the page.",
   quote: "This is sample quote text in blockquote style.",
@@ -536,7 +538,7 @@ export default function ThemeAdmin() {
         <AccordionSection title="Headings (individual)" defaultOpen={false}>
           <div className="space-y-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {(["blogPostTitle", "blogListCardTitle", "blogListCardMetadata"] as const)
+              {(["blogPostTitle", "blogListCardTitle", "blogListCardMetadata", "blogListCardExcerpt"] as const)
                 .filter(
                   (k) =>
                     theme[k] &&

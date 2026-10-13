@@ -9,6 +9,7 @@ export const BLOG_CATEGORIES: BlogCategoryItem[] = [
   { slug: "putovanja", 
     label: "Putovanja",
   subcategories: [
+    { slug: "hrvatska", label: "Hrvatska" },
     { slug: "irska", label: "Irska" },
     { slug: "nizozemska", label: "Nizozemska" },
     { slug: "skotska", label: "Škotska" },

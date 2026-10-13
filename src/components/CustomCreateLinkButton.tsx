@@ -230,8 +230,8 @@ export function CustomCreateLinkButton() {
   return (
     <>
       <Components.FormattingToolbar.Button
-        label={isEditingLink ? "Uredi link" : "Dodaj link"}
-        mainTooltip={isEditingLink ? "Uredi link" : "Dodaj link"}
+        label={isEditingLink ? "Edit link" : "Add link"}
+        mainTooltip={isEditingLink ? "Edit link" : "Add link"}
         secondaryTooltip={formatKeyboardShortcut("Mod+K")}
         isSelected={showModal}
         onClick={() => setShowModal((o) => !o)}

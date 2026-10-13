@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DrusanyPortfolio — interaktivna arhitektura</title>
+  <style>
+    :root {
+      --bg: #0c0c0f;
+      --panel: #18181b;
+      --border: #3f3f46;
+      --text: #e4e4e7;
+      --muted: #a1a1aa;
+      --accent: #f59e0b;
+      --edge: #52525b;
+      --edge-hi: #fbbf24;
+      --public: #38bdf8;
+      --admin: #c084fc;
+      --data: #4ade80;
+      --api: #fb7185;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem 1.25rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    header p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+      flex: 1;
+      min-width: 200px;
+    }
+    .tabs {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+    .tabs button {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.4rem 0.75rem;
+      border-radius: 0.375rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .tabs button:hover { color: var(--text); border-color: #71717a; }
+    .tabs button[aria-selected="true"] {
+      color: var(--bg);
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr minmax(280px, 340px);
+      gap: 0;
+      min-height: 0;
+    }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+    }
+    .canvas-wrap {
+      position: relative;
+      overflow: auto;
+      padding: 1rem;
+      min-height: 420px;
+    }
+    svg {
+      display: block;
+      width: 100%;
+      min-width: 720px;
+      height: auto;
+    }
+    .node {
+      cursor: pointer;
+      transition: filter 0.15s ease;
+    }
+    .node rect, .node path {
+      transition: stroke 0.15s ease, fill 0.15s ease;
+    }
+    .node:hover rect, .node:hover path { filter: brightness(1.08); }
+    .node.selected rect, .node.selected path {
+      stroke: var(--edge-hi) !important;
+      stroke-width: 2.5px !important;
+    }
+    .node text { pointer-events: none; user-select: none; }
+    .edge {
+      fill: none;
+      stroke: var(--edge);
+      stroke-width: 1.25;
+      opacity: 0.55;
+      transition: stroke 0.15s, opacity 0.15s;
+    }
+    .edge.dim { opacity: 0.12; }
+    .edge.highlight {
+      stroke: var(--edge-hi);
+      opacity: 0.95;
+      stroke-width: 2;
+    }
+    aside {
+      border-left: 1px solid var(--border);
+      background: var(--panel);
+      padding: 1rem 1.1rem;
+      overflow: auto;
+      max-height: calc(100vh - 120px);
+    }
+    @media (max-width: 900px) {
+      aside {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        max-height: none;
+      }
+    }
+    aside h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+      color: var(--accent);
+    }
+    aside .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.2rem 0.45rem;
+      border-radius: 0.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .tag.public { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; }
+    .tag.admin { background: rgba(192, 132, 252, 0.2); color: #d8b4fe; }
+    .tag.data { background: rgba(74, 222, 128, 0.2); color: #86efac; }
+    .tag.api { background: rgba(251, 113, 133, 0.2); color: #fda4af; }
+    .tag.core { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+    aside p {
+      margin: 0 0 0.85rem;
+      font-size: 0.875rem;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    aside ul {
+      margin: 0 0 0.85rem;
+      padding-left: 1.1rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    aside code, aside .path {
+      font-family: ui-monospace, monospace;
+      font-size: 0.78rem;
+      background: var(--bg);
+      padding: 0.15rem 0.35rem;
+      border-radius: 0.25rem;
+      color: #d4d4d8;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .dot { width: 10px; height: 10px; border-radius: 2px; }
+    .placeholder {
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>DrusanyPortfolio — interaktivni pregled</h1>
+    <p>Statični Next.js 16 (App Router) fotografski portfolio. Klikni čvor za detalje; tabovi mijenjaju prikaz grafa.</p>
+    <div class="tabs" role="tablist" aria-label="Prikaz dijagrama">
+      <button type="button" role="tab" id="tab-structure" aria-selected="true" data-view="structure">Struktura aplikacije</button>
+      <button type="button" role="tab" id="tab-data" aria-selected="false" data-view="data">Podaci i datoteke</button>
+      <button type="button" role="tab" id="tab-dev" aria-selected="false" data-view="dev">Dev admin i API</button>
+    </div>
+  </header>
+  <main>
+    <div class="canvas-wrap">
+      <svg id="diagram" viewBox="0 0 920 560" xmlns="http://www.w3.org/2000/svg" aria-label="Dijagram arhitekture">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#71717a" />
+          </marker>
+        </defs>
+        <g id="edges"></g>
+        <g id="nodes"></g>
+      </svg>
+      <div class="legend" id="legend"></div>
+    </div>
+    <aside id="detail" aria-live="polite">
+      <h2>Odaberi čvor</h2>
+      <p class="placeholder">Klikni bilo koji pravokutnik u dijagramu. Poveznice istaknu kada prelaziš mišem iznad čvora.</p>
+    </aside>
+  </main>
+
+  <script>
+    const views = {
+      structure: {
+        legend: [
+          { c: "var(--public)", t: "Javne rute / UI" },
+          { c: "var(--core)", t: "Core layout" },
+          { c: "var(--data)", t: "Izvor podataka (build)" },
+        ],
+        nodes: [
+          { id: "browser", x: 40, y: 220, w: 100, h: 52, label: "Preglednik", type: "public",
+            detail: "Korisnik otvara statički izvezeni sajt (`out/`). Nema Node servera u produkciji.",
+            paths: [], bullets: ["SSG / `output: export`", "Slike: `next/image` unoptimized"] },
+          { id: "root", x: 200, y: 200, w: 130, h: 92, label: "Root layout", type: "core",
+            detail: "Globalni `layout.tsx`: Google font varijable, ThemeStyles (CSS varijable iz theme.json), CustomCursor (isključeno na /admin).",
+            paths: ["src/app/layout.tsx", "src/components/ThemeStyles.tsx", "src/components/CustomCursor.tsx"],
+            bullets: ["metadataBase, favicon, OG defaults"] },
+          { id: "home", x: 400, y: 40, w: 120, h: 56, label: "Početna /", type: "public",
+            detail: "Bez `?category`: HeroSlider (6 kategorija). S kategorijom: masonry Gallery, venue/sport filteri, pretraga, lightbox.",
+            paths: ["src/app/(with-footer)/page.tsx", "src/components/HomeContent.tsx", "src/components/HeroSlider.tsx", "src/components/Gallery.tsx"],
+            bullets: ["URL: `?category`, `?venue`, `?sport`, `?image=slug`"] },
+          { id: "about", x: 400, y: 120, w: 120, h: 56, label: "About", type: "public",
+            detail: "Split layout, ProseContent, PressSection, GearSection, AboutNav.",
+            paths: ["src/app/(no-footer)/about/page.tsx", "src/components/ProseContent.tsx"],
+            bullets: ["pages.json + press.json + gear.json"] },
+          { id: "contact", x: 400, y: 200, w: 120, h: 56, label: "Contact", type: "public",
+            detail: "Prose + ContactForm (Formspree ili mailto).",
+            paths: ["src/app/(with-footer)/contact/page.tsx", "src/components/ContactForm.tsx"],
+            bullets: [] },
+          { id: "blog", x: 400, y: 280, w: 120, h: 56, label: "Blog", type: "public",
+            detail: "Lista s paginacijom i kategorijama, pojedinačni post, ruta po kategoriji za SEO/OG. Sidebar widgeti (search, categories, featured, plans, maps).",
+            paths: ["src/app/(with-footer)/blog/[[...segments]]/page.tsx", "src/app/(with-footer)/blog/[slug]/page.tsx", "src/components/blog/BlogSidebar.tsx"],
+            bullets: ["Body u `src/data/blog/[slug].html`"] },
+          { id: "header", x: 560, y: 100, w: 110, h: 48, label: "Header", type: "public",
+            detail: "Navigacija, Portfolio dropdown, pretraga u galeriji, forceLightMode na blogu (hydration).",
+            paths: ["src/components/Header.tsx"],
+            bullets: [] },
+          { id: "footer", x: 560, y: 170, w: 110, h: 44, label: "Footer", type: "public",
+            detail: "(with-footer) layout omotava stranice s Footer komponentom.",
+            paths: ["src/app/(with-footer)/layout.tsx", "src/components/Footer.tsx"],
+            bullets: [] },
+          { id: "dataread", x: 720, y: 120, w: 150, h: 100, label: "Čitanje pri buildu", type: "data",
+            detail: "Server komponente i `lib/*` čitaju JSON i generiraju statički HTML. Sanitizacija HTML-a pri čitanju stranica i bloga.",
+            paths: ["src/lib/getGallery.ts", "src/lib/blog.ts", "src/lib/pages.ts", "src/lib/sanitize.ts"],
+            bullets: ["gallery.json → galerija", "blog.json + .html body"] },
+        ],
+        edges: [
+          ["browser", "root"],
+          ["root", "home"], ["root", "about"], ["root", "contact"], ["root", "blog"],
+          ["home", "header"], ["blog", "header"], ["contact", "footer"],
+          ["home", "dataread"], ["about", "dataread"], ["contact", "dataread"], ["blog", "dataread"],
+        ],
+      },
+      data: {
+        legend: [
+          { c: "var(--data)", t: "JSON / HTML sadržaj" },
+          { c: "var(--public)", t: "Statičke datoteke" },
+        ],
+        nodes: [
+          { id: "galleryjson", x: 60, y: 80, w: 140, h: 56, label: "gallery.json", type: "data",
+            detail: "Flat-file baza slika: id, src, thumb, kategorija, EXIF polja, slug, order, hero…",
+            paths: ["src/data/gallery.json"],
+            bullets: ["full + thumbs u public/uploads/"] },
+          { id: "blogjson", x: 60, y: 160, w: 140, h: 56, label: "blog.json", type: "data",
+            detail: "Meta postova; body u odvojenim .html datotekama po slug-u.",
+            paths: ["src/data/blog.json", "src/data/blog/*.html"],
+            bullets: ["status draft/published", "blogExif.json za galeriju"] },
+          { id: "pagesjson", x: 60, y: 240, w: 140, h: 56, label: "pages.json", type: "data",
+            detail: "About i Contact: naslov, HTML (BlockNote), quote, Formspree, SEO.",
+            paths: ["src/data/pages.json"],
+            bullets: [] },
+          { id: "themejson", x: 60, y: 320, w: 140, h: 56, label: "theme.json", type: "data",
+            detail: "Fontovi, veličine i boje po elementima; ThemeStyles injektira CSS varijable.",
+            paths: ["src/data/theme.json", "src/data/themeFonts.ts"],
+            bullets: [] },
+          { id: "widgets", x: 60, y: 400, w: 140, h: 56, label: "Widgets + plans", type: "data",
+            detail: "blogWidgets.json i plans.json za sidebar.",
+            paths: ["src/data/blogWidgets.json", "src/data/plans.json"],
+            bullets: [] },
+          { id: "uploads", x: 320, y: 160, w: 160, h: 72, label: "public/uploads/", type: "public",
+            detail: "Portfolio: full/ i thumbs/ po kategoriji. Blog: featured, gallery/, content/. Gear, press.",
+            paths: ["public/uploads/"],
+            bullets: ["WebP putem Sharp pri uploadu (dev)"] },
+          { id: "out", x: 560, y: 160, w: 140, h: 72, label: "out/ (export)", type: "public",
+            detail: "Produkcijski artefakt: HTML, _next, uploads, sitemap.xml, robots.txt.",
+            paths: ["next.config.ts → output: export"],
+            bullets: ["Deploy: cPanel rsync, Vercel/Netlify…"] },
+          { id: "lock", x: 320, y: 320, w: 160, h: 64, label: "jsonLock + sanitize", type: "data",
+            detail: "proper-lockfile pri read-modify-write JSON-a u dev API-ju; sanitize-html za prose.",
+            paths: ["src/lib/jsonLock.ts", "src/lib/sanitize.ts"],
+            bullets: [] },
+        ],
+        edges: [
+          ["galleryjson", "uploads"],
+          ["blogjson", "uploads"],
+          ["galleryjson", "out"],
+          ["blogjson", "out"],
+          ["pagesjson", "out"],
+          ["themejson", "out"],
+          ["widgets", "out"],
+          ["uploads", "out"],
+          ["galleryjson", "lock"],
+          ["blogjson", "lock"],
+        ],
+      },
+      dev: {
+        legend: [
+          { c: "var(--admin)", t: "Admin UI (samo dev)" },
+          { c: "var(--api)", t: "API rute (403 u prod)" },
+          { c: "var(--data)", t: "Isti JSON izvori" },
+        ],
+        nodes: [
+          { id: "admin", x: 80, y: 100, w: 120, h: 64, label: "/admin", type: "admin",
+            detail: "Dashboard, galerija (upload, EXIF preview, reorder, hero), stranice (BlockNote), blog, media library, theme, blog widgets. NODE_ENV !== production.",
+            paths: ["src/app/admin/", "src/components/AdminClient.tsx"],
+            bullets: ["UnsavedChangesContext", "tamna tema BlockNote"] },
+          { id: "blocknote", x: 80, y: 200, w: 120, h: 56, label: "BlockNote", type: "admin",
+            detail: "About, Contact, Blog body; patch-package za side menu; BlogFilePanel, upload u content/.",
+            paths: ["src/components/BlockNoteEditor.tsx", "patches/"],
+            bullets: [] },
+          { id: "apiupload", x: 280, y: 40, w: 130, h: 48, label: "upload / blog-upload", type: "api",
+            detail: "Sharp resize, exifr, gallery.json ili blog folderi; rate limit.",
+            paths: ["src/app/api/upload/route.ts", "src/app/api/blog-upload/route.ts"],
+            bullets: [] },
+          { id: "apicrud", x: 280, y: 100, w: 130, h: 48, label: "update delete reorder hero", type: "api",
+            detail: "CRUD nad gallery.json s file lockingom.",
+            paths: ["src/app/api/update/route.ts", "src/app/api/delete/route.ts"],
+            bullets: [] },
+          { id: "apiblog", x: 280, y: 160, w: 130, h: 48, label: "blog API", type: "api",
+            detail: "GET/POST/PUT/DELETE; blogCleanup pri promjeni slug/datuma; 409 ako nestanu slike.",
+            paths: ["src/app/api/blog/route.ts", "src/lib/blogCleanup.ts"],
+            bullets: [] },
+          { id: "apimedia", x: 280, y: 220, w: 130, h: 48, label: "media *", type: "api",
+            detail: "Agregacija usages, detach, delete datoteke; content-health, health za CI.",
+            paths: ["src/app/api/media/route.ts", "src/app/api/health/route.ts"],
+            bullets: [] },
+          { id: "apirest", x: 280, y: 280, w: 130, h: 48, label: "pages theme widgets plans", type: "api",
+            detail: "PUT za pages.json, theme.json, blogWidgets, plans — svi guardani za dev.",
+            paths: ["src/app/api/pages/route.ts", "src/app/api/theme/route.ts"],
+            bullets: [] },
+          { id: "ratelimit", x: 480, y: 120, w: 120, h: 44, label: "rateLimit", type: "api",
+            detail: "In-memory 200 req/min po IP na admin API rutama.",
+            paths: ["src/lib/rateLimit.ts"],
+            bullets: [] },
+          { id: "jsonfiles", x: 660, y: 80, w: 150, h: 120, label: "JSON + disk", type: "data",
+            detail: "Isti izvori kao u produkcijskom buildu; admin ih mijenja lokalno prije `npm run build`.",
+            paths: ["src/data/*.json"],
+            bullets: ["build uključuje ažurirane datoteke"] },
+        ],
+        edges: [
+          ["admin", "apiupload"],
+          ["admin", "apicrud"],
+          ["admin", "apiblog"],
+          ["admin", "apimedia"],
+          ["admin", "apirest"],
+          ["blocknote", "admin"],
+          ["apiupload", "ratelimit"],
+          ["apicrud", "ratelimit"],
+          ["apiblog", "ratelimit"],
+          ["apiupload", "jsonfiles"],
+          ["apicrud", "jsonfiles"],
+          ["apiblog", "jsonfiles"],
+          ["apimedia", "jsonfiles"],
+          ["apirest", "jsonfiles"],
+        ],
+      },
+    };
+
+    const typeColors = {
+      public: { fill: "#0c4a6e", stroke: "#38bdf8" },
+      core: { fill: "#422006", stroke: "#f59e0b" },
+      data: { fill: "#14532d", stroke: "#4ade80" },
+      admin: { fill: "#3b0764", stroke: "#c084fc" },
+      api: { fill: "#4c0519", stroke: "#fb7185" },
+    };
+
+    let currentView = "structure";
+    let selectedId = null;
+    const nodeEl = {};
+    const edgeEls = [];
+
+    function centerOf(n) {
+      return { x: n.x + n.w / 2, y: n.y + n.h / 2 };
+    }
+
+    function edgePath(x1, y1, x2, y2) {
+      const mx = (x1 + x2) / 2;
+      return `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`;
+    }
+
+    function render(viewKey) {
+      const v = views[viewKey];
+      const svg = document.getElementById("diagram");
+      const gNodes = document.getElementById("nodes");
+      const gEdges = document.getElementById("edges");
+      const legendEl = document.getElementById("legend");
+      gNodes.innerHTML = "";
+      gEdges.innerHTML = "";
+      edgeEls.length = 0;
+      Object.keys(nodeEl).forEach((k) => delete nodeEl[k]);
+
+      const nodeMap = Object.fromEntries(v.nodes.map((n) => [n.id, n]));
+
+      v.edges.forEach(([from, to], i) => {
+        const a = nodeMap[from];
+        const b = nodeMap[to];
+        if (!a || !b) return;
+        const ca = centerOf(a);
+        const cb = centerOf(b);
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", edgePath(ca.x, ca.y, cb.x, cb.y));
+        path.setAttribute("class", "edge");
+        path.dataset.from = from;
+        path.dataset.to = to;
+        path.setAttribute("marker-end", "url(#arrow)");
+        gEdges.appendChild(path);
+        edgeEls.push(path);
+      });
+
+      v.nodes.forEach((n) => {
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.classList.add("node");
+        g.dataset.id = n.id;
+        const col = typeColors[n.type] || typeColors.public;
+        const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        r.setAttribute("x", n.x);
+        r.setAttribute("y", n.y);
+        r.setAttribute("width", n.w);
+        r.setAttribute("height", n.h);
+        r.setAttribute("rx", 8);
+        r.setAttribute("fill", col.fill);
+        r.setAttribute("stroke", col.stroke);
+        r.setAttribute("stroke-width", 1.5);
+        g.appendChild(r);
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", n.x + n.w / 2);
+        text.setAttribute("y", n.y + n.h / 2);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("dominant-baseline", "middle");
+        text.setAttribute("fill", "#e4e4e7");
+        text.setAttribute("font-size", n.label.length > 18 ? 11 : 12);
+        text.setAttribute("font-weight", "600");
+        const lines = n.label.split(" ");
+        if (lines.length <= 2 && n.label.length < 22) {
+          text.textContent = n.label;
+        } else {
+          const tspan1 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+          tspan1.setAttribute("x", n.x + n.w / 2);
+          tspan1.setAttribute("dy", "-0.35em");
+          tspan1.textContent = lines.slice(0, Math.ceil(lines.length / 2)).join(" ");
+          const tspan2 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+          tspan2.setAttribute("x", n.x + n.w / 2);
+          tspan2.setAttribute("dy", "1.2em");
+          tspan2.textContent = lines.slice(Math.ceil(lines.length / 2)).join(" ");
+          text.appendChild(tspan1);
+          text.appendChild(tspan2);
+        }
+        g.appendChild(text);
+        g.addEventListener("click", () => selectNode(n.id, viewKey));
+        g.addEventListener("mouseenter", () => highlightEdges(n.id, true));
+        g.addEventListener("mouseleave", () => highlightEdges(n.id, false));
+        gNodes.appendChild(g);
+        nodeEl[n.id] = g;
+      });
+
+      legendEl.innerHTML = v.legend
+        .map((L) => `<span><span class="dot" style="background:${L.c}"></span>${escapeHtml(L.t)}</span>`)
+        .join("");
+
+      selectedId = null;
+      document.getElementById("detail").innerHTML =
+        '<h2>Odaberi čvor</h2><p class="placeholder">Klikni pravokutnik u dijagramu.</p>';
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function highlightEdges(nodeId, on) {
+      edgeEls.forEach((p) => {
+        const f = p.dataset.from;
+        const t = p.dataset.to;
+        const hit = f === nodeId || t === nodeId;
+        p.classList.toggle("highlight", on && hit);
+        p.classList.toggle("dim", on && !hit);
+      });
+    }
+
+    function selectNode(id, viewKey) {
+      selectedId = id;
+      Object.values(nodeEl).forEach((g) => g.classList.remove("selected"));
+      if (nodeEl[id]) nodeEl[id].classList.add("selected");
+
+      const n = views[viewKey].nodes.find((x) => x.id === id);
+      const aside = document.getElementById("detail");
+      if (!n) return;
+
+      const tagClass = `tag ${n.type}`;
+      const paths = n.paths.map((p) => `<div class="path">${escapeHtml(p)}</div>`).join("");
+      const bullets =
+        n.bullets && n.bullets.length
+          ? `<ul>${n.bullets.map((b) => `<li>${escapeHtml(b)}</li>`).join("")}</ul>`
+          : "";
+
+      aside.innerHTML = `
+        <h2>${escapeHtml(n.label)}</h2>
+        <span class="${tagClass}">${escapeHtml(n.type)}</span>
+        <p>${escapeHtml(n.detail)}</p>
+        ${paths ? `<p><strong>Datoteke / moduli</strong></p>${paths}` : ""}
+        ${bullets}
+      `;
+    }
+
+    document.querySelectorAll(".tabs button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const view = btn.dataset.view;
+        currentView = view;
+        document.querySelectorAll(".tabs button").forEach((b) => b.setAttribute("aria-selected", b === btn ? "true" : "false"));
+        render(view);
+      });
+    });
+
+    render("structure");
+  </script>
+</body>
+</html>

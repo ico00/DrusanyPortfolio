@@ -133,6 +133,36 @@ export default function ProseContent({
     return () => cleanups.forEach((fn) => fn());
   }, [processedHtml]);
 
+  /** Blok "Filter galerije" – as-you-type filter za BlogGallery ispod posta. */
+  useEffect(() => {
+    const root = containerRef.current;
+    if (!root) return;
+    const inputs = root.querySelectorAll<HTMLInputElement>(
+      ".prose-player-filter-input"
+    );
+    const cleanups: (() => void)[] = [];
+
+    inputs.forEach((input) => {
+      const dispatch = () => {
+        window.dispatchEvent(
+          new CustomEvent("blog-gallery-filter", {
+            detail: { query: input.value },
+          })
+        );
+      };
+      input.addEventListener("input", dispatch);
+      cleanups.push(() => input.removeEventListener("input", dispatch));
+    });
+
+    return () => {
+      cleanups.forEach((fn) => fn());
+      // Reset filtera kad se ovaj blok makne iz DOM-a (npr. navigacija)
+      window.dispatchEvent(
+        new CustomEvent("blog-gallery-filter", { detail: { query: "" } })
+      );
+    };
+  }, [processedHtml]);
+
   return (
     <>
       <div

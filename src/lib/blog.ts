@@ -21,6 +21,8 @@ export interface BlogGalleryImage {
   aperture?: string;
   /** ISO speed */
   iso?: number;
+  /** Ključne riječi ugrađene u EXIF/IPTC/XMP slike – samo za filter, ne prikazuje se kao caption */
+  exifKeywords?: string;
 }
 
 /** Metadata po URL-u slike u galeriji */
@@ -66,6 +68,8 @@ export interface BlogPost {
   body?: string; // body comes from file; deprecated in JSON
   /** Plain text from body for search (from getBlogWithBodies) */
   bodySearchText?: string;
+  /** Prvi paragraf iz body-ja, plain text (from getBlogWithBodies) – teaser na listi postova */
+  excerpt?: string;
 }
 
 
@@ -141,40 +145,84 @@ function stripHtml(html: string): string {
     .trim();
 }
 
+/** Uzima prvi neprazan <p> iz HTML-a body-ja, kao plain text, skraćen na maxLen (na granici riječi). */
+export function extractExcerpt(html: string, maxLen = 200): string {
+  if (!html?.trim()) return "";
+  const paragraphs = html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi);
+  for (const match of paragraphs) {
+    const text = stripHtml(match[1]);
+    if (!text) continue;
+    if (text.length <= maxLen) return text;
+    const truncated = text.slice(0, maxLen);
+    const lastSpace = truncated.lastIndexOf(" ");
+    return `${truncated.slice(0, lastSpace > 0 ? lastSpace : maxLen)}…`;
+  }
+  return "";
+}
+
+interface BlogExifEntry {
+  camera?: string;
+  lens?: string;
+  exposure?: string;
+  aperture?: string;
+  iso?: number;
+  /** Opis/caption ugrađen u EXIF/IPTC/XMP slike (npr. Photo Mechanic "Description/Caption") */
+  description?: string;
+  /** Ključne riječi ugrađene u EXIF/IPTC/XMP slike */
+  keywords?: string;
+}
+
+const BLOG_EXIF_PATH = path.join(process.cwd(), "src", "data", "blogExif.json");
+
+async function getBlogExifMap(): Promise<Record<string, BlogExifEntry>> {
+  try {
+    const raw = await readFile(BLOG_EXIF_PATH, "utf-8");
+    return JSON.parse(raw) as Record<string, BlogExifEntry>;
+  } catch {
+    return {};
+  }
+}
+
 /** Get blog posts with body content for search (plain text, no HTML). Samo published. */
 export async function getBlogWithBodies(): Promise<BlogData> {
   const { posts } = await getBlog();
   const published = getPublishedPosts(posts);
+  const blogExif = await getBlogExifMap();
   const enriched = await Promise.all(
     published.map(async (post) => {
       let bodySearchText = "";
+      let excerpt = "";
       try {
         const contentPath = getBlogContentPath(post.slug);
         const body = await readFile(contentPath, "utf-8");
         bodySearchText = stripHtml(body);
+        excerpt = extractExcerpt(body);
       } catch {
         // No body file
       }
-      return { ...post, bodySearchText };
+      const galleryExifText = (post.gallery ?? [])
+        .map((url) => {
+          const src = url.startsWith("/") ? url : `/${url}`;
+          const exif = blogExif[src];
+          return [exif?.description, exif?.keywords].filter(Boolean).join(" ");
+        })
+        .filter(Boolean)
+        .join(" ");
+      if (galleryExifText) {
+        bodySearchText = `${bodySearchText} ${galleryExifText}`.trim();
+      }
+      return { ...post, bodySearchText, excerpt };
     })
   );
   return { posts: enriched };
 }
-
-const BLOG_EXIF_PATH = path.join(process.cwd(), "src", "data", "blogExif.json");
 
 /** Enrich gallery URLs with width/height, EXIF and metadata */
 async function enrichBlogGallery(
   urls: string[],
   galleryMetadata?: Record<string, BlogGalleryMetadata>
 ): Promise<BlogGalleryImage[]> {
-  let blogExif: Record<string, { camera?: string; lens?: string; exposure?: string; aperture?: string; iso?: number }> = {};
-  try {
-    const raw = await readFile(BLOG_EXIF_PATH, "utf-8");
-    blogExif = JSON.parse(raw) as typeof blogExif;
-  } catch {
-    // file doesn't exist or invalid
-  }
+  const blogExif = await getBlogExifMap();
 
   const result: BlogGalleryImage[] = [];
   for (const url of urls) {
@@ -193,17 +241,21 @@ async function enrichBlogGallery(
 
     const exif = blogExif[src];
     const meta = galleryMetadata?.[src];
+    // Ručno uneseni opis ima prednost; EXIF caption (npr. Photo Mechanic Description)
+    // popunjava caption samo kad admin nije ništa upisao – tako se ime iz IPTC-a vidi bez dodatnog unosa.
+    const description = meta?.description || exif?.description || undefined;
     result.push({
       src,
       width: w,
       height: h,
       ...(meta?.title && { title: meta.title }),
-      ...(meta?.description && { description: meta.description }),
+      ...(description && { description }),
       ...(exif?.camera && { camera: exif.camera }),
       ...(exif?.lens && { lens: exif.lens }),
       ...(exif?.exposure && { exposure: exif.exposure }),
       ...(exif?.aperture && { aperture: exif.aperture }),
       ...(exif?.iso != null && { iso: exif.iso }),
+      ...(exif?.keywords && { exifKeywords: exif.keywords }),
     });
   }
   return result;
@@ -214,20 +266,28 @@ export async function getBlogPostById(id: string): Promise<BlogPost | null> {
   const { posts } = await getBlog();
   const post = posts.find((p) => p.id === id) ?? null;
   if (!post) return null;
+  const galleryImages =
+    (post.gallery?.length ?? 0) > 0
+      ? await enrichBlogGallery(post.gallery!, post.galleryMetadata)
+      : undefined;
   try {
     const contentPath = getBlogContentPath(post.slug);
     const body = await readFile(contentPath, "utf-8");
-    return { ...post, body: sanitizeProseHtml(body) };
+    return { ...post, body: sanitizeProseHtml(body), galleryImages };
   } catch {
-    return { ...post };
+    return { ...post, galleryImages };
   }
 }
 
-export async function getBlogPost(slug: string): Promise<BlogPost | null> {
+export async function getBlogPost(
+  slug: string,
+  options?: { includeDraft?: boolean }
+): Promise<BlogPost | null> {
   const normalizedSlug = slug.endsWith(".html") ? slug.slice(0, -5) : slug;
   const { posts } = await getBlog();
   const post = posts.find((p) => p.slug === normalizedSlug) ?? null;
-  if (!post || post.status === "draft") return null;
+  if (!post) return null;
+  if (post.status === "draft" && !options?.includeDraft) return null;
 
   const galleryImages =
     (post.gallery?.length ?? 0) > 0

@@ -17,6 +17,16 @@ export default function BlogListLayout({
   /** Kada je postavljeno (ruta /blog/kategorija/[slug]), filter i OG-friendly URL. */
   initialCategorySlug?: string;
 }) {
+  // BlogList/BlogSidebar su client komponente → cijeli prop se serijalizira u RSC
+  // payload SVAKE liste/kategorije/paginacije. Maknemo teška polja (gallery slike,
+  // body) koja se ovdje ne koriste; ostala (skalarna) polja ostaju pa nema type-promjena.
+  const slimPosts: BlogPost[] = posts.map((p) => ({
+    ...p,
+    gallery: undefined,
+    galleryImages: undefined,
+    galleryMetadata: undefined,
+    body: undefined,
+  }));
   return (
     <div className="min-h-screen bg-white">
       <Suspense fallback={<div className="h-16" />}>
@@ -30,7 +40,7 @@ export default function BlogListLayout({
           <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
             <main className="min-w-0 flex-1">
               <BlogList
-                posts={posts}
+                posts={slimPosts}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 initialCategorySlug={initialCategorySlug}
@@ -38,7 +48,7 @@ export default function BlogListLayout({
             </main>
             <aside className="w-full shrink-0 lg:w-80">
               <div className="sticky top-24">
-                <BlogSidebar posts={posts} />
+                <BlogSidebar posts={slimPosts} />
               </div>
             </aside>
           </div>

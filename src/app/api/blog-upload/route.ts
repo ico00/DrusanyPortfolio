@@ -4,7 +4,7 @@ import sharp from "sharp";
 import exifr from "exifr";
 import { getBlogUploadDir } from "@/lib/blog";
 import { hasValidImageSignature } from "@/lib/imageValidation";
-import { getExifExtras } from "@/lib/exif";
+import { getExifExtras, getExifDescription, getKeywords } from "@/lib/exif";
 import { checkRateLimit } from "@/lib/rateLimit";
 import { requireDevApiResponse } from "@/lib/apiDevOnly";
 import { slugify } from "@/lib/slug";
@@ -13,15 +13,27 @@ import { sanitizeFilename } from "@/lib/utils";
 
 const BLOG_EXIF_PATH = path.join(process.cwd(), "src", "data", "blogExif.json");
 
-async function saveBlogExif(url: string, exif: { camera?: string; lens?: string; exposure?: string; aperture?: string; iso?: number }) {
-  let data: Record<string, { camera?: string; lens?: string; exposure?: string; aperture?: string; iso?: number }> = {};
+interface BlogExifEntry {
+  camera?: string;
+  lens?: string;
+  exposure?: string;
+  aperture?: string;
+  iso?: number;
+  description?: string;
+  keywords?: string;
+}
+
+async function saveBlogExif(url: string, exif: BlogExifEntry) {
+  let data: Record<string, BlogExifEntry> = {};
   try {
     const raw = await readFile(BLOG_EXIF_PATH, "utf-8");
     data = JSON.parse(raw) as typeof data;
   } catch {
     // file doesn't exist or invalid
   }
-  const hasAny = exif.camera || exif.lens || exif.exposure || exif.aperture || exif.iso != null;
+  const hasAny =
+    exif.camera || exif.lens || exif.exposure || exif.aperture || exif.iso != null ||
+    exif.description || exif.keywords;
   if (hasAny) {
     data[url] = exif;
   } else {
@@ -103,8 +115,16 @@ export async function POST(request: Request) {
       );
     }
 
+    const isGif = file.type === "image/gif";
+
     if (type === "featured") {
       await mkdir(baseDir, { recursive: true });
+      if (isGif) {
+        const outPath = path.join(baseDir, "featured-pending.gif");
+        await writeFile(outPath, buffer);
+        const url = `/uploads/blog/${folderName}/featured-pending.gif`;
+        return Response.json({ success: true, url });
+      }
       const outPath = path.join(baseDir, "featured-pending.webp");
       await sharp(buffer)
         .rotate()
@@ -120,15 +140,16 @@ export async function POST(request: Request) {
       const galleryDir = path.join(baseDir, "gallery");
       await mkdir(galleryDir, { recursive: true });
       const nameToUse = (file.name || originalFilename).trim();
-      let filename = sanitizeFilename(nameToUse || "image", { slug, index });
+      const ext = isGif ? "gif" : "webp";
+      let filename = sanitizeFilename(nameToUse || "image", { slug, index, ext });
       const outPath = path.join(galleryDir, filename);
 
       if (await fileExists(outPath) && !overwrite) {
         if (addWithSuffix) {
-          const base = path.basename(filename, ".webp");
+          const base = path.basename(filename, `.${ext}`);
           let n = 2;
-          while (await fileExists(path.join(galleryDir, `${base}_${n}.webp`))) n++;
-          filename = `${base}_${n}.webp`;
+          while (await fileExists(path.join(galleryDir, `${base}_${n}.${ext}`))) n++;
+          filename = `${base}_${n}.${ext}`;
         } else {
           const existingSrc = `/uploads/blog/${folderName}/gallery/${filename}`;
           let existingSize: number | null = null;
@@ -159,6 +180,8 @@ export async function POST(request: Request) {
       let exposure: string | undefined;
       let aperture: string | undefined;
       let iso: number | undefined;
+      let description: string | undefined;
+      let keywords: string | undefined;
       try {
         const exif = await exifr.parse(buffer, {
           userComment: true,
@@ -174,20 +197,28 @@ export async function POST(request: Request) {
           if (extras.exposure) exposure = extras.exposure;
           if (extras.aperture) aperture = extras.aperture;
           if (extras.iso != null) iso = extras.iso;
+          const desc = getExifDescription(exif as Record<string, unknown>);
+          if (desc) description = desc;
+          const kw = getKeywords(exif as Record<string, unknown>);
+          if (kw) keywords = kw;
         }
       } catch {
         // EXIF parse failed
       }
 
-      await sharp(buffer)
-        .rotate() // primijeni EXIF orijentaciju (WebP u preglednicima ne podržava EXIF orientation)
-        .keepExif() // zadrži EXIF u WebP datoteci
-        .resize(2048, undefined, { withoutEnlargement: true })
-        .webp({ quality: 85 })
-        .toFile(finalPath);
+      if (isGif) {
+        await writeFile(finalPath, buffer);
+      } else {
+        await sharp(buffer)
+          .rotate() // primijeni EXIF orijentaciju (WebP u preglednicima ne podržava EXIF orientation)
+          .keepExif() // zadrži EXIF u WebP datoteci
+          .resize(2048, undefined, { withoutEnlargement: true })
+          .webp({ quality: 85 })
+          .toFile(finalPath);
+      }
 
-      if (camera || lens || exposure || aperture || iso != null) {
-        await saveBlogExif(url, { camera, lens, exposure, aperture, iso });
+      if (camera || lens || exposure || aperture || iso != null || description || keywords) {
+        await saveBlogExif(url, { camera, lens, exposure, aperture, iso, description, keywords });
       }
 
       return Response.json({ success: true, url });
@@ -197,21 +228,26 @@ export async function POST(request: Request) {
       const contentDir = path.join(baseDir, "content");
       await mkdir(contentDir, { recursive: true });
       const nameToUse = (file.name || originalFilename).trim();
-      let filename = sanitizeFilename(nameToUse || "image", { slug });
+      const ext = isGif ? "gif" : "webp";
+      let filename = sanitizeFilename(nameToUse || "image", { slug, ext });
       let outPath = path.join(contentDir, filename);
       if (await fileExists(outPath)) {
-        const stem = path.basename(filename, ".webp");
+        const stem = path.basename(filename, `.${ext}`);
         let n = 2;
-        while (await fileExists(path.join(contentDir, `${stem}_${n}.webp`))) n++;
-        filename = `${stem}_${n}.webp`;
+        while (await fileExists(path.join(contentDir, `${stem}_${n}.${ext}`))) n++;
+        filename = `${stem}_${n}.${ext}`;
         outPath = path.join(contentDir, filename);
       }
-      await sharp(buffer)
-        .rotate()
-        .keepExif()
-        .resize(2048, undefined, { withoutEnlargement: true })
-        .webp({ quality: 85 })
-        .toFile(outPath);
+      if (isGif) {
+        await writeFile(outPath, buffer);
+      } else {
+        await sharp(buffer)
+          .rotate()
+          .keepExif()
+          .resize(2048, undefined, { withoutEnlargement: true })
+          .webp({ quality: 85 })
+          .toFile(outPath);
+      }
       const url = `/uploads/blog/${folderName}/content/${filename}`;
       return Response.json({ success: true, url });
     }

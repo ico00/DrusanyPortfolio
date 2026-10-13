@@ -1,13 +1,22 @@
 "use client";
 
 import Link from "next/link";
+import { Star } from "lucide-react";
 import { formatBlogDate } from "@/data/blogCategories";
 import { BLOG_WIDGET_UI } from "@/data/blogWidgetUI";
+import WidgetAccordion from "./WidgetAccordion";
 import type { BlogPost } from "@/lib/blog";
+
+/** Samo polja potrebna za prikaz istaknutih – izbjegava serijalizaciju
+ *  cijelog BlogPost-a (gallery, body…) u RSC payload svake stranice. */
+export type FeaturedWidgetPost = Pick<
+  BlogPost,
+  "id" | "slug" | "title" | "date" | "time" | "thumbnail" | "thumbnailFocus" | "featured"
+>;
 
 interface FeaturedPostsWidgetProps {
   title?: string;
-  posts: BlogPost[];
+  posts: FeaturedWidgetPost[];
 }
 
 export default function FeaturedPostsWidget({
@@ -28,8 +37,7 @@ export default function FeaturedPostsWidget({
   }
 
   return (
-    <>
-      <h3 className={BLOG_WIDGET_UI.title}>{title}</h3>
+    <WidgetAccordion title={title} icon={<Star className="h-4 w-4 shrink-0" />}>
       <ul className="mt-4 space-y-3">
         {featured.map((post) => {
           const href = `/blog/${post.slug}`;
@@ -71,6 +79,6 @@ export default function FeaturedPostsWidget({
           </li>
         )})}
       </ul>
-    </>
+    </WidgetAccordion>
   );
 }

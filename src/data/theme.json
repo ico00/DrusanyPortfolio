@@ -90,6 +90,13 @@
     "fontWeight": "400",
     "fontStyle": "normal"
   },
+  "blogListCardExcerpt": {
+    "fontFamily": "redHatDisplay",
+    "fontSize": "1.125rem",
+    "color": "#52525b",
+    "fontWeight": "400",
+    "fontStyle": "italic"
+  },
   "widgetTitle": {
     "fontFamily": "redHatDisplay",
     "fontSize": "1.125rem",

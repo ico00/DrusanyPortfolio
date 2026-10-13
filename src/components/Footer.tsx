@@ -20,7 +20,7 @@ export default function Footer() {
   if (isAbout) return null;
 
   return (
-    <footer className="border-t border-zinc-800/50 bg-zinc-950 py-6">
+    <footer className="border-t border-white/10 bg-black py-6">
       <div className="mx-auto max-w-7xl px-6">
         <p className="text-center text-xs text-zinc-500">
           © {getCopyrightYear()} Ivica Drusany. {rightsText}

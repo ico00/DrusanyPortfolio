@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono, JetBrains_Mono, Playfair_Display, Red_Hat_Display, Shantell_Sans } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
@@ -76,6 +77,12 @@ export default function RootLayout({
         <ThemeStyles />
         <CustomCursor />
         {children}
+        <Script
+          type="module"
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "6bd90186525f4b99aead5c692adfa2b1"}'
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

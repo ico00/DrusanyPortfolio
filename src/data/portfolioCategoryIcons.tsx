@@ -5,6 +5,7 @@ import {
   Home,
   MapPin,
   Music,
+  Smartphone,
   Trophy,
 } from "lucide-react";
 import { PORTFOLIO_CATEGORIES } from "./portfolioCategories";
@@ -19,6 +20,7 @@ const SLUG_TO_ICON: Record<
   interiors: Home,
   zagreb: MapPin,
   "food-drink": Coffee,
+  iphoneography: Smartphone,
 };
 
 export type PortfolioCategoryWithIcon = {

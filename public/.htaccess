@@ -42,7 +42,7 @@ RewriteCond %{DOCUMENT_ROOT}/blog/$1.html -f
 RewriteRule ^blog/(.+)\.html$ /blog/$1 [L,R=301]
 
 # 3. Portfolio kategorije (čiste rute: /interiors, /concerts, itd.)
-RewriteRule ^(concerts|sport|animals|interiors|zagreb|food-drink)/?$ $1.html [L]
+RewriteRule ^(concerts|sport|animals|interiors|zagreb|food-drink|iphoneography)/?$ $1.html [L]
 
 # 4. Fallback za sve ostalo (index, about, contact...)
 #    !-f AND !-d: preskače direktorije (slug/ mape sa segment datotekama)

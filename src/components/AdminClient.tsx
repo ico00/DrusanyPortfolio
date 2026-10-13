@@ -671,7 +671,7 @@ export default function AdminClient() {
         showToast("success", "Redoslijed spremljen.");
         fetchGallery();
       } catch (err) {
-        showToast("error", err instanceof Error ? err.message : "Greška pri spremanju.");
+        showToast("error", err instanceof Error ? err.message : "Error saving.");
       } finally {
         setReordering(false);
       }
@@ -1161,18 +1161,18 @@ export default function AdminClient() {
                                 method: "POST",
                               });
                               const data = await res.json();
-                              if (!res.ok) throw new Error(data.error || "Greška");
-                              showToast("success", `Dodano ${data.updated} slugova.`);
+                              if (!res.ok) throw new Error(data.error || "Error");
+                              showToast("success", `Added ${data.updated} slug(s).`);
                               setGalleryFilter("");
                               setGalleryFilterIds([]);
                               fetchGallery();
                             } catch (err) {
-                              showToast("error", err instanceof Error ? err.message : "Greška.");
+                              showToast("error", err instanceof Error ? err.message : "Error.");
                             }
                           }}
                           className="ml-3 rounded-lg bg-amber-500/20 px-3 py-1.5 text-sm font-medium text-amber-400 transition-colors hover:bg-amber-500/30"
                         >
-                          Generiraj slugove
+                          Generate slugs
                         </button>
                       )}
                       <button
@@ -1544,7 +1544,7 @@ export default function AdminClient() {
                   return editingImg?.src ? (
                     <div>
                       <label className="mb-1 block text-sm text-zinc-400">
-                        Fokus točka (za hero/featured prikaz)
+                        Focus point (for hero/featured display)
                       </label>
                       <div
                         className="relative aspect-video w-full cursor-crosshair overflow-hidden rounded-lg bg-zinc-800"

@@ -16,6 +16,7 @@ Na početku svakog zadatka koristi ovaj checklist:
 6. **Koristi centralizirane funkcije** – za upload/sanitizaciju koristi `utils.ts` (sanitizeFilename, sanitizeFolderName) i `fileUtils.ts` (fileExists); za slug koristi `slug.ts`
 
 **Kratka fraza za početak zadatka (možeš kopirati):**
+
 > „Prije implementacije pročitaj `docs/technical-patterns.md` i `docs/architecture.md`. Prati postojeće komponente – ne izmišljaj nove pristupe.“
 
 ---
@@ -57,7 +58,8 @@ const { processedHtml, imageUrls } = useMemo(
 );
 ```
 
-**Korak 2:** U `processProseHtml` ([`src/lib/processProseHtml.ts`](src/lib/processProseHtml.ts)):
+**Korak 2:** U `processProseHtml` (`[src/lib/processProseHtml.ts](src/lib/processProseHtml.ts)`):
+
 - Parsiraj HTML s **linkedom** (i na serveru i na klijentu – isti parser = nema hydration mismatch)
 - Za svaku sliku: stvori `<button>` wrapper, dodaj `data-cursor-hover`, `data-cursor-aperture`, `data-index`
 - Dodaj `data-cursor-aperture` i na samu `<img>` (da `target.closest()` uvijek pronađe element)
@@ -94,46 +96,48 @@ Graf "Images by category in blog" prikazuje glavne kategorije na X-osi, podkateg
 
 ## 3. Referentne komponente
 
-| Funkcionalnost | Komponenta | Lokacija |
-|----------------|------------|----------|
-| Slike + lightbox + aperture (React) | BlogGallery | `src/components/BlogGallery.tsx` |
-| Slike + lightbox + aperture (React) | Gallery | `src/components/Gallery.tsx` |
-| Slike + lightbox + aperture (HTML string) | ProseContent | `src/components/ProseContent.tsx` |
-| Obrada proze (slike, TOC, blockquote, YouTube) | processProseHtml | `src/lib/processProseHtml.ts` |
-| TOC članka (h1–h6) | BlogPostToc, BlogPostLayoutClient | `src/components/blog/BlogPostToc.tsx`, `BlogPostLayoutClient.tsx` |
-| Custom cursor | CustomCursor | `src/components/CustomCursor.tsx` |
-| Stacked chart (blog kategorije) | AdminDashboard | `src/components/AdminDashboard.tsx` |
-| Chart podaci | getBlogCategoryStackedChartData | `src/data/blogCategories.ts` |
-| Sanitizer (whitelist atributa) | sanitizeProseHtml | `src/lib/sanitize.ts` |
-| Centralizirane util funkcije | transliterateCroatian, sanitizeFilename, sanitizeFolderName | `src/lib/utils.ts` |
-| Portfolio kategorije (slug + label) | PORTFOLIO_CATEGORIES | `src/data/portfolioCategories.ts` |
-| Portfolio kategorije + Lucide ikone | PORTFOLIO_CATEGORIES_WITH_ICONS | `src/data/portfolioCategoryIcons.tsx` |
-| Masonry broj stupaca (resize) | useColumnCount(`"gallery"` \| `"press"`) | `src/hooks/useColumnCount.ts` |
-| Dev-only API guard | requireDevApiResponse | `src/lib/apiDevOnly.ts` |
-| Format datuma (blog, portfolio, admin) | formatBlogDate, formatPortfolioDateLong, … | `src/lib/formatDate.ts` |
-| Provjera postojanja datoteke | fileExists | `src/lib/fileUtils.ts` (samo server) |
-| Blog sidebar widgeti (stilovi, hover rub) | BLOG_WIDGET_UI (`rowHover`, `itemInactive`, `inputWrapper`) | `src/data/blogWidgetUI.ts` |
-| Blog widget konfiguracija (JSON) | getBlogWidgets, blogWidgets.json | `src/lib/blogWidgets.ts`, `src/data/blogWidgets.json` |
-| Admin: blog widgeti + planovi | BlogWidgetsAdmin (grid Title stupac na `md+`), `/api/blog-widgets`, `/api/plans` | `BlogWidgetsAdmin.tsx`, `api/blog-widgets/route.ts`, `api/plans/route.ts`, `lib/blogWidgets.ts`, `lib/plans.ts` |
-| Admin stringovi (blog widgeti) | `ADMIN_UI.adminWidgets` | `src/data/adminUI.ts` |
-| Admin blog forma – metadata red | AdminBlog (Datum, vrijeme, Status, Autor teksta, Autor fotografija, Featured u jednom redu) | `src/components/AdminBlog.tsx` |
-| Blog widget komponente | SearchWidget, CategoriesWidget, FeaturedPostsWidget, PlansWidget, GoogleMapsWidget | `src/components/blog/` |
-| Accordion (grid-rows) | CategoriesWidget (kategorije s podkategorijama), AdminSidebar | `src/components/blog/CategoriesWidget.tsx` |
-| Block type select (slash `/` i proširenja tipova) | BlockTypeSelectWithCursor, `getSlashMenuItems` | `src/components/BlockTypeSelectWithCursor.tsx`, `BlockNoteEditor.tsx` |
-| Formatting toolbar na vrhu bloka | BlockTopFormattingToolbarController | `src/components/BlockTopFormattingToolbarController.tsx` |
-| Link toolbar (FormattingToolbar) | CustomCreateLinkButton | `src/components/CustomCreateLinkButton.tsx` |
-| Custom Image block (displayWidth) | blocknoteImageSchema | `src/lib/blocknoteImageSchema.tsx` |
-| YouTube video blok (embed po širini stranice) | blocknoteYouTubeSchema | `src/lib/blocknoteYouTubeSchema.tsx` |
-| File Panel (Upload + Media + Embed) | BlogFilePanel, BlogUploadTab | `src/components/blocknote/BlogFilePanel.tsx`, `BlogUploadTab.tsx` |
-| Media tab (odabir postojeće slike) | MediaLibraryTab | `src/components/blocknote/MediaLibraryTab.tsx` |
-| Theme grupe, accordion, elementi | ThemeAdmin | `src/components/ThemeAdmin.tsx` |
-| Prose linkovi (hover) | globals.css | `.prose a`, `.prose-invert a` |
-| LCP optimizacija (blog thumbnail) | blog/[slug]/page.tsx | `src/app/(with-footer)/blog/[slug]/page.tsx` |
-| Traka napretka čitanja (post) | BlogReadingProgress + `data-blog-reading-article` na `<article>` | `src/components/blog/BlogReadingProgress.tsx` |
-| Header (forceLightMode za blog) | Header | `src/components/Header.tsx` |
-| Blog lista po kategoriji (OG/share) | `blog/kategorija/[slug]/page.tsx` | `src/app/(with-footer)/blog/kategorija/[slug]/page.tsx` |
-| Put kategorije za linkove | `blogCategoryListPath`, `getAllBlogCategorySlugs`, `getCategorySlugFromBlogPathname` | `src/data/blogCategories.ts` |
-| Paginacija bloga s kategorijom | Pagination (`categorySlug`) | `src/components/blog/Pagination.tsx` |
+
+| Funkcionalnost                                    | Komponenta                                                                                  | Lokacija                                                                                                        |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Slike + lightbox + aperture (React)               | BlogGallery                                                                                 | `src/components/BlogGallery.tsx`                                                                                |
+| Slike + lightbox + aperture (React)               | Gallery                                                                                     | `src/components/Gallery.tsx`                                                                                    |
+| Slike + lightbox + aperture (HTML string)         | ProseContent                                                                                | `src/components/ProseContent.tsx`                                                                               |
+| Obrada proze (slike, TOC, blockquote, YouTube)    | processProseHtml                                                                            | `src/lib/processProseHtml.ts`                                                                                   |
+| TOC članka (h1–h6)                                | BlogPostToc, BlogPostLayoutClient                                                           | `src/components/blog/BlogPostToc.tsx`, `BlogPostLayoutClient.tsx`                                               |
+| Custom cursor                                     | CustomCursor                                                                                | `src/components/CustomCursor.tsx`                                                                               |
+| Stacked chart (blog kategorije)                   | AdminDashboard                                                                              | `src/components/AdminDashboard.tsx`                                                                             |
+| Chart podaci                                      | getBlogCategoryStackedChartData                                                             | `src/data/blogCategories.ts`                                                                                    |
+| Sanitizer (whitelist atributa)                    | sanitizeProseHtml                                                                           | `src/lib/sanitize.ts`                                                                                           |
+| Centralizirane util funkcije                      | transliterateCroatian, sanitizeFilename, sanitizeFolderName                                 | `src/lib/utils.ts`                                                                                              |
+| Portfolio kategorije (slug + label)               | PORTFOLIO_CATEGORIES                                                                        | `src/data/portfolioCategories.ts`                                                                               |
+| Portfolio kategorije + Lucide ikone               | PORTFOLIO_CATEGORIES_WITH_ICONS                                                             | `src/data/portfolioCategoryIcons.tsx`                                                                           |
+| Masonry broj stupaca (resize)                     | useColumnCount(`"gallery"` | `"press"`)                                                     | `src/hooks/useColumnCount.ts`                                                                                   |
+| Dev-only API guard                                | requireDevApiResponse                                                                       | `src/lib/apiDevOnly.ts`                                                                                         |
+| Format datuma (blog, portfolio, admin)            | formatBlogDate, formatPortfolioDateLong, …                                                  | `src/lib/formatDate.ts`                                                                                         |
+| Provjera postojanja datoteke                      | fileExists                                                                                  | `src/lib/fileUtils.ts` (samo server)                                                                            |
+| Blog sidebar widgeti (stilovi, hover rub)         | BLOG_WIDGET_UI (`rowHover`, `itemInactive`, `inputWrapper`)                                 | `src/data/blogWidgetUI.ts`                                                                                      |
+| Blog widget konfiguracija (JSON)                  | getBlogWidgets, blogWidgets.json                                                            | `src/lib/blogWidgets.ts`, `src/data/blogWidgets.json`                                                           |
+| Admin: blog widgeti + planovi                     | BlogWidgetsAdmin (grid Title stupac na `md+`), `/api/blog-widgets`, `/api/plans`            | `BlogWidgetsAdmin.tsx`, `api/blog-widgets/route.ts`, `api/plans/route.ts`, `lib/blogWidgets.ts`, `lib/plans.ts` |
+| Admin stringovi (blog widgeti)                    | `ADMIN_UI.adminWidgets`                                                                     | `src/data/adminUI.ts`                                                                                           |
+| Admin blog forma – metadata red                   | AdminBlog (Datum, vrijeme, Status, Autor teksta, Autor fotografija, Featured u jednom redu) | `src/components/AdminBlog.tsx`                                                                                  |
+| Blog widget komponente                            | SearchWidget, CategoriesWidget, FeaturedPostsWidget, PlansWidget, GoogleMapsWidget          | `src/components/blog/`                                                                                          |
+| Accordion (grid-rows)                             | CategoriesWidget (kategorije s podkategorijama), AdminSidebar                               | `src/components/blog/CategoriesWidget.tsx`                                                                      |
+| Block type select (slash `/` i proširenja tipova) | BlockTypeSelectWithCursor, `getSlashMenuItems`                                              | `src/components/BlockTypeSelectWithCursor.tsx`, `BlockNoteEditor.tsx`                                           |
+| Formatting toolbar na vrhu bloka                  | BlockTopFormattingToolbarController                                                         | `src/components/BlockTopFormattingToolbarController.tsx`                                                        |
+| Link toolbar (FormattingToolbar)                  | CustomCreateLinkButton                                                                      | `src/components/CustomCreateLinkButton.tsx`                                                                     |
+| Custom Image block (displayWidth)                 | blocknoteImageSchema                                                                        | `src/lib/blocknoteImageSchema.tsx`                                                                              |
+| YouTube video blok (embed po širini stranice)     | blocknoteYouTubeSchema                                                                      | `src/lib/blocknoteYouTubeSchema.tsx`                                                                            |
+| File Panel (Upload + Media + Embed)               | BlogFilePanel, BlogUploadTab                                                                | `src/components/blocknote/BlogFilePanel.tsx`, `BlogUploadTab.tsx`                                               |
+| Media tab (odabir postojeće slike)                | MediaLibraryTab                                                                             | `src/components/blocknote/MediaLibraryTab.tsx`                                                                  |
+| Theme grupe, accordion, elementi                  | ThemeAdmin                                                                                  | `src/components/ThemeAdmin.tsx`                                                                                 |
+| Prose linkovi (hover)                             | globals.css                                                                                 | `.prose a`, `.prose-invert a`                                                                                   |
+| LCP optimizacija (blog thumbnail)                 | blog/[slug]/page.tsx                                                                        | `src/app/(with-footer)/blog/[slug]/page.tsx`                                                                    |
+| Traka napretka čitanja (post)                     | BlogReadingProgress + `data-blog-reading-article` na `<article>`                            | `src/components/blog/BlogReadingProgress.tsx`                                                                   |
+| Header (forceLightMode za blog)                   | Header                                                                                      | `src/components/Header.tsx`                                                                                     |
+| Blog lista po kategoriji (OG/share)               | `blog/kategorija/[slug]/page.tsx`                                                           | `src/app/(with-footer)/blog/kategorija/[slug]/page.tsx`                                                         |
+| Put kategorije za linkove                         | `blogCategoryListPath`, `getAllBlogCategorySlugs`, `getCategorySlugFromBlogPathname`        | `src/data/blogCategories.ts`                                                                                    |
+| Paginacija bloga s kategorijom                    | Pagination (`categorySlug`)                                                                 | `src/components/blog/Pagination.tsx`                                                                            |
+
 
 ---
 
@@ -182,7 +186,7 @@ Dizajn: **jedinstveni panel** – bijela pozadina (`bg-white`), tamna slova (`te
 
 ### 4.0.1 BLOG_WIDGET_UI – lijeva crta na hoveru
 
-Javni blog sidebar koristi **`BLOG_WIDGET_UI`** (`src/data/blogWidgetUI.ts`): **`rowHover`** (`border-l-2 border-transparent`, `hover:border-zinc-300`) na redovima linkova; **`itemInactive` / `itemActive`** – aktivna stavka s `border-l-2`; **`inputWrapper`** – isti obrazac na `hover` / `focus-within` za default SearchWidget. **CategoriesWidget** – naslov akordeona također koristi `rowHover`. **Minimalni** SearchWidget (`variant="minimal"`) kombinira `rowHover` s donjom crtom.
+Javni blog sidebar koristi `**BLOG_WIDGET_UI`** (`src/data/blogWidgetUI.ts`): `**rowHover**` (`border-l-2 border-transparent`, `hover:border-zinc-300`) na redovima linkova; `**itemInactive` / `itemActive**` – aktivna stavka s `border-l-2`; `**inputWrapper**` – isti obrazac na `hover` / `focus-within` za default SearchWidget. **CategoriesWidget** – naslov akordeona također koristi `rowHover`. **Minimalni** SearchWidget (`variant="minimal"`) kombinira `rowHover` s donjom crtom.
 
 ### 4.1 CategoriesWidget – accordion za kategorije s podkategorijama
 
@@ -238,6 +242,7 @@ Svaki post ima dva opcionalna polja: `authorText` (autor teksta) i `authorPhoto`
 **Admin forma:** Dva input polja u metadata redu (Datum, Vrijeme, Status, **Autor teksta**, **Autor fotografija**, Featured). Placeholder: "Ivica Drusany". Kad su prazna, ne spremaju se u JSON (čist blog.json za postojeće postove).
 
 **Prikaz na blogu (blog post + BlogList):**
+
 - **Isti autori** (oba prazna ili isti tekst) → kompaktno: `📝 📷 Tekst i fotografije: Ivica Drusany`
 - **Različiti autori** → odvojeno: `📝 Tekst: Pero Perić` i `📷 Fotografije: Ivica Drusany`
 
@@ -249,11 +254,11 @@ Svaki post ima dva opcionalna polja: `authorText` (autor teksta) i `authorPhoto`
 
 **Problem:** URL `blog.html?kategorija=slug` dijeli isti statički HTML kao `/blog` – u `<head>` nema posebnog `og:image` po kategoriji; društvene mreže prikazuju generički blog.
 
-**Rješenje:** Za svaku kategoriju (roditelj + podkategorije iz `getBlogCategoryOptions()`) generira se statička stranica **`/blog/kategorija/[slug]`** (`generateStaticParams`, `dynamicParams: false`).
+**Rješenje:** Za svaku kategoriju (roditelj + podkategorije iz `getBlogCategoryOptions()`) generira se statička stranica `**/blog/kategorija/[slug]`** (`generateStaticParams`, `dynamicParams: false`).
 
-**Metadata (`generateMetadata`):** Naslov `{label kategorije} | {blog SEO title}`; opis iz `pages.json` blog SEO ili fallback; **canonical** `/blog/kategorija/slug`; **`og:image` / Twitter** – apsolutni URL **thumbnaila najnovijeg objavljenog posta** u toj kategoriji (`postHasCategory`), ako nema thumbnaila – prva slika iz `gallery`.
+**Metadata (`generateMetadata`):** Naslov `{label kategorije} | {blog SEO title}`; opis iz `pages.json` blog SEO ili fallback; **canonical** `/blog/kategorija/slug`; `**og:image` / Twitter** – apsolutni URL **thumbnaila najnovijeg objavljenog posta** u toj kategoriji (`postHasCategory`), ako nema thumbnaila – prva slika iz `gallery`.
 
-**UI:** `BlogListLayout` prima opcionalno `initialCategorySlug`; `BlogList` spaja `?kategorija=` iz URL-a s tim slugom (path-URL i dalje filtrira isto). **Linkovi** na filter kategorije koriste **`blogCategoryListPath(slug)`** → `/blog/kategorija/slug` (CategoriesWidget, BlogList, blog post stranica). **CategoriesWidget** – aktivna stavka: `searchParams.get("kategorija")` **ili** `getCategorySlugFromBlogPathname(pathname)`.
+**UI:** `BlogListLayout` prima opcionalno `initialCategorySlug`; `BlogList` spaja `?kategorija=` iz URL-a s tim slugom (path-URL i dalje filtrira isto). **Linkovi** na filter kategorije koriste `**blogCategoryListPath(slug)`** → `/blog/kategorija/slug` (CategoriesWidget, BlogList, blog post stranica). **CategoriesWidget** – aktivna stavka: `searchParams.get("kategorija")` **ili** `getCategorySlugFromBlogPathname(pathname)`.
 
 **SearchWidget:** `router.replace` koristi **puni `pathname`** (ne skraćivanje na `/blog`) da pretraga na `/blog/kategorija/foo` ostane na toj ruti s `?q=`.
 
@@ -279,7 +284,7 @@ Kad radiš s linkovima u BlockNote editoru:
 - **FormattingToolbar.Button** – zahtijeva obavezan `label` prop (BlockNote 0.46+).
 - **CustomCreateLinkButton** – `checkLinkInSchema` vraća `boolean` (ne type predicate – custom shema nije kompatibilna s default tipovima); za `anchor?.target === "_blank"` koristiti `anchor ? anchor.target === "_blank" : true` (ne `?? true` – boolean nije nullish).
 - **blocknoteImageSchema** – `createImageBlockConfig({})` zahtijeva objekat (ne prazan poziv); `displayWidth` u `parseImageWithDisplayWidth` mora biti literal tip `"full" | "50" | "25"` (type assertion ako dolazi iz `getAttribute`).
-- **blocksToFullHTML** – koristiti umjesto `blocksToHTMLLossy` za spremanje sadržaja. Lossy može gubiti slike pri konverziji u standardni HTML. Full je lossless. **Prored u prose:** Full HTML proizvodi `bn-block-group` / `bn-block-outer` strukturu – `.prose > * + *` ne primjenjuje se jer je jedini direktni child `bn-block-group`. U `globals.css` treba pravilo `.prose .bn-block-group > .bn-block-outer { margin-bottom: 1.5em }` za razmak između blokova pri renderiranju.
+- **blocksToFullHTML** – koristiti umjesto `blocksToHTMLLossy` za spremanje sadržaja. Lossy može gubiti slike pri konverziji u standardni HTML. Full je lossless. **Prored u prose:** Full HTML proizvodi `bn-block-group` / `bn-block-outer` strukturu – `.prose > * + `* ne primjenjuje se jer je jedini direktni child `bn-block-group`. U `globals.css` treba pravilo `.prose .bn-block-group > .bn-block-outer { margin-bottom: 1.5em }` za razmak između blokova pri renderiranju.
 
 ### 5.1 Dodavanje blokova u popup za stil bloka (Block Type Select)
 
@@ -298,13 +303,10 @@ const newBlockItem: BlockTypeSelectItem = {
 };
 ```
 
-2. **Pozicija** – umetni gdje želiš (npr. nakon quote: `insertAt = quoteIdx + 1`) ili pushaj na kraj: `[...base, newBlockItem]`.
-
-3. **Dictionary** – BlockNote ima prijevode u `slash_menu` (vidi `@blocknote/core` locales); ako postoji, koristi `dict.slash_menu.ime_bloka.title`.
-
-4. **Ikona** – iz `react-icons/ri` (npr. `RiCodeBlock`, `RiTable`, `RiImage2Fill`, `RiSeparator`).
-
-5. **Schema** – blok mora postojati u shemi editora (`defaultBlockSpecs` ili custom schema); inače ga `editorHasBlockWithType` filtrira i neće se prikazati.
+1. **Pozicija** – umetni gdje želiš (npr. nakon quote: `insertAt = quoteIdx + 1`) ili pushaj na kraj: `[...base, newBlockItem]`.
+2. **Dictionary** – BlockNote ima prijevode u `slash_menu` (vidi `@blocknote/core` locales); ako postoji, koristi `dict.slash_menu.ime_bloka.title`.
+3. **Ikona** – iz `react-icons/ri` (npr. `RiCodeBlock`, `RiTable`, `RiImage2Fill`, `RiSeparator`).
+4. **Schema** – blok mora postojati u shemi editora (`defaultBlockSpecs` ili custom schema); inače ga `editorHasBlockWithType` filtrira i neće se prikazati.
 
 **Referentna komponenta:** `BlockTypeSelectWithCursor.tsx` – primjer: codeBlock stavka.
 
@@ -315,6 +317,7 @@ Blok "YouTube video" omogućuje ubacivanje YouTube videa po punoj širini strani
 **Dodavanje u Block Type Select:** U `BlockTypeSelectWithCursor.tsx` – `blockTypeSelectItemsWithCodeBlock` – dodaj stavku `type: "youtubeEmbed"` s ikonom `RiYoutubeFill`. U `BlockNoteEditor.tsx` – `getCustomSlashMenuItems` – dodaj stavku za slash menu.
 
 **Implementacija:**
+
 - `src/lib/blocknoteYouTubeSchema.tsx` – blok s propom `url`; parsira YouTube link (watch, youtu.be, embed) u video ID; `toExternalHTML` vraća `figure.prose-youtube-wrapper` s iframe
 - Sanitizer (`src/lib/sanitize.ts`) – dozvoljava `iframe` samo za `youtube.com/embed` URL
 - ProseContent – wrapa postojeće YouTube iframe-ove u `.prose-youtube-wrapper`; CSS u `globals.css` za full-width breakout (YouTube; slike u blogu koriste 100% širine bez breakouta)
@@ -335,7 +338,7 @@ Implementacija: `BlogFilePanel` (Upload + Media + Embed) koristi se umjesto defa
 
 ### 5.3.1 File Panel – Upload tab (`BlogUploadTab`)
 
-- **`BlogFilePanel`** koristi **`BlogUploadTab`** umjesto default **`UploadTab`** iz `@blocknote/react`.
+- `**BlogFilePanel`** koristi `**BlogUploadTab**` umjesto default `**UploadTab**` iz `@blocknote/react`.
 - **Drag-and-drop:** zona s `preventDefault` na `dragover`; brojač na `dragenter`/`dragleave`; `drop` uz prvu datoteku; `fileMatchesAccept` usklađuje s `accept` sheme bloka.
 - **Tekst (EN):** *Drag and drop file here or Choose file*; klik na gumb poziva nativni picker preko `dropzoneRef` + `querySelector('input[type="file"]')` (BlockNote `FileInput` u tipovima ne izlaže `ref`).
 - **Stil nativnog file inputa:** `globals.css` – `.bn-panel input[type="file"].bn-file-input` – `::file-selector-button` i `::-webkit-file-upload-button` (margin, rub, pozadina gumba) da se „Choose file“ i „No file chosen“ vizualno odvoje.
@@ -356,7 +359,7 @@ Formatting toolbar (Bold, Italic, link, …) pojavljuje se **na vrhu bloka** i k
 
 ### 5.4.1 Admin – tooltipovi formatting toolbar gumba
 
-BlockNote/shadcn koriste Radix **`[data-slot="tooltip-content"]`** (portal na `body`). U admin tamnoj temi (`document.documentElement` **`data-theme="dark"`** iz `AdminClient`) u **`globals.css`** pravilo **`[data-theme="dark"] [data-slot="tooltip-content"]`** postavlja crnu pozadinu, svijetli tekst, rub i blagu sjenu; strelica (`svg` zadnji child) `fill` usklađen s pozadinom.
+BlockNote/shadcn koriste Radix `**[data-slot="tooltip-content"]`** (portal na `body`). U admin tamnoj temi (`document.documentElement` `**data-theme="dark"**` iz `AdminClient`) u `**globals.css**` pravilo `**[data-theme="dark"] [data-slot="tooltip-content"]**` postavlja crnu pozadinu, svijetli tekst, rub i blagu sjenu; strelica (`svg` zadnji child) `fill` usklađen s pozadinom.
 
 ### 5.5 Okvir blokova u editoru
 
@@ -444,13 +447,15 @@ const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
 
 ### 6.3 Theme elementi (blog)
 
-| Element | CSS klasa | Komponenta |
-|---------|-----------|------------|
-| pageTitle | `.theme-page-title` | BlogListLayout, buduće stranice |
-| blogPostTitle | `.theme-blog-post-title` | `blog/[slug]/page.tsx` |
-| blogListCardTitle | `.theme-blog-list-card-title` | BlogList |
-| blogListCardMetadata | `.theme-blog-list-card-metadata` | BlogList |
-| widgetTitle | `.theme-widget-title` | blogWidgetUI.ts (Search, Categories, Featured, Maps) |
+
+| Element              | CSS klasa                        | Komponenta                                           |
+| -------------------- | -------------------------------- | ---------------------------------------------------- |
+| pageTitle            | `.theme-page-title`              | BlogListLayout, buduće stranice                      |
+| blogPostTitle        | `.theme-blog-post-title`         | `blog/[slug]/page.tsx`                               |
+| blogListCardTitle    | `.theme-blog-list-card-title`    | BlogList                                             |
+| blogListCardMetadata | `.theme-blog-list-card-metadata` | BlogList                                             |
+| widgetTitle          | `.theme-widget-title`            | blogWidgetUI.ts (Search, Categories, Featured, Maps) |
+
 
 ---
 
@@ -474,7 +479,7 @@ const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
 
 ## 8. Arhitektura
 
-Detaljniji opis projekta: **`docs/architecture.md`**.
+Detaljniji opis projekta: `**docs/architecture.md`**.
 
 ---
 
@@ -538,7 +543,7 @@ RewriteRule ^(.*)$ $1.html [L]
 - **Mobile blog layout (full‑bleed)** – na mobilnom:
   - featured slike i tamni blok ispod njih (naslov + datum) na listi bloga idu **od ruba do ruba** (`-mx-6 w-[calc(100%+3rem)]`, unutarnji sadržaj ima `px-6`);
   - isto za featured sliku i tekstualni dio posta na stranici `blog/[slug]/page.tsx`.
-  - **Blog post mobilna specifika:** search widget isti razmak kao blog lista (`py-24`); autor ispod featured slike; kategorija kao **Link** na **`/blog/kategorija/{slug}`** (`blogCategoryListPath`) – filter i OG-friendly URL.
+  - **Blog post mobilna specifika:** search widget isti razmak kao blog lista (`py-24`); autor ispod featured slike; kategorija kao **Link** na `**/blog/kategorija/{slug}`** (`blogCategoryListPath`) – filter i OG-friendly URL.
   - referentne komponente: `BlogList`, `blog/[slug]/page.tsx`.
 
 ### 9.1 Deploy (rsync over SSH)
@@ -561,7 +566,7 @@ RewriteRule ^(.*)$ $1.html [L]
 - **deploy-uploads.sh** – rsync samo `public/uploads/`; bez `--delete`; sa servera briše samo datoteke koje je sama ranije poslala (manifest `scripts/.uploads-manifest`, commitati ga), pa ručno dignut sadržaj ostaje netaknut. SSH/rsync put; FTP ne briše
 - **cPanel Git™ Version Control:**
   - klonirani repo `drusany-static` koristi `.cpanel.yml` (skripta ga generira pri svakom deployu)
-  - **Važno:** `cp -R *` ne kopira dotfileove – `.htaccess` mora biti eksplicitno u tasku
+  - **Važno:** `cp -R `* ne kopira dotfileove – `.htaccess` mora biti eksplicitno u tasku
   - Skripta piše čisti YAML (ne RTF – TextEdit u Rich Text modu kvari datoteku)
 
 ```yaml
@@ -576,18 +581,26 @@ deployment:
   1. U cPanelu: Security → SSH Access – omogući SSH, zapiši port (često nije 22, npr. 21098).
   2. Na serveru: instaliraj rsync ako nije (`yum install rsync` ili slično – hosting obično ima).
   3. U `.env` dodaj:
-     ```
+    ```
      SSH_HOST=drusany.com
      SSH_USER=drusanyc
      SSH_PATH=/home/drusanyc/public_html
      SSH_PORT=21098
-     ```
+    ```
   4. Testiraj: `ssh -p 21098 drusanyc@drusany.com` (ili lozinka ili SSH ključ).
 - **Deploy rutina:** Uređuješ u adminu → Save → `./scripts/deploy-static.sh` → gotovo. Skripta radi build, push i rsync.
 - **Alternativa (ako nemaš SSH):** FTP deploy (`FTP_HOST`, `FTP_USER`, `FTP_PASS`) ili cPanel Deploy HEAD Commit (može biti nestabilan).
 - **uploads/** (fotografije): `./scripts/deploy-uploads.sh` ili `npm run deploy:uploads` – rsync/FTP samo `public/uploads/`, šalje samo promijenjene datoteke (provjera po veličini). Koristi iste varijable kao deploy-static (SSH_* ili FTP_*).
 
-### 9.2 Brzi start dev (dev-and-open)
+### 9.2 Web Analytics (Cloudflare)
+
+- **Praćenje posjeta** (koliko gledano, izvori, zemlje, uređaji) – Cloudflare Web Analytics, ubačen kao `<Script>` u [layout.tsx](../src/app/layout.tsx).
+- **Bez kolačića** – radi na beacon principu (RUM), ne postavlja cookije → **nije potreban GDPR/cookie consent banner**.
+- Domena nije na Cloudflare DNS-u pa je instaliran ručno ("JS Snippet" opcija u Cloudflare dashboardu), ne automatski preko nameservera.
+- **Token** je u `data-cf-beacon` atributu u `layout.tsx` – vezan uz domenu `drusany.com`, javno vidljiv u HTML-u (to je normalno za Web Analytics beacon, nije tajna vrijednost).
+- **Statistika:** [dash.cloudflare.com](https://dash.cloudflare.com) → Analytics & Logs → Web Analytics. Podaci se pojavljuju tek nakon deploya i stvarnih posjeta (ne rade na `localhost` – CORS blokira beacon jer domena nije registrirana za `localhost`).
+
+### 9.3 Brzi start dev (dev-and-open)
 
 Skripta `./scripts/dev-and-open.sh` ili `npm run dev:open`: otvara novi Terminal prozor s `npm run dev`, čeka da server odgovori (max 30 s), zatim otvara Google Chrome s 2 taba – `http://localhost:3000` i `http://localhost:3000/admin`. Korisno za brzi pokretanje razvoja bez ručnog otvaranja preglednika.
 

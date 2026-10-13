@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import SearchWidget from "./SearchWidget";
-import CategoriesWidget from "./CategoriesWidget";
+import CategoriesWidget, { type CategoriesWidgetPost } from "./CategoriesWidget";
 import GoogleMapsWidget from "./GoogleMapsWidget";
-import FeaturedPostsWidget from "./FeaturedPostsWidget";
+import FeaturedPostsWidget, { type FeaturedWidgetPost } from "./FeaturedPostsWidget";
 import PlansWidget from "./PlansWidget";
 import {
   getBlogWidgets,
@@ -40,7 +40,7 @@ export default async function BlogSidebar({ posts, searchOnMobile = false }: Blo
       sections.push(
         <section
           key={widget.id}
-          className={`border-t border-zinc-200 first:border-t-0 ${isSearch ? `${searchMobileClass} px-0 py-5` : "p-5"}`}
+          className={isSearch ? `${searchMobileClass} px-0 py-5` : "p-5"}
         >
           {content}
         </section>
@@ -69,15 +69,21 @@ async function WidgetRenderer({
           <SearchWidget variant="minimal" />
         </Suspense>
       );
-    case "categories":
+    case "categories": {
+      // Projiciraj na minimalna polja → ne serijaliziramo gallery/body u svaku stranicu
+      const slim: CategoriesWidgetPost[] = posts.map((p) => ({
+        category: p.category,
+        categories: p.categories,
+      }));
       return (
         <Suspense fallback={<div className="h-24 animate-pulse rounded-lg bg-zinc-100" />}>
           <CategoriesWidget
             title={(widget as CategoriesWidgetConfig).title}
-            posts={posts}
+            posts={slim}
           />
         </Suspense>
       );
+    }
     case "maps": {
       const maps = widget as MapsWidgetConfig;
       return (
@@ -89,10 +95,23 @@ async function WidgetRenderer({
     }
     case "featured-posts": {
       const fp = widget as FeaturedPostsWidgetConfig;
+      // Samo istaknuti postovi i samo polja koja widget koristi
+      const slim: FeaturedWidgetPost[] = posts
+        .filter((p) => p.featured)
+        .map((p) => ({
+          id: p.id,
+          slug: p.slug,
+          title: p.title,
+          date: p.date,
+          time: p.time,
+          thumbnail: p.thumbnail,
+          thumbnailFocus: p.thumbnailFocus,
+          featured: p.featured,
+        }));
       return (
         <FeaturedPostsWidget
           title={fp.title}
-          posts={posts}
+          posts={slim}
         />
       );
     }

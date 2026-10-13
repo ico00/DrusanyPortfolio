@@ -11,8 +11,13 @@ const SPORTS_RAW = [
   { slug: "auto-moto", label: "Auto-Moto", icon: Trophy },
   { slug: "martialarts", label: "Martial Arts", icon: Trophy },
   { slug: "fencing", label: "Fencing", icon: Trophy },
-
   { slug: "athletics", label: "Athletics", icon: Trophy },
+  { slug: "baseball", label: "Baseball", icon: Trophy },
+  { slug: "ice-skating", label: "Ice Skating", icon: Trophy },
+  { slug: "ice-hockey", label: "Ice Hockey", icon: Trophy },
+  { slug: "horse-riding", label: "Horse Riding", icon: Trophy },
+  { slug: "american-football", label: "American Football", icon: Trophy },
+  { slug: "misc", label: "Misc", icon: Trophy },
 ] as const;
 
 export const SPORTS = [...SPORTS_RAW].sort((a, b) =>

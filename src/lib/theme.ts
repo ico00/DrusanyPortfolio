@@ -30,6 +30,7 @@ export interface ThemeConfig {
   blogPostTitle: ThemeElement;
   blogListCardTitle: ThemeElement;
   blogListCardMetadata: ThemeElement;
+  blogListCardExcerpt: ThemeElement;
   widgetTitle: ThemeElement;
   body: ThemeElement;
   quote: ThemeElement;
@@ -143,6 +144,13 @@ export function getDefaultTheme(): ThemeConfig {
       color: "#d4d4d8",
       fontWeight: DEFAULT_WEIGHT,
       fontStyle: DEFAULT_STYLE,
+    },
+    blogListCardExcerpt: {
+      fontFamily: "serif",
+      fontSize: "1.125rem",
+      color: "#52525b",
+      fontWeight: DEFAULT_WEIGHT,
+      fontStyle: "italic",
     },
     widgetTitle: {
       fontFamily: "serif",

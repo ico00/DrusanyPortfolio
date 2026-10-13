@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, Tag } from "lucide-react";
 import {
   BLOG_CATEGORIES,
   blogCategoryListPath,
@@ -15,12 +15,16 @@ import {
 import { BLOG_WIDGET_UI } from "@/data/blogWidgetUI";
 import type { BlogPost } from "@/lib/blog";
 
+/** Samo polja potrebna za brojanje po kategorijama – izbjegava serijalizaciju
+ *  cijelog BlogPost-a (gallery, body…) u RSC payload svake stranice. */
+export type CategoriesWidgetPost = Pick<BlogPost, "category" | "categories">;
+
 interface CategoriesWidgetProps {
   title?: string;
-  posts: BlogPost[];
+  posts: CategoriesWidgetPost[];
 }
 
-function getCategoryCounts(posts: BlogPost[]): Record<string, number> {
+function getCategoryCounts(posts: CategoriesWidgetPost[]): Record<string, number> {
   const counts: Record<string, number> = {};
   const options = getBlogCategoryOptions();
 
@@ -117,23 +121,27 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
       <button
         type="button"
         onClick={() => setExpanded((e) => !e)}
-        className={`flex w-full items-center justify-between gap-2 text-left transition-colors hover:bg-zinc-50 -m-2 rounded-lg p-2 ${BLOG_WIDGET_UI.title}`}
+        className={`widget-title-bar flex w-full items-center justify-between gap-2 text-left transition-colors bg-zinc-900 hover:bg-zinc-800 -mx-2 -mt-2 p-2 px-3 ${BLOG_WIDGET_UI.title}`}
         aria-expanded={expanded}
       >
-        {title}
-        {expanded ? (
-          <ChevronDown className="h-5 w-5 shrink-0 text-zinc-400" />
-        ) : (
-          <ChevronRight className="h-5 w-5 shrink-0 text-zinc-400" />
-        )}
+        <span className="flex min-w-0 items-center gap-2">
+          <Tag className="h-4 w-4 shrink-0" />
+          {title}
+        </span>
+        <ChevronDown
+          className={`h-5 w-5 shrink-0 text-zinc-400 transition-transform duration-200 ${
+            expanded ? "rotate-180" : ""
+          }`}
+        />
       </button>
       <div
-        className={`grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out ${
+        className={`w-full -ml-2 grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out ${
           expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
         }`}
       >
         <div className="min-h-0">
-          <ul className="mt-3 space-y-1">
+        <div className="bg-zinc-50 p-3">
+          <ul className="space-y-1">
         <li>
           <Link
             href="/blog"
@@ -189,7 +197,7 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
                         className="flex shrink-0 items-center justify-center px-1 text-zinc-400 hover:text-zinc-600 transition-colors"
                         aria-expanded={isParentExpanded}
                       >
-                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isParentExpanded ? "" : "-rotate-90"}`} />
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isParentExpanded ? "rotate-180" : ""}`} />
                       </button>
                       <span className="text-xs text-zinc-400 shrink-0 ml-1">({parentCount})</span>
                     </div>
@@ -224,6 +232,7 @@ export default function CategoriesWidget({ title = "Kategorije", posts }: Catego
               );
             })}
           </ul>
+        </div>
         </div>
       </div>
     </>

@@ -71,6 +71,7 @@ function formatMonthOption(yearMonth: string): string {
 
 function SortableGalleryItem({
   url,
+  cacheBust,
   selected,
   isFeatured,
   onToggleSelect,
@@ -78,6 +79,7 @@ function SortableGalleryItem({
   onRemove,
 }: {
   url: string;
+  cacheBust?: string;
   selected: boolean;
   isFeatured: boolean;
   onToggleSelect: () => void;
@@ -134,7 +136,7 @@ function SortableGalleryItem({
         )}
       </button>
       <img
-        src={url}
+        src={cacheBust ? `${url}?t=${cacheBust}` : url}
         alt=""
         className="h-32 w-44 object-cover"
       />
@@ -264,6 +266,7 @@ export default function AdminBlog({
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const [galleryPreviewUrls, setGalleryPreviewUrls] = useState<string[]>([]);
   const [galleryDragActive, setGalleryDragActive] = useState(false);
+  const [galleryCacheBust, setGalleryCacheBust] = useState<Record<string, string>>({});
   const [galleryUploadProgress, setGalleryUploadProgress] = useState<{
     current: number;
     total: number;
@@ -493,6 +496,7 @@ export default function AdminBlog({
     setEditLoading(true);
     setSelectedGalleryUrls(new Set());
     setThumbnailCacheBust(null);
+    setGalleryCacheBust({});
     setEditorRetryKey((k) => k + 1);
     try {
       const full = post.body !== undefined ? post : await fetchPostWithBody(post.slug);
@@ -550,6 +554,7 @@ export default function AdminBlog({
   const openCreate = () => {
     setCreating(true);
     setThumbnailCacheBust(null);
+    setGalleryCacheBust({});
     setEditorRetryKey((k) => k + 1);
     const formData = {
       title: "",
@@ -592,6 +597,7 @@ export default function AdminBlog({
     setCreating(false);
     setSelectedGalleryUrls(new Set());
     setThumbnailCacheBust(null);
+    setGalleryCacheBust({});
     initialFormRef.current = null;
     unsavedCtx?.setUnsavedChanges(false);
     if (formOnly) {
@@ -742,6 +748,7 @@ export default function AdminBlog({
     setGalleryUploadProgress({ current: 0, total: galleryFiles.length });
     applyToAllRef.current = null;
     const newUrls: string[] = [];
+    const overwrittenUrls: string[] = [];
     let rateLimitedAt: number | null = null;
     try {
       for (let i = 0; i < galleryFiles.length; i++) {
@@ -776,6 +783,9 @@ export default function AdminBlog({
 
           if (choice === "overwrite") {
             result = await uploadGallerySingle(file, { overwrite: true, index: i });
+            if (result.ok && result.data) {
+              overwrittenUrls.push((result.data as { url: string }).url);
+            }
           } else if (choice === "add") {
             result = await uploadGallerySingle(file, { addWithSuffix: true, index: i });
           }
@@ -793,8 +803,20 @@ export default function AdminBlog({
         }
       }
       if (newUrls.length > 0) {
-        setForm((f) => ({ ...f, gallery: [...f.gallery, ...newUrls] }));
+        setForm((f) => ({
+          ...f,
+          gallery: [...f.gallery, ...newUrls.filter((u) => !f.gallery.includes(u))],
+        }));
         showToast("success", ADMIN_UI.blog.imageAdded(newUrls.length));
+      }
+      if (overwrittenUrls.length > 0) {
+        setGalleryCacheBust((prev) => {
+          const next = { ...prev };
+          for (const u of overwrittenUrls) {
+            next[u] = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+          }
+          return next;
+        });
       }
       if (rateLimitedAt !== null) {
         const remaining = galleryFiles.length - rateLimitedAt;
@@ -1021,6 +1043,14 @@ export default function AdminBlog({
     }
   };
 
+  const handlePreview = () => {
+    if (!editingId) {
+      showToast("error", ADMIN_UI.messages.previewSaveFirst);
+      return;
+    }
+    window.open(`/admin/blog/preview/${encodeURIComponent(editingId)}`, "_blank", "noopener,noreferrer");
+  };
+
   const handleDelete = async (id: string) => {
     if (!confirm(ADMIN_UI.messages.blogDeleteConfirm)) return;
     try {
@@ -1211,11 +1241,11 @@ export default function AdminBlog({
                         seo: { ...f.seo, metaTitle: e.target.value },
                       }))
                     }
-                    placeholder={`Prazno = koristi naslov članka (${form.title || "—"})`}
+                    placeholder={`Empty = uses the post title (${form.title || "—"})`}
                     className="w-full rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
                   />
                   <p className="mt-1 text-xs text-zinc-500">
-                    Ako ostane prazno, koristi se naslov članka
+                    If left empty, the post title is used
                   </p>
                 </div>
                 <div>
@@ -1236,7 +1266,7 @@ export default function AdminBlog({
                       }))
                     }
                     rows={3}
-                    placeholder="Fotografije + event + lokacija + godina + što se vidi"
+                    placeholder="Photos + event + location + year + what's in the frame"
                     className={`w-full rounded-lg border px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-1 ${
                       (form.seo?.metaDescription?.length ?? 0) > META_DESCRIPTION_MAX
                         ? "border-amber-500 bg-zinc-800/50 focus:border-amber-500 focus:ring-amber-500"
@@ -1245,12 +1275,12 @@ export default function AdminBlog({
                   />
                   {(form.seo?.metaDescription?.length ?? 0) > META_DESCRIPTION_MAX && (
                     <p className="mt-1 text-xs text-amber-400">
-                      Preporučeno max. 160 znakova za prikaz u rezultatima pretrage
+                      Recommended max. 160 characters for search result display
                     </p>
                   )}
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">Keywords (zarezom odvojeno)</label>
+                  <label className="mb-1 block text-xs text-zinc-500">Keywords (comma separated)</label>
                   <input
                     type="text"
                     value={form.seo?.keywords ?? ""}
@@ -1533,6 +1563,7 @@ export default function AdminBlog({
                         <SortableGalleryItem
                           key={url}
                           url={url}
+                          cacheBust={galleryCacheBust[url]}
                           selected={selectedGalleryUrls.has(url)}
                           isFeatured={form.thumbnail === url}
                           onToggleSelect={() => toggleGallerySelect(url)}
@@ -1668,6 +1699,13 @@ export default function AdminBlog({
             )}
             <button
               type="button"
+              onClick={handlePreview}
+              className="rounded-lg border border-zinc-600 px-4 py-2 text-sm text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-zinc-100"
+            >
+              {ADMIN_UI.blog.preview}
+            </button>
+            <button
+              type="button"
               onClick={() => (creating ? handleCreate() : handleSaveEdit())}
               disabled={saving}
               className="flex items-center gap-2 rounded-lg bg-zinc-700 px-4 py-2 text-sm font-medium text-zinc-100 transition-colors hover:bg-zinc-600 disabled:opacity-50"
@@ -1697,7 +1735,7 @@ export default function AdminBlog({
             onChange={(e) => handleListSearchChange(e.target.value)}
             placeholder={ADMIN_UI.blog.searchPlaceholder}
             className="w-full min-w-0 bg-transparent py-2 pr-3 text-sm text-zinc-200 outline-none placeholder:text-zinc-500"
-            aria-label="Pretraži blog"
+            aria-label="Search blog"
           />
         </div>
         <div className="w-36">
@@ -1811,7 +1849,7 @@ export default function AdminBlog({
           <p className="rounded-lg bg-zinc-800/50 py-8 text-center text-sm text-zinc-500">
             {contentHealthFilter || listStatusFilter || listCategoryFilter.length > 0 || listMonthFilter || urlSearchQuery.trim()
               ? urlSearchQuery.trim()
-                ? `Nema rezultata za „${urlSearchQuery.trim()}“.`
+                ? `No results for “${urlSearchQuery.trim()}”.`
                 : ADMIN_UI.blog.noPostsFilter
               : ADMIN_UI.blog.noPostsYet}
           </p>
@@ -1964,10 +2002,10 @@ export default function AdminBlog({
                   onClick={() => setListPage((p) => Math.max(1, p - 1))}
                   disabled={safePage <= 1}
                   className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed"
-                  aria-label="Prethodna stranica"
+                  aria-label="Previous page"
                 >
                   <ChevronLeft className="h-4 w-4" />
-                  Prethodna
+                  Previous
                 </button>
                 <div className="flex items-center gap-1">
                   {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -2005,9 +2043,9 @@ export default function AdminBlog({
                   onClick={() => setListPage((p) => Math.min(totalPages, p + 1))}
                   disabled={safePage >= totalPages}
                   className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed"
-                  aria-label="Sljedeća stranica"
+                  aria-label="Next page"
                 >
-                  Sljedeća
+                  Next
                   <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
@@ -2072,7 +2110,7 @@ export default function AdminBlog({
                 <p className="mb-2 text-xs font-medium text-zinc-500">{ADMIN_UI.duplicateModal.newLabel}</p>
                 <img
                   src={duplicateModal.filePreviewUrl}
-                  alt="Nova"
+                  alt="New"
                   className="h-40 w-full rounded-lg object-contain bg-zinc-800"
                 />
                 <p className="mt-1.5 text-xs text-zinc-600">
@@ -2085,7 +2123,7 @@ export default function AdminBlog({
                 <p className="mb-2 text-xs font-medium text-zinc-500">{ADMIN_UI.duplicateModal.existingLabel}</p>
                 <img
                   src={duplicateModal.existingSrc}
-                  alt="Postojeća"
+                  alt="Existing"
                   className="h-40 w-full rounded-lg object-contain bg-zinc-800"
                 />
                 <p className="mt-1.5 text-xs text-zinc-600">

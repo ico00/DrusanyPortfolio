@@ -1,7 +1,8 @@
 "use client";
 
+import { Calendar } from "lucide-react";
 import { formatBlogDate } from "@/data/blogCategories";
-import { BLOG_WIDGET_UI } from "@/data/blogWidgetUI";
+import WidgetAccordion from "./WidgetAccordion";
 import type { PlanItem } from "@/lib/plans";
 
 interface PlansWidgetProps {
@@ -18,8 +19,7 @@ export default function PlansWidget({
   }
 
   return (
-    <>
-      <h3 className={BLOG_WIDGET_UI.title}>{title}</h3>
+    <WidgetAccordion title={title} icon={<Calendar className="h-4 w-4 shrink-0" />}>
       <ul className="mt-4 space-y-3">
         {plans.map((plan, index) => (
           <li key={`${plan.date}-${plan.name}-${index}`}>
@@ -32,6 +32,6 @@ export default function PlansWidget({
           </li>
         ))}
       </ul>
-    </>
+    </WidgetAccordion>
   );
 }

@@ -49,6 +49,50 @@ function assignHeadingIdsAndToc(doc: Document): ProseTocItem[] {
   return toc;
 }
 
+/** Iz data-column-widths gradi <colgroup> za fiksne širine stupaca na blogu. */
+function applyProseTableColumnWidths(doc: Document) {
+  doc.querySelectorAll("table[data-column-widths]").forEach((table) => {
+    const raw = table.getAttribute("data-column-widths")?.trim() ?? "";
+    if (!raw) return;
+    const parts = raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (parts.length === 0) return;
+
+    const firstRow = table.querySelector("tr");
+    if (!firstRow) return;
+    const colCount = firstRow.querySelectorAll("th, td").length;
+    if (colCount === 0) return;
+
+    let cg = table.querySelector("colgroup");
+    if (!cg) {
+      cg = doc.createElement("colgroup");
+      const insertBefore =
+        table.querySelector("thead") ||
+        table.querySelector("tbody") ||
+        table.firstElementChild;
+      if (insertBefore) {
+        table.insertBefore(cg, insertBefore);
+      } else {
+        table.appendChild(cg);
+      }
+    } else {
+      cg.replaceChildren();
+    }
+
+    for (let i = 0; i < colCount; i++) {
+      const col = doc.createElement("col");
+      const w = parts[i] ?? "auto";
+      const lower = w.toLowerCase();
+      if (lower !== "auto" && lower !== "*") {
+        col.setAttribute("style", `width: ${w};`);
+      }
+      cg.appendChild(col);
+    }
+  });
+}
+
 /**
  * Ista obrada kao ProseContent: TOC iz h1–h6, YouTube wrap, blockquote, slike + lightbox URL-ovi.
  * Koristi linkedom na serveru i klijentu – identičan output.
@@ -165,6 +209,8 @@ export function processProseHtml(html: string): {
       }
     }
   });
+
+  applyProseTableColumnWidths(doc);
 
   const bodyHtml = doc.body?.innerHTML ?? html;
   return { processedHtml: bodyHtml, imageUrls, tocItems };

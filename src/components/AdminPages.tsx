@@ -167,7 +167,7 @@ export default function AdminPages({ page }: AdminPagesProps) {
         <>
           <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
             <label className="mb-2 block text-sm font-medium text-zinc-400">
-              Formspree endpoint (preporučeno)
+              Formspree endpoint (recommended)
             </label>
             <input
               type="url"
@@ -177,12 +177,12 @@ export default function AdminPages({ page }: AdminPagesProps) {
               className="w-full rounded-lg border border-zinc-600 bg-zinc-700/50 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
             />
             <p className="mt-1 text-xs text-zinc-500">
-              Kreiraj besplatni formu na formspree.io – poruke stižu na email. Ako prazno, koristi se mailto.
+              Create a free form on formspree.io – messages arrive by email. If empty, mailto is used.
             </p>
           </div>
           <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
             <label className="mb-2 block text-sm font-medium text-zinc-400">
-              Email (fallback za mailto)
+              Email (mailto fallback)
             </label>
             <input
               type="email"

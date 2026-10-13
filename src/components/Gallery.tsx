@@ -6,11 +6,13 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Camera } from "lucide-react";
 import type { GalleryImage } from "@/lib/getGallery";
+import { normalizeGalleryCategory } from "@/lib/galleryCategory";
 import { formatPortfolioDateLong } from "@/lib/formatDate";
 import { useColumnCount } from "@/hooks/useColumnCount";
 import { VENUES } from "./VenueSelect";
 import { SPORTS } from "./SportSelect";
 import { FOOD_DRINK } from "./FoodDrinkSelect";
+import LightboxMetaSpine from "./LightboxMetaSpine";
 
 const COPYRIGHT_START = 2026;
 
@@ -19,13 +21,6 @@ function getCopyrightYear(): string {
   return current === COPYRIGHT_START
     ? `${COPYRIGHT_START}`
     : `${COPYRIGHT_START}-${current}`;
-}
-
-function normalizeCategory(cat: string): string {
-  return cat
-    .toLowerCase()
-    .replace(/\s*&\s*/g, "-")
-    .replace(/\s+/g, "-");
 }
 
 const containerVariants = {
@@ -84,7 +79,7 @@ export default function Gallery({ images, categorySlug: categorySlugProp }: Gall
     if (!categorySlug) return images;
     const slug = categorySlug.toLowerCase();
     let result = images.filter(
-      (img) => normalizeCategory(img.category) === slug
+      (img) => normalizeGalleryCategory(img.category) === slug
     );
     if (slug === "concerts" && venueSlug) {
       const v = venueSlug.toLowerCase();
@@ -171,7 +166,7 @@ export default function Gallery({ images, categorySlug: categorySlugProp }: Gall
     if (!categorySlug) return images;
     const slug = categorySlug.toLowerCase();
     let result = images.filter(
-      (img) => normalizeCategory(img.category) === slug
+      (img) => normalizeGalleryCategory(img.category) === slug
     );
     if (slug === "concerts" && venueSlug) {
       const v = venueSlug.toLowerCase();
@@ -199,7 +194,7 @@ export default function Gallery({ images, categorySlug: categorySlugProp }: Gall
   const venuesWithImages = useMemo(() => {
     if (!isConcerts) return [];
     const concerts = images.filter(
-      (img) => normalizeCategory(img.category) === "concerts"
+      (img) => normalizeGalleryCategory(img.category) === "concerts"
     );
     const venueSlugsPresent = new Set(
       concerts
@@ -212,7 +207,7 @@ export default function Gallery({ images, categorySlug: categorySlugProp }: Gall
   const sportsWithImages = useMemo(() => {
     if (!isSport) return [];
     const sportImages = images.filter(
-      (img) => normalizeCategory(img.category) === "sport"
+      (img) => normalizeGalleryCategory(img.category) === "sport"
     );
     const sportSlugsPresent = new Set(
       sportImages
@@ -225,7 +220,7 @@ export default function Gallery({ images, categorySlug: categorySlugProp }: Gall
   const foodDrinkWithImages = useMemo(() => {
     if (!isFoodDrink) return [];
     const fdImages = images.filter(
-      (img) => normalizeCategory(img.category) === "food-drink"
+      (img) => normalizeGalleryCategory(img.category) === "food-drink"
     );
     const fdSlugsPresent = new Set(
       fdImages
@@ -244,6 +239,26 @@ export default function Gallery({ images, categorySlug: categorySlugProp }: Gall
     () => (lightboxIndex !== null ? filteredImages[lightboxIndex] ?? null : null),
     [lightboxIndex, filteredImages]
   );
+
+  const spineMeta = useMemo(() => {
+    if (!lightboxImage) return null;
+    const excluded = ["interiors", "animals"].includes(categorySlug?.toLowerCase() ?? "");
+    const title = excluded ? undefined : lightboxImage.title;
+    const locationLabel = excluded
+      ? undefined
+      : lightboxImage.venue
+      ? (VENUES.find((v) => v.slug === lightboxImage.venue)?.label ?? lightboxImage.venue)
+      : lightboxImage.sport
+      ? (SPORTS.find((s) => s.slug === lightboxImage.sport)?.label ?? lightboxImage.sport)
+      : undefined;
+    const dateLabel =
+      !excluded &&
+      categorySlug?.toLowerCase() !== "food-drink" &&
+      (lightboxImage.capturedAt || lightboxImage.createdAt)
+        ? formatPortfolioDateLong(lightboxImage.capturedAt || lightboxImage.createdAt!)
+        : undefined;
+    return { title, locationLabel, dateLabel };
+  }, [lightboxImage, categorySlug]);
 
   const updateUrlWithImage = useCallback(
     (slug: string | null) => {
@@ -610,176 +625,129 @@ export default function Gallery({ images, categorySlug: categorySlugProp }: Gall
               </div>
             </div>
 
-            {hasPrev && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goPrev();
-                }}
-                className="absolute left-2 top-1/2 z-20 hidden -translate-y-1/2 p-2 text-white/30 transition-all duration-300 hover:scale-110 hover:text-white md:left-4 md:flex"
-                aria-label="Previous image"
-              >
-                <ChevronLeft className="h-12 w-12 md:h-14 md:w-14" strokeWidth={1.5} />
-              </button>
-            )}
-            {hasNext && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goNext();
-                }}
-                className="absolute right-2 top-1/2 z-20 hidden -translate-y-1/2 p-2 text-white/30 transition-all duration-300 hover:scale-110 hover:text-white md:right-4 md:flex"
-                aria-label="Next image"
-              >
-                <ChevronRight className="h-12 w-12 md:h-14 md:w-14" strokeWidth={1.5} />
-              </button>
-            )}
-
             <motion.div
               key={lightboxImage.id}
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.3 }}
-              className="relative z-10 flex min-h-0 flex-1 items-center justify-center p-4"
+              className="relative z-10 flex min-h-0 flex-1 flex-col-reverse items-stretch justify-center md:flex-row"
               onClick={(e) => e.stopPropagation()}
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
             >
-              <div
-                className="flex h-[100vh] shrink-0 items-center justify-center"
-                style={{ maxWidth: "min(95vw, 2048px)" }}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  setShowCopyright(true);
-                }}
-              >
-                <img
-                  src={lightboxImage.src}
-                  alt={lightboxImage.alt || lightboxImage.title || "Gallery image"}
-                  className="max-h-full max-w-full select-none object-contain pointer-events-none"
-                  draggable={false}
+              {spineMeta && (
+                <LightboxMetaSpine
+                  title={spineMeta.title}
+                  titleSuffix={
+                    spineMeta.locationLabel && (
+                      <>
+                        {" "}
+                        <span className="text-white/60">@</span> {spineMeta.locationLabel}
+                      </>
+                    )
+                  }
+                  dateLabel={spineMeta.dateLabel}
+                  showExif={showExif}
+                  camera={lightboxImage.camera}
+                  lens={lightboxImage.lens}
+                  exposure={lightboxImage.exposure}
+                  aperture={lightboxImage.aperture}
+                  iso={lightboxImage.iso}
                 />
-              </div>
+              )}
 
-              <AnimatePresence>
-                {showCopyright && (
-                  <div
-                    className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-                    onClick={() => setShowCopyright(false)}
+              <div className="relative flex min-h-0 min-w-0 flex-1 items-center justify-center p-4">
+                {hasPrev && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goPrev();
+                    }}
+                    className="absolute left-2 top-1/2 z-20 hidden -translate-y-1/2 p-2 text-white/30 transition-all duration-300 hover:scale-110 hover:text-white md:flex"
+                    aria-label="Previous image"
                   >
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.98 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.98 }}
-                      transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      className="max-w-xl min-w-[20rem] rounded-xl border border-zinc-700 bg-zinc-900 px-8 py-6 text-center shadow-xl"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="space-y-3">
-                        <p className="font-serif text-lg tracking-tight text-white">
-                          © {getCopyrightYear()} Ivica Drusany
-                        </p>
-                        <p className="mt-1.5 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">
-                          All rights reserved
-                        </p>
-                        <div className="mt-6 space-y-2 text-sm leading-relaxed text-zinc-400">
-                          <p>These images are protected by copyright.</p>
-                          <p>Downloading, copying, or distributing without permission is prohibited.</p>
-                          <p>
-                            For purchase and usage inquiries, please complete the{" "}
-                            <Link
-                              href="/contact"
-                              className="border-b border-zinc-500 text-zinc-300 transition-colors hover:border-zinc-400 hover:text-white"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              contact form
-                            </Link>
-                            .
-                          </p>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setShowCopyright(false)}
-                        className="mt-6 rounded-lg border border-zinc-600 bg-zinc-800 px-6 py-2.5 text-sm tracking-[0.1em] text-zinc-300 transition-colors hover:bg-zinc-700 hover:text-white"
-                      >
-                        I understand
-                      </button>
-                    </motion.div>
-                  </div>
+                    <ChevronLeft className="h-12 w-12 md:h-14 md:w-14" strokeWidth={1.5} />
+                  </button>
                 )}
-              </AnimatePresence>
+                {hasNext && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goNext();
+                    }}
+                    className="absolute right-2 top-1/2 z-20 hidden -translate-y-1/2 p-2 text-white/30 transition-all duration-300 hover:scale-110 hover:text-white md:flex"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="h-12 w-12 md:h-14 md:w-14" strokeWidth={1.5} />
+                  </button>
+                )}
 
-              <div
-                className="absolute bottom-0 left-0 right-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.4)_25%,rgba(0,0,0,0.1)_50%,transparent_100%)] pb-10 pt-32 md:pb-12 md:pt-36"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="mx-auto max-w-2xl px-6 text-center md:px-12">
-                  {((!["interiors", "animals"].includes(categorySlug?.toLowerCase() ?? "") &&
-                    (lightboxImage.title || lightboxImage.venue || lightboxImage.sport || lightboxImage.capturedAt || lightboxImage.createdAt)) ||
-                    (showExif &&
-                      (lightboxImage.camera ||
-                        lightboxImage.lens ||
-                        lightboxImage.exposure ||
-                        lightboxImage.aperture ||
-                        lightboxImage.iso != null))) && (
-                    <div className="inline-block rounded-lg border border-white/10 bg-black/50 px-4 py-2 backdrop-blur-sm">
-                      {!["interiors", "animals"].includes(categorySlug?.toLowerCase() ?? "") &&
-                        (lightboxImage.title || lightboxImage.venue || lightboxImage.sport || lightboxImage.capturedAt || lightboxImage.createdAt) && (
-                        <p className="text-[14px] font-medium leading-relaxed tracking-[0.15em] text-white/80">
-                          {lightboxImage.title}
-                          {lightboxImage.venue && (
-                            <>
-                              {lightboxImage.title ? " " : ""}
-                              <span className="text-white/70">@</span>{" "}
-                              {VENUES.find((v) => v.slug === lightboxImage.venue)?.label ?? lightboxImage.venue}
-                            </>
-                          )}
-                          {lightboxImage.sport && !lightboxImage.venue && (
-                            <>
-                              {lightboxImage.title ? " " : ""}
-                              <span className="text-white/70">@</span>{" "}
-                              {SPORTS.find((s) => s.slug === lightboxImage.sport)?.label ?? lightboxImage.sport}
-                            </>
-                          )}
-                          {categorySlug?.toLowerCase() !== "food-drink" &&
-                            (lightboxImage.capturedAt || lightboxImage.createdAt) && (
-                            <>
-                              {(lightboxImage.venue || lightboxImage.sport) ? ", " : ""}
-                              <span className="text-white/80">
-                                {formatPortfolioDateLong(
-                                  lightboxImage.capturedAt ||
-                                    lightboxImage.createdAt!
-                                )}
-                              </span>
-                            </>
-                          )}
-                        </p>
-                      )}
-                      {showExif &&
-                        (lightboxImage.camera ||
-                          lightboxImage.lens ||
-                          lightboxImage.exposure ||
-                          lightboxImage.aperture ||
-                          lightboxImage.iso != null) && (
-                          <p className={`text-[10px] font-medium tracking-[0.2em] text-white/80 ${!["interiors", "animals"].includes(categorySlug?.toLowerCase() ?? "") && (lightboxImage.title || lightboxImage.venue || lightboxImage.sport || lightboxImage.capturedAt || lightboxImage.createdAt) ? "mt-1" : ""}`}>
-                            {[
-                              lightboxImage.camera,
-                              lightboxImage.lens,
-                              lightboxImage.exposure,
-                              lightboxImage.aperture,
-                              lightboxImage.iso != null ? `ISO ${lightboxImage.iso}` : null,
-                            ]
-                              .filter(Boolean)
-                              .join("  |  ")}
+                <div
+                  className="flex h-full w-full max-w-[2048px] items-center justify-center"
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    setShowCopyright(true);
+                  }}
+                >
+                  <img
+                    src={lightboxImage.src}
+                    alt={lightboxImage.alt || lightboxImage.title || "Gallery image"}
+                    className="max-h-full max-w-full select-none object-contain pointer-events-none"
+                    draggable={false}
+                  />
+                </div>
+
+                <AnimatePresence>
+                  {showCopyright && (
+                    <div
+                      className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+                      onClick={() => setShowCopyright(false)}
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.98 }}
+                        transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="max-w-xl min-w-[20rem] rounded-xl border border-zinc-700 bg-zinc-900 px-8 py-6 text-center shadow-xl"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className="space-y-3">
+                          <p className="font-serif text-lg tracking-tight text-white">
+                            © {getCopyrightYear()} Ivica Drusany
                           </p>
-                        )}
+                          <p className="mt-1.5 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">
+                            All rights reserved
+                          </p>
+                          <div className="mt-6 space-y-2 text-sm leading-relaxed text-zinc-400">
+                            <p>These images are protected by copyright.</p>
+                            <p>Downloading, copying, or distributing without permission is prohibited.</p>
+                            <p>
+                              For purchase and usage inquiries, please complete the{" "}
+                              <Link
+                                href="/contact"
+                                className="border-b border-zinc-500 text-zinc-300 transition-colors hover:border-zinc-400 hover:text-white"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                contact form
+                              </Link>
+                              .
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowCopyright(false)}
+                          className="mt-6 rounded-lg border border-zinc-600 bg-zinc-800 px-6 py-2.5 text-sm tracking-[0.1em] text-zinc-300 transition-colors hover:bg-zinc-700 hover:text-white"
+                        >
+                          I understand
+                        </button>
+                      </motion.div>
                     </div>
                   )}
-                </div>
+                </AnimatePresence>
               </div>
             </motion.div>
           </motion.div>

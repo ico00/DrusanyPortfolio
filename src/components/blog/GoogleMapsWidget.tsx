@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { MapPin } from "lucide-react";
 import { BLOG_WIDGET_UI } from "@/data/blogWidgetUI";
+import WidgetAccordion from "./WidgetAccordion";
 
 interface MapLocation {
   id: string;
@@ -29,9 +31,7 @@ export default function GoogleMapsWidget({
   const activeLocation = locations.find((l) => l.id === activeId) ?? locations[0];
 
   return (
-    <>
-      <h3 className={BLOG_WIDGET_UI.title}>{title}</h3>
-
+    <WidgetAccordion title={title} icon={<MapPin className="h-4 w-4 shrink-0" />} defaultOpen={false}>
       {locations.length > 1 && (
         <div className="mt-4 flex flex-wrap gap-2">
           {locations.map((loc) => (
@@ -64,6 +64,6 @@ export default function GoogleMapsWidget({
           />
         </div>
       </div>
-    </>
+    </WidgetAccordion>
   );
 }

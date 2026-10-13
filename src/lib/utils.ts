@@ -14,15 +14,17 @@ const GENERIC_NAMES = ["", "image", "blob", "untitled"];
 
 /**
  * Sanitizira naziv datoteke: lowercase, razmaci u crtice, uklanja specijalne znakove.
- * Uvijek vraća .webp ekstenziju.
+ * Vraća zadanu ekstenziju (.webp), ili options.ext ako je zadan (npr. za GIF-ove koji
+ * moraju zadržati .gif kako bi animacija ostala sačuvana).
  *
  * @param originalName – originalni naziv datoteke
  * @param options.slug – opcionalno, za fallback kad je naziv generički (npr. "image", "blob")
  * @param options.index – opcionalno, indeks za fallback (npr. "slug-1", "slug-2")
+ * @param options.ext – opcionalno, ekstenzija bez točke (zadano "webp")
  */
 export function sanitizeFilename(
   originalName: string,
-  options?: { slug?: string; index?: number }
+  options?: { slug?: string; index?: number; ext?: string }
 ): string {
   const name = (originalName || "").trim();
   const base = name ? path.basename(name, path.extname(name)) : "";
@@ -44,7 +46,7 @@ export function sanitizeFilename(
     sanitized = `${options.slug}-${sanitized}`;
   }
 
-  return sanitized + ".webp";
+  return `${sanitized}.${options?.ext || "webp"}`;
 }
 
 /** Sanitizira naziv foldera (npr. kategorija): lowercase, crtice, dozvoljava underscore */

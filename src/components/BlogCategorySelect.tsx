@@ -200,16 +200,16 @@ export default function BlogCategorySelect({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.stopPropagation()}
-                  placeholder="Pretraži kategorije…"
+                  placeholder="Search categories…"
                   className="min-w-0 flex-1 bg-transparent text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none"
-                  aria-label="Pretraži kategorije"
+                  aria-label="Search categories"
                 />
               </div>
             </div>
             <div className="max-h-56 overflow-auto py-1.5">
             {options.length === 0 ? (
               <p className="px-4 py-6 text-center text-sm text-zinc-500">
-                Nema rezultata za &quot;{searchQuery}&quot;
+                No results for &quot;{searchQuery}&quot;
               </p>
             ) : (
             options.map((opt) => {
@@ -271,7 +271,7 @@ export default function BlogCategorySelect({
               role="option"
               onClick={() => {
                 const custom = prompt(
-                  "Unesi naziv kategorije (npr. recenzije, izložbe):",
+                  "Enter category name (e.g. recenzije, izložbe):",
                   !multiple && isCustom ? valueNorm : ""
                 );
                 if (custom?.trim()) {
@@ -299,8 +299,8 @@ export default function BlogCategorySelect({
               <Tag className="h-4 w-4 shrink-0" />
               <span>
                 {!multiple && isCustom
-                  ? "Promijeni prilagođenu kategoriju"
-                  : "Ostalo (prilagođeno)"}
+                  ? "Change custom category"
+                  : "Other (custom)"}
               </span>
             </button>
           </motion.div>

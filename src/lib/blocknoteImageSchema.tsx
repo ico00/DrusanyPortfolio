@@ -253,13 +253,17 @@ export const CustomImageBlock = createReactBlockSpec(extendedImageConfig, () => 
 
 import { YouTubeEmbedBlockSpec } from "./blocknoteYouTubeSchema";
 import { BeforeAfterBlockSpec } from "./blocknoteBeforeAfterSchema";
+import { blogTableBlockSpec } from "./blocknoteTableSchema";
+import { PlayerFilterBlockSpec } from "./blocknotePlayerFilterSchema";
 
 export const blogBlockNoteSchema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
     image: CustomImageBlock(),
+    table: blogTableBlockSpec,
     youtubeEmbed: YouTubeEmbedBlockSpec(),
     beforeAfter: BeforeAfterBlockSpec(),
+    playerFilter: PlayerFilterBlockSpec(),
   },
   inlineContentSpecs: defaultInlineContentSpecs,
   styleSpecs: defaultStyleSpecs,

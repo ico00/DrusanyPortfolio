@@ -92,28 +92,17 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
     }, 200);
   };
 
-  const textClass = isHeroMode
-    ? "text-white/90 hover:text-white"
-    : "text-zinc-600 hover:text-zinc-900";
+  // "Negativ": header je taman posvuda (blog, about, contact, portfolio, scrollani hero) –
+  // jedina iznimka je vrh naslovnice prije scrolla, gdje je proziran preko fotografije.
+  const isTransparent = isHeroMode && !scrolled;
+  const textClass = "text-white/90 hover:text-white";
   const navLinkClass = (active: boolean) =>
     `inline-block pb-1 text-sm font-normal tracking-widest transition-[color,border-color] duration-200 ${textClass} ${
-      active
-        ? isHeroMode
-          ? "border-b border-white"
-          : "border-b border-zinc-900"
-        : isHeroMode
-          ? "border-b border-transparent hover:border-white"
-          : "border-b border-transparent hover:border-zinc-900"
+      active ? "border-b border-white" : "border-b border-transparent hover:border-white"
     }`;
-  const dropdownBg = isHeroMode
-    ? "border-white/20 bg-zinc-950/95"
-    : "border-zinc-200/60 bg-white/95";
-  const dropdownItemClass = isHeroMode
-    ? "text-white/80 hover:bg-white/10 hover:text-white"
-    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900";
-  const mobileBg = isHeroMode
-    ? "border-white/20 bg-zinc-950/95"
-    : "border-zinc-200/40 bg-white/95";
+  const dropdownBg = "border-white/20 bg-black";
+  const dropdownItemClass = "text-white/80 hover:bg-white/10 hover:text-white";
+  const mobileBg = "border-white/20 bg-black";
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -122,12 +111,9 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const headerBg =
-    !isHeroMode
-      ? "border-b border-zinc-200/60 bg-white/95 backdrop-blur-xl"
-      : scrolled
-        ? "border-b border-white/10 bg-zinc-950/80 backdrop-blur-xl"
-        : "border-b border-transparent bg-transparent";
+  const headerBg = isTransparent
+    ? "border-b border-transparent bg-transparent"
+    : "border-b border-white/10 bg-black";
 
   return (
     <header className={`fixed left-0 right-0 top-0 z-50 w-full transition-all duration-300 ${headerBg}`}>
@@ -139,7 +125,7 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
         >
           <DrusanyLogo
             className="block h-9 w-auto"
-            fill={isHeroMode ? "#ffffff" : "#18181b"}
+            fill="#ffffff"
           />
         </Link>
 
@@ -159,12 +145,8 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
               type="button"
               className={`inline-flex items-center gap-1 pb-1 text-sm font-normal tracking-widest transition-[color,border-color] duration-200 ${textClass} ${
                 isPortfolio
-                  ? isHeroMode
-                    ? "border-b border-white"
-                    : "border-b border-zinc-900"
-                  : isHeroMode
-                    ? "border-b border-transparent hover:border-white"
-                    : "border-b border-transparent hover:border-zinc-900"
+                  ? "border-b border-white"
+                  : "border-b border-transparent hover:border-white"
               }`}
               aria-expanded={dropdownOpen}
               aria-haspopup="true"
@@ -186,12 +168,8 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
                         href={`/${cat.slug}`}
                         className={`block border-l-2 px-4 py-2 text-sm font-normal tracking-wider transition-colors ${dropdownItemClass} ${
                           isActive
-                            ? isHeroMode
-                              ? "border-white"
-                              : "border-zinc-900"
-                            : isHeroMode
-                              ? "border-transparent hover:border-white"
-                              : "border-transparent hover:border-zinc-900"
+                            ? "border-white"
+                            : "border-transparent hover:border-white"
                         }`}
                         onClick={() => setDropdownOpen(false)}
                       >
@@ -222,9 +200,9 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
               onMouseEnter={() => setSearchExpanded(true)}
               onMouseLeave={() => !localSearchQuery && setSearchExpanded(false)}
             >
-              <Search className="h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2} />
+              <Search className="h-4 w-4 shrink-0 text-white/60" strokeWidth={2} />
               <span
-                className={`inline-flex overflow-hidden border-b border-zinc-300 transition-[width] duration-200 ${
+                className={`inline-flex overflow-hidden border-b border-white/30 transition-[width] duration-200 ${
                   localSearchQuery || searchExpanded ? "w-28" : "w-0"
                 }`}
               >
@@ -233,7 +211,7 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
                   value={localSearchQuery}
                   onChange={(e) => handlePortfolioSearchChange(e.target.value)}
                   placeholder="Search..."
-                  className="w-28 min-w-28 bg-transparent py-0.5 pl-1.5 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
+                  className="w-28 min-w-28 bg-transparent py-0.5 pl-1.5 text-sm text-white outline-none placeholder:text-white/40"
                   aria-label="Search images"
                 />
               </span>
@@ -244,7 +222,7 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
         <button
           type="button"
           onClick={() => setMobileOpen((o) => !o)}
-          className={`flex p-2 md:hidden ${isHeroMode ? "text-white" : "text-zinc-900"}`}
+          className="flex p-2 text-white md:hidden"
           aria-label="Meni"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -253,18 +231,16 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
 
       {mobileOpen && (
         <div className={`theme-nav border-t px-8 py-6 backdrop-blur-xl md:hidden ${mobileBg}`}>
-          <div className={`flex flex-col gap-4 ${isHeroMode ? "text-white/90" : "text-zinc-600"}`}>
+          <div className="flex flex-col gap-4 text-white/90">
             {isPortfolio && (
-              <label className="flex items-center gap-2 border-b border-zinc-300 pb-4">
-                <Search className="h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2} />
+              <label className="flex items-center gap-2 border-b border-white/30 pb-4">
+                <Search className="h-4 w-4 shrink-0 text-white/60" strokeWidth={2} />
                 <input
                   type="search"
                   value={localSearchQuery}
                   onChange={(e) => handlePortfolioSearchChange(e.target.value)}
                   placeholder="Search..."
-                  className={`flex-1 bg-transparent text-sm outline-none placeholder:opacity-60 ${
-                    isHeroMode ? "text-white placeholder-white/50" : "text-zinc-900 placeholder-zinc-400"
-                  }`}
+                  className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/50 placeholder:opacity-60"
                   aria-label="Search images"
                 />
               </label>
@@ -272,14 +248,14 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
             <Link
               href="/"
               onClick={() => setMobileOpen(false)}
-              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
-                isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
-              } ${isHome ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
+              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 hover:text-white ${
+                isHome ? "border-white" : "border-transparent hover:border-white"
+              }`}
             >
               Home
             </Link>
             <div className="flex flex-col gap-2">
-              <span className={`text-sm font-normal tracking-widest ${isHeroMode ? "text-white/60" : "text-zinc-400"}`}>Portfolio</span>
+              <span className="text-sm font-normal tracking-widest text-white/60">Portfolio</span>
               {PORTFOLIO_CATEGORIES.map((cat) => {
                 const isActive = isPortfolio && effectiveCategory === cat.slug;
                 return (
@@ -287,9 +263,9 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
                     key={cat.slug}
                     href={`/${cat.slug}`}
                     onClick={() => setMobileOpen(false)}
-                    className={`block py-1 pl-6 text-sm font-normal tracking-wider transition-colors border-l-2 ${
-                      isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
-                    } ${isActive ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
+                    className={`block py-1 pl-6 text-sm font-normal tracking-wider transition-colors border-l-2 hover:text-white ${
+                      isActive ? "border-white" : "border-transparent hover:border-white"
+                    }`}
                   >
                     {cat.label}
                   </Link>
@@ -299,27 +275,27 @@ export default function Header({ forceLightMode = false }: HeaderProps) {
             <Link
               href="/blog"
               onClick={() => setMobileOpen(false)}
-              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
-                isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
-              } ${isBlog ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
+              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 hover:text-white ${
+                isBlog ? "border-white" : "border-transparent hover:border-white"
+              }`}
             >
               Blog
             </Link>
             <Link
               href="/about"
               onClick={() => setMobileOpen(false)}
-              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
-                isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
-              } ${isAbout ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
+              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 hover:text-white ${
+                isAbout ? "border-white" : "border-transparent hover:border-white"
+              }`}
             >
               About
             </Link>
             <Link
               href="/contact"
               onClick={() => setMobileOpen(false)}
-              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 ${
-                isHeroMode ? "hover:text-white" : "hover:text-zinc-900"
-              } ${isContact ? (isHeroMode ? "border-white" : "border-zinc-900") : isHeroMode ? "border-transparent hover:border-white" : "border-transparent hover:border-zinc-900"}`}
+              className={`block py-1 pl-3 text-sm font-normal tracking-widest transition-colors border-l-2 hover:text-white ${
+                isContact ? "border-white" : "border-transparent hover:border-white"
+              }`}
             >
               Contact
             </Link>

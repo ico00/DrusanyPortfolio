@@ -77,12 +77,13 @@ export async function POST(request: Request) {
         ? [body.category]
         : [];
     let thumbnail = body.thumbnail || "";
-    if (thumbnail.endsWith("featured-pending.webp")) {
+    const pendingExt = thumbnail.endsWith("featured-pending.gif") ? "gif" : thumbnail.endsWith("featured-pending.webp") ? "webp" : null;
+    if (pendingExt) {
       const pendingPath = path.join(process.cwd(), "public", thumbnail.replace(/^\//, ""));
-      const canonicalPath = pendingPath.replace("featured-pending.webp", "featured.webp");
+      const canonicalPath = pendingPath.replace(`featured-pending.${pendingExt}`, `featured.${pendingExt}`);
       try {
         await rename(pendingPath, canonicalPath);
-        thumbnail = thumbnail.replace("featured-pending.webp", "featured.webp");
+        thumbnail = thumbnail.replace(`featured-pending.${pendingExt}`, `featured.${pendingExt}`);
       } catch {
         thumbnail = body.thumbnail || "";
       }
@@ -191,12 +192,13 @@ export async function PUT(request: Request) {
     }
     if (body.thumbnail !== undefined) {
       let thumbnailToStore = body.thumbnail;
-      if (body.thumbnail.endsWith("featured-pending.webp")) {
+      const pendingExt = body.thumbnail.endsWith("featured-pending.gif") ? "gif" : body.thumbnail.endsWith("featured-pending.webp") ? "webp" : null;
+      if (pendingExt) {
         const pendingPath = path.join(process.cwd(), "public", body.thumbnail.replace(/^\//, ""));
-        const canonicalPath = pendingPath.replace("featured-pending.webp", "featured.webp");
+        const canonicalPath = pendingPath.replace(`featured-pending.${pendingExt}`, `featured.${pendingExt}`);
         try {
           await rename(pendingPath, canonicalPath);
-          thumbnailToStore = body.thumbnail.replace("featured-pending.webp", "featured.webp");
+          thumbnailToStore = body.thumbnail.replace(`featured-pending.${pendingExt}`, `featured.${pendingExt}`);
         } catch {
           thumbnailToStore = body.thumbnail;
         }

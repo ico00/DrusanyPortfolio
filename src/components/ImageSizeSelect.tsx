@@ -78,7 +78,7 @@ export default function ImageSizeSelect() {
         top: selectionRect.top + selectionRect.height + 8,
       }}
     >
-      <span className="text-xs text-zinc-400">Širina:</span>
+      <span className="text-xs text-zinc-400">Width:</span>
       <div className="flex rounded border border-zinc-600 bg-zinc-700">
         {WIDTH_OPTIONS.map((opt) => (
           <button
@@ -90,7 +90,7 @@ export default function ImageSizeSelect() {
                 ? "bg-amber-600 text-white"
                 : "text-zinc-300 hover:bg-zinc-600 hover:text-zinc-100"
             }`}
-            title={`Širina slike: ${opt.label}`}
+            title={`Image width: ${opt.label}`}
           >
             {opt.label}
           </button>
